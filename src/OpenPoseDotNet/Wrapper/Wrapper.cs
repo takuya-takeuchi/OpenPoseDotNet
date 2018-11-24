@@ -37,6 +37,26 @@ namespace OpenPoseDotNet
 
         #region Methods
 
+        public void Configure(WrapperStructHand hand)
+        {
+            if (hand == null)
+                throw new ArgumentNullException(nameof(hand));
+
+            hand.ThrowIfDisposed();
+
+            Native.op_wrapper_configure_hand(this.NativePtr, hand.NativePtr);
+        }
+
+        public void Configure(WrapperStructFace face)
+        {
+            if (face == null)
+                throw new ArgumentNullException(nameof(face));
+
+            face.ThrowIfDisposed();
+
+            Native.op_wrapper_configure_face(this.NativePtr, face.NativePtr);
+        }
+
         public void DisableMultiThreading()
         {
             this.ThrowIfDisposed();
@@ -125,6 +145,24 @@ namespace OpenPoseDotNet
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             [return: MarshalAs(UnmanagedType.U1)]
             public static extern bool op_wrapper_isRunning(IntPtr wrapper);
+                
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void op_wrapper_configure_pose(IntPtr wrapper, IntPtr wrapperStructPose);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void op_wrapper_configure_face(IntPtr wrapper, IntPtr wrapperStructFace);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void op_wrapper_configure_hand(IntPtr wrapper, IntPtr wrapperStructHand);
+                
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void op_wrapper_configure_extra(IntPtr wrapper, IntPtr wrapperStructExtra);
+            
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void op_wrapper_configure_input(IntPtr wrapper, IntPtr wrapperStructInput);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void op_wrapper_configure_output(IntPtr wrapper, IntPtr wrapperStructOutput);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern IntPtr op_wrapper_emplaceAndPop_cvMat(IntPtr wrapper, IntPtr mat);

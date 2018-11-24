@@ -38,4 +38,14 @@ DLLEXPORT op::Array<float>* op_core_datum_get_poseKeypoints(op::Datum* datum)
     return &datum->poseKeypoints;
 }
 
+DLLEXPORT op::Array<float>* op_core_datum_get_faceKeypoints(op::Datum* datum)
+{
+    return &datum->faceKeypoints;
+}
+
+DLLEXPORT std::array<op::Array<float>, 2>* op_core_datum_get_handKeypoints(op::Datum* datum)
+{
+    return &datum->handKeypoints;
+}
+
 #endif
