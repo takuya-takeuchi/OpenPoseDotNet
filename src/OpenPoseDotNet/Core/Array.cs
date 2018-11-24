@@ -81,7 +81,7 @@ namespace OpenPoseDotNet
             finally
             {
                 if (stdstr != IntPtr.Zero)
-                    OpenPose.Native.string_delete(stdstr);
+                    OpenPose.Native.std_string_delete(stdstr);
             }
 
             return str;

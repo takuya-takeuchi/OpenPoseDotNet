@@ -33,7 +33,7 @@ namespace OpenPoseDotNet
             if (this.NativePtr == IntPtr.Zero)
                 return;
 
-            OpenPose.Native.string_delete(this.NativePtr);
+            OpenPose.Native.std_string_delete(this.NativePtr);
             this.NativePtr = IntPtr.Zero;
         }
 
