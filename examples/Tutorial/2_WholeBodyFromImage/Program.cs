@@ -1,5 +1,5 @@
 ﻿/*
- * This sample program is ported by C# from examples/tutorial_api_cpp/1_body_from_image.cpp.
+ * This sample program is ported by C# from examples/tutorial_api_cpp/2_whole_body_from_image.cpp.
 */
 
 using System;
