@@ -1,6 +1,6 @@
 ﻿
 /*
- * This sample program is ported by C# from examples/tutorial_api_cpp/3_keypoints_from_image_configurable.cpp.cpp.
+ * This sample program is ported by C# from examples/tutorial_api_cpp/3_keypoints_from_image_configurable.cpp.
 */
 
 using System;
