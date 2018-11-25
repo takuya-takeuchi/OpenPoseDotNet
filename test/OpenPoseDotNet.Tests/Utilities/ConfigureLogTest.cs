@@ -34,8 +34,8 @@ namespace OpenPoseDotNet.Tests
         {
             foreach (var priority in Enum.GetValues(typeof(Priority)).Cast<Priority>())
             {
-                ConfigureLog.Priority = priority;
-                Assert.IsTrue(priority == ConfigureLog.Priority);
+                ConfigureLog.PriorityThreshold = priority;
+                Assert.IsTrue(priority == ConfigureLog.PriorityThreshold);
             }
         }
 

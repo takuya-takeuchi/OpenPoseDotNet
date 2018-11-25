@@ -25,7 +25,7 @@ namespace OpenPoseDotNet
             }
         }
 
-        public static Priority Priority
+        public static Priority PriorityThreshold
         {
             get => Native.op_ConfigureLog_getPriorityThreshold();
             set => Native.op_ConfigureLog_setPriorityThreshold(value);

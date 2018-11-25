@@ -64,6 +64,7 @@ namespace OpenPoseDotNet
 
             OpenPose.Native.op_core_array_delete(this.NativePtr);
         }
+
         public override string ToString()
         {
             var stdstr = IntPtr.Zero;
@@ -71,8 +72,8 @@ namespace OpenPoseDotNet
 
             try
             {
-                var ret = OpenPose.Native.op_core_Array_toString(this.NativePtr, this.ArrayElementType);
-                str = StringHelper.FromStdString(ret) ?? "";
+                stdstr = OpenPose.Native.op_core_Array_toString(this.NativePtr, this.ArrayElementType);
+                str = StringHelper.FromStdString(stdstr) ?? "";
             }
             catch (Exception e)
             {

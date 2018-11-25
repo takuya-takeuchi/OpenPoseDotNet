@@ -55,6 +55,15 @@ namespace OpenPoseDotNet.Interop
                 dest[i] = (LogMode)tmp[i];
         }
 
+        public static void Copy(IntPtr ptrSource, HeatMapType[] dest, int elements)
+        {
+            var tmp = new byte[dest.Length];
+            Copy(ptrSource, tmp, elements);
+
+            for (var i = 0; i < dest.Length; i++)
+                dest[i] = (HeatMapType)tmp[i];
+        }
+
         public static unsafe void Copy(uint[] source, IntPtr ptrDest, int elements)
         {
             fixed (uint* ptrSource = &source[0])

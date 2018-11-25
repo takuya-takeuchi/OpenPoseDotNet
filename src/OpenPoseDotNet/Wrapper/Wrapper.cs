@@ -37,6 +37,16 @@ namespace OpenPoseDotNet
 
         #region Methods
 
+        public void Configure(WrapperStructPose pose)
+        {
+            if (pose == null)
+                throw new ArgumentNullException(nameof(pose));
+
+            pose.ThrowIfDisposed();
+
+            Native.op_wrapper_configure_pose(this.NativePtr, pose.NativePtr);
+        }
+
         public void Configure(WrapperStructHand hand)
         {
             if (hand == null)
@@ -56,7 +66,26 @@ namespace OpenPoseDotNet
 
             Native.op_wrapper_configure_face(this.NativePtr, face.NativePtr);
         }
+        
+        public void Configure(WrapperStructExtra extra)
+        {
+            if (extra == null)
+                throw new ArgumentNullException(nameof(extra));
 
+            extra.ThrowIfDisposed();
+
+            Native.op_wrapper_configure_extra(this.NativePtr, extra.NativePtr);
+        }
+
+        public void Configure(WrapperStructOutput output)
+        {
+            if (output == null)
+                throw new ArgumentNullException(nameof(output));
+
+            output.ThrowIfDisposed();
+
+            Native.op_wrapper_configure_output(this.NativePtr, output.NativePtr);
+        }
         public void DisableMultiThreading()
         {
             this.ThrowIfDisposed();

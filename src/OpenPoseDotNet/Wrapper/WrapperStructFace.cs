@@ -7,12 +7,28 @@ namespace OpenPoseDotNet
 
     public sealed class WrapperStructFace : OpenPoseObject
     {
+        #region Fields
+
+        public static readonly Point<int> DefaultNetInputSize = new Point<int>(368, 368);
+
+        #endregion
 
         #region Constructors
 
-        public WrapperStructFace(bool enable = false)
+        public WrapperStructFace(bool enable = false,
+                                 Point<int> netInputSize = default(Point<int>),
+                                 RenderMode renderMode = RenderMode.Gpu,
+                                 float alphaKeyPoint = OpenPose.FaceDefaultAlphaKeyPoint,
+                                 float alphaHeatMap = OpenPose.FaceDefaultAlphaHeatMap,
+                                 float renderThreshold = 0.4f)
         {
-            this.NativePtr = Native.op_wrapper_wrapperStructFace_new(enable);
+            using(var native = netInputSize.ToNative())
+                this.NativePtr = Native.op_wrapperStructFace_new(enable,
+                                                                 native.NativePtr,
+                                                                 renderMode,
+                                                                 alphaKeyPoint,
+                                                                 alphaHeatMap,
+                                                                 renderThreshold);
         }
 
         #endregion
@@ -24,12 +40,12 @@ namespace OpenPoseDotNet
             get
             {
                 this.ThrowIfDisposed();
-                return Native.op_wrapper_wrapperStructFace_get_enable(this.NativePtr);
+                return Native.op_wrapperStructFace_get_enable(this.NativePtr);
             }
             set
             {
                 this.ThrowIfDisposed();
-                Native.op_wrapper_wrapperStructFace_set_enable(this.NativePtr, value);
+                Native.op_wrapperStructFace_set_enable(this.NativePtr, value);
             }
         }
 
@@ -49,7 +65,7 @@ namespace OpenPoseDotNet
             if (this.NativePtr == IntPtr.Zero)
                 return;
 
-            Native.op_wrapper_wrapperStructFace_delete(this.NativePtr);
+            Native.op_wrapperStructFace_delete(this.NativePtr);
         }
 
         #endregion
@@ -60,17 +76,22 @@ namespace OpenPoseDotNet
         {
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr op_wrapper_wrapperStructFace_new(bool enable);
+            public static extern IntPtr op_wrapperStructFace_new(bool enable,
+                                                                 IntPtr netInputSize,
+                                                                 RenderMode renderMode,
+                                                                 float alphaKeyPoint,
+                                                                 float alphaHeatMap,
+                                                                 float renderThreshold);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern void op_wrapper_wrapperStructFace_delete(IntPtr face);
+            public static extern void op_wrapperStructFace_delete(IntPtr face);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             [return: MarshalAs(UnmanagedType.U1)]
-            public static extern bool op_wrapper_wrapperStructFace_get_enable(IntPtr face);
+            public static extern bool op_wrapperStructFace_get_enable(IntPtr face);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern void op_wrapper_wrapperStructFace_set_enable(IntPtr face, bool enable);
+            public static extern void op_wrapperStructFace_set_enable(IntPtr face, bool enable);
 
         }
 

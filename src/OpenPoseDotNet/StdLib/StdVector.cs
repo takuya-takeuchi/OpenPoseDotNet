@@ -25,9 +25,10 @@ namespace OpenPoseDotNet
         {
             var types = new[]
             {
-                new { Type = typeof(ErrorMode), ElementType = ElementTypes.ErrorMode },
-                new { Type = typeof(LogMode),   ElementType = ElementTypes.LogMode },
-                new { Type = typeof(Datum),     ElementType = ElementTypes.Datum }
+                new { Type = typeof(ErrorMode),   ElementType = ElementTypes.ErrorMode },
+                new { Type = typeof(LogMode),     ElementType = ElementTypes.LogMode },
+                new { Type = typeof(Datum),       ElementType = ElementTypes.Datum },
+                new { Type = typeof(HeatMapType), ElementType = ElementTypes.HeatMapType }
             };
 
             foreach (var type in types)
@@ -124,6 +125,8 @@ namespace OpenPoseDotNet
                         return new StdVectorLogModeImp(isEnabledDispose) as StdVectorImp<TItem>;
                     case ElementTypes.Datum:
                         return new StdVectorDatumImp(isEnabledDispose) as StdVectorImp<TItem>;
+                    case ElementTypes.HeatMapType:
+                        return new StdVectorHeatMapTypeImp(isEnabledDispose) as StdVectorImp<TItem>;
                 }
             }
 
@@ -141,7 +144,9 @@ namespace OpenPoseDotNet
 
             LogMode,
 
-            Datum
+            Datum,
+
+            HeatMapType
 
         }
 
@@ -400,6 +405,78 @@ namespace OpenPoseDotNet
                 var dst = new IntPtr[size];
                 OpenPose.Native.std_vector_Datum_copy(ptr, dst);
                 return dst.Select(p => new Datum(p, this.IsEnabledDispose)).ToArray();
+            }
+
+            #endregion
+
+        }
+
+        private sealed class StdVectorHeatMapTypeImp : StdVectorImp<HeatMapType>
+        {
+
+            #region Constructors
+
+            internal StdVectorHeatMapTypeImp(bool isEnabledDispose) :
+                base(isEnabledDispose)
+            {
+            }
+
+            #endregion
+
+            #region Methods
+
+            public override IntPtr Create()
+            {
+                return OpenPose.Native.std_vector_HeatMapType_new1();
+            }
+
+            public override IntPtr Create(int size)
+            {
+                if (size < 0)
+                    throw new ArgumentOutOfRangeException(nameof(size));
+
+                return OpenPose.Native.std_vector_HeatMapType_new2(new IntPtr(size));
+            }
+
+            public override IntPtr Create(IEnumerable<HeatMapType> data)
+            {
+                if (data == null)
+                    throw new ArgumentNullException(nameof(data));
+
+                var array = data.ToArray();
+                return OpenPose.Native.std_vector_HeatMapType_new3(array, new IntPtr(array.Length));
+            }
+
+            public override void Dispose(IntPtr ptr)
+            {
+                OpenPose.Native.std_vector_HeatMapType_delete(ptr);
+            }
+
+            public override bool Empty(IntPtr ptr)
+            {
+                return OpenPose.Native.std_vector_HeatMapType_empty(ptr);
+            }
+
+            public override IntPtr GetElementPtr(IntPtr ptr)
+            {
+                return OpenPose.Native.std_vector_HeatMapType_getPointer(ptr);
+            }
+
+            public override int GetSize(IntPtr ptr)
+            {
+                return OpenPose.Native.std_vector_HeatMapType_getSize(ptr).ToInt32();
+            }
+
+            public override HeatMapType[] ToArray(IntPtr ptr)
+            {
+                var size = this.GetSize(ptr);
+                if (size == 0)
+                    return new HeatMapType[0];
+
+                var dst = new HeatMapType[size];
+                var elementPtr = this.GetElementPtr(ptr);
+                InteropHelper.Copy(elementPtr, dst, dst.Length);
+                return dst;
             }
 
             #endregion
