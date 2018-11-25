@@ -36,16 +36,16 @@ namespace OpenPoseDotNet
             #region string
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr string_new();
+            public static extern IntPtr std_string_new();
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern void string_append(IntPtr str, StringBuilder c_str, int len);
+            public static extern void std_string_append(IntPtr str, StringBuilder c_str, int len);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr string_c_str(IntPtr str);
+            public static extern IntPtr std_string_c_str(IntPtr str);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern void string_delete(IntPtr str);
+            public static extern void std_string_delete(IntPtr str);
 
             #endregion
 
@@ -62,95 +62,151 @@ namespace OpenPoseDotNet
 
             #endregion
 
+            #region array
+
+            #region op::Array<float>
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern IntPtr std_array_op_Array_float_new1(int templateSize);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern IntPtr std_array_op_Array_float_getSize(IntPtr array, int templateSize);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern IntPtr std_array_op_Array_float_getPointer(IntPtr array, int templateSize);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            [return: MarshalAs(UnmanagedType.U1)]
+            public static extern bool std_array_op_Array_float_empty(IntPtr array, int templateSize);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void std_array_op_Array_float_delete(IntPtr array, int templateSize);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void std_array_op_Array_float_copy(IntPtr array, IntPtr[] dst, int templateSize);
+
+            #endregion
+
+            #endregion
+
             #region vector
 
             #region ErrorMode
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr stdvector_ErrorMode_new1();
+            public static extern IntPtr std_vector_ErrorMode_new1();
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr stdvector_ErrorMode_new2(IntPtr size);
+            public static extern IntPtr std_vector_ErrorMode_new2(IntPtr size);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr stdvector_ErrorMode_new3([In] ErrorMode[] data, IntPtr dataLength);
+            public static extern IntPtr std_vector_ErrorMode_new3([In] ErrorMode[] data, IntPtr dataLength);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr stdvector_ErrorMode_getSize(IntPtr vector);
+            public static extern IntPtr std_vector_ErrorMode_getSize(IntPtr vector);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr stdvector_ErrorMode_getPointer(IntPtr vector);
+            public static extern IntPtr std_vector_ErrorMode_getPointer(IntPtr vector);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern ErrorMode stdvector_ErrorMode_at(IntPtr vector, int index);
+            public static extern ErrorMode std_vector_ErrorMode_at(IntPtr vector, int index);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             [return: MarshalAs(UnmanagedType.U1)]
-            public static extern bool stdvector_ErrorMode_empty(IntPtr vector);
+            public static extern bool std_vector_ErrorMode_empty(IntPtr vector);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern void stdvector_ErrorMode_delete(IntPtr vector);
+            public static extern void std_vector_ErrorMode_delete(IntPtr vector);
 
             #endregion
 
             #region LogMode
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr stdvector_LogMode_new1();
+            public static extern IntPtr std_vector_LogMode_new1();
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr stdvector_LogMode_new2(IntPtr size);
+            public static extern IntPtr std_vector_LogMode_new2(IntPtr size);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr stdvector_LogMode_new3([In] LogMode[] data, IntPtr dataLength);
+            public static extern IntPtr std_vector_LogMode_new3([In] LogMode[] data, IntPtr dataLength);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr stdvector_LogMode_getSize(IntPtr vector);
+            public static extern IntPtr std_vector_LogMode_getSize(IntPtr vector);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr stdvector_LogMode_getPointer(IntPtr vector);
+            public static extern IntPtr std_vector_LogMode_getPointer(IntPtr vector);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern LogMode stdvector_LogMode_at(IntPtr vector, int index);
+            public static extern LogMode std_vector_LogMode_at(IntPtr vector, int index);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             [return: MarshalAs(UnmanagedType.U1)]
-            public static extern bool stdvector_LogMode_empty(IntPtr vector);
+            public static extern bool std_vector_LogMode_empty(IntPtr vector);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern void stdvector_LogMode_delete(IntPtr vector);
+            public static extern void std_vector_LogMode_delete(IntPtr vector);
 
             #endregion
 
             #region Datum
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr stdvector_Datum_new1();
+            public static extern IntPtr std_vector_Datum_new1();
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr stdvector_Datum_new2(IntPtr size);
+            public static extern IntPtr std_vector_Datum_new2(IntPtr size);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr stdvector_Datum_new3([In] IntPtr[] data, IntPtr dataLength);
+            public static extern IntPtr std_vector_Datum_new3([In] IntPtr[] data, IntPtr dataLength);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr stdvector_Datum_getSize(IntPtr vector);
+            public static extern IntPtr std_vector_Datum_getSize(IntPtr vector);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr stdvector_Datum_getPointer(IntPtr vector);
+            public static extern IntPtr std_vector_Datum_getPointer(IntPtr vector);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr stdvector_Datum_at(IntPtr vector, int index);
+            public static extern IntPtr std_vector_Datum_at(IntPtr vector, int index);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             [return: MarshalAs(UnmanagedType.U1)]
-            public static extern bool stdvector_Datum_empty(IntPtr vector);
+            public static extern bool std_vector_Datum_empty(IntPtr vector);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern void stdvector_Datum_delete(IntPtr vector);
+            public static extern void std_vector_Datum_delete(IntPtr vector);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern void stdvector_Datum_copy(IntPtr vector, IntPtr[] dst);
+            public static extern void std_vector_Datum_copy(IntPtr vector, IntPtr[] dst);
+
+            #endregion
+
+            #region HeatMapType
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern IntPtr std_vector_HeatMapType_new1();
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern IntPtr std_vector_HeatMapType_new2(IntPtr size);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern IntPtr std_vector_HeatMapType_new3([In] HeatMapType[] data, IntPtr dataLength);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern IntPtr std_vector_HeatMapType_getSize(IntPtr vector);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern IntPtr std_vector_HeatMapType_getPointer(IntPtr vector);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern HeatMapType std_vector_HeatMapType_at(IntPtr vector, int index);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            [return: MarshalAs(UnmanagedType.U1)]
+            public static extern bool std_vector_HeatMapType_empty(IntPtr vector);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void std_vector_HeatMapType_delete(IntPtr vector);
 
             #endregion
 
