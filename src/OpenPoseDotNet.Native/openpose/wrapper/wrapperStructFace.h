@@ -3,22 +3,32 @@
 
 #include "../shared.h"
 
-DLLEXPORT op::WrapperStructFace* op_wrapper_wrapperStructFace_new(const bool enable)
+DLLEXPORT op::WrapperStructFace* op_wrapperStructFace_new(const bool enable,
+                                                          const op::Point<int>* netInputSize,
+                                                          const op::RenderMode renderMode,
+                                                          const float alphaKeypoint,
+                                                          const float alphaHeatMap,
+                                                          const float renderThreshold)
 {
-    return new op::WrapperStructFace(enable);
+    return new op::WrapperStructFace(enable,
+                                     *netInputSize,
+                                     renderMode,
+                                     alphaKeypoint,
+                                     alphaHeatMap,
+                                     renderThreshold);
 }
 
-DLLEXPORT void op_wrapper_wrapperStructFace_delete(op::WrapperStructFace* face)
+DLLEXPORT void op_wrapperStructFace_delete(op::WrapperStructFace* face)
 {
     delete face;
 }
 
-DLLEXPORT bool op_wrapper_wrapperStructFace_get_enable(op::WrapperStructFace* face)
+DLLEXPORT bool op_wrapperStructFace_get_enable(op::WrapperStructFace* face)
 {
     return face->enable;
 }
 
-DLLEXPORT void op_wrapper_wrapperStructFace_set_enable(op::WrapperStructFace* face, const bool enable)
+DLLEXPORT void op_wrapperStructFace_set_enable(op::WrapperStructFace* face, const bool enable)
 {
     face->enable = enable;
 }

@@ -3,22 +3,38 @@
 
 #include "../shared.h"
 
-DLLEXPORT op::WrapperStructHand* op_wrapper_wrapperStructHand_new(const bool enable)
+DLLEXPORT op::WrapperStructHand* op_wrapperStructHand_new(const bool enable,
+                                                          const op::Point<int>* netInputSize,
+                                                          const int scalesNumber,
+                                                          const float scaleRange,
+                                                          const bool tracking,
+                                                          const op::RenderMode renderMode,
+                                                          const float alphaKeypoint,
+                                                          const float alphaHeatMap,
+                                                          const float renderThreshold)
 {
-    return new op::WrapperStructHand(enable);
+    return new op::WrapperStructHand(enable,
+                                     *netInputSize,
+                                     scalesNumber,
+                                     scaleRange,
+                                     tracking,
+                                     renderMode,
+                                     alphaKeypoint,
+                                     alphaHeatMap,
+                                     renderThreshold);
 }
 
-DLLEXPORT void op_wrapper_wrapperStructHand_delete(op::WrapperStructHand* hand)
+DLLEXPORT void op_wrapperStructHand_delete(op::WrapperStructHand* hand)
 {
     delete hand;
 }
 
-DLLEXPORT bool op_wrapper_wrapperStructHand_get_enable(op::WrapperStructHand* hand)
+DLLEXPORT bool op_wrapperStructHand_get_enable(op::WrapperStructHand* hand)
 {
     return hand->enable;
 }
 
-DLLEXPORT void op_wrapper_wrapperStructHand_set_enable(op::WrapperStructHand* hand, const bool enable)
+DLLEXPORT void op_wrapperStructHand_set_enable(op::WrapperStructHand* hand, const bool enable)
 {
     hand->enable = enable;
 }

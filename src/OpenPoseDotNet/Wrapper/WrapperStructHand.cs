@@ -8,11 +8,34 @@ namespace OpenPoseDotNet
     public sealed class WrapperStructHand : OpenPoseObject
     {
 
+        #region Fields
+
+        public static readonly Point<int> DefaultNetInputSize = new Point<int>(656, 368);
+
+        #endregion
+
         #region Constructors
 
-        public WrapperStructHand(bool enable = false)
+        public WrapperStructHand(bool enable = false,
+                                 Point<int> netInputSize = default (Point<int>),
+                                 int scalesNumber = 1,
+                                 float scaleRange = 0.4f,
+                                 bool tracking = false,
+                                 RenderMode renderMode = RenderMode.Gpu,
+                                 float alphaKeyPoint = OpenPose.HandDefaultAlphaKeyPoint,
+                                 float alphaHeatMap = OpenPose.HandDefaultAlphaHeatMap,
+                                 float renderThreshold = 0.2f)
         {
-            this.NativePtr = Native.op_wrapper_wrapperStructHand_new(enable);
+            using (var native = netInputSize.ToNative())
+                this.NativePtr = Native.op_wrapperStructHand_new(enable,
+                                                             native.NativePtr,
+                                                             scalesNumber,
+                                                             scaleRange,
+                                                             tracking,
+                                                             renderMode,
+                                                             alphaKeyPoint,
+                                                             alphaHeatMap,
+                                                             renderThreshold);
         }
 
         #endregion
@@ -24,12 +47,12 @@ namespace OpenPoseDotNet
             get
             {
                 this.ThrowIfDisposed();
-                return Native.op_wrapper_wrapperStructHand_get_enable(this.NativePtr);
+                return Native.op_wrapperStructHand_get_enable(this.NativePtr);
             }
             set
             {
                 this.ThrowIfDisposed();
-                Native.op_wrapper_wrapperStructHand_set_enable(this.NativePtr, value);
+                Native.op_wrapperStructHand_set_enable(this.NativePtr, value);
             }
         }
 
@@ -49,7 +72,7 @@ namespace OpenPoseDotNet
             if (this.NativePtr == IntPtr.Zero)
                 return;
 
-            Native.op_wrapper_wrapperStructHand_delete(this.NativePtr);
+            Native.op_wrapperStructHand_delete(this.NativePtr);
         }
 
         #endregion
@@ -60,17 +83,25 @@ namespace OpenPoseDotNet
         {
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr op_wrapper_wrapperStructHand_new(bool enable);
+            public static extern IntPtr op_wrapperStructHand_new(bool enable,
+                                                                 IntPtr netInputSize,
+                                                                 int scalesNumber,
+                                                                 float scaleRange,
+                                                                 bool tracking,
+                                                                 RenderMode renderMode,
+                                                                 float alphaKeyPoint,
+                                                                 float alphaHeatMap,
+                                                                 float renderThreshold);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern void op_wrapper_wrapperStructHand_delete(IntPtr hand);
+            public static extern void op_wrapperStructHand_delete(IntPtr hand);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             [return: MarshalAs(UnmanagedType.U1)]
-            public static extern bool op_wrapper_wrapperStructHand_get_enable(IntPtr hand);
+            public static extern bool op_wrapperStructHand_get_enable(IntPtr hand);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern void op_wrapper_wrapperStructHand_set_enable(IntPtr hand, bool enable);
+            public static extern void op_wrapperStructHand_set_enable(IntPtr hand, bool enable);
 
         }
 
