@@ -1,112 +1,48 @@
 ﻿
 /*
- * This sample program is ported by C# from examples/tutorial_api_cpp/3_keypoints_from_image_configurable.cpp.
+ * This sample program is ported by C# from examples/openpose/openpose.cpp.
 */
 
 using System;
-using System.IO;
-using Microsoft.Extensions.CommandLineUtils;
+using System.Diagnostics;
 using OpenPoseDotNet;
 
-namespace KeyPointsFromImageConfigurable
+namespace OpenPoseDemo
 {
 
     internal class Program
     {
 
-        #region Fields
-
-        private static string ImagePath;
-
-        #endregion
-
         #region Methods
 
-        private static void Main(string[] args)
+        private static void Main()
         {
-            var app = new CommandLineApplication(false)
-            {
-                Name = nameof(KeyPointsFromImageConfigurable)
-            };
-
-            app.HelpOption("-h|--help");
-
-            var disableMultiThreadArgument = app.Argument("disableMultiThread", "Disable MultiThread");
-            var inputImageOption = app.Option("-i|--image", "Input image", CommandOptionType.SingleValue);
-
-            app.OnExecute(() =>
-            {
-                if (disableMultiThreadArgument.Value != null)
-                    Flags.DisableMultiThread = true;
-
-                var path = inputImageOption.Value();
-                if (string.IsNullOrWhiteSpace(path) || !File.Exists(path))
-                {
-                    Console.WriteLine($"Argument 'image' is invalid or not found.");
-                    app.ShowHelp();
-                    return -1;
-                }
-
-                ImagePath = path;
-
-                TutorialApiCpp3();
-
-                return 0;
-            });
-
-            app.Execute(args);
+            OpenPoseDemo();
         }
 
         #region Helpers
 
-        private static void Display(SharedHandle<StdVector<Datum>> datumsPtr)
-        {
-            // User's displaying/saving/other processing here
-            // datum.cvOutputData: rendered frame with pose or heatmaps
-            // datum.poseKeypoints: Array<float> with the estimated pose
-            if (datumsPtr != null && datumsPtr.GetData(out var data) && !data.Empty)
-            {
-                // Display image
-                var temp = data.ToArray();
-                Cv.ImShow("User worker GUI", temp[0].CvOutputData);
-                Cv.WaitKey();
-            }
-            else
-            {
-                OpenPose.Log("Nullptr or empty datumsPtr found.", Priority.High);
-            }
-        }
-
-        private static void PrintKeypoints(SharedHandle<StdVector<Datum>> datumsPtr)
-        {
-            // Example: How to use the pose keypoints
-            if (datumsPtr != null && datumsPtr.GetData(out var data) && !data.Empty)
-            {
-                // Alternative 1
-                var temp = data.ToArray();
-                OpenPose.Log($"Body keypoints: {temp[0].PoseKeyPoints}");
-                OpenPose.Log($"Face keypoints: {temp[0].FaceKeyPoints}");
-                OpenPose.Log($"Left hand keypoints: {temp[0].HandKeyPoints[0]}");
-                OpenPose.Log($"Right hand keypoints: {temp[0].HandKeyPoints[1]}");
-            }
-            else
-            {
-                OpenPose.Log("Nullptr or empty datumsPtr found.", Priority.High);
-            }
-        }
-
-        private static int TutorialApiCpp3()
+        private static int OpenPoseDemo()
         {
             try
             {
                 OpenPose.Log("Starting OpenPose demo...", Priority.High);
+                var timer = new Stopwatch();
+                timer.Start();
 
                 // logging_level
                 OpenPose.Check(0 <= Flags.LoggingLevel && Flags.LoggingLevel <= 255, "Wrong logging_level value.");
                 ConfigureLog.PriorityThreshold = (Priority)Flags.LoggingLevel;
                 Profiler.SetDefaultX((ulong)Flags.ProfileSpeed);
+                // // For debugging
+                // // Print all logging messages
+                // op::ConfigureLog::setPriorityThreshold(op::Priority::None);
+                // // Print out speed values faster
+                // op::Profiler::setDefaultX(100);
 
                 // Applying user defined configuration - GFlags to program variables
+                // cameraSize
+                var cameraSize = OpenPose.FlagsToPoint(Flags.CameraResolution, "-1x-1");
                 // outputSize
                 var outputSize = OpenPose.FlagsToPoint(Flags.OutputResolution, "-1x-1");
                 // netInputSize
@@ -115,30 +51,34 @@ namespace KeyPointsFromImageConfigurable
                 var faceNetInputSize = OpenPose.FlagsToPoint(Flags.FaceNetResolution, "368x368 (multiples of 16)");
                 // handNetInputSize
                 var handNetInputSize = OpenPose.FlagsToPoint(Flags.HandNetResolution, "368x368 (multiples of 16)");
+                // producerType
+                var tie = OpenPose.FlagsToProducer(Flags.ImageDir, Flags.Video, Flags.IpCamera, Flags.Camera, Flags.FlirCamera, Flags.FlirCameraIndex);
+                var producerType = tie.Item1;
+                var producerString = tie.Item2;
                 // poseModel
                 var poseModel = OpenPose.FlagsToPoseModel(Flags.ModelPose);
                 // JSON saving
                 if (!string.IsNullOrEmpty(Flags.WriteKeyPoint))
                     OpenPose.Log("Flag `write_keypoint` is deprecated and will eventually be removed. Please, use `write_json` instead.", Priority.Max);
-                // keypointScale
-                var keypointScale = OpenPose.FlagsToScaleMode(Flags.KeyPointScale);
+                // keyPointScale
+                var keyPointScale = OpenPose.FlagsToScaleMode(Flags.KeyPointScale);
                 // heatmaps to add
                 var heatMapTypes = OpenPose.FlagsToHeatMaps(Flags.HeatmapsAddParts, Flags.HeatmapsAddBackground, Flags.HeatmapsAddPAFs);
                 var heatMapScale = OpenPose.FlagsToHeatMapScaleMode(Flags.HeatmapsScale);
                 // >1 camera view?
-                var multipleView = (Flags.Enable3D || Flags.Views3D > 1);
+                var multipleView = (Flags.Enable3D || Flags.Views3D > 1 || Flags.FlirCamera);
                 // Enabling Google Logging
                 const bool enableGoogleLogging = true;
 
                 // Configuring OpenPose
                 OpenPose.Log("Configuring OpenPose...", Priority.High);
-                using (var opWrapper = new Wrapper(ThreadManagerMode.Asynchronous))
+                using (var opWrapper = new Wrapper())
                 {
                     // Pose configuration (use WrapperStructPose{} for default and recommended configuration)
                     using (var pose = new WrapperStructPose(!Flags.BodyDisabled,
                                                             netInputSize,
                                                             outputSize,
-                                                            keypointScale,
+                                                            keyPointScale,
                                                             Flags.NumGpu,
                                                             Flags.NumGpuStart,
                                                             Flags.ScaleNumber,
@@ -180,6 +120,20 @@ namespace KeyPointsFromImageConfigurable
                                                               Flags.Identification,
                                                               Flags.Tracking,
                                                               Flags.IkThreads))
+                    // Producer (use default to disable any input)
+                    using (var input = new WrapperStructInput(producerType,
+                                                              producerString,
+                                                              Flags.FrameFirst,
+                                                              Flags.FrameStep,
+                                                              Flags.FrameLast,
+                                                              Flags.ProcessRealTime,
+                                                              Flags.FrameFlip,
+                                                              Flags.FrameRotate,
+                                                              Flags.FramesRepeat,
+                                                              cameraSize,
+                                                              Flags.CameraParameterFolder,
+                                                              !Flags.FrameKeepDistortion,
+                                                              (uint)Flags.Views3D))
                     // Output (comment or use default argument to disable any output)
                     using (var output = new WrapperStructOutput(Flags.CliVerbose,
                                                                 Flags.WriteKeyPoint,
@@ -195,39 +149,35 @@ namespace KeyPointsFromImageConfigurable
                                                                 Flags.WriteHeatmaps,
                                                                 Flags.WriteHeatmapsFormat,
                                                                 Flags.WriteVideoAdam,
-                                                                Flags.WriteBvh, 
+                                                                Flags.WriteBvh,
                                                                 Flags.UdpHost,
                                                                 Flags.UdpPort))
+                    // GUI (comment or use default argument to disable any visual output)
+                    using (var gui = new WrapperStructGui(OpenPose.FlagsToDisplayMode(Flags.Display, Flags.Enable3D),
+                                                          !Flags.NoGuiVerbose,
+                                                          Flags.FullScreen))
                     {
                         opWrapper.Configure(pose);
                         opWrapper.Configure(face);
                         opWrapper.Configure(hand);
                         opWrapper.Configure(extra);
+                        opWrapper.Configure(input);
                         opWrapper.Configure(output);
+                        opWrapper.Configure(gui);
 
-                        // No GUI. Equivalent to: opWrapper.configure(op::WrapperStructGui{});
                         // Set to single-thread (for sequential processing and/or debugging and/or reducing latency)
                         if (Flags.DisableMultiThread)
                             opWrapper.DisableMultiThreading();
 
-                        // Starting OpenPose
+                        // Start, run, and stop processing - exec() blocks this thread until OpenPose wrapper has finished
                         OpenPose.Log("Starting thread(s)...", Priority.High);
-                        opWrapper.Start();
+                        opWrapper.Exec();
 
-                        // Process and display image
-                        using (var imageToProcess = Cv.ImRead(ImagePath))
-                        using (var datumProcessed = opWrapper.EmplaceAndPop(imageToProcess))
-                        {
-                            if (datumProcessed != null)
-                            {
-                                PrintKeypoints(datumProcessed);
-                                Display(datumProcessed);
-                            }
-                            else
-                            {
-                                OpenPose.Log("Image could not be processed.", Priority.High);
-                            }
-                        }
+                        // Measuring total time
+                        timer.Stop();
+                        var totalTimeSec = timer.ElapsedMilliseconds * 1000;
+                        var message = $"OpenPose demo successfully finished. Total time: {totalTimeSec} seconds.";
+                        OpenPose.Log(message, Priority.High);
                     }
                 }
 

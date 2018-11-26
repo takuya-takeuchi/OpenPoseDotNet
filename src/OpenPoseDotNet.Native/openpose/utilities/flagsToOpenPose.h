@@ -49,4 +49,32 @@ DLLEXPORT op::ScaleMode op_flagsToHeatMapScaleMode(const int heatMapScale)
     return op::flagsToHeatMapScaleMode(heatMapScale);
 }
 
+DLLEXPORT void op_flagsToProducer(const char* imageDirectory,
+                                  const char* videoPath,
+                                  const char* ipCameraPath,
+                                  const int webcamIndex,
+                                  const bool flirCamera,
+                                  const int flirCameraIndex,
+                                  op::ProducerType* item1,
+                                  std::string** item2)
+{
+    const std::string str_imageDirectory(imageDirectory);
+    const std::string str_videoPath(videoPath);
+    const std::string str_ipCameraPath(ipCameraPath);
+
+    const auto ret = op::flagsToProducer(str_imageDirectory,
+                                         str_videoPath,
+                                         str_ipCameraPath,
+                                         webcamIndex,
+                                         flirCamera,
+                                         flirCameraIndex);
+    *item1 = ret.first;
+    *item2 = new std::string(ret.second);
+}
+
+DLLEXPORT op::DisplayMode op_flagsToDisplayMode(const int display, const bool enabled3d)
+{
+    return op::flagsToDisplayMode(display, enabled3d);
+}
+
 #endif
