@@ -16,7 +16,7 @@ namespace OpenPoseDotNet
         #region utilities/check
 
         public static void Check(bool condition,
-                                 string message, 
+                                 string message,
                                  int line = -1,
                                  string function = "",
                                  string file = "")
@@ -134,77 +134,125 @@ namespace OpenPoseDotNet
             return Native.op_flagsToHeatMapScaleMode(heatMapScale);
         }
 
+
+        public static Tuple<ProducerType, string> FlagsToProducer(string imageDirectory,
+                                                                  string videoPath,
+                                                                  string ipCameraPath,
+                                                                  int webcamIndex,
+                                                                  bool flirCamera,
+                                                                  int flirCameraIndex)
+        {
+            var imageDirectoryBytes = Encoding.UTF8.GetBytes(imageDirectory ?? "");
+            var videoPathBytes = Encoding.UTF8.GetBytes(videoPath ?? "");
+            var ipCameraPathBytes = Encoding.UTF8.GetBytes(ipCameraPath ?? "");
+            Native.op_flagsToProducer(imageDirectoryBytes,
+                                      videoPathBytes,
+                                      ipCameraPathBytes,
+                                      webcamIndex,
+                                      flirCamera,
+                                      flirCameraIndex,
+                                      out var item1, 
+                                      out var item2);
+
+            var str = "";
+            if (item2 != IntPtr.Zero)
+            {
+                str = StringHelper.FromStdString(item2);
+                Native.std_string_delete(item2);
+            }
+
+            return new Tuple<ProducerType, string>(item1, str);
+        }
+
+        public static DisplayMode FlagsToDisplayMode(int display, bool enabled3d)
+        {
+            return Native.op_flagsToDisplayMode(display, enabled3d);
+        }
+
         #endregion
 
         #endregion
 
         internal sealed partial class Native
-    {
+        {
 
-        #region utilities/check
+            #region utilities/check
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-        public static extern void op_check(bool condition,
-                                           byte[] message,
-                                           int line,
-                                           byte[] function,
-                                           byte[] file);
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void op_check(bool condition,
+                                               byte[] message,
+                                               int line,
+                                               byte[] function,
+                                               byte[] file);
 
-        #endregion
+            #endregion
 
-        #region utilities/errorAndLog
+            #region utilities/errorAndLog
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-        public static extern void op_dLog(byte[] message,
-                                                  Priority priority,
-                                                  int line,
-                                                  byte[] function,
-                                                  byte[] file);
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void op_dLog(byte[] message,
+                                                      Priority priority,
+                                                      int line,
+                                                      byte[] function,
+                                                      byte[] file);
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-        public static extern void op_error(byte[] message,
-                                           int line,
-                                           byte[] function,
-                                           byte[] file);
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void op_error(byte[] message,
+                                               int line,
+                                               byte[] function,
+                                               byte[] file);
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-        public static extern void op_log(byte[] message,
-                                         Priority priority,
-                                         int line,
-                                         byte[] function,
-                                         byte[] file);
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void op_log(byte[] message,
+                                             Priority priority,
+                                             int line,
+                                             byte[] function,
+                                             byte[] file);
 
-        #endregion
+            #endregion
 
-        #region utilities/flagsToOpenPose
+            #region utilities/flagsToOpenPose
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-        public static extern IntPtr op_flagsToPoint(byte[] pointString, byte[] pointExample);
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern IntPtr op_flagsToPoint(byte[] pointString, byte[] pointExample);
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-        public static extern void op_flagsToPoint_xy(byte[] pointString, byte[] pointExample, out int x, out int y);
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void op_flagsToPoint_xy(byte[] pointString, byte[] pointExample, out int x, out int y);
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-        public static extern RenderMode op_flagsToRenderMode(int renderFlag, bool gpuBuggy, int renderPoseFlag);
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern RenderMode op_flagsToRenderMode(int renderFlag, bool gpuBuggy, int renderPoseFlag);
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-        public static extern PoseModel op_flagsToPoseModel(byte[] poseModeString);
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern PoseModel op_flagsToPoseModel(byte[] poseModeString);
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-        public static extern ScaleMode op_flagsToScaleMode(int keyPointScale);
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern ScaleMode op_flagsToScaleMode(int keyPointScale);
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-        public static extern IntPtr op_flagsToHeatMaps(bool heatMapsAddParts,
-                                                       bool heatMapsAddBkg,
-                                                       bool heatMapsAddPAFs);
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern IntPtr op_flagsToHeatMaps(bool heatMapsAddParts,
+                                                           bool heatMapsAddBkg,
+                                                           bool heatMapsAddPAFs);
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-        public static extern ScaleMode op_flagsToHeatMapScaleMode(int heatMapScale);
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern ScaleMode op_flagsToHeatMapScaleMode(int heatMapScale);
 
-        #endregion
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void op_flagsToProducer(byte[] imageDirectory,
+                                                         byte[] videoPath,
+                                                         byte[] ipCameraPath,
+                                                         int webcamIndex,
+                                                         bool flirCamera,
+                                                         int flirCameraIndex,
+                                                         out ProducerType item1,
+                                                         out IntPtr item2);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern DisplayMode op_flagsToDisplayMode(int display, bool enabled3d);
+
+            #endregion
+
+        }
 
     }
-
-}
 
 }

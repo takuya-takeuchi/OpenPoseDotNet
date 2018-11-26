@@ -77,6 +77,16 @@ namespace OpenPoseDotNet
             Native.op_wrapper_configure_extra(this.NativePtr, extra.NativePtr);
         }
 
+        public void Configure(WrapperStructInput input)
+        {
+            if (input == null)
+                throw new ArgumentNullException(nameof(input));
+
+            input.ThrowIfDisposed();
+
+            Native.op_wrapper_configure_input(this.NativePtr, input.NativePtr);
+        }
+
         public void Configure(WrapperStructOutput output)
         {
             if (output == null)
@@ -86,6 +96,17 @@ namespace OpenPoseDotNet
 
             Native.op_wrapper_configure_output(this.NativePtr, output.NativePtr);
         }
+
+        public void Configure(WrapperStructGui gui)
+        {
+            if (gui == null)
+                throw new ArgumentNullException(nameof(gui));
+
+            gui.ThrowIfDisposed();
+
+            Native.op_wrapper_configure_gui(this.NativePtr, gui.NativePtr);
+        }
+
         public void DisableMultiThreading()
         {
             this.ThrowIfDisposed();
@@ -192,6 +213,9 @@ namespace OpenPoseDotNet
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern void op_wrapper_configure_output(IntPtr wrapper, IntPtr wrapperStructOutput);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void op_wrapper_configure_gui(IntPtr wrapper, IntPtr wrapperStructOutput);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern IntPtr op_wrapper_emplaceAndPop_cvMat(IntPtr wrapper, IntPtr mat);
