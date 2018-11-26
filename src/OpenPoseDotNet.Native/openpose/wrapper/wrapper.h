@@ -49,25 +49,25 @@ DLLEXPORT void op_wrapper_configure_hand(op::Wrapper* wrapper, op::WrapperStruct
     wrapper->configure(tmp);
 }
 
-DLLEXPORT void op_wrapper_configure_extra(op::Wrapper* wrapper, op::WrapperStructHand* wrapperStructExtra)
+DLLEXPORT void op_wrapper_configure_extra(op::Wrapper* wrapper, op::WrapperStructExtra* wrapperStructExtra)
 {
     auto& tmp = *wrapperStructExtra;
     wrapper->configure(tmp);
 }
 
-DLLEXPORT void op_wrapper_configure_input(op::Wrapper* wrapper, op::WrapperStructHand* wrapperStructInput)
+DLLEXPORT void op_wrapper_configure_input(op::Wrapper* wrapper, op::WrapperStructInput* wrapperStructInput)
 {
     auto& tmp = *wrapperStructInput;
     wrapper->configure(tmp);
 }
 
-DLLEXPORT void op_wrapper_configure_output(op::Wrapper* wrapper, op::WrapperStructHand* wrapperStructOutput)
+DLLEXPORT void op_wrapper_configure_output(op::Wrapper* wrapper, op::WrapperStructOutput* wrapperStructOutput)
 {
     auto& tmp = *wrapperStructOutput;
     wrapper->configure(tmp);
 }
 
-DLLEXPORT void op_wrapper_configure_gui(op::Wrapper* wrapper, op::WrapperStructHand* wrapperStructGui)
+DLLEXPORT void op_wrapper_configure_gui(op::Wrapper* wrapper, op::WrapperStructGui* wrapperStructGui)
 {
     auto& tmp = *wrapperStructGui;
     wrapper->configure(tmp);

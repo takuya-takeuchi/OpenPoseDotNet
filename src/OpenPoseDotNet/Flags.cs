@@ -58,10 +58,22 @@ namespace OpenPoseDotNet
             set => Native.op_flags_set_alpha_pose(value);
         }
 
+        public static int Camera
+        {
+            get => Native.op_flags_get_camera();
+            set => Native.op_flags_set_camera(value);
+        }
+
         public static double CliVerbose
         {
             get => Native.op_flags_get_cli_verbose();
             set => Native.op_flags_set_cli_verbose(value);
+        }
+
+        public static int Display
+        {
+            get => Native.op_flags_get_display();
+            set => Native.op_flags_set_display(value);
         }
 
         public static bool DisableBlending
@@ -94,10 +106,70 @@ namespace OpenPoseDotNet
             set => Native.op_flags_set_face_render_threshold(value);
         }
 
+        public static bool FlirCamera
+        {
+            get => Native.op_flags_get_flir_camera();
+            set => Native.op_flags_set_flir_camera(value);
+        }
+
+        public static int FlirCameraIndex
+        {
+            get => Native.op_flags_get_flir_camera_index();
+            set => Native.op_flags_set_flir_camera_index(value);
+        }
+
+        public static ulong FrameFirst
+        {
+            get => Native.op_flags_get_frame_first();
+            set => Native.op_flags_set_frame_first(value);
+        }
+
+        public static bool FrameFlip
+        {
+            get => Native.op_flags_get_frame_flip();
+            set => Native.op_flags_set_frame_flip(value);
+        }
+
+        public static bool FrameKeepDistortion
+        {
+            get => Native.op_flags_get_frame_keep_distortion();
+            set => Native.op_flags_set_frame_keep_distortion(value);
+        }
+
+        public static ulong FrameLast
+        {
+            get => Native.op_flags_get_frame_last();
+            set => Native.op_flags_set_frame_last(value);
+        }
+
+        public static int FrameRotate
+        {
+            get => Native.op_flags_get_frame_rotate();
+            set => Native.op_flags_set_frame_rotate(value);
+        }
+
+        public static bool FramesRepeat
+        {
+            get => Native.op_flags_get_frames_repeat();
+            set => Native.op_flags_set_frames_repeat(value);
+        }
+
+        public static ulong FrameStep
+        {
+            get => Native.op_flags_get_frame_step();
+            set => Native.op_flags_set_frame_step(value);
+        }
+
         public static double FpsMax
         {
             get => Native.op_flags_get_fps_max();
             set => Native.op_flags_set_fps_max(value);
+        }
+
+        public static bool FullScreen
+        {
+            get => Native.op_flags_get_fullscreen();
+            set => Native.op_flags_set_fullscreen(value);
         }
 
         public static double HandAlphaHeatmap
@@ -160,10 +232,22 @@ namespace OpenPoseDotNet
             set => Native.op_flags_set_maximize_positives(value);
         }
 
+        public static bool NoGuiVerbose
+        {
+            get => Native.op_flags_get_no_gui_verbose();
+            set => Native.op_flags_set_no_gui_verbose(value);
+        }
+
         public static bool PartCandidates
         {
             get => Native.op_flags_get_part_candidates();
             set => Native.op_flags_set_part_candidates(value);
+        }
+
+        public static bool ProcessRealTime
+        {
+            get => Native.op_flags_get_process_real_time();
+            set => Native.op_flags_set_process_real_time(value);
         }
 
         public static int NumGpu
@@ -274,6 +358,40 @@ namespace OpenPoseDotNet
             set => Native.op_flags_set_logging_level(value);
         }
 
+        public static string CameraParameterFolder
+        {
+            get
+            {
+                var stdstr = Native.op_flags_get_camera_parameter_folder();
+                var ret = StringHelper.FromStdString(stdstr);
+                if (stdstr != IntPtr.Zero)
+                    OpenPose.Native.std_string_delete(stdstr);
+                return ret;
+            }
+            set
+            {
+                var str = Encoding.UTF8.GetBytes(value ?? "");
+                Native.op_flags_set_camera_parameter_folder(str);
+            }
+        }
+
+        public static string CameraResolution
+        {
+            get
+            {
+                var stdstr = Native.op_flags_get_camera_resolution();
+                var ret = StringHelper.FromStdString(stdstr);
+                if (stdstr != IntPtr.Zero)
+                    OpenPose.Native.std_string_delete(stdstr);
+                return ret;
+            }
+            set
+            {
+                var str = Encoding.UTF8.GetBytes(value ?? "");
+                Native.op_flags_set_camera_resolution(str);
+            }
+        }
+
         public static string OutputResolution
         {
             get
@@ -339,6 +457,57 @@ namespace OpenPoseDotNet
             {
                 var str = Encoding.UTF8.GetBytes(value ?? "");
                 Native.op_flags_set_hand_net_resolution(str);
+            }
+        }
+
+        public static string ImageDir
+        {
+            get
+            {
+                var stdstr = Native.op_flags_get_image_dir();
+                var ret = StringHelper.FromStdString(stdstr);
+                if (stdstr != IntPtr.Zero)
+                    OpenPose.Native.std_string_delete(stdstr);
+                return ret;
+            }
+            set
+            {
+                var str = Encoding.UTF8.GetBytes(value ?? "");
+                Native.op_flags_set_image_dir(str);
+            }
+        }
+
+        public static string IpCamera
+        {
+            get
+            {
+                var stdstr = Native.op_flags_get_ip_camera();
+                var ret = StringHelper.FromStdString(stdstr);
+                if (stdstr != IntPtr.Zero)
+                    OpenPose.Native.std_string_delete(stdstr);
+                return ret;
+            }
+            set
+            {
+                var str = Encoding.UTF8.GetBytes(value ?? "");
+                Native.op_flags_set_ip_camera(str);
+            }
+        }
+
+        public static string Video
+        {
+            get
+            {
+                var stdstr = Native.op_flags_get_video();
+                var ret = StringHelper.FromStdString(stdstr);
+                if (stdstr != IntPtr.Zero)
+                    OpenPose.Native.std_string_delete(stdstr);
+                return ret;
+            }
+            set
+            {
+                var str = Encoding.UTF8.GetBytes(value ?? "");
+                Native.op_flags_set_video(str);
             }
         }
 
@@ -663,6 +832,12 @@ namespace OpenPoseDotNet
             public static extern void op_flags_set_body_disable(bool value);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern int op_flags_get_camera();
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void op_flags_set_camera(int value);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern double op_flags_get_cli_verbose();
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
@@ -681,6 +856,11 @@ namespace OpenPoseDotNet
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern void op_flags_set_disable_multi_thread(bool value);
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern int op_flags_get_display();
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void op_flags_set_display(int value);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             [return: MarshalAs(UnmanagedType.U1)]
@@ -714,10 +894,75 @@ namespace OpenPoseDotNet
             public static extern void op_flags_set_face_render_threshold(double value);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            [return: MarshalAs(UnmanagedType.U1)]
+            public static extern bool op_flags_get_flir_camera();
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void op_flags_set_flir_camera(bool value);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern int op_flags_get_flir_camera_index();
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void op_flags_set_flir_camera_index(int value);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern double op_flags_get_fps_max();
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern void op_flags_set_fps_max(double value);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern ulong op_flags_get_frame_first();
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void op_flags_set_frame_first(ulong value);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            [return: MarshalAs(UnmanagedType.U1)]
+            public static extern bool op_flags_get_frame_flip();
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void op_flags_set_frame_flip(bool value);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            [return: MarshalAs(UnmanagedType.U1)]
+            public static extern bool op_flags_get_frame_keep_distortion();
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void op_flags_set_frame_keep_distortion(bool value);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern ulong op_flags_get_frame_last();
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void op_flags_set_frame_last(ulong value);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern int op_flags_get_frame_rotate();
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void op_flags_set_frame_rotate(int value);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            [return: MarshalAs(UnmanagedType.U1)]
+            public static extern bool op_flags_get_frames_repeat();
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void op_flags_set_frames_repeat(bool value);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern ulong op_flags_get_frame_step();
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void op_flags_set_frame_step(ulong value);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            [return: MarshalAs(UnmanagedType.U1)]
+            public static extern bool op_flags_get_fullscreen();
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void op_flags_set_fullscreen(bool value);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             [return: MarshalAs(UnmanagedType.U1)]
@@ -829,6 +1074,13 @@ namespace OpenPoseDotNet
             public static extern void op_flags_set_maximize_positives(bool value);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            [return: MarshalAs(UnmanagedType.U1)]
+            public static extern bool op_flags_get_no_gui_verbose();
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void op_flags_set_no_gui_verbose(bool value);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern int op_flags_get_num_gpu();
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
@@ -858,6 +1110,13 @@ namespace OpenPoseDotNet
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern void op_flags_set_part_to_show(int value);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            [return: MarshalAs(UnmanagedType.U1)]
+            public static extern bool op_flags_get_process_real_time();
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void op_flags_set_process_real_time(bool value);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern int op_flags_get_profile_speed();
@@ -908,6 +1167,18 @@ namespace OpenPoseDotNet
             public static extern void op_flags_set_write_video_fps(double value);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern IntPtr op_flags_get_camera_parameter_folder();
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void op_flags_set_camera_parameter_folder(byte[] value);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern IntPtr op_flags_get_camera_resolution();
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void op_flags_set_camera_resolution(byte[] value);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern IntPtr op_flags_get_face_net_resolution();
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
@@ -918,6 +1189,18 @@ namespace OpenPoseDotNet
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern void op_flags_set_hand_net_resolution(byte[] value);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern IntPtr op_flags_get_image_dir();
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void op_flags_set_image_dir(byte[] value);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern IntPtr op_flags_get_ip_camera();
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void op_flags_set_ip_camera(byte[] value);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern IntPtr op_flags_get_model_folder();
@@ -1026,6 +1309,12 @@ namespace OpenPoseDotNet
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern void op_flags_set_write_video_adam(byte[] value);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern IntPtr op_flags_get_video();
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void op_flags_set_video(byte[] value);
 
         }
 
