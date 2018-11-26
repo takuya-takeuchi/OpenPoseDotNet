@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "2_WholeBodyFromImage", "exa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "3_KeyPointsFromImageConfigurable", "examples\Tutorial\3_KeyPointsFromImageConfigurable\3_KeyPointsFromImageConfigurable.csproj", "{DDEC0B42-56D6-48B5-AE57-9D6B066AE494}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenPoseDemo", "examples\OpenPoseDemo\OpenPoseDemo.csproj", "{06D51F05-34B9-4743-93BD-3092C922F306}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,10 @@ Global
 		{DDEC0B42-56D6-48B5-AE57-9D6B066AE494}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DDEC0B42-56D6-48B5-AE57-9D6B066AE494}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DDEC0B42-56D6-48B5-AE57-9D6B066AE494}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06D51F05-34B9-4743-93BD-3092C922F306}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06D51F05-34B9-4743-93BD-3092C922F306}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06D51F05-34B9-4743-93BD-3092C922F306}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06D51F05-34B9-4743-93BD-3092C922F306}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -58,6 +64,7 @@ Global
 		{D4C5BF0F-1C53-4521-B5B0-A7DED48C6A51} = {9636645D-A6CD-44A2-B8B0-C3EA476F047F}
 		{E12E5F2E-BD3A-447E-BA61-31B2658D6E61} = {9636645D-A6CD-44A2-B8B0-C3EA476F047F}
 		{DDEC0B42-56D6-48B5-AE57-9D6B066AE494} = {9636645D-A6CD-44A2-B8B0-C3EA476F047F}
+		{06D51F05-34B9-4743-93BD-3092C922F306} = {80F0C80F-FB14-4064-BA6A-13999DF04660}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9D8118C7-92BF-487E-83ED-EFB9BF807E08}
