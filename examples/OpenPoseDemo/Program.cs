@@ -186,9 +186,8 @@ namespace OpenPoseDemo
 
                 return 0;
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                Console.WriteLine(e);
                 return -1;
             }
         }
