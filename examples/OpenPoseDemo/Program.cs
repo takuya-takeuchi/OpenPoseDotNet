@@ -131,9 +131,9 @@ namespace OpenPoseDemo
                                                               Flags.FrameRotate,
                                                               Flags.FramesRepeat,
                                                               cameraSize,
-                                                              Flags.CameraParameterFolder,
-                                                              !Flags.FrameKeepDistortion,
-                                                              (uint)Flags.Views3D))
+                                                              Flags.CameraParameterPath,
+                                                              !Flags.FrameUndistort,
+                                                              Flags.Views3D))
                     // Output (comment or use default argument to disable any output)
                     using (var output = new WrapperStructOutput(Flags.CliVerbose,
                                                                 Flags.WriteKeyPoint,

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using OpenPoseDotNet.Interop;
 
 // ReSharper disable once CheckNamespace
@@ -25,6 +26,9 @@ namespace OpenPoseDotNet
         {
             var types = new[]
             {
+                new { Type = typeof(int),         ElementType = ElementTypes.Int32 },
+                new { Type = typeof(uint),        ElementType = ElementTypes.UInt32 },
+                new { Type = typeof(float),       ElementType = ElementTypes.Float },
                 new { Type = typeof(ErrorMode),   ElementType = ElementTypes.ErrorMode },
                 new { Type = typeof(LogMode),     ElementType = ElementTypes.LogMode },
                 new { Type = typeof(Datum),       ElementType = ElementTypes.Datum },
@@ -119,6 +123,12 @@ namespace OpenPoseDotNet
             {
                 switch (type)
                 {
+                    case ElementTypes.Int32:
+                        return new StdVectorInt32Imp(isEnabledDispose) as StdVectorImp<TItem>;
+                    case ElementTypes.UInt32:
+                        return new StdVectorUInt32Imp(isEnabledDispose) as StdVectorImp<TItem>;
+                    case ElementTypes.Float:
+                        return new StdVectorFloatImp(isEnabledDispose) as StdVectorImp<TItem>;
                     case ElementTypes.ErrorMode:
                         return new StdVectorErrorModeImp(isEnabledDispose) as StdVectorImp<TItem>;
                     case ElementTypes.LogMode:
@@ -139,6 +149,12 @@ namespace OpenPoseDotNet
 
         private enum ElementTypes
         {
+
+            Int32,
+
+            UInt32,
+
+            Float,
 
             ErrorMode,
 
@@ -190,6 +206,222 @@ namespace OpenPoseDotNet
             public abstract int GetSize(IntPtr ptr);
 
             public abstract T[] ToArray(IntPtr ptr);
+
+            #endregion
+
+        }
+
+        private sealed class StdVectorInt32Imp : StdVectorImp<int>
+        {
+
+            #region Constructors
+
+            internal StdVectorInt32Imp(bool isEnabledDispose) :
+                base(isEnabledDispose)
+            {
+            }
+
+            #endregion
+
+            #region Methods
+
+            public override IntPtr Create()
+            {
+                return OpenPose.Native.std_vector_int32_t_new1();
+            }
+
+            public override IntPtr Create(int size)
+            {
+                if (size < 0)
+                    throw new ArgumentOutOfRangeException(nameof(size));
+
+                return OpenPose.Native.std_vector_int32_t_new2(new IntPtr(size));
+            }
+
+            public override IntPtr Create(IEnumerable<int> data)
+            {
+                if (data == null)
+                    throw new ArgumentNullException(nameof(data));
+
+                var array = data.ToArray();
+                return OpenPose.Native.std_vector_int32_t_new3(array, new IntPtr(array.Length));
+            }
+
+            public override void Dispose(IntPtr ptr)
+            {
+                OpenPose.Native.std_vector_int32_t_delete(ptr);
+            }
+
+            public override bool Empty(IntPtr ptr)
+            {
+                return OpenPose.Native.std_vector_int32_t_empty(ptr);
+            }
+
+            public override IntPtr GetElementPtr(IntPtr ptr)
+            {
+                return OpenPose.Native.std_vector_int32_t_getPointer(ptr);
+            }
+
+            public override int GetSize(IntPtr ptr)
+            {
+                return OpenPose.Native.std_vector_int32_t_getSize(ptr).ToInt32();
+            }
+
+            public override int[] ToArray(IntPtr ptr)
+            {
+                var size = this.GetSize(ptr);
+                if (size == 0)
+                    return new int[0];
+
+                var dst = new int[size];
+                var elementPtr = this.GetElementPtr(ptr);
+                Marshal.Copy(elementPtr, dst, 0, dst.Length);
+                return dst;
+            }
+
+            #endregion
+
+        }
+
+        private sealed class StdVectorUInt32Imp : StdVectorImp<uint>
+        {
+
+            #region Constructors
+
+            internal StdVectorUInt32Imp(bool isEnabledDispose) :
+                base(isEnabledDispose)
+            {
+            }
+
+            #endregion
+
+            #region Methods
+
+            public override IntPtr Create()
+            {
+                return OpenPose.Native.std_vector_uint32_t_new1();
+            }
+
+            public override IntPtr Create(int size)
+            {
+                if (size < 0)
+                    throw new ArgumentOutOfRangeException(nameof(size));
+
+                return OpenPose.Native.std_vector_uint32_t_new2(new IntPtr(size));
+            }
+
+            public override IntPtr Create(IEnumerable<uint> data)
+            {
+                if (data == null)
+                    throw new ArgumentNullException(nameof(data));
+
+                var array = data.ToArray();
+                return OpenPose.Native.std_vector_uint32_t_new3(array, new IntPtr(array.Length));
+            }
+
+            public override void Dispose(IntPtr ptr)
+            {
+                OpenPose.Native.std_vector_uint32_t_delete(ptr);
+            }
+
+            public override bool Empty(IntPtr ptr)
+            {
+                return OpenPose.Native.std_vector_uint32_t_empty(ptr);
+            }
+
+            public override IntPtr GetElementPtr(IntPtr ptr)
+            {
+                return OpenPose.Native.std_vector_uint32_t_getPointer(ptr);
+            }
+
+            public override int GetSize(IntPtr ptr)
+            {
+                return OpenPose.Native.std_vector_uint32_t_getSize(ptr).ToInt32();
+            }
+
+            public override uint[] ToArray(IntPtr ptr)
+            {
+                var size = this.GetSize(ptr);
+                if (size == 0)
+                    return new uint[0];
+
+                var dst = new uint[size];
+                var elementPtr = this.GetElementPtr(ptr);
+                InteropHelper.Copy(elementPtr, dst, dst.Length);
+                return dst;
+            }
+
+            #endregion
+
+        }
+
+        private sealed class StdVectorFloatImp : StdVectorImp<float>
+        {
+
+            #region Constructors
+
+            internal StdVectorFloatImp(bool isEnabledDispose) :
+                base(isEnabledDispose)
+            {
+            }
+
+            #endregion
+
+            #region Methods
+
+            public override IntPtr Create()
+            {
+                return OpenPose.Native.std_vector_float_new1();
+            }
+
+            public override IntPtr Create(int size)
+            {
+                if (size < 0)
+                    throw new ArgumentOutOfRangeException(nameof(size));
+
+                return OpenPose.Native.std_vector_float_new2(new IntPtr(size));
+            }
+
+            public override IntPtr Create(IEnumerable<float> data)
+            {
+                if (data == null)
+                    throw new ArgumentNullException(nameof(data));
+
+                var array = data.ToArray();
+                return OpenPose.Native.std_vector_float_new3(array, new IntPtr(array.Length));
+            }
+
+            public override void Dispose(IntPtr ptr)
+            {
+                OpenPose.Native.std_vector_float_delete(ptr);
+            }
+
+            public override bool Empty(IntPtr ptr)
+            {
+                return OpenPose.Native.std_vector_float_empty(ptr);
+            }
+
+            public override IntPtr GetElementPtr(IntPtr ptr)
+            {
+                return OpenPose.Native.std_vector_float_getPointer(ptr);
+            }
+
+            public override int GetSize(IntPtr ptr)
+            {
+                return OpenPose.Native.std_vector_float_getSize(ptr).ToInt32();
+            }
+
+            public override float[] ToArray(IntPtr ptr)
+            {
+                var size = this.GetSize(ptr);
+                if (size == 0)
+                    return new float[0];
+
+                var dst = new float[size];
+                var elementPtr = this.GetElementPtr(ptr);
+                Marshal.Copy(elementPtr, dst, 0, dst.Length);
+                return dst;
+            }
 
             #endregion
 

@@ -135,6 +135,9 @@ DLLEXPORT bool std_vector_##__TYPENAME__##_delete(std::vector<__TYPE__*> *vector
 #pragma endregion template
 
 // primitives
+MAKE_FUNC(int32_t, int32_t)
+MAKE_FUNC(uint32_t, uint32_t)
+MAKE_FUNC(float, float)
 MAKE_FUNC(op::LogMode, LogMode)
 MAKE_FUNC(op::ErrorMode, ErrorMode)
 MAKE_FUNC(op::HeatMapType, HeatMapType)

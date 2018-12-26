@@ -25,6 +25,24 @@ namespace OpenPoseDotNet
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern IntPtr op_core_Array_toString(IntPtr array, ArrayElementType elementType);
 
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern ErrorType op_core_Array_gets(IntPtr array, ArrayElementType type, int index, out IntPtr ret);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern ErrorType op_core_Array_getSize(IntPtr array, ArrayElementType type, int index, out int ret);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern ErrorType op_core_Array_getSize2(IntPtr array, ArrayElementType type, out IntPtr ret);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern ErrorType op_core_Array_getNumberDimensions(IntPtr array, ArrayElementType type, out uint ret);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern ErrorType op_core_Array_getVolume(IntPtr array, ArrayElementType type, out uint ret);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern ErrorType op_core_Array_empty(IntPtr array, ArrayElementType type, out bool ret);
+
             #endregion
 
             #region std::shared_ptr
@@ -58,6 +76,21 @@ namespace OpenPoseDotNet
             public static extern void op_core_point_double_delete(IntPtr point);
 
             #endregion
+
+            internal enum ErrorType
+            {
+
+                OK = 0x00000000,
+
+                #region Common
+
+                CommonError = 0x70000000,
+
+                CommonErrorTypeNotSupport = -(CommonError | 0x00000001)
+
+                #endregion
+
+            }
 
         }
 

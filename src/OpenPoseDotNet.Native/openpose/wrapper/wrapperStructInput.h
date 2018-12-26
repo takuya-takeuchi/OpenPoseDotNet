@@ -15,7 +15,7 @@ DLLEXPORT op::WrapperStructInput* op_wrapperStructInput_new(const op::ProducerTy
                                                             const op::Point<int>* cameraResolution,
                                                             const char* cameraParameterPath,
                                                             const bool undistortImage,
-                                                            const unsigned int imageDirectoryStereo)
+                                                            const int numberViews)
 {
     return new op::WrapperStructInput(producerType,
                                       std::string(producerString),
@@ -29,7 +29,7 @@ DLLEXPORT op::WrapperStructInput* op_wrapperStructInput_new(const op::ProducerTy
                                       *cameraResolution,
                                       std::string(cameraParameterPath),
                                       undistortImage,
-                                      imageDirectoryStereo);
+                                      numberViews);
 }
 
 DLLEXPORT void op_wrapperStructInput_delete(op::WrapperStructInput* input)
