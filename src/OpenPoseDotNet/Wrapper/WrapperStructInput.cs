@@ -29,7 +29,7 @@ namespace OpenPoseDotNet
                                   Point<int> cameraResolution = default(Point<int>),
                                   string cameraParameterPath = "models/cameraParameters/",
                                   bool undistortImage = true,
-                                  uint imageDirectoryStereo = 1)
+                                  int numberViews = -1)
         {
             if (cameraParameterPath == null)
                 throw new ArgumentNullException(nameof(cameraParameterPath));
@@ -50,7 +50,7 @@ namespace OpenPoseDotNet
                                                                   native.NativePtr,
                                                                   cameraParameterPathBytes,
                                                                   undistortImage,
-                                                                  imageDirectoryStereo);
+                                                                  numberViews);
         }
 
         #endregion
@@ -92,7 +92,7 @@ namespace OpenPoseDotNet
                                                                   IntPtr cameraResolution,
                                                                   byte[] cameraParameterPath,
                                                                   bool undistortImage,
-                                                                  uint imageDirectoryStereo);
+                                                                  int numberViews);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern void op_wrapperStructInput_delete(IntPtr face);

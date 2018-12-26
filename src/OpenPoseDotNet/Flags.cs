@@ -130,10 +130,10 @@ namespace OpenPoseDotNet
             set => Native.op_flags_set_frame_flip(value);
         }
 
-        public static bool FrameKeepDistortion
+        public static bool FrameUndistort
         {
-            get => Native.op_flags_get_frame_keep_distortion();
-            set => Native.op_flags_set_frame_keep_distortion(value);
+            get => Native.op_flags_get_frame_undistort();
+            set => Native.op_flags_set_frame_undistort(value);
         }
 
         public static ulong FrameLast
@@ -358,11 +358,11 @@ namespace OpenPoseDotNet
             set => Native.op_flags_set_logging_level(value);
         }
 
-        public static string CameraParameterFolder
+        public static string CameraParameterPath
         {
             get
             {
-                var stdstr = Native.op_flags_get_camera_parameter_folder();
+                var stdstr = Native.op_flags_get_camera_parameter_path();
                 var ret = StringHelper.FromStdString(stdstr);
                 if (stdstr != IntPtr.Zero)
                     OpenPose.Native.std_string_delete(stdstr);
@@ -371,7 +371,7 @@ namespace OpenPoseDotNet
             set
             {
                 var str = Encoding.UTF8.GetBytes(value ?? "");
-                Native.op_flags_set_camera_parameter_folder(str);
+                Native.op_flags_set_camera_parameter_path(str);
             }
         }
 
@@ -927,10 +927,10 @@ namespace OpenPoseDotNet
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             [return: MarshalAs(UnmanagedType.U1)]
-            public static extern bool op_flags_get_frame_keep_distortion();
+            public static extern bool op_flags_get_frame_undistort();
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern void op_flags_set_frame_keep_distortion(bool value);
+            public static extern void op_flags_set_frame_undistort(bool value);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern ulong op_flags_get_frame_last();
@@ -1167,10 +1167,10 @@ namespace OpenPoseDotNet
             public static extern void op_flags_set_write_video_fps(double value);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr op_flags_get_camera_parameter_folder();
+            public static extern IntPtr op_flags_get_camera_parameter_path();
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern void op_flags_set_camera_parameter_folder(byte[] value);
+            public static extern void op_flags_set_camera_parameter_path(byte[] value);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern IntPtr op_flags_get_camera_resolution();

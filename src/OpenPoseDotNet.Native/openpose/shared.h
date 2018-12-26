@@ -12,6 +12,10 @@ enum struct array_element_type : int
 
 #define ERR_OK                                                            0x00000000
 
+// common
+#define ERR_COMMON_ERROR                                                  0x70000000
+#define ERR_COMMON_TYPE_NOT_SUPPORT                  -(ERR_COMMON_ERROR | 0x00000001)
+
 #pragma region template
 
 #define MAKE_SHARED_PTR_FUNC(__TYPE__, __TYPENAME__)\
