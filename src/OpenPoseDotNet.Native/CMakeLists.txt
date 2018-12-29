@@ -38,10 +38,9 @@ configure_file(
     @ONLY)
 
 set(STATIC_LIBRARIES
-    optimized ../../../openpose/3rdparty/windows/opencv/x64/vc14/lib/opencv_world310
+    ../../../openpose/3rdparty/windows/opencv/x64/vc14/lib/opencv_world310
     optimized ../../../openpose/3rdparty/windows/caffe3rdparty/lib/gflags
     optimized ../../../openpose/build/src/openpose/Release/openpose
-    debug ../../../openpose/3rdparty/windows/opencv/x64/vc14/lib/opencv_world310d
     debug ../../../openpose/3rdparty/windows/caffe3rdparty/lib/gflagsd
     debug ../../../openpose/build/src/openpose/Debug/openposed
 )
