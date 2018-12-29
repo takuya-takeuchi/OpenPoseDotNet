@@ -132,7 +132,7 @@ namespace OpenPoseDemo
                                                               Flags.FramesRepeat,
                                                               cameraSize,
                                                               Flags.CameraParameterPath,
-                                                              !Flags.FrameUndistort,
+                                                              Flags.FrameUndistort,
                                                               Flags.Views3D))
                     // Output (comment or use default argument to disable any output)
                     using (var output = new WrapperStructOutput(Flags.CliVerbose,
