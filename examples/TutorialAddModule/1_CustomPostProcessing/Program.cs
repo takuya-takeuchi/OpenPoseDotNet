@@ -1,44 +1,44 @@
-﻿
-/*
- * This sample program is ported by C# from examples/openpose/openpose.cpp.
+﻿/*
+ * This sample program is ported by C# from examples/tutorial_api_cpp/1_body_from_image.cpp.
 */
 
 using System;
 using System.Diagnostics;
 using OpenPoseDotNet;
 
-namespace OpenPoseDemo
+namespace CustomPostProcessing
 {
 
     internal class Program
     {
 
+        #region Fields
+
+        private static string ImagePath;
+
+        #endregion
+
         #region Methods
 
-        private static void Main()
+        private static void Main(string[] args)
         {
-            OpenPoseDemo();
+            TutorialAddModule1();
         }
 
         #region Helpers
 
-        private static int OpenPoseDemo()
+        private static int TutorialAddModule1()
         {
             try
             {
                 OpenPose.Log("Starting OpenPose demo...", Priority.High);
-                var timer = new Stopwatch();
-                timer.Start();
+                var timeBegin = new Stopwatch();
+                timeBegin.Start();
 
                 // logging_level
                 OpenPose.Check(0 <= Flags.LoggingLevel && Flags.LoggingLevel <= 255, "Wrong logging_level value.");
                 ConfigureLog.PriorityThreshold = (Priority)Flags.LoggingLevel;
                 Profiler.SetDefaultX((ulong)Flags.ProfileSpeed);
-                // // For debugging
-                // // Print all logging messages
-                // op::ConfigureLog::setPriorityThreshold(op::Priority::None);
-                // // Print out speed values faster
-                // op::Profiler::setDefaultX(100);
 
                 // Applying user defined configuration - GFlags to program variables
                 // cameraSize
@@ -59,8 +59,8 @@ namespace OpenPoseDemo
                 var poseModel = OpenPose.FlagsToPoseModel(Flags.ModelPose);
                 // JSON saving
                 if (!string.IsNullOrEmpty(Flags.WriteKeyPoint))
-                    OpenPose.Log("Flag `write_keypoint` is deprecated and will eventually be removed. Please, use `write_json` instead.", Priority.Max);
-                // keyPointScale
+                    OpenPose.Log("Flag `write_keypoint` is deprecated and will eventually be removed. Please, use `write_json` instead.");
+                // keypointScale
                 var keyPointScale = OpenPose.FlagsToScaleMode(Flags.KeyPointScale);
                 // heatmaps to add
                 var heatMapTypes = OpenPose.FlagsToHeatMaps(Flags.HeatmapsAddParts, Flags.HeatmapsAddBackground, Flags.HeatmapsAddPAFs);
@@ -72,7 +72,7 @@ namespace OpenPoseDemo
 
                 // Configuring OpenPose
                 OpenPose.Log("Configuring OpenPose...", Priority.High);
-                using (var opWrapper = new Wrapper())
+                using (var opWrapper = new CustomWrapper())
                 {
                     // Pose configuration (use WrapperStructPose{} for default and recommended configuration)
                     using (var pose = new WrapperStructPose(!Flags.BodyDisabled,
@@ -82,32 +82,32 @@ namespace OpenPoseDemo
                                                             Flags.NumGpu,
                                                             Flags.NumGpuStart,
                                                             Flags.ScaleNumber,
-                                                            (float)Flags.ScaleGap, 
+                                                            (float)Flags.ScaleGap,
                                                             OpenPose.FlagsToRenderMode(Flags.RenderPose, multipleView),
-                                                            poseModel, 
-                                                            !Flags.DisableBlending, 
+                                                            poseModel,
+                                                            !Flags.DisableBlending,
                                                             (float)Flags.AlphaPose,
                                                             (float)Flags.AlphaHeatmap,
-                                                            Flags.PartToShow, 
-                                                            Flags.ModelFolder, 
-                                                            heatMapTypes, 
-                                                            heatMapScale, 
+                                                            Flags.PartToShow,
+                                                            Flags.ModelFolder,
+                                                            heatMapTypes,
+                                                            heatMapScale,
                                                             Flags.PartCandidates,
                                                             (float)Flags.RenderThreshold,
-                                                            Flags.NumberPeopleMax, 
-                                                            Flags.MaximizePositives, 
+                                                            Flags.NumberPeopleMax,
+                                                            Flags.MaximizePositives,
                                                             Flags.FpsMax,
                                                             enableGoogleLogging))
                     // Face configuration (use op::WrapperStructFace{} to disable it)
-                    using (var face = new WrapperStructFace(Flags.Face, 
+                    using (var face = new WrapperStructFace(Flags.Face,
                                                             faceNetInputSize,
                                                             OpenPose.FlagsToRenderMode(Flags.FaceRender, multipleView, Flags.RenderPose),
                                                             (float)Flags.FaceAlphaPose,
                                                             (float)Flags.FaceAlphaHeatmap,
                                                             (float)Flags.FaceRenderThreshold))
                     // Hand configuration (use op::WrapperStructHand{} to disable it)
-                    using (var hand = new WrapperStructHand(Flags.Hand, 
-                                                            handNetInputSize, 
+                    using (var hand = new WrapperStructHand(Flags.Hand,
+                                                            handNetInputSize,
                                                             Flags.HandScaleNumber,
                                                             (float)Flags.HandScaleRange, Flags.HandTracking,
                                                             OpenPose.FlagsToRenderMode(Flags.HandRender, multipleView, Flags.RenderPose),
@@ -165,25 +165,32 @@ namespace OpenPoseDemo
                         opWrapper.Configure(output);
                         opWrapper.Configure(gui);
 
+                        // Custom post-processing
+                        var userPostProcessing = new UserPostProcessing(/* Your class arguments here */);
+                        var wUserPostProcessing = new WUserPostProcessing(
+                            userPostProcessing
+                        );
+                        // Add custom processing
+                        const bool workerProcessingOnNewThread = false;
+                        opWrapper.SetWorker(WorkerType.PostProcessing, wUserPostProcessing, workerProcessingOnNewThread);
+
                         // Set to single-thread (for sequential processing and/or debugging and/or reducing latency)
                         if (Flags.DisableMultiThread)
                             opWrapper.DisableMultiThreading();
 
-                        // Start, run, and stop processing - exec() blocks this thread until OpenPose wrapper has finished
                         OpenPose.Log("Starting thread(s)...", Priority.High);
+                        // Start, run & stop threads - it blocks this thread until all others have finished
                         opWrapper.Exec();
 
                         // Measuring total time
-                        timer.Stop();
-                        var totalTimeSec = timer.ElapsedMilliseconds * 1000;
+                        timeBegin.Stop();
+                        var totalTimeSec = timeBegin.ElapsedMilliseconds * 1000;
                         var message = $"OpenPose demo successfully finished. Total time: {totalTimeSec} seconds.";
                         OpenPose.Log(message, Priority.High);
                     }
                 }
 
                 // Return successful message
-                OpenPose.Log("Stopping OpenPose...", Priority.High);
-
                 return 0;
             }
             catch (Exception)
