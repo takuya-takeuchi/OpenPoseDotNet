@@ -3,7 +3,6 @@
 
 #include "../shared.h"
 #include "customDatum.h"
-#include "customProcessing.h"
 #include "customWorker.h"
 #include "customWrapper.h"
 
@@ -29,14 +28,9 @@ DLLEXPORT void op_CustomDatum_set_data(CustomDatum* datum, void* data)
     datum->data = data;
 }
 
-DLLEXPORT CustomProcessing* op_CustomProcessing_new(void (*initializationOnThread_function)(), void (*process_function)(TCustomDatumsSP*))
+DLLEXPORT TCustomWorker* op_CustomWorker_new(void (*initializationOnThread_function)(), void (*process_function)(TCustomDatumsSP*))
 {
-    return new CustomProcessing(initializationOnThread_function, process_function);
-}
-
-DLLEXPORT TCustomWorker* op_CustomWorker_new(CustomProcessing* custom_processing)
-{
-    return new TCustomWorker(new CustomWorker(custom_processing));
+    return new TCustomWorker(new CustomWorker(initializationOnThread_function, process_function));
 }
 
 DLLEXPORT CustomWrapper* op_custom_wrapper_new(const op::ThreadManagerMode threadManagerMode)

@@ -3,19 +3,20 @@
 
 #include "../shared.h"
 #include "customDatum.h"
-#include "customProcessing.h"
 
 class CustomWorker : public op::Worker<TCustomDatumsSP>
 {
 public:
-    CustomWorker(CustomProcessing* processing);
+    CustomWorker(void (*initializationOnThread_function)(), void (*process_function)(TCustomDatumsSP*));
 
     void initializationOnThread();
 
     void work(TCustomDatumsSP& tDatums);
 
 private:
-    CustomProcessing* m_processing;
+    void (*m_initializationOnThread_function)();
+
+    void (*m_process_function)(TCustomDatumsSP*);
 
 };
 
