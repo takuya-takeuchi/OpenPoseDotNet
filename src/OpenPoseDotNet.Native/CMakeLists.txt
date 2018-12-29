@@ -66,6 +66,11 @@ set(CompilerFlags
     CMAKE_C_FLAGS_RELEASE
 )
 
+# Replace /MDd with /MD. openposed is debug library but it does not depend on non debug runtime library
+foreach(CompilerFlag ${CompilerFlags})
+  string(REPLACE "/MDd" "/MD" ${CompilerFlag} "${${CompilerFlag}}")
+endforeach()
+
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 include(CPack)
