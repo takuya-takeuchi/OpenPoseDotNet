@@ -36,6 +36,11 @@ namespace OpenPoseDotNet
 
             Native.op_Profiler_printAveragedTimeMsEveryXIterations(keyBytes, line, functionBytes, fileBytes, x);
         }
+        
+        public static void PrintAveragedTimeMsOnIterationX(string key, int line, string function, string file)
+        {
+            PrintAveragedTimeMsOnIterationX(key, line, function, file, DefaultX);
+        }
 
         public static void PrintAveragedTimeMsOnIterationX(string key, int line, string function, string file, ulong x)
         {
