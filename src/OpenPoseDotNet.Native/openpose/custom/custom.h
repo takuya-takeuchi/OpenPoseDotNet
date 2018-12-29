@@ -33,6 +33,32 @@ DLLEXPORT TCustomWorker* op_CustomWorker_new(void (*initializationOnThread_funct
     return new TCustomWorker(new CustomWorker(initializationOnThread_function, process_function));
 }
 
+DLLEXPORT void op_CustomWorker_delete(TCustomWorker* worker)
+{
+    auto content = worker->get();
+    delete content;
+    delete worker;
+}
+
+DLLEXPORT bool op_CustomWorker_checkAndWork(TCustomWorker* worker, TCustomDatumsSP* datums)
+{
+    auto content = worker->get();
+    TCustomDatumsSP& tmp = *datums;
+    return content->checkAndWork(tmp);
+}
+
+DLLEXPORT bool op_CustomWorker_isRunning(TCustomWorker* worker)
+{
+    auto content = worker->get();
+    return content->isRunning();
+}
+
+DLLEXPORT void op_CustomWorker_stop(TCustomWorker* worker)
+{
+    auto content = worker->get();
+    content->stop();
+}
+
 DLLEXPORT CustomWrapper* op_custom_wrapper_new(const op::ThreadManagerMode threadManagerMode)
 {
     return new CustomWrapper{ threadManagerMode };
