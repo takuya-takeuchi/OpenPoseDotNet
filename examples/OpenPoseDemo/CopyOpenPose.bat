@@ -35,5 +35,9 @@ mkdir models\hand
 copy ..\..\openpose\models\hand\pose_deploy.prototxt models\hand /y
 copy ..\..\openpose\models\hand\pose_iter_102000.caffemodel models\hand /y
 
+mkdir models\cameraParameters
+mkdir models\cameraParameters\flir
+copy ..\..\openpose\models\cameraParameters\17012332.xml.example models\cameraParameters\flir /y
+
 mkdir bin\%1\netcoreapp2.0\models
 xcopy models bin\%1\netcoreapp2.0\models /y /s
