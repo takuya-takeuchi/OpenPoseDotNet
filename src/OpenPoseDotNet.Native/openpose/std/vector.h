@@ -3,6 +3,7 @@
 
 #include "../shared.h"
 #include <openpose/headers.hpp>
+#include "../custom/customDatum.h"
 
 #pragma region template
 
@@ -143,5 +144,6 @@ MAKE_FUNC(op::ErrorMode, ErrorMode)
 MAKE_FUNC(op::HeatMapType, HeatMapType)
 
 MAKE_FUNC_CLASS(op::Datum, Datum)
+MAKE_FUNC_CLASS(CustomDatum, CustomDatum)
 
 #endif

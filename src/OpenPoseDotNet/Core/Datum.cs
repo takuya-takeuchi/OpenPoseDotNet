@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 namespace OpenPoseDotNet
 {
 
-    public sealed class Datum : OpenPoseObject
+    public class Datum : OpenPoseObject
     {
 
         #region Constructors

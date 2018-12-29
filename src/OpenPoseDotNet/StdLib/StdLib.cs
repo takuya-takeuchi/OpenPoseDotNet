@@ -268,6 +268,38 @@ namespace OpenPoseDotNet
 
             #endregion
 
+            #region CustomDatum
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern IntPtr std_vector_CustomDatum_new1();
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern IntPtr std_vector_CustomDatum_new2(IntPtr size);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern IntPtr std_vector_CustomDatum_new3([In] IntPtr[] data, IntPtr dataLength);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern IntPtr std_vector_CustomDatum_getSize(IntPtr vector);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern IntPtr std_vector_CustomDatum_getPointer(IntPtr vector);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern IntPtr std_vector_CustomDatum_at(IntPtr vector, int index);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            [return: MarshalAs(UnmanagedType.U1)]
+            public static extern bool std_vector_CustomDatum_empty(IntPtr vector);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void std_vector_CustomDatum_delete(IntPtr vector);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void std_vector_CustomDatum_copy(IntPtr vector, IntPtr[] dst);
+
+            #endregion
+
             #region HeatMapType
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
