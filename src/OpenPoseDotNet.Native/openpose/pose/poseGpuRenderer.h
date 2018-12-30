@@ -1,16 +1,18 @@
-#ifndef _CPP_OP_POSE_POSE_CPU_RENDERER_H_
-#define _CPP_OP_POSE_POSE_CPU_RENDERER_H_
+#ifndef _CPP_OP_POSE_POSE_GPU_RENDERER_H_
+#define _CPP_OP_POSE_POSE_GPU_RENDERER_H_
 
 #include "../shared.h"
 
-DLLEXPORT op::PoseCpuRenderer* op_PoseCpuRenderer_new(const op::PoseModel poseModel,
+DLLEXPORT op::PoseGpuRenderer* op_PoseGpuRenderer_new(const op::PoseModel poseModel,
+                                                      const std::shared_ptr<op::PoseExtractorNet>* poseExtractorNet,
                                                       const float renderThreshold,
                                                       const bool blendOriginalFrame,
                                                       const float alphaKeypoint,
                                                       const float alphaHeatMap,
                                                       const unsigned int elementToRender)
 {
-    return new op::PoseCpuRenderer(poseModel,
+    return new op::PoseGpuRenderer(poseModel,
+                                   *poseExtractorNet,
                                    renderThreshold,
                                    blendOriginalFrame,
                                    alphaKeypoint,
@@ -18,17 +20,17 @@ DLLEXPORT op::PoseCpuRenderer* op_PoseCpuRenderer_new(const op::PoseModel poseMo
                                    elementToRender);
 }
 
-DLLEXPORT void op_PoseCpuRenderer_delete(op::PoseCpuRenderer* renderer)
+DLLEXPORT void op_PoseGpuRenderer_delete(op::PoseGpuRenderer* renderer)
 {
     delete renderer;
 }
 
-DLLEXPORT void op_PoseCpuRenderer_initializationOnThread(op::PoseCpuRenderer* renderer)
+DLLEXPORT void op_PoseGpuRenderer_initializationOnThread(op::PoseGpuRenderer* renderer)
 {
     renderer->initializationOnThread();
 }
 
-DLLEXPORT void op_PoseCpuRenderer_renderPose(op::PoseCpuRenderer* renderer,
+DLLEXPORT void op_PoseGpuRenderer_renderPose(op::PoseGpuRenderer* renderer,
                                              op::Array<float>* outputData,
                                              const op::Array<float>* poseKeypoints,
                                              const float scaleInputToOutput,
@@ -43,7 +45,7 @@ DLLEXPORT void op_PoseCpuRenderer_renderPose(op::PoseCpuRenderer* renderer,
     *item2 = new std::string(ret.second);
 }
 
-DLLEXPORT void op_PoseCpuRenderer_setElementToRender(op::PoseCpuRenderer* renderer,
+DLLEXPORT void op_PoseGpuRenderer_setElementToRender(op::PoseGpuRenderer* renderer,
                                                      const int elementToRender)
 {
     renderer->setElementToRender(elementToRender);

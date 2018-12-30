@@ -5,19 +5,19 @@ using System.Runtime.InteropServices;
 namespace OpenPoseDotNet
 {
 
-    public sealed class PoseCpuRenderer : OpenPoseObject, IPoseRenderer, IRenderer
+    public sealed class PoseGpuRenderer : OpenPoseObject, IPoseRenderer, IGpuRenderer
     {
 
         #region Constructors
 
-        public PoseCpuRenderer(PoseModel poseModel,
+        public PoseGpuRenderer(PoseModel poseModel,
                                float renderThreshold,
                                bool blendOriginalFrame = true,
                                float alphaKeyPoint = OpenPose.PoseDefaultAlphaKeyPoint,
                                float alphaHeatMap = OpenPose.PoseDefaultAlphaHeatMap,
                                uint elementToRender = 0u)
         {
-            this.NativePtr = Native.op_PoseCpuRenderer_new(poseModel,
+            this.NativePtr = Native.op_PoseGpuRenderer_new(poseModel,
                                                            renderThreshold,
                                                            blendOriginalFrame,
                                                            alphaKeyPoint,
@@ -32,7 +32,7 @@ namespace OpenPoseDotNet
         public void InitializationOnThread()
         {
             this.ThrowIfDisposed();
-            Native.op_PoseCpuRenderer_initializationOnThread(this.NativePtr);
+            Native.op_PoseGpuRenderer_initializationOnThread(this.NativePtr);
         }
 
         public Tuple<int, string> RenderPose(Array<float> outputData,
@@ -50,7 +50,7 @@ namespace OpenPoseDotNet
             outputData.ThrowIfDisposed();
             poseKeyPoints.ThrowIfDisposed();
 
-            Native.op_PoseCpuRenderer_renderPose(this.NativePtr, 
+            Native.op_PoseGpuRenderer_renderPose(this.NativePtr, 
                                                  outputData.NativePtr, 
                                                  poseKeyPoints.NativePtr,
                                                  scaleInputToOutput,
@@ -65,7 +65,7 @@ namespace OpenPoseDotNet
         public void SetElementToRender(int elementToRender)
         {
             this.ThrowIfDisposed();
-            Native.op_PoseCpuRenderer_setElementToRender(this.NativePtr, elementToRender);
+            Native.op_PoseGpuRenderer_setElementToRender(this.NativePtr, elementToRender);
         }
 
         #region Overrides
@@ -80,7 +80,7 @@ namespace OpenPoseDotNet
             if (this.NativePtr == IntPtr.Zero)
                 return;
 
-            PoseCpuRenderer.Native.op_PoseCpuRenderer_delete(this.NativePtr);
+            PoseGpuRenderer.Native.op_PoseGpuRenderer_delete(this.NativePtr);
         }
 
         #endregion
@@ -91,7 +91,8 @@ namespace OpenPoseDotNet
         {
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr op_PoseCpuRenderer_new(PoseModel poseModel,
+            public static extern IntPtr op_PoseGpuRenderer_new(PoseModel poseModel,
+                                                               IntPtr poseExtractorNet,
                                                                float renderThreshold,
                                                                bool blendOriginalFrame,
                                                                float alphaKeyPoint,
@@ -99,13 +100,13 @@ namespace OpenPoseDotNet
                                                                uint elementToRender);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern void op_PoseCpuRenderer_delete(IntPtr renderer);
+            public static extern void op_PoseGpuRenderer_delete(IntPtr renderer);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern void op_PoseCpuRenderer_initializationOnThread(IntPtr renderer);
+            public static extern void op_PoseGpuRenderer_initializationOnThread(IntPtr renderer);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern void op_PoseCpuRenderer_renderPose(IntPtr renderer,
+            public static extern void op_PoseGpuRenderer_renderPose(IntPtr renderer,
                                                                     IntPtr outputData,
                                                                     IntPtr poseKeypoints,
                                                                     float scaleInputToOutput,
@@ -114,7 +115,7 @@ namespace OpenPoseDotNet
                                                                     out IntPtr item2);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern void op_PoseCpuRenderer_setElementToRender(IntPtr renderer, int elementToRender);
+            public static extern void op_PoseGpuRenderer_setElementToRender(IntPtr renderer, int elementToRender);
 
         }
 
