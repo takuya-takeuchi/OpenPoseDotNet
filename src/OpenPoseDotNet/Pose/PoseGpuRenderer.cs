@@ -11,6 +11,7 @@ namespace OpenPoseDotNet
         #region Constructors
 
         public PoseGpuRenderer(PoseModel poseModel,
+                               StdSharedPtr<PoseExtractorCaffe> poseExtractorNet,
                                float renderThreshold,
                                bool blendOriginalFrame = true,
                                float alphaKeyPoint = OpenPose.PoseDefaultAlphaKeyPoint,
@@ -18,6 +19,7 @@ namespace OpenPoseDotNet
                                uint elementToRender = 0u)
         {
             this.NativePtr = Native.op_PoseGpuRenderer_new(poseModel,
+                                                           poseExtractorNet.NativePtr,
                                                            renderThreshold,
                                                            blendOriginalFrame,
                                                            alphaKeyPoint,
@@ -80,7 +82,7 @@ namespace OpenPoseDotNet
             if (this.NativePtr == IntPtr.Zero)
                 return;
 
-            PoseGpuRenderer.Native.op_PoseGpuRenderer_delete(this.NativePtr);
+            Native.op_PoseGpuRenderer_delete(this.NativePtr);
         }
 
         #endregion

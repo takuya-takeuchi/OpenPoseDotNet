@@ -37,6 +37,11 @@ namespace OpenPoseDotNet
                                                                                     enableGoogleLogging);
         }
 
+        internal PoseExtractorCaffe(IntPtr ptr, bool isEnabledDispose = true) :
+            base(ptr, isEnabledDispose)
+        {
+        }
+
         #endregion
 
         #region Methods
@@ -56,6 +61,12 @@ namespace OpenPoseDotNet
                                                                            inputDataSizeNative.NativePtr,
                                                                            scaleVector.NativePtr);
         }
+
+        //public override void InitializationOnThread()
+        //{
+        //    this.ThrowIfDisposed();
+        //    PoseExtractorCaffeNative.op_PoseExtractorCaffe_initializationOnThread(this.NativePtr);
+        //}
 
         #region Overrides
 

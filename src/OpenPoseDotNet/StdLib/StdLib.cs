@@ -424,6 +424,23 @@ namespace OpenPoseDotNet
 
             #endregion
 
+            #region share_ptr
+
+            #region op::PoseExtractorCaffe
+            
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern IntPtr std_shared_ptr_op_PoseExtractorCaffe_new(IntPtr ptr);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void std_shared_ptr_op_PoseExtractorCaffe_delete(IntPtr p);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern IntPtr std_shared_ptr_op_PoseExtractorCaffe_get(IntPtr p);
+
+            #endregion
+
+            #endregion
+
         }
 
     }
