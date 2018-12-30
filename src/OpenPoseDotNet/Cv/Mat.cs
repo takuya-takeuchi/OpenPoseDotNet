@@ -44,6 +44,15 @@ namespace OpenPoseDotNet
             }
         }
 
+        public bool Empty
+        {
+            get
+            {
+                this.ThrowIfDisposed();
+                return Native.op_3rdparty_cv_mat_empty(this.NativePtr);
+            }
+        }
+
         public int Rows
         {
             get
@@ -87,6 +96,10 @@ namespace OpenPoseDotNet
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern void op_3rdparty_cv_mat_delete(IntPtr mat);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            [return: MarshalAs(UnmanagedType.U1)]
+            public static extern bool op_3rdparty_cv_mat_empty(IntPtr mat);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern int op_3rdparty_cv_mat_rows(IntPtr mat);

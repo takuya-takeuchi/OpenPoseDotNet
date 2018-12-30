@@ -173,6 +173,18 @@ namespace OpenPoseDotNet
         internal sealed partial class Native
         {
 
+            [StructLayout(LayoutKind.Explicit)]
+            internal struct NativePointOfInt32
+            {
+
+                [FieldOffset(0)]
+                public int x;
+
+                [FieldOffset(4)]
+                public int y;
+
+            }
+
             #region utilities/check
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]

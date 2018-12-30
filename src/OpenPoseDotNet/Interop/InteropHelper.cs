@@ -64,6 +64,12 @@ namespace OpenPoseDotNet.Interop
                 dest[i] = (HeatMapType)tmp[i];
         }
 
+        public static unsafe void Copy(IntPtr ptrSource, OpenPose.Native.NativePointOfInt32[] dest, int elements)
+        {
+            fixed (OpenPose.Native.NativePointOfInt32* ptrDest = &dest[0])
+                NativeMethods.memcpy((IntPtr)ptrDest, ptrSource, (elements * sizeof(OpenPose.Native.NativePointOfInt32)));
+        }
+
         public static unsafe void Copy(uint[] source, IntPtr ptrDest, int elements)
         {
             fixed (uint* ptrSource = &source[0])

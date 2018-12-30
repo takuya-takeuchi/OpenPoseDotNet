@@ -26,14 +26,17 @@ namespace OpenPoseDotNet
         {
             var types = new[]
             {
-                new { Type = typeof(int),         ElementType = ElementTypes.Int32 },
-                new { Type = typeof(uint),        ElementType = ElementTypes.UInt32 },
-                new { Type = typeof(float),       ElementType = ElementTypes.Float },
-                new { Type = typeof(ErrorMode),   ElementType = ElementTypes.ErrorMode },
-                new { Type = typeof(LogMode),     ElementType = ElementTypes.LogMode },
-                new { Type = typeof(Datum),       ElementType = ElementTypes.Datum },
-                new { Type = typeof(CustomDatum), ElementType = ElementTypes.CustomDatum },
-                new { Type = typeof(HeatMapType), ElementType = ElementTypes.HeatMapType }
+                new { Type = typeof(int),          ElementType = ElementTypes.Int32 },
+                new { Type = typeof(uint),         ElementType = ElementTypes.UInt32 },
+                new { Type = typeof(float),        ElementType = ElementTypes.Float },
+                new { Type = typeof(double),       ElementType = ElementTypes.Double },
+                new { Type = typeof(ErrorMode),    ElementType = ElementTypes.ErrorMode },
+                new { Type = typeof(LogMode),      ElementType = ElementTypes.LogMode },
+                new { Type = typeof(Point<int>),   ElementType = ElementTypes.PointOfInt32 },
+                new { Type = typeof(Array<float>), ElementType = ElementTypes.ArrayFloat },
+                new { Type = typeof(Datum),        ElementType = ElementTypes.Datum },
+                new { Type = typeof(CustomDatum),  ElementType = ElementTypes.CustomDatum },
+                new { Type = typeof(HeatMapType),  ElementType = ElementTypes.HeatMapType }
             };
 
             foreach (var type in types)
@@ -130,10 +133,16 @@ namespace OpenPoseDotNet
                         return new StdVectorUInt32Imp(isEnabledDispose) as StdVectorImp<TItem>;
                     case ElementTypes.Float:
                         return new StdVectorFloatImp(isEnabledDispose) as StdVectorImp<TItem>;
+                    case ElementTypes.Double:
+                        return new StdVectorDoubleImp(isEnabledDispose) as StdVectorImp<TItem>;
                     case ElementTypes.ErrorMode:
                         return new StdVectorErrorModeImp(isEnabledDispose) as StdVectorImp<TItem>;
                     case ElementTypes.LogMode:
                         return new StdVectorLogModeImp(isEnabledDispose) as StdVectorImp<TItem>;
+                    case ElementTypes.PointOfInt32:
+                        return new StdVectorPointOfInt32Imp(isEnabledDispose) as StdVectorImp<TItem>;
+                    case ElementTypes.ArrayFloat:
+                        return new StdVectorArrayOfFloatImp(isEnabledDispose) as StdVectorImp<TItem>;
                     case ElementTypes.Datum:
                         return new StdVectorDatumImp(isEnabledDispose) as StdVectorImp<TItem>;
                     case ElementTypes.CustomDatum:
@@ -159,9 +168,15 @@ namespace OpenPoseDotNet
 
             Float,
 
+            Double,
+
             ErrorMode,
 
             LogMode,
+
+            PointOfInt32,
+
+            ArrayFloat,
 
             Datum,
 
@@ -432,6 +447,78 @@ namespace OpenPoseDotNet
 
         }
 
+        private sealed class StdVectorDoubleImp : StdVectorImp<double>
+        {
+
+            #region Constructors
+
+            internal StdVectorDoubleImp(bool isEnabledDispose) :
+                base(isEnabledDispose)
+            {
+            }
+
+            #endregion
+
+            #region Methods
+
+            public override IntPtr Create()
+            {
+                return OpenPose.Native.std_vector_double_new1();
+            }
+
+            public override IntPtr Create(int size)
+            {
+                if (size < 0)
+                    throw new ArgumentOutOfRangeException(nameof(size));
+
+                return OpenPose.Native.std_vector_double_new2(new IntPtr(size));
+            }
+
+            public override IntPtr Create(IEnumerable<double> data)
+            {
+                if (data == null)
+                    throw new ArgumentNullException(nameof(data));
+
+                var array = data.ToArray();
+                return OpenPose.Native.std_vector_double_new3(array, new IntPtr(array.Length));
+            }
+
+            public override void Dispose(IntPtr ptr)
+            {
+                OpenPose.Native.std_vector_double_delete(ptr);
+            }
+
+            public override bool Empty(IntPtr ptr)
+            {
+                return OpenPose.Native.std_vector_double_empty(ptr);
+            }
+
+            public override IntPtr GetElementPtr(IntPtr ptr)
+            {
+                return OpenPose.Native.std_vector_double_getPointer(ptr);
+            }
+
+            public override int GetSize(IntPtr ptr)
+            {
+                return OpenPose.Native.std_vector_double_getSize(ptr).ToInt32();
+            }
+
+            public override double[] ToArray(IntPtr ptr)
+            {
+                var size = this.GetSize(ptr);
+                if (size == 0)
+                    return new double[0];
+
+                var dst = new double[size];
+                var elementPtr = this.GetElementPtr(ptr);
+                Marshal.Copy(elementPtr, dst, 0, dst.Length);
+                return dst;
+            }
+
+            #endregion
+
+        }
+
         private sealed class StdVectorErrorModeImp : StdVectorImp<ErrorMode>
         {
 
@@ -576,6 +663,150 @@ namespace OpenPoseDotNet
 
         }
 
+        private sealed class StdVectorPointOfInt32Imp : StdVectorImp<Point<int>>
+        {
+
+            #region Constructors
+
+            internal StdVectorPointOfInt32Imp(bool isEnabledDispose) :
+                base(isEnabledDispose)
+            {
+            }
+
+            #endregion
+
+            #region Methods
+
+            public override IntPtr Create()
+            {
+                return OpenPose.Native.std_vector_PointOfInt32_t_new1();
+            }
+
+            public override IntPtr Create(int size)
+            {
+                if (size < 0)
+                    throw new ArgumentOutOfRangeException(nameof(size));
+
+                return OpenPose.Native.std_vector_PointOfInt32_t_new2(new IntPtr(size));
+            }
+
+            public override IntPtr Create(IEnumerable<Point<int>> data)
+            {
+                if (data == null)
+                    throw new ArgumentNullException(nameof(data));
+
+                var array = data.Select(p => new OpenPose.Native.NativePointOfInt32 { x = p.X, y = p.Y }).ToArray();
+                return OpenPose.Native.std_vector_PointOfInt32_t_new3(array, new IntPtr(array.Length));
+            }
+
+            public override void Dispose(IntPtr ptr)
+            {
+                OpenPose.Native.std_vector_PointOfInt32_t_delete(ptr);
+            }
+
+            public override bool Empty(IntPtr ptr)
+            {
+                return OpenPose.Native.std_vector_PointOfInt32_t_empty(ptr);
+            }
+
+            public override IntPtr GetElementPtr(IntPtr ptr)
+            {
+                return OpenPose.Native.std_vector_PointOfInt32_t_getPointer(ptr);
+            }
+
+            public override int GetSize(IntPtr ptr)
+            {
+                return OpenPose.Native.std_vector_PointOfInt32_t_getSize(ptr).ToInt32();
+            }
+
+            public override Point<int>[] ToArray(IntPtr ptr)
+            {
+                var size = this.GetSize(ptr);
+                if (size == 0)
+                    return new Point<int>[0];
+
+                var dst = new OpenPose.Native.NativePointOfInt32[size];
+                var elementPtr = this.GetElementPtr(ptr);
+                InteropHelper.Copy(elementPtr, dst, dst.Length);
+                return dst.Select(p => new Point<int>(p.x, p.y)).ToArray();
+            }
+
+            #endregion
+
+        }
+
+        private sealed class StdVectorArrayOfFloatImp : StdVectorImp<Array<float>>
+        {
+
+            #region Constructors
+
+            internal StdVectorArrayOfFloatImp(bool isEnabledDispose) :
+                base(isEnabledDispose)
+            {
+            }
+
+            #endregion
+
+            #region Methods
+
+            public override IntPtr Create()
+            {
+                return OpenPose.Native.std_vector_op_ArrayOfFloat_new1();
+            }
+
+            public override IntPtr Create(int size)
+            {
+                if (size < 0)
+                    throw new ArgumentOutOfRangeException(nameof(size));
+
+                return OpenPose.Native.std_vector_op_ArrayOfFloat_new2(new IntPtr(size));
+            }
+
+            public override IntPtr Create(IEnumerable<Array<float>> data)
+            {
+                if (data == null)
+                    throw new ArgumentNullException(nameof(data));
+
+                var array = data.Select(d => d.NativePtr).ToArray();
+                return OpenPose.Native.std_vector_op_ArrayOfFloat_new3(array, new IntPtr(array.Length));
+            }
+
+            public override void Dispose(IntPtr ptr)
+            {
+                if (this.IsEnabledDispose)
+                    OpenPose.Native.std_vector_op_ArrayOfFloat_delete(ptr);
+            }
+
+            public override bool Empty(IntPtr ptr)
+            {
+                return OpenPose.Native.std_vector_op_ArrayOfFloat_empty(ptr);
+            }
+
+            public override IntPtr GetElementPtr(IntPtr ptr)
+            {
+                return OpenPose.Native.std_vector_op_ArrayOfFloat_getPointer(ptr);
+            }
+
+            public override int GetSize(IntPtr ptr)
+            {
+                return OpenPose.Native.std_vector_op_ArrayOfFloat_getSize(ptr).ToInt32();
+            }
+
+            public override Array<float>[] ToArray(IntPtr ptr)
+            {
+                var size = this.GetSize(ptr);
+                if (size == 0)
+                    return new Array<float>[0];
+
+                var dst = new IntPtr[size];
+                OpenPose.Native.std_vector_op_ArrayOfFloat_copy(ptr, dst);
+                return dst.Select(p => new Array<float>(p, this.IsEnabledDispose)).ToArray();
+            }
+
+            #endregion
+
+        }
+
         private sealed class StdVectorDatumImp : StdVectorImp<Datum>
         {
 
@@ -608,7 +839,7 @@ namespace OpenPoseDotNet
                 if (data == null)
                     throw new ArgumentNullException(nameof(data));
 
-                var array = data.Select(rectangle => rectangle.NativePtr).ToArray();
+                var array = data.Select(d => d.NativePtr).ToArray();
                 return OpenPose.Native.std_vector_Datum_new3(array, new IntPtr(array.Length));
             }
 
@@ -680,7 +911,7 @@ namespace OpenPoseDotNet
                 if (data == null)
                     throw new ArgumentNullException(nameof(data));
 
-                var array = data.Select(rectangle => rectangle.NativePtr).ToArray();
+                var array = data.Select(d => d.NativePtr).ToArray();
                 return OpenPose.Native.std_vector_CustomDatum_new3(array, new IntPtr(array.Length));
             }
 

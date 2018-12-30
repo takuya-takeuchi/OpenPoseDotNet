@@ -78,6 +78,7 @@ namespace OpenPoseDotNet
             public static extern UInt64 op_CameraParameterReader_getNumberCameras(IntPtr parameter);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            [return: MarshalAs(UnmanagedType.U1)]
             public static extern bool op_CameraParameterReader_getUndistortImage(IntPtr parameter);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]

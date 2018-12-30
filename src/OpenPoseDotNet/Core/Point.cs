@@ -114,12 +114,14 @@ namespace OpenPoseDotNet
 
         }
 
-        private abstract class PointImp<T>
+        private abstract class PointImp<U>
         {
 
             #region Methods
 
-            public abstract IOpenPoseObject ToNative(T x, T y);
+            public abstract IOpenPoseObject ToNative(U x, U y);
+
+            public abstract IOpenPoseObject ToNative(IntPtr ptr);
 
             #endregion
 
@@ -135,6 +137,11 @@ namespace OpenPoseDotNet
                 return new NativePoint(x, y);
             }
 
+            public override IOpenPoseObject ToNative(IntPtr ptr)
+            {
+                return new NativePoint(ptr);
+            }
+
             #endregion
 
             private sealed class NativePoint : OpenPoseObject
@@ -145,6 +152,11 @@ namespace OpenPoseDotNet
                 public NativePoint(int x, int y)
                 {
                     this.NativePtr = OpenPose.Native.op_core_point_int_new(x, y);
+                }
+
+                public NativePoint(IntPtr ptr)
+                {
+                    this.NativePtr = ptr;
                 }
 
                 #endregion
@@ -184,6 +196,11 @@ namespace OpenPoseDotNet
                 return new NativePoint(x, y);
             }
 
+            public override IOpenPoseObject ToNative(IntPtr ptr)
+            {
+                return new NativePoint(ptr);
+            }
+
             #endregion
 
             private sealed class NativePoint : OpenPoseObject
@@ -194,6 +211,11 @@ namespace OpenPoseDotNet
                 public NativePoint(float x, float y)
                 {
                     this.NativePtr = OpenPose.Native.op_core_point_float_new(x, y);
+                }
+
+                public NativePoint(IntPtr ptr)
+                {
+                    this.NativePtr = ptr;
                 }
 
                 #endregion
@@ -233,6 +255,11 @@ namespace OpenPoseDotNet
                 return new NativePoint(x, y);
             }
 
+            public override IOpenPoseObject ToNative(IntPtr ptr)
+            {
+                return new NativePoint(ptr);
+            }
+
             #endregion
 
             private sealed class NativePoint : OpenPoseObject
@@ -243,6 +270,11 @@ namespace OpenPoseDotNet
                 public NativePoint(double x, double y)
                 {
                     this.NativePtr = OpenPose.Native.op_core_point_double_new(x, y);
+                }
+
+                public NativePoint(IntPtr ptr)
+                {
+                    this.NativePtr = ptr;
                 }
 
                 #endregion
