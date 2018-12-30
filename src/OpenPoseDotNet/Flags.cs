@@ -363,9 +363,7 @@ namespace OpenPoseDotNet
             get
             {
                 var stdstr = Native.op_flags_get_camera_parameter_path();
-                var ret = StringHelper.FromStdString(stdstr);
-                if (stdstr != IntPtr.Zero)
-                    OpenPose.Native.std_string_delete(stdstr);
+                var ret = StringHelper.FromStdString(stdstr, true);
                 return ret;
             }
             set
@@ -380,9 +378,7 @@ namespace OpenPoseDotNet
             get
             {
                 var stdstr = Native.op_flags_get_camera_resolution();
-                var ret = StringHelper.FromStdString(stdstr);
-                if (stdstr != IntPtr.Zero)
-                    OpenPose.Native.std_string_delete(stdstr);
+                var ret = StringHelper.FromStdString(stdstr, true);
                 return ret;
             }
             set
@@ -397,9 +393,7 @@ namespace OpenPoseDotNet
             get
             {
                 var stdstr = Native.op_flags_get_output_resolution();
-                var ret = StringHelper.FromStdString(stdstr);
-                if (stdstr != IntPtr.Zero)
-                    OpenPose.Native.std_string_delete(stdstr);
+                var ret = StringHelper.FromStdString(stdstr, true);
                 return ret;
             }
             set
@@ -414,9 +408,7 @@ namespace OpenPoseDotNet
             get
             {
                 var stdstr = Native.op_flags_get_net_resolution();
-                var ret = StringHelper.FromStdString(stdstr);
-                if (stdstr != IntPtr.Zero)
-                    OpenPose.Native.std_string_delete(stdstr);
+                var ret = StringHelper.FromStdString(stdstr, true);
                 return ret;
             }
             set
@@ -431,9 +423,7 @@ namespace OpenPoseDotNet
             get
             {
                 var stdstr = Native.op_flags_get_face_net_resolution();
-                var ret = StringHelper.FromStdString(stdstr);
-                if (stdstr != IntPtr.Zero)
-                    OpenPose.Native.std_string_delete(stdstr);
+                var ret = StringHelper.FromStdString(stdstr, true);
                 return ret;
             }
             set
@@ -448,9 +438,7 @@ namespace OpenPoseDotNet
             get
             {
                 var stdstr = Native.op_flags_get_hand_net_resolution();
-                var ret = StringHelper.FromStdString(stdstr);
-                if (stdstr != IntPtr.Zero)
-                    OpenPose.Native.std_string_delete(stdstr);
+                var ret = StringHelper.FromStdString(stdstr, true);
                 return ret;
             }
             set
@@ -465,9 +453,7 @@ namespace OpenPoseDotNet
             get
             {
                 var stdstr = Native.op_flags_get_image_dir();
-                var ret = StringHelper.FromStdString(stdstr);
-                if (stdstr != IntPtr.Zero)
-                    OpenPose.Native.std_string_delete(stdstr);
+                var ret = StringHelper.FromStdString(stdstr, true);
                 return ret;
             }
             set
@@ -482,9 +468,7 @@ namespace OpenPoseDotNet
             get
             {
                 var stdstr = Native.op_flags_get_ip_camera();
-                var ret = StringHelper.FromStdString(stdstr);
-                if (stdstr != IntPtr.Zero)
-                    OpenPose.Native.std_string_delete(stdstr);
+                var ret = StringHelper.FromStdString(stdstr, true);
                 return ret;
             }
             set
@@ -499,9 +483,7 @@ namespace OpenPoseDotNet
             get
             {
                 var stdstr = Native.op_flags_get_video();
-                var ret = StringHelper.FromStdString(stdstr);
-                if (stdstr != IntPtr.Zero)
-                    OpenPose.Native.std_string_delete(stdstr);
+                var ret = StringHelper.FromStdString(stdstr, true);
                 return ret;
             }
             set
@@ -516,9 +498,7 @@ namespace OpenPoseDotNet
             get
             {
                 var stdstr = Native.op_flags_get_write_keypoint();
-                var ret = StringHelper.FromStdString(stdstr);
-                if (stdstr != IntPtr.Zero)
-                    OpenPose.Native.std_string_delete(stdstr);
+                var ret = StringHelper.FromStdString(stdstr, true);
                 return ret;
             }
             set
@@ -539,9 +519,7 @@ namespace OpenPoseDotNet
             get
             {
                 var stdstr = Native.op_flags_get_model_folder();
-                var ret = StringHelper.FromStdString(stdstr);
-                if (stdstr != IntPtr.Zero)
-                    OpenPose.Native.std_string_delete(stdstr);
+                var ret = StringHelper.FromStdString(stdstr, true);
                 return ret;
             }
             set
@@ -556,9 +534,7 @@ namespace OpenPoseDotNet
             get
             {
                 var stdstr = Native.op_flags_get_model_pose();
-                var ret = StringHelper.FromStdString(stdstr);
-                if (stdstr != IntPtr.Zero)
-                    OpenPose.Native.std_string_delete(stdstr);
+                var ret = StringHelper.FromStdString(stdstr, true);
                 return ret;
             }
             set
@@ -573,9 +549,7 @@ namespace OpenPoseDotNet
             get
             {
                 var stdstr = Native.op_flags_get_udp_host();
-                var ret = StringHelper.FromStdString(stdstr);
-                if (stdstr != IntPtr.Zero)
-                    OpenPose.Native.std_string_delete(stdstr);
+                var ret = StringHelper.FromStdString(stdstr, true);
                 return ret;
             }
             set
@@ -590,9 +564,7 @@ namespace OpenPoseDotNet
             get
             {
                 var stdstr = Native.op_flags_get_udp_port();
-                var ret = StringHelper.FromStdString(stdstr);
-                if (stdstr != IntPtr.Zero)
-                    OpenPose.Native.std_string_delete(stdstr);
+                var ret = StringHelper.FromStdString(stdstr, true);
                 return ret;
             }
             set
@@ -607,9 +579,7 @@ namespace OpenPoseDotNet
             get
             {
                 var stdstr = Native.op_flags_get_write_bvh();
-                var ret = StringHelper.FromStdString(stdstr);
-                if (stdstr != IntPtr.Zero)
-                    OpenPose.Native.std_string_delete(stdstr);
+                var ret = StringHelper.FromStdString(stdstr, true);
                 return ret;
             }
             set
@@ -624,9 +594,7 @@ namespace OpenPoseDotNet
             get
             {
                 var stdstr = Native.op_flags_get_write_coco_foot_json();
-                var ret = StringHelper.FromStdString(stdstr);
-                if (stdstr != IntPtr.Zero)
-                    OpenPose.Native.std_string_delete(stdstr);
+                var ret = StringHelper.FromStdString(stdstr, true);
                 return ret;
             }
             set
@@ -641,9 +609,7 @@ namespace OpenPoseDotNet
             get
             {
                 var stdstr = Native.op_flags_get_write_coco_json();
-                var ret = StringHelper.FromStdString(stdstr);
-                if (stdstr != IntPtr.Zero)
-                    OpenPose.Native.std_string_delete(stdstr);
+                var ret = StringHelper.FromStdString(stdstr, true);
                 return ret;
             }
             set
@@ -658,9 +624,7 @@ namespace OpenPoseDotNet
             get
             {
                 var stdstr = Native.op_flags_get_write_heatmaps();
-                var ret = StringHelper.FromStdString(stdstr);
-                if (stdstr != IntPtr.Zero)
-                    OpenPose.Native.std_string_delete(stdstr);
+                var ret = StringHelper.FromStdString(stdstr, true);
                 return ret;
             }
             set
@@ -675,9 +639,7 @@ namespace OpenPoseDotNet
             get
             {
                 var stdstr = Native.op_flags_get_write_heatmaps_format();
-                var ret = StringHelper.FromStdString(stdstr);
-                if (stdstr != IntPtr.Zero)
-                    OpenPose.Native.std_string_delete(stdstr);
+                var ret = StringHelper.FromStdString(stdstr, true);
                 return ret;
             }
             set
@@ -692,9 +654,7 @@ namespace OpenPoseDotNet
             get
             {
                 var stdstr = Native.op_flags_get_write_images();
-                var ret = StringHelper.FromStdString(stdstr);
-                if (stdstr != IntPtr.Zero)
-                    OpenPose.Native.std_string_delete(stdstr);
+                var ret = StringHelper.FromStdString(stdstr, true);
                 return ret;
             }
             set
@@ -709,9 +669,7 @@ namespace OpenPoseDotNet
             get
             {
                 var stdstr = Native.op_flags_get_write_images_format();
-                var ret = StringHelper.FromStdString(stdstr);
-                if (stdstr != IntPtr.Zero)
-                    OpenPose.Native.std_string_delete(stdstr);
+                var ret = StringHelper.FromStdString(stdstr, true);
                 return ret;
             }
             set
@@ -726,9 +684,7 @@ namespace OpenPoseDotNet
             get
             {
                 var stdstr = Native.op_flags_get_write_json();
-                var ret = StringHelper.FromStdString(stdstr);
-                if (stdstr != IntPtr.Zero)
-                    OpenPose.Native.std_string_delete(stdstr);
+                var ret = StringHelper.FromStdString(stdstr, true);
                 return ret;
             }
             set
@@ -743,9 +699,7 @@ namespace OpenPoseDotNet
             get
             {
                 var stdstr = Native.op_flags_get_write_keypoint_format();
-                var ret = StringHelper.FromStdString(stdstr);
-                if (stdstr != IntPtr.Zero)
-                    OpenPose.Native.std_string_delete(stdstr);
+                var ret = StringHelper.FromStdString(stdstr, true);
                 return ret;
             }
             set
@@ -760,9 +714,7 @@ namespace OpenPoseDotNet
             get
             {
                 var stdstr = Native.op_flags_get_write_video();
-                var ret = StringHelper.FromStdString(stdstr);
-                if (stdstr != IntPtr.Zero)
-                    OpenPose.Native.std_string_delete(stdstr);
+                var ret = StringHelper.FromStdString(stdstr, true);
                 return ret;
             }
             set
@@ -777,9 +729,7 @@ namespace OpenPoseDotNet
             get
             {
                 var stdstr = Native.op_flags_get_write_video_adam();
-                var ret = StringHelper.FromStdString(stdstr);
-                if (stdstr != IntPtr.Zero)
-                    OpenPose.Native.std_string_delete(stdstr);
+                var ret = StringHelper.FromStdString(stdstr, true);
                 return ret;
             }
             set
