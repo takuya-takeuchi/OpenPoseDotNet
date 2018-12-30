@@ -91,9 +91,7 @@ namespace OpenPoseDotNet
             var fileBytes = Encoding.UTF8.GetBytes(file);
 
             var stdstr = Native.op_Profiler_timerInit(line, functionBytes, fileBytes);
-            var ret =  StringHelper.FromStdString(stdstr);
-            if (stdstr != IntPtr.Zero)
-                OpenPose.Native.std_string_delete(stdstr);
+            var ret =  StringHelper.FromStdString(stdstr, true);
             return ret;
         }
 

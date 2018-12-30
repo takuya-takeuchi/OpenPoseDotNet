@@ -156,10 +156,7 @@ namespace OpenPoseDotNet
 
             var str = "";
             if (item2 != IntPtr.Zero)
-            {
-                str = StringHelper.FromStdString(item2);
-                Native.std_string_delete(item2);
-            }
+                str = StringHelper.FromStdString(item2, true);
 
             return new Tuple<ProducerType, string>(item1, str);
         }
