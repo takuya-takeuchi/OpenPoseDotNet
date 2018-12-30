@@ -3,6 +3,7 @@
 
 #include "../shared.h"
 #include <memory>
+#include "../defines.h"
 
 #pragma region template
 
@@ -25,5 +26,10 @@ DLLEXPORT __TYPE__* std_shared_ptr_##__TYPENAME__##_get(std::shared_ptr<__TYPE__
 #pragma endregion template
 
 MAKE_FUNC(op::PoseExtractorCaffe, op_PoseExtractorCaffe)
+MAKE_FUNC(op::Producer, op_Producer)
+MAKE_FUNC(DefaultDatumProducer, op_DatumProducerOfDatum)
+MAKE_FUNC(DefaultWDatumProducer, op_WDatumProducerOfDatum)
+MAKE_FUNC(op::Gui, op_Gui)
+MAKE_FUNC(DefaultWGui, op_WGui)
 
 #endif

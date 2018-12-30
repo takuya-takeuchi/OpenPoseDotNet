@@ -38,7 +38,7 @@ DLLEXPORT int op_core_Array_gets(void* array, array_element_type type, const int
                 auto tmp = static_cast<op::Array<float>*>(array);
 
                 // create return data
-                const auto size = tmp->getNumberDimensions();
+                const auto size = (int)tmp->getNumberDimensions();
                 auto vector = new std::vector<float>();
                 vector->reserve(size);
                 for (auto i = index * size, end = index * size + size; i < end; i++) vector->push_back(tmp->at(i));

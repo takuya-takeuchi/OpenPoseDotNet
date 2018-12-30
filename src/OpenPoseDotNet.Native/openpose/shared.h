@@ -10,6 +10,12 @@ enum struct array_element_type : int
     Float = 0,
 };
 
+enum struct data_type : int
+{
+    Default = 0,
+    Custom  = 1,
+};
+
 #define ERR_OK                                                            0x00000000
 
 // common
