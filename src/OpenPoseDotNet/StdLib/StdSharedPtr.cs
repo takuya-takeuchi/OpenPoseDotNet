@@ -54,7 +54,7 @@ namespace OpenPoseDotNet
             return this._Imp.Get(this.NativePtr);
         }
 
-        #region Overrids
+        #region Overrides
 
         /// <summary>
         /// Releases all unmanaged resources.

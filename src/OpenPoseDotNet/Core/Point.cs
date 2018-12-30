@@ -163,7 +163,7 @@ namespace OpenPoseDotNet
 
                 #region Methods
 
-                #region Overrids
+                #region Overrides
 
                 /// <summary>
                 /// Releases all unmanaged resources.
@@ -222,7 +222,7 @@ namespace OpenPoseDotNet
 
                 #region Methods
 
-                #region Overrids
+                #region Overrides
 
                 /// <summary>
                 /// Releases all unmanaged resources.
@@ -281,7 +281,7 @@ namespace OpenPoseDotNet
 
                 #region Methods
 
-                #region Overrids
+                #region Overrides
 
                 /// <summary>
                 /// Releases all unmanaged resources.

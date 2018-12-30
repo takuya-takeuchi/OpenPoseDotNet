@@ -27,7 +27,7 @@ namespace CustomPostProcessing
 
         #region Methods
 
-        #region Overrids
+        #region Overrides
 
         protected override void InitializationOnThread()
         {

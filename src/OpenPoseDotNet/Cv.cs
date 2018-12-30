@@ -64,7 +64,7 @@ namespace OpenPoseDotNet
             return Native.op_3rdparty_cv_waitKey(delay);
         }
 
-        #region Overrids
+        #region Overrides
         #endregion
 
         #region Event Handlers
