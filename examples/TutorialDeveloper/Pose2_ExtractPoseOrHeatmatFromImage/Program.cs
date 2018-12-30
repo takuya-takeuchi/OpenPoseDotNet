@@ -1,12 +1,12 @@
 ﻿/*
- * This sample program is ported by C# from examples/tutorial_developer/pose_1_extract_from_image.cpp.
+ * This sample program is ported by C# from examples/tutorial_developer/pose_2_extract_pose_or_heatmat_from_image.cpp.
 */
 
 using System;
 using System.Diagnostics;
 using OpenPoseDotNet;
 
-namespace Pose1_ExtractFromImage
+namespace Pose2_ExtractPoseOrHeatmatFromImage
 {
 
     internal class Program
@@ -50,6 +50,9 @@ namespace Pose1_ExtractFromImage
                                               // `net_resolution` by your desired initial scale.
             Flags.ScaleNumber = 1;            // Number of scales to average.
             // OpenPose Rendering
+            Flags.PartToShow = 19;            // Prediction channel to visualize (default: 0). 0 for all the body parts, 1-18 for each body
+                                              // part heat map, 19 for the background heat map, 20 for all the body part heat maps
+                                              // together, 21 for all the PAFs, 22-40 for each body part pair PAF.
             Flags.DisableBlending = false;    // If enabled, it will render the results (keypoint skeletons or heatmaps) on a black
                                               // background, instead of being rendered into the original image. Related: `part_to_show`,
                                               // `alpha_pose`, and `alpha_pose`.
@@ -59,6 +62,8 @@ namespace Pose1_ExtractFromImage
                                               // more false positives (i.e., wrong detections).
             Flags.AlphaPose = 0.6;            // Blending factor (range 0-1) for the body part rendering. 1 will show it completely, 0 will
                                               // hide it. Only valid for GPU rendering.
+            Flags.AlphaHeatmap = 0.7;         // Blending factor (range 0-1) between heatmap and original frame. 1 will only show the
+                                              // heatmap, 0 will only show the frame. Only valid for GPU rendering.
         }
 
         #endregion
@@ -67,12 +72,12 @@ namespace Pose1_ExtractFromImage
 
         private static void Main()
         {
-            TutorialDeveloperPose1();
+            TutorialDeveloperPose2();
         }
 
         #region Helpers
 
-        private static int TutorialDeveloperPose1()
+        private static int TutorialDeveloperPose2()
         {
             try
             {
@@ -96,64 +101,69 @@ namespace Pose1_ExtractFromImage
                 var poseModel = OpenPose.FlagsToPoseModel(Flags.ModelPose);
                 // Check no contradictory flags enabled
                 if (Flags.AlphaPose < 0.0 || Flags.AlphaPose > 1.0)
-                    OpenPose.Error("Alpha value for blending must be in the range [0,1].", -1, nameof(TutorialDeveloperPose1));
+                    OpenPose.Error("Alpha value for blending must be in the range [0,1].", -1, nameof(TutorialDeveloperPose2));
                 if (Flags.ScaleGap <= 0.0 && Flags.ScaleNumber > 1)
-                    OpenPose.Error("Incompatible flag configuration: scale_gap must be greater than 0 or scale_number = 1.", -1, nameof(TutorialDeveloperPose1));
+                    OpenPose.Error("Incompatible flag configuration: scale_gap must be greater than 0 or scale_number = 1.", -1, nameof(TutorialDeveloperPose2));
                 // Step 3 - Initialize all required classes
                 using (var scaleAndSizeExtractor = new ScaleAndSizeExtractor(netInputSize, outputSize, Flags.ScaleNumber, Flags.ScaleGap))
                 using (var cvMatToOpInput = new CvMatToOpInput(poseModel))
                 using (var cvMatToOpOutput = new CvMatToOpOutput())
-                using (var poseExtractorCaffe = new PoseExtractorCaffe(poseModel, Flags.ModelFolder, Flags.NumGpuStart))
-                using (var poseRenderer = new PoseCpuRenderer(poseModel, (float)Flags.RenderThreshold, !Flags.DisableBlending, (float)Flags.AlphaPose))
-                using (var opOutputToCvMat = new OpOutputToCvMat())
-                using (var frameDisplayer = new FrameDisplayer("OpenPose Tutorial - Example 1", outputSize))
+                using (var poseExtractorPtr = new StdSharedPtr<PoseExtractorCaffe>(new PoseExtractorCaffe(poseModel, Flags.ModelFolder, Flags.NumGpuStart)))
+                using (var poseGpuRenderer = new PoseGpuRenderer(poseModel, poseExtractorPtr, (float)Flags.RenderThreshold, !Flags.DisableBlending, (float)Flags.AlphaPose))
                 {
-                    // Step 4 - Initialize resources on desired thread (in this case single thread, i.e., we init resources here)
-                    poseExtractorCaffe.InitializationOnThread();
-                    poseRenderer.InitializationOnThread();
+                    poseGpuRenderer.SetElementToRender(Flags.PartToShow);
 
-                    // ------------------------- POSE ESTIMATION AND RENDERING -------------------------
-                    // Step 1 - Read and load image, error if empty (possibly wrong path)
-                    // Alternative: cv::imread(Flags.image_path, CV_LOAD_IMAGE_COLOR);
-                    using (var inputImage = OpenPose.LoadImage(ImagePath, LoadImageFlag.LoadImageColor))
+                    using (var opOutputToCvMat = new OpOutputToCvMat())
+                    using (var frameDisplayer = new FrameDisplayer("OpenPose Tutorial - Example 2", outputSize))
                     {
-                        if (inputImage.Empty)
-                            OpenPose.Error("Could not open or find the image: " + ImagePath, -1, nameof(TutorialDeveloperPose1));
-                        var imageSize = new Point<int>(inputImage.Cols, inputImage.Rows);
-                        // Step 2 - Get desired scale sizes
-                        var tuple = scaleAndSizeExtractor.Extract(imageSize);
-                        var scaleInputToNetInputs = tuple.Item1;
-                        var netInputSizes = tuple.Item2;
-                        var scaleInputToOutput = tuple.Item3;
-                        var outputResolution = tuple.Item4;
-                        // Step 3 - Format input image to OpenPose input and output formats
-                        var netInputArray = cvMatToOpInput.CreateArray(inputImage, scaleInputToNetInputs, netInputSizes);
-                        var outputArray = cvMatToOpOutput.CreateArray(inputImage, scaleInputToOutput, outputResolution);
-                        // Step 4 - Estimate poseKeypoints
-                        poseExtractorCaffe.ForwardPass(netInputArray, imageSize, scaleInputToNetInputs);
-                        var poseKeypoints = poseExtractorCaffe.GetPoseKeyPoints();
-                        // Step 5 - Render poseKeypoints
-                        poseRenderer.RenderPose(outputArray, poseKeypoints, (float)scaleInputToOutput);
-                        // Step 6 - OpenPose output format to cv::Mat
-                        using (var outputImage = opOutputToCvMat.FormatToCvMat(outputArray))
+                        // Step 4 - Initialize resources on desired thread (in this case single thread, i.e., we init resources here)
+                        poseExtractorPtr.Get().InitializationOnThread();
+                        poseGpuRenderer.InitializationOnThread();
+
+                        // ------------------------- POSE ESTIMATION AND RENDERING -------------------------
+                        // Step 1 - Read and load image, error if empty (possibly wrong path)
+                        // Alternative: cv::imread(Flags.image_path, CV_LOAD_IMAGE_COLOR);
+                        using (var inputImage = OpenPose.LoadImage(ImagePath, LoadImageFlag.LoadImageColor))
                         {
-                            // ------------------------- SHOWING RESULT AND CLOSING -------------------------
-                            // Show results
-                            frameDisplayer.DisplayFrame(outputImage, 0); // Alternative: cv::imshow(outputImage) + cv::waitKey(0)
-                                                                         // Measuring total time
-                            timeBegin.Stop();
-                            var totalTimeSec = timeBegin.ElapsedMilliseconds / 1000d;
-                            var message = $"OpenPose demo successfully finished. Total time: {totalTimeSec} seconds.";
-                            OpenPose.Log(message, Priority.High);
-                            // Return successful message
-                            return 0;
+                            if (inputImage.Empty)
+                                OpenPose.Error("Could not open or find the image: " + ImagePath, -1, nameof(TutorialDeveloperPose2));
+                            var imageSize = new Point<int>(inputImage.Cols, inputImage.Rows);
+                            // Step 2 - Get desired scale sizes
+                            var tuple = scaleAndSizeExtractor.Extract(imageSize);
+                            var scaleInputToNetInputs = tuple.Item1;
+                            var netInputSizes = tuple.Item2;
+                            var scaleInputToOutput = tuple.Item3;
+                            var outputResolution = tuple.Item4;
+                            // Step 3 - Format input image to OpenPose input and output formats
+                            var netInputArray = cvMatToOpInput.CreateArray(inputImage, scaleInputToNetInputs, netInputSizes);
+                            var outputArray = cvMatToOpOutput.CreateArray(inputImage, scaleInputToOutput, outputResolution);
+                            // Step 4 - Estimate poseKeypoints
+                            poseExtractorPtr.Get().ForwardPass(netInputArray, imageSize, scaleInputToNetInputs);
+                            var poseKeypoints = poseExtractorPtr.Get().GetPoseKeyPoints();
+                            var scaleNetToOutput = poseExtractorPtr.Get().GetScaleNetToOutput();
+                            // Step 5 - Render pose
+                            poseGpuRenderer.RenderPose(outputArray, poseKeypoints, (float)scaleInputToOutput, scaleNetToOutput);
+                            // Step 6 - OpenPose output format to cv::Mat
+                            using (var outputImage = opOutputToCvMat.FormatToCvMat(outputArray))
+                            {
+                                // ------------------------- SHOWING RESULT AND CLOSING -------------------------
+                                // Show results
+                                frameDisplayer.DisplayFrame(outputImage, 0); // Alternative: cv::imshow(outputImage) + cv::waitKey(0)
+                                                                             // Measuring total time
+                                timeBegin.Stop();
+                                var totalTimeSec = timeBegin.ElapsedMilliseconds / 1000d;
+                                var message = $"OpenPose demo successfully finished. Total time: {totalTimeSec} seconds.";
+                                OpenPose.Log(message, Priority.High);
+                                // Return successful message
+                                return 0;
+                            }
                         }
                     }
                 }
             }
             catch (Exception e)
             {
-                OpenPose.Error(e.Message, -1, nameof(TutorialDeveloperPose1));
+                OpenPose.Error(e.Message, -1, nameof(TutorialDeveloperPose2));
                 return -1;
             }
         }

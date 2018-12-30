@@ -9,6 +9,20 @@ namespace OpenPoseDotNet
     public abstract class PoseExtractorNet : OpenPoseObject
     {
 
+        #region Constructors
+
+        protected PoseExtractorNet()
+        {
+        }
+
+        protected PoseExtractorNet(IntPtr ptr, bool isEnabledDispose = true):
+            base(isEnabledDispose)
+        {
+            this.NativePtr = ptr;
+        }
+
+        #endregion
+
         #region Methods
 
         public abstract void ForwardPass(IEnumerable<Array<float>> inputNetData, Point<int> inputDataSize, double[] scaleRatios = null);
@@ -19,6 +33,12 @@ namespace OpenPoseDotNet
 
             var ret = Native.op_PoseExtractorNet_getPoseKeypoints(this.NativePtr);
             return new Array<float>(ret);
+        }
+
+        public float GetScaleNetToOutput()
+        {
+            this.ThrowIfDisposed();
+            return Native.op_PoseExtractorNet_getScaleNetToOutput(this.NativePtr);
         }
 
         public void InitializationOnThread()
@@ -38,7 +58,10 @@ namespace OpenPoseDotNet
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern IntPtr op_PoseExtractorNet_getPoseKeypoints(IntPtr net);
 
-        }
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern float op_PoseExtractorNet_getScaleNetToOutput(IntPtr net);
+
+    }
 
     }
 

@@ -14,4 +14,9 @@ DLLEXPORT op::Array<float>* op_PoseExtractorNet_getPoseKeypoints(const op::PoseE
     return new op::Array<float>(ret);
 }
 
+DLLEXPORT float op_PoseExtractorNet_getScaleNetToOutput(const op::PoseExtractorNet* net)
+{
+    return net->getScaleNetToOutput();
+}
+
 #endif
