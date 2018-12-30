@@ -41,6 +41,7 @@ namespace OpenPoseDotNet
         public bool IsEnableDispose
         {
             get;
+            internal set;
         }
 
         /// <summary>
