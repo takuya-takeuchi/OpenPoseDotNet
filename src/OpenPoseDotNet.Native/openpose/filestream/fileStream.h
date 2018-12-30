@@ -3,6 +3,12 @@
 
 #include "../shared.h"
 
+DLLEXPORT cv::Mat* op_loadImage(const char* fullFilePath, const int openCvFlags)
+{
+    const auto ret = op::loadImage(std::string(fullFilePath), openCvFlags);
+    return new cv::Mat(ret);
+}
+
 DLLEXPORT op::DataFormat op_stringToDataFormat(const char* dataFormat)
 {
     const std::string str_dataFormat(dataFormat);

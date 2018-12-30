@@ -126,9 +126,11 @@ namespace OpenPoseDotNet
             public static extern void op_CustomWorker_delete(IntPtr worker);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            [return: MarshalAs(UnmanagedType.U1)]
             public static extern bool op_CustomWorker_checkAndWork(IntPtr worker, IntPtr datums);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            [return: MarshalAs(UnmanagedType.U1)]
             public static extern bool op_CustomWorker_isRunning(IntPtr worker);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]

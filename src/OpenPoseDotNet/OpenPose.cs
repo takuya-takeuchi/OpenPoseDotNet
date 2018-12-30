@@ -83,6 +83,13 @@ namespace OpenPoseDotNet
 
             #endregion
 
+            #region op::PoseRenderer
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void op_PoseRenderer_initializationOnThread(IntPtr poseRenderer);
+
+            #endregion
+
             internal enum ErrorType
             {
 

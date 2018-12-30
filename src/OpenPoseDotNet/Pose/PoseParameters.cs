@@ -16,10 +16,7 @@ namespace OpenPoseDotNet
 
             var ret = Native.op_getPoseProtoTxt(poseModel);
             if (ret != IntPtr.Zero)
-            {
-                str = StringHelper.FromStdString(ret);
-                Native.std_string_delete(ret);
-            }
+                str = StringHelper.FromStdString(ret, true);
 
             return str;
         }
@@ -30,10 +27,7 @@ namespace OpenPoseDotNet
 
             var ret = Native.op_getPoseTrainedModel(poseModel);
             if (ret != IntPtr.Zero)
-            {
-                str = StringHelper.FromStdString(ret);
-                Native.std_string_delete(ret);
-            }
+                str = StringHelper.FromStdString(ret, true);
 
             return str;
         }
@@ -131,6 +125,7 @@ namespace OpenPoseDotNet
             public static extern float op_getPoseDefaultConnectMinSubsetScore(bool maximizePositives);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            [return: MarshalAs(UnmanagedType.U1)]
             public static extern bool op_addBkgChannel(PoseModel poseModel);
 
         }

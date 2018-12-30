@@ -55,6 +55,11 @@ DLLEXPORT int op_3rdparty_cv_mat_channels(cv::Mat* mat)
     return mat->channels();
 }
 
+DLLEXPORT bool op_3rdparty_cv_mat_empty(cv::Mat* mat)
+{
+    return mat->empty();
+}
+
 #pragma endregion cv::Mat
 
 #endif

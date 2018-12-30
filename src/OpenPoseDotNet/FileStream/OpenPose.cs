@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -13,6 +14,18 @@ namespace OpenPoseDotNet
         #region Methods
 
         #region filestream/filestream
+
+        public static Mat LoadImage(string path, LoadImageFlag flag)
+        {
+            if (path == null)
+                throw new ArgumentNullException(nameof(path));
+            if (!File.Exists(path))
+                throw new FileNotFoundException($"'{path}' is not found.");
+
+            var pathBytes = Encoding.UTF8.GetBytes(path);
+            var ret = Native.op_loadImage(pathBytes, flag);
+            return new Mat(ret);
+        }
 
         public static DataFormat StringToDataFormat(string dataFormat)
         {
@@ -31,12 +44,11 @@ namespace OpenPoseDotNet
         internal sealed partial class Native
         {
 
-            #region filestream/filestream
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern IntPtr op_loadImage(byte[] fullFilePath, LoadImageFlag openCvFlags);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern DataFormat op_stringToDataFormat(byte[] dataFormat);
-
-            #endregion
 
         }
 
