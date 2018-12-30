@@ -26,39 +26,39 @@ namespace Pose1_ExtractFromImage
             // Note: This command will show you flags for other unnecessary 3rdparty files. Check only the flags for the OpenPose
             // executable. E.g., for `openpose.bin`, look for `Flags from examples/openpose/openpose.cpp:`.
             // Debugging/Other
-            Flags.LoggingLevel = 3; // "The logging level. Integer in the range [0, 255]. 0 will output any log() message, while
-                                    // " 255 will not output any. Current OpenPose library messages are in the range 0-4: 1 for
-                                    // " low priority messages and 4 for important ones.
+            Flags.LoggingLevel = 3; // The logging level. Integer in the range [0, 255]. 0 will output any log() message, while
+                                    // 255 will not output any. Current OpenPose library messages are in the range 0-4: 1 for
+                                    // low priority messages and 4 for important ones.
                                     // Producer
             ImagePath = "examples/media/COCO_val2014_000000000192.jpg"; // Process the desired image.
             //ImagePath.Replace("\\", "/");
             // OpenPose
-            Flags.ModelPose = "BODY_25";      // "Model to be used. E.g., `COCO` (18 keypoints), `MPI` (15 keypoints, ~10% faster), 
-                                              // "`MPI_4_layers` (15 keypoints, even faster but less accurate).
-            Flags.ModelFolder = "models/";    // "Folder path (absolute or relative) where the models (pose, face, ...) are located.;
-            Flags.NetResolution = "-1x368";   // "Multiples of 16. If it is increased, the accuracy potentially increases. If it is
-                                              // " decreased, the speed increases. For maximum speed-accuracy balance, it should keep the
-                                              // "  closest aspect ratio possible to the images or videos to be processed. Using `-1` in
-                                              // " any of the dimensions, OP will choose the optimal aspect ratio depending on the user's
-                                              // " input value. E.g., the default `-1x368` is equivalent to `656x368` in 16:9 resolutions,
-                                              // " e.g., full HD (1980x1080) and HD (1280x720) resolutions.
-            Flags.OutputResolution = "-1x-1"; // "The image resolution (display and output). Use \"-1x-1\" to force the program to use the
-                                              // " input image resolution.
-            Flags.NumGpuStart = 0;            // "GPU device start number.
-            Flags.ScaleGap = 0.3;             // "Scale gap between scales. No effect unless scale_number > 1. Initial scale is always 1."
-                                              // "  If you want to change the initial scale, you actually want to multiply the"
-                                              // " `net_resolution` by your desired initial scale.
-            Flags.ScaleNumber = 1;            // "Number of scales to average.;
+            Flags.ModelPose = "BODY_25";      // Model to be used. E.g., `COCO` (18 keypoints), `MPI` (15 keypoints, ~10% faster), 
+                                              // `MPI_4_layers` (15 keypoints, even faster but less accurate).
+            Flags.ModelFolder = "models/";    // Folder path (absolute or relative) where the models (pose, face, ...) are located.
+            Flags.NetResolution = "-1x368";   // Multiples of 16. If it is increased, the accuracy potentially increases. If it is
+                                              // decreased, the speed increases. For maximum speed-accuracy balance, it should keep the
+                                              // closest aspect ratio possible to the images or videos to be processed. Using `-1` in
+                                              // any of the dimensions, OP will choose the optimal aspect ratio depending on the user's
+                                              // input value. E.g., the default `-1x368` is equivalent to `656x368` in 16:9 resolutions,
+                                              // e.g., full HD (1980x1080) and HD (1280x720) resolutions.
+            Flags.OutputResolution = "-1x-1"; // The image resolution (display and output). Use \"-1x-1\" to force the program to use the
+                                              // input image resolution.
+            Flags.NumGpuStart = 0;            // GPU device start number.
+            Flags.ScaleGap = 0.3;             // Scale gap between scales. No effect unless scale_number > 1. Initial scale is always 1.
+                                              // If you want to change the initial scale, you actually want to multiply the"
+                                              // `net_resolution` by your desired initial scale.
+            Flags.ScaleNumber = 1;            // Number of scales to average.
             // OpenPose Rendering
             Flags.DisableBlending = false;    // If enabled, it will render the results (keypoint skeletons or heatmaps) on a black
-                                              //  background, instead of being rendered into the original image. Related: `part_to_show`,
-                                              //  `alpha_pose`, and `alpha_pose`.
+                                              // background, instead of being rendered into the original image. Related: `part_to_show`,
+                                              // `alpha_pose`, and `alpha_pose`.
             Flags.RenderThreshold = 0.05;     // Only estimated keypoints whose score confidences are higher than this threshold will be
-                                              //   rendered. Generally, a high threshold (> 0.5) will only render very clear body parts;
-                                              //  while small thresholds (~0.1) will also output guessed and occluded keypoints, but also
-                                              //   more false positives (i.e., wrong detections).
+                                              // rendered. Generally, a high threshold (> 0.5) will only render very clear body parts
+                                              // while small thresholds (~0.1) will also output guessed and occluded keypoints, but also
+                                              // more false positives (i.e., wrong detections).
             Flags.AlphaPose = 0.6;            // Blending factor (range 0-1) for the body part rendering. 1 will show it completely, 0 will
-                                              //  hide it. Only valid for GPU rendering.
+                                              // hide it. Only valid for GPU rendering.
         }
 
         #endregion
