@@ -1,5 +1,5 @@
 ﻿/*
- * This sample program is ported by C# from examples/tutorial_api_cpp/1_body_from_image.cpp.
+ * This sample program is ported by C# from examples/tutorial_add_module/1_custom_post_processing.cpp.
 */
 
 using System;
@@ -12,15 +12,9 @@ namespace CustomPostProcessing
     internal class Program
     {
 
-        #region Fields
-
-        private static string ImagePath;
-
-        #endregion
-
         #region Methods
 
-        private static void Main(string[] args)
+        private static void Main()
         {
             TutorialAddModule1();
         }
