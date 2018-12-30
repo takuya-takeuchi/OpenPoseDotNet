@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -156,10 +155,7 @@ namespace OpenPoseDotNet
 
             var str = "";
             if (item2 != IntPtr.Zero)
-            {
-                str = StringHelper.FromStdString(item2);
-                Native.std_string_delete(item2);
-            }
+                str = StringHelper.FromStdString(item2, true);
 
             return new Tuple<ProducerType, string>(item1, str);
         }
@@ -175,6 +171,18 @@ namespace OpenPoseDotNet
 
         internal sealed partial class Native
         {
+
+            [StructLayout(LayoutKind.Explicit)]
+            internal struct NativePointOfInt32
+            {
+
+                [FieldOffset(0)]
+                public int x;
+
+                [FieldOffset(4)]
+                public int y;
+
+            }
 
             #region utilities/check
 

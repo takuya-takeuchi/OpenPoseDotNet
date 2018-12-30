@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 namespace OpenPoseDotNet
 {
 
-    public sealed class Wrapper : OpenPoseObject
+    public sealed class Wrapper : WrapperBase<Datum>
     {
 
         #region Constructors
@@ -23,7 +23,7 @@ namespace OpenPoseDotNet
 
         #region Properties
 
-        public bool IsRunning
+        public override bool IsRunning
         {
             get
             {
@@ -37,7 +37,7 @@ namespace OpenPoseDotNet
 
         #region Methods
 
-        public void Configure(WrapperStructPose pose)
+        public override void Configure(WrapperStructPose pose)
         {
             if (pose == null)
                 throw new ArgumentNullException(nameof(pose));
@@ -47,7 +47,7 @@ namespace OpenPoseDotNet
             Native.op_wrapper_configure_pose(this.NativePtr, pose.NativePtr);
         }
 
-        public void Configure(WrapperStructHand hand)
+        public override void Configure(WrapperStructHand hand)
         {
             if (hand == null)
                 throw new ArgumentNullException(nameof(hand));
@@ -57,7 +57,7 @@ namespace OpenPoseDotNet
             Native.op_wrapper_configure_hand(this.NativePtr, hand.NativePtr);
         }
 
-        public void Configure(WrapperStructFace face)
+        public override void Configure(WrapperStructFace face)
         {
             if (face == null)
                 throw new ArgumentNullException(nameof(face));
@@ -67,7 +67,7 @@ namespace OpenPoseDotNet
             Native.op_wrapper_configure_face(this.NativePtr, face.NativePtr);
         }
         
-        public void Configure(WrapperStructExtra extra)
+        public override void Configure(WrapperStructExtra extra)
         {
             if (extra == null)
                 throw new ArgumentNullException(nameof(extra));
@@ -77,7 +77,7 @@ namespace OpenPoseDotNet
             Native.op_wrapper_configure_extra(this.NativePtr, extra.NativePtr);
         }
 
-        public void Configure(WrapperStructInput input)
+        public override void Configure(WrapperStructInput input)
         {
             if (input == null)
                 throw new ArgumentNullException(nameof(input));
@@ -87,7 +87,7 @@ namespace OpenPoseDotNet
             Native.op_wrapper_configure_input(this.NativePtr, input.NativePtr);
         }
 
-        public void Configure(WrapperStructOutput output)
+        public override void Configure(WrapperStructOutput output)
         {
             if (output == null)
                 throw new ArgumentNullException(nameof(output));
@@ -97,7 +97,7 @@ namespace OpenPoseDotNet
             Native.op_wrapper_configure_output(this.NativePtr, output.NativePtr);
         }
 
-        public void Configure(WrapperStructGui gui)
+        public override void Configure(WrapperStructGui gui)
         {
             if (gui == null)
                 throw new ArgumentNullException(nameof(gui));
@@ -107,14 +107,14 @@ namespace OpenPoseDotNet
             Native.op_wrapper_configure_gui(this.NativePtr, gui.NativePtr);
         }
 
-        public void DisableMultiThreading()
+        public override void DisableMultiThreading()
         {
             this.ThrowIfDisposed();
 
             Native.op_wrapper_disableMultiThreading(this.NativePtr);
         }
 
-        public SharedHandle<StdVector<Datum>> EmplaceAndPop(Mat mat)
+        public override SharedHandle<StdVector<Datum>> EmplaceAndPop(Mat mat)
         {
             if (mat == null)
                 throw new ArgumentNullException(nameof(mat));
@@ -128,21 +128,28 @@ namespace OpenPoseDotNet
                                                       OpenPose.Native.op_shared_ptr_TDatums_delete);
         }
 
-        public void Exec()
+        public override void Exec()
         {
             this.ThrowIfDisposed();
 
             Native.op_wrapper_exec(this.NativePtr);
         }
 
-        public void Start()
+        public override void SetWorker(WorkerType workerType, OpenPoseObject worker, bool workerOnNewThread = true)
+        {
+            this.ThrowIfDisposed();
+
+            Native.op_wrapper_setWorker(this.NativePtr, workerType, worker.NativePtr, workerOnNewThread);
+        }
+
+        public override void Start()
         {
             this.ThrowIfDisposed();
 
             Native.op_wrapper_start(this.NativePtr);
         }
 
-        public void Stop()
+        public override void Stop()
         {
             this.ThrowIfDisposed();
 
@@ -166,9 +173,6 @@ namespace OpenPoseDotNet
 
         #endregion
 
-        #region Helpers
-        #endregion
-
         #endregion
 
         internal sealed class Native
@@ -182,6 +186,9 @@ namespace OpenPoseDotNet
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern void op_wrapper_disableMultiThreading(IntPtr wrapper);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void op_wrapper_setWorker(IntPtr wrapper, WorkerType workerType, IntPtr worker, bool workerOnNewThread);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern void op_wrapper_exec(IntPtr wrapper);

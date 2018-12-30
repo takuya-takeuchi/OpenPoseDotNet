@@ -36,6 +36,11 @@ namespace OpenPoseDotNet
 
             Native.op_Profiler_printAveragedTimeMsEveryXIterations(keyBytes, line, functionBytes, fileBytes, x);
         }
+        
+        public static void PrintAveragedTimeMsOnIterationX(string key, int line, string function, string file)
+        {
+            PrintAveragedTimeMsOnIterationX(key, line, function, file, DefaultX);
+        }
 
         public static void PrintAveragedTimeMsOnIterationX(string key, int line, string function, string file, ulong x)
         {
@@ -86,9 +91,7 @@ namespace OpenPoseDotNet
             var fileBytes = Encoding.UTF8.GetBytes(file);
 
             var stdstr = Native.op_Profiler_timerInit(line, functionBytes, fileBytes);
-            var ret =  StringHelper.FromStdString(stdstr);
-            if (stdstr != IntPtr.Zero)
-                OpenPose.Native.std_string_delete(stdstr);
+            var ret =  StringHelper.FromStdString(stdstr, true);
             return ret;
         }
 

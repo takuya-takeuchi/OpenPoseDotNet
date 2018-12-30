@@ -46,9 +46,72 @@ namespace OpenPoseDotNet
             get;
         }
 
+        public float[] this[int index]
+        {
+            get
+            {
+                this.ThrowIfDisposed();
+                this.ThrowIfHasError(OpenPose.Native.op_core_Array_gets(this.NativePtr, this.ArrayElementType, index, out var ret));
+                using (var vector = new StdVector<float>(ret))
+                    return vector.ToArray();
+            }
+        }
+
+        public bool Empty
+        {
+            get
+            {
+                this.ThrowIfDisposed();
+                this.ThrowIfHasError(OpenPose.Native.op_core_Array_empty(this.NativePtr, this.ArrayElementType, out var ret));
+                return ret;
+            }
+        }
+
+        public uint NumberDimensions
+        {
+            get
+            {
+                this.ThrowIfDisposed();
+                this.ThrowIfHasError(OpenPose.Native.op_core_Array_getNumberDimensions(this.NativePtr, this.ArrayElementType, out var ret));
+                return ret;
+            }
+        }
+
+        public uint Volume
+        {
+            get
+            {
+                this.ThrowIfDisposed();
+                this.ThrowIfHasError(OpenPose.Native.op_core_Array_getVolume(this.NativePtr, this.ArrayElementType, out var ret));
+                return ret;
+            }
+        }
+
         #endregion
 
         #region Methods
+
+        public int[] GetSize()
+        {
+            this.ThrowIfDisposed();
+            this.ThrowIfHasError(OpenPose.Native.op_core_Array_getSize2(this.NativePtr, this.ArrayElementType, out var ret));
+            using (var vector = new StdVector<int>(ret))
+                return vector.ToArray();
+        }
+
+        public int GetSize(int index)
+        {
+            this.ThrowIfDisposed();
+            this.ThrowIfHasError(OpenPose.Native.op_core_Array_getSize(this.NativePtr, this.ArrayElementType, index, out var ret));
+
+            // openpose/include/openpose/core/array.hpp says
+            // 'It will return 0 if the requested dimension is higher than the number of dimensions'
+            // but this function never return 0. You can see this reason in  openpose/src/openpose/core/array.cpp.
+            //if (ret == 0)
+            //    throw new ArgumentOutOfRangeException();
+
+            return ret;
+        }
 
         #region Overrides
 
@@ -67,6 +130,8 @@ namespace OpenPoseDotNet
 
         public override string ToString()
         {
+            this.ThrowIfDisposed();
+
             var stdstr = IntPtr.Zero;
             var str = "";
 
@@ -88,9 +153,6 @@ namespace OpenPoseDotNet
             return str;
         }
 
-        #endregion
-
-        #region Event Handlers
         #endregion
 
         #region Helpers

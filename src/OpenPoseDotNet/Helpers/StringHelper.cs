@@ -9,14 +9,17 @@ namespace OpenPoseDotNet
     {
 
         #region Methods
-
-        public static string FromStdString(IntPtr ptr)
+        
+        public static string FromStdString(IntPtr ptr, bool dispose = false)
         {
             // Need not to delete str
             // Because string.c_str returns inner memory of string instance.
             // This inner memory will be deleted when string instance is deleted.
             var str = OpenPose.Native.std_string_c_str(ptr);
-            return Marshal.PtrToStringAnsi(str);
+            var ret =  Marshal.PtrToStringAnsi(str);
+            if (dispose && ptr != IntPtr.Zero)
+                OpenPose.Native.std_string_delete(ptr);
+            return ret;
         }
 
         #endregion

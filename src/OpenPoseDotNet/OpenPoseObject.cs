@@ -71,6 +71,13 @@ namespace OpenPoseDotNet
                 throw new ObjectDisposedException(objectName);
         }
 
+        internal void ThrowIfHasError(OpenPose.Native.ErrorType error)
+        {
+            // ToDo: Define OpenPose exception and message
+            if (error != OpenPose.Native.ErrorType.OK)
+                throw new Exception("");
+        }
+
         #region Overrides
 
         /// <summary>

@@ -23,6 +23,19 @@ namespace OpenPoseDotNet
 
         #region Methods
 
+        public static void BitwiseNot(Mat src, Mat dst)
+        {
+            if (src == null)
+                throw new ArgumentNullException(nameof(src));
+            if (dst == null)
+                throw new ArgumentNullException(nameof(dst));
+
+            src.ThrowIfDisposed();
+            dst.ThrowIfDisposed();
+
+            Native.op_3rdparty_cv_bitwise_not(src.NativePtr, dst.NativePtr);
+        }
+
         public static Mat ImRead(string path, int flags = 1)
         {
             if (path == null)
@@ -51,7 +64,7 @@ namespace OpenPoseDotNet
             return Native.op_3rdparty_cv_waitKey(delay);
         }
 
-        #region Overrids
+        #region Overrides
         #endregion
 
         #region Event Handlers
@@ -64,6 +77,9 @@ namespace OpenPoseDotNet
 
         internal sealed class Native
         {
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void op_3rdparty_cv_bitwise_not(IntPtr src, IntPtr dst);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern IntPtr op_3rdparty_cv_imread(byte[] path, int flags);

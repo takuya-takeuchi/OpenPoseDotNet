@@ -88,12 +88,6 @@ namespace OpenPoseDotNet
 
         #endregion
 
-        #region Event Handlers
-        #endregion
-
-        #region Helpers
-        #endregion
-
         #endregion
 
     }

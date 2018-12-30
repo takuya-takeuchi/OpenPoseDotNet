@@ -5,6 +5,13 @@
 
 #pragma region cv
 
+DLLEXPORT void op_3rdparty_cv_bitwise_not(cv::Mat* src, cv::Mat* dst)
+{
+    auto& s = *src;
+    auto& d = *dst;
+    cv::bitwise_not(s, d);
+}
+
 DLLEXPORT cv::Mat* op_3rdparty_cv_imread(const char* path, const int flags)
 {
     std::string str(path);
@@ -46,6 +53,11 @@ DLLEXPORT int op_3rdparty_cv_mat_cols(cv::Mat* mat)
 DLLEXPORT int op_3rdparty_cv_mat_channels(cv::Mat* mat)
 {
     return mat->channels();
+}
+
+DLLEXPORT bool op_3rdparty_cv_mat_empty(cv::Mat* mat)
+{
+    return mat->empty();
 }
 
 #pragma endregion cv::Mat

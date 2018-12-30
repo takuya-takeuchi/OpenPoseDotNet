@@ -38,10 +38,9 @@ configure_file(
     @ONLY)
 
 set(STATIC_LIBRARIES
-    optimized ../../../openpose/3rdparty/windows/opencv/x64/vc14/lib/opencv_world310
+    ../../../openpose/3rdparty/windows/opencv/x64/vc14/lib/opencv_world310
     optimized ../../../openpose/3rdparty/windows/caffe3rdparty/lib/gflags
     optimized ../../../openpose/build/src/openpose/Release/openpose
-    debug ../../../openpose/3rdparty/windows/opencv/x64/vc14/lib/opencv_world310d
     debug ../../../openpose/3rdparty/windows/caffe3rdparty/lib/gflagsd
     debug ../../../openpose/build/src/openpose/Debug/openposed
 )
@@ -65,6 +64,11 @@ set(CompilerFlags
     CMAKE_C_FLAGS_DEBUG
     CMAKE_C_FLAGS_RELEASE
 )
+
+# Replace /MDd with /MD. openposed is debug library but it does not depend on non debug runtime library
+foreach(CompilerFlag ${CompilerFlags})
+  string(REPLACE "/MDd" "/MD" ${CompilerFlag} "${${CompilerFlag}}")
+endforeach()
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})

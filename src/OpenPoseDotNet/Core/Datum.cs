@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 namespace OpenPoseDotNet
 {
 
-    public sealed class Datum : OpenPoseObject
+    public class Datum : OpenPoseObject
     {
 
         #region Constructors
@@ -124,12 +124,6 @@ namespace OpenPoseDotNet
             Native.op_core_datum_delete(this.NativePtr);
         }
 
-        #endregion
-
-        #region Event Handlers
-        #endregion
-
-        #region Helpers
         #endregion
 
         #endregion
