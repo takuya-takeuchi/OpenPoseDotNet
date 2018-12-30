@@ -31,6 +31,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TutorialDeveloper", "Tutori
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pose1_ExtractFromImage", "examples\TutorialDeveloper\Pose1_ExtractFromImage\Pose1_ExtractFromImage.csproj", "{91F84E98-C9BB-4F45-B2EB-48A81510C4FA}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pose2_ExtractPoseOrHeatmatFromImage", "examples\TutorialDeveloper\Pose2_ExtractPoseOrHeatmatFromImage\Pose2_ExtractPoseOrHeatmatFromImage.csproj", "{95CADA78-0D0A-43F6-85BA-F62B2E502B70}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,10 @@ Global
 		{91F84E98-C9BB-4F45-B2EB-48A81510C4FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91F84E98-C9BB-4F45-B2EB-48A81510C4FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{91F84E98-C9BB-4F45-B2EB-48A81510C4FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95CADA78-0D0A-43F6-85BA-F62B2E502B70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95CADA78-0D0A-43F6-85BA-F62B2E502B70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95CADA78-0D0A-43F6-85BA-F62B2E502B70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95CADA78-0D0A-43F6-85BA-F62B2E502B70}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -85,6 +91,7 @@ Global
 		{C364DC69-295D-4897-A8F9-27822AEC83DB} = {A36BBD14-61FC-4E14-92A5-6130781D9AD6}
 		{6F92A36C-28EB-4D84-9CB1-3ADD31A2AAAF} = {80F0C80F-FB14-4064-BA6A-13999DF04660}
 		{91F84E98-C9BB-4F45-B2EB-48A81510C4FA} = {6F92A36C-28EB-4D84-9CB1-3ADD31A2AAAF}
+		{95CADA78-0D0A-43F6-85BA-F62B2E502B70} = {6F92A36C-28EB-4D84-9CB1-3ADD31A2AAAF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9D8118C7-92BF-487E-83ED-EFB9BF807E08}
