@@ -1,6 +1,5 @@
 ﻿using System;
 using OpenPoseDotNet;
-
 using UserDatum = OpenPoseDotNet.CustomDatum;
 
 namespace Thread4_UserInputProcessingAndOutput

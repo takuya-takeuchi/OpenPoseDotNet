@@ -19,7 +19,7 @@
 #### 3. Try Tutorial
 
 ````dos
-> cd <OpenPoseDotNet_dir>\examples\Tutorial\1_BodyFromImage
+> cd <OpenPoseDotNet_dir>\examples\TutorialApiCpp\1_BodyFromImage
 > CopyOpenPose.bat <Debug/Release>
 > dotnet run -c Release  -i "<OpenPoseDotNet_dir>\openpose\examples\med
 ia\COCO_val2014_000000000192.jpg"

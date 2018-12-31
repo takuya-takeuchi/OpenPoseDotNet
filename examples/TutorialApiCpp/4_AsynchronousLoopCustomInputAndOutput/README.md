@@ -1,5 +1,4 @@
-# Whole Body From Image
-
+# Asynchronous Loop Custom Input And Output
 ## Quick Start
 
 #### 1. Build OpenPose
@@ -19,10 +18,9 @@
 #### 3. Try Tutorial
 
 ````dos
-> cd <OpenPoseDotNet_dir>\examples\TutorialApiCpp\2_WholeBodyFromImage
+> cd <OpenPoseDotNet_dir>\examples\TutorialApiCpp\4_AsynchronousLoopCustomInputAndOutput
 > CopyOpenPose.bat <Debug/Release>
-> dotnet run -c Release  -i "<OpenPoseDotNet_dir>\openpose\examples\med
-ia\COCO_val2014_000000000241.jpg"
+> dotnet run -c Release
 ````
 
-<img src="images/example_turorial_2.png"/>
+<img src="images/example_turorial_4.gif"/>

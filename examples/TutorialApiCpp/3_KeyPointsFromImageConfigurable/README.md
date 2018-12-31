@@ -19,7 +19,7 @@
 #### 3. Try Tutorial
 
 ````dos
-> cd <OpenPoseDotNet_dir>\examples\Tutorial\3_KeyPointsFromImageConfigurable
+> cd <OpenPoseDotNet_dir>\examples\TutorialApiCpp\3_KeyPointsFromImageConfigurable
 > CopyOpenPose.bat <Debug/Release>
 > dotnet run -c Release  -i "<OpenPoseDotNet_dir>\openpose\examples\med
 ia\COCO_val2014_000000000294.jpg"

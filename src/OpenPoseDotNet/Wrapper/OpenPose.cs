@@ -58,6 +58,14 @@ namespace OpenPoseDotNet
             public static extern void op_wrapper_configure_gui(DataType dataType, IntPtr wrapper, IntPtr wrapperStructOutput);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            [return: MarshalAs(UnmanagedType.U1)]
+            public static extern bool op_wrapper_waitAndEmplace(DataType dataType, IntPtr wrapper, IntPtr tDatums);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            [return: MarshalAs(UnmanagedType.U1)]
+            public static extern bool op_wrapper_waitAndPop(DataType dataType, IntPtr wrapper, out IntPtr tDatums);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern IntPtr op_wrapper_emplaceAndPop_cvMat(DataType dataType, IntPtr wrapper, IntPtr mat);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
