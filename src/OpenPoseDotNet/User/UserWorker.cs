@@ -18,14 +18,6 @@ namespace OpenPoseDotNet
 
         #region Fields
 
-        private readonly InitializationOnThreadAction _InitializationOnThreadAction;
-
-        private readonly ProcessAction _ProcessAction;
-
-        private readonly IntPtr _InitializationOnThreadActionPointer;
-
-        private readonly IntPtr _ProcessActionPointer;
-
         private readonly OpenPose.DataType _DataType;
 
         private readonly UserWorkerDelegateMediator _Mediator;
