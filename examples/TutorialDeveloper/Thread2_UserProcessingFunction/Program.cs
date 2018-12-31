@@ -1,12 +1,12 @@
 ﻿/*
- * This sample program is ported by C# from examples/tutorial_developer/thread_1_openpose_read_and_display.cpp.
+ * This sample program is ported by C# from examples/tutorial_developer/thread_2_user_processing_function.cpp.
 */
 
 using System;
 using System.Diagnostics;
 using OpenPoseDotNet;
 
-namespace Thread1_OpenPoseReadAndDisplay
+namespace Thread2_UserProcessingFunction
 {
 
     internal class Program
@@ -62,12 +62,12 @@ namespace Thread1_OpenPoseReadAndDisplay
 
         private static void Main()
         {
-            TutorialDeveloperThread1();
+            TutorialDeveloperThread2();
         }
 
         #region Helpers
 
-        private static int TutorialDeveloperThread1()
+        private static int TutorialDeveloperThread2()
         {
             try
             {
@@ -114,54 +114,64 @@ namespace Thread1_OpenPoseReadAndDisplay
                         using (var datumProducer = new StdSharedPtr<DatumProducer<Datum>>(new DatumProducer<Datum>(producerSharedPtr)))
                         using (var wDatumProducer = new StdSharedPtr<WDatumProducer<Datum>>(new WDatumProducer<Datum>(datumProducer)))
                         {
-                            // GUI (Display)
-                            using (var gui = new StdSharedPtr<Gui>(new Gui(outputSize, Flags.FullScreen, threadManager.GetIsRunningSharedPtr())))
-                            using (var wGui = new StdSharedPtr<WGui<Datum>>(new WGui<Datum>(gui)))
+                            // Specific WUserClass
+                            using (var wUserClass = new StdSharedPtr<UserWorker<Datum>>(new WUserClass()))
                             {
-                                // ------------------------- CONFIGURING THREADING -------------------------
-                                // In this simple multi-thread example, we will do the following:
-                                // 3 (virtual) queues: 0, 1, 2
-                                // 1 real queue: 1. The first and last queue ids (in this case 0 and 2) are not actual queues, but the
-                                // beginning and end of the processing sequence
-                                // 2 threads: 0, 1
-                                // wDatumProducer will generate frames (there is no real queue 0) and push them on queue 1
-                                // wGui will pop frames from queue 1 and process them (there is no real queue 2)
-                                var threadId = 0UL;
-                                var queueIn = 0UL;
-                                var queueOut = 1UL;
-                                threadManager.Add(threadId++, wDatumProducer, queueIn++, queueOut++);       // Thread 0, queues 0 -> 1
-                                threadManager.Add(threadId++, wGui, queueIn++, queueOut++);                 // Thread 1, queues 1 -> 2
+                                // GUI (Display)
+                                using (var gui = new StdSharedPtr<Gui>(new Gui(outputSize, Flags.FullScreen, threadManager.GetIsRunningSharedPtr())))
+                                using (var wGui = new StdSharedPtr<WGui<Datum>>(new WGui<Datum>(gui)))
+                                {
+                                    // ------------------------- CONFIGURING THREADING -------------------------
+                                    // In this simple multi-thread example, we will do the following:
+                                    // 3 (virtual) queues: 0, 1, 2
+                                    // 1 real queue: 1. The first and last queue ids (in this case 0 and 2) are not actual queues, but the
+                                    // beginning and end of the processing sequence
+                                    // 2 threads: 0, 1
+                                    // wDatumProducer will generate frames (there is no real queue 0) and push them on queue 1
+                                    // wGui will pop frames from queue 1 and process them (there is no real queue 2)
+                                    var threadId = 0UL;
+                                    var queueIn = 0UL;
+                                    var queueOut = 1UL;
+                                    threadManager.Add(threadId++, wDatumProducer, queueIn++, queueOut++);   // Thread 0, queues 0 -> 1
+                                    threadManager.Add(threadId++, wUserClass, queueIn++, queueOut++);       // Thread 1, queues 1 -> 2
+                                    threadManager.Add(threadId++, wGui, queueIn++, queueOut++);             // Thread 2, queues 2 -> 3
 
-                                // Equivalent single-thread version (option a)
-                                // const auto threadId = 0ull;
-                                // auto queueIn = 0ull;
-                                // auto queueOut = 1ull;
-                                // threadManager.add(threadId, wDatumProducer, queueIn++, queueOut++);       // Thread 0, queues 0 -> 1
-                                // threadManager.add(threadId, wGui, queueIn++, queueOut++);                 // Thread 0, queues 1 -> 2
+                                    // Equivalent single-thread version
+                                    // const auto threadId = 0ull;
+                                    // auto queueIn = 0ull;
+                                    // auto queueOut = 1ull;
+                                    // threadManager.add(threadId, wDatumProducer, queueIn++, queueOut++);     // Thread 0, queues 0 -> 1
+                                    // threadManager.add(threadId, wUserClass, queueIn++, queueOut++);         // Thread 1, queues 1 -> 2
+                                    // threadManager.add(threadId, wGui, queueIn++, queueOut++);               // Thread 2, queues 2 -> 3
 
-                                // Equivalent single-thread version (option b)
-                                // const auto threadId = 0ull;
-                                // const auto queueIn = 0ull;
-                                // const auto queueOut = 1ull;
-                                // threadManager.add(threadId, {wDatumProducer, wGui}, queueIn, queueOut);     // Thread 0, queues 0 -> 1
+                                    // Smart multi-thread version
+                                    // Assume wUser is the slowest process, and that wDatumProducer + wGui is faster than wGui itself,
+                                    // then, we can group the last 2 in the same thread and keep wGui in a different thread:
+                                    // const auto threadId = 0ull;
+                                    // auto queueIn = 0ull;
+                                    // auto queueOut = 1ull;
+                                    // threadManager.add(threadId, wDatumProducer, queueIn++, queueOut++);     // Thread 0, queues 0 -> 1
+                                    // threadManager.add(threadId+1, wUserClass, queueIn++, queueOut++);       // Thread 1, queues 1 -> 2
+                                    // threadManager.add(threadId, wGui, queueIn++, queueOut++);               // Thread 0, queues 2 -> 3
 
-                                // ------------------------- STARTING AND STOPPING THREADING -------------------------
-                                OpenPose.Log("Starting thread(s)...", Priority.High);
-                                // Two different ways of running the program on multithread environment
-                                // Option a) Using the main thread (this thread) for processing (it saves 1 thread, recommended)
-                                threadManager.Exec();
-                                // Option b) Giving to the user the control of this thread
-                                // // VERY IMPORTANT NOTE: if OpenCV is compiled with Qt support, this option will not work. Qt needs the main
-                                // // thread to plot visual results, so the final GUI (which uses OpenCV) would return an exception similar to:
-                                // // `QMetaMethod::invoke: Unable to invoke methods with return values in queued connections`
-                                // // Start threads
-                                // threadManager.start();
-                                // // Keep program alive while running threads. Here the user could perform any other desired function
-                                // while (threadManager.isRunning())
-                                //     std::this_thread::sleep_for(std::chrono::milliseconds{33});
-                                // // Stop and join threads
-                                // op::log("Stopping thread(s)", op::Priority::High);
-                                // threadManager.stop();
+                                    // ------------------------- STARTING AND STOPPING THREADING -------------------------
+                                    OpenPose.Log("Starting thread(s)...", Priority.High);
+                                    // Two different ways of running the program on multithread environment
+                                    // Option a) Using the main thread (this thread) for processing (it saves 1 thread, recommended)
+                                    threadManager.Exec();
+                                    // Option b) Giving to the user the control of this thread
+                                    // // VERY IMPORTANT NOTE: if OpenCV is compiled with Qt support, this option will not work. Qt needs the main
+                                    // // thread to plot visual results, so the final GUI (which uses OpenCV) would return an exception similar to:
+                                    // // `QMetaMethod::invoke: Unable to invoke methods with return values in queued connections`
+                                    // // Start threads
+                                    // threadManager.start();
+                                    // // Keep program alive while running threads. Here the user could perform any other desired function
+                                    // while (threadManager.isRunning())
+                                    //     std::this_thread::sleep_for(std::chrono::milliseconds{33});
+                                    // // Stop and join threads
+                                    // op::log("Stopping thread(s)", op::Priority::High);
+                                    // threadManager.stop();
+                                }
                             }
                         }
                     }
@@ -179,7 +189,7 @@ namespace Thread1_OpenPoseReadAndDisplay
             }
             catch (Exception e)
             {
-                OpenPose.Error(e.Message, -1, nameof(TutorialDeveloperThread1));
+                OpenPose.Error(e.Message, -1, nameof(TutorialDeveloperThread2));
                 return -1;
             }
         }

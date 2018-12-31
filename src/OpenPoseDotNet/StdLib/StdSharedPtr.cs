@@ -13,6 +13,8 @@ namespace OpenPoseDotNet
 
         private static readonly Dictionary<Type, ElementTypes> SupportTypes = new Dictionary<Type, ElementTypes>();
 
+        private static readonly Dictionary<Type, ElementSubTypes> SupportSubTypes = new Dictionary<Type, ElementSubTypes>();
+
         private readonly StdSharedPtrImp<T> _Imp;
 
         private readonly OpenPoseObject _Obj;
@@ -25,16 +27,27 @@ namespace OpenPoseDotNet
         {
             var types = new[]
             {
-                new { Type = typeof(PoseExtractorCaffe),    ElementType = ElementTypes.PoseExtractorCaffe },
-                new { Type = typeof(Producer),              ElementType = ElementTypes.Producer },
-                new { Type = typeof(DatumProducer<Datum>),  ElementType = ElementTypes.DatumProducerOfDatum },
-                new { Type = typeof(WDatumProducer<Datum>), ElementType = ElementTypes.WDatumProducerOfDatum },
-                new { Type = typeof(Gui),                   ElementType = ElementTypes.Gui },
-                new { Type = typeof(WGui<Datum>),           ElementType = ElementTypes.WGui },
+                new { Type = typeof(PoseExtractorCaffe),      ElementType = ElementTypes.PoseExtractorCaffe },
+                new { Type = typeof(Producer),                ElementType = ElementTypes.Producer },
+                new { Type = typeof(DatumProducer<Datum>),    ElementType = ElementTypes.DatumProducerOfDatum },
+                new { Type = typeof(WDatumProducer<Datum>),   ElementType = ElementTypes.WDatumProducerOfDatum },
+                new { Type = typeof(Gui),                     ElementType = ElementTypes.Gui },
+                new { Type = typeof(WGui<Datum>),             ElementType = ElementTypes.WGui },
+                new { Type = typeof(UserWorker<Datum>),       ElementType = ElementTypes.UserWorkerOfDefault },
+                new { Type = typeof(UserWorker<CustomDatum>), ElementType = ElementTypes.UserWorkerOfCustom },
             };
 
             foreach (var type in types)
                 SupportTypes.Add(type.Type, type.ElementType);
+
+            var subtypes = new[]
+            {
+                new { Type = typeof(UserWorker<Datum>),       ElementType = ElementSubTypes.UserWorkerOfDefault },
+                new { Type = typeof(UserWorker<CustomDatum>), ElementType = ElementSubTypes.UserWorkerOfCustom },
+            };
+
+            foreach (var type in subtypes)
+                SupportSubTypes.Add(type.Type, type.ElementType);
         }
 
         public StdSharedPtr(T obj)
@@ -50,10 +63,10 @@ namespace OpenPoseDotNet
             obj.IsEnableDispose = false;
         }
 
-        internal StdSharedPtr(IntPtr ptr)
+        internal StdSharedPtr(IntPtr sharedPtr)
         {
             this._Imp = CreateImp();
-            this.NativePtr = ptr;
+            this.NativePtr = sharedPtr;
         }
 
         #endregion
@@ -89,7 +102,8 @@ namespace OpenPoseDotNet
 
         private static StdSharedPtrImp<T> CreateImp()
         {
-            if (SupportTypes.TryGetValue(typeof(T), out var type))
+            var t = typeof(T);
+            if (SupportTypes.TryGetValue(t, out var type))
             {
                 switch (type)
                 {
@@ -105,6 +119,26 @@ namespace OpenPoseDotNet
                         return new StdSharedPtrGuiImp() as StdSharedPtrImp<T>;
                     case ElementTypes.WGui:
                         return new StdSharedPtrWGuiImp() as StdSharedPtrImp<T>;
+                    case ElementTypes.UserWorkerOfDefault:
+                        return new StdSharedPtrUserWorkerOfDefaultImp() as StdSharedPtrImp<T>;
+                    case ElementTypes.UserWorkerOfCustom:
+                        return new StdSharedPtrUserWorkerOfCustomImp() as StdSharedPtrImp<T>;
+                }
+            }
+            else
+            {
+                foreach (var subType in SupportSubTypes)
+                {
+                    if (!subType.Key.IsSubclassOf(t))
+                        continue;
+
+                    switch (subType.Value)
+                    {
+                        case ElementSubTypes.UserWorkerOfDefault:
+                            return new StdSharedPtrUserWorkerOfDefaultImp() as StdSharedPtrImp<T>;
+                        case ElementSubTypes.UserWorkerOfCustom:
+                            return new StdSharedPtrUserWorkerOfCustomImp() as StdSharedPtrImp<T>;
+                    }
                 }
             }
 
@@ -128,7 +162,20 @@ namespace OpenPoseDotNet
 
             Gui,
 
-            WGui
+            WGui,
+
+            UserWorkerOfDefault,
+
+            UserWorkerOfCustom
+
+        }
+
+        private enum ElementSubTypes
+        {
+
+            UserWorkerOfDefault,
+
+            UserWorkerOfCustom
 
         }
 
@@ -174,7 +221,7 @@ namespace OpenPoseDotNet
             #endregion
 
         }
-        
+
         private sealed class StdSharedPtrProducerImp : StdSharedPtrImp<Producer>
         {
 
@@ -200,7 +247,7 @@ namespace OpenPoseDotNet
             #endregion
 
         }
-        
+
         private sealed class StdSharedPtrDatumProducerOfDatumImp : StdSharedPtrImp<DatumProducer<Datum>>
         {
 
@@ -226,7 +273,7 @@ namespace OpenPoseDotNet
             #endregion
 
         }
-        
+
         private sealed class StdSharedPtrWDatumProducerOfDatumImp : StdSharedPtrImp<WDatumProducer<Datum>>
         {
 
@@ -299,6 +346,58 @@ namespace OpenPoseDotNet
             {
                 var p = OpenPose.Native.std_shared_ptr_op_WGui_get(ptr);
                 return new WGui<Datum>(p, false);
+            }
+
+            #endregion
+
+        }
+
+        private sealed class StdSharedPtrUserWorkerOfDefaultImp : StdSharedPtrImp<UserWorker<Datum>>
+        {
+
+            #region Methods
+
+            public override IntPtr Create(IntPtr ptr)
+            {
+                return OpenPose.Native.std_shared_ptr_op_UserWorkerOfDefault_new(ptr);
+            }
+
+            public override void Delete(IntPtr ptr)
+            {
+                if (ptr != IntPtr.Zero)
+                    OpenPose.Native.std_shared_ptr_op_UserWorkerOfDefault_delete(ptr);
+            }
+
+            public override UserWorker<Datum> Get(IntPtr ptr)
+            {
+                var p = OpenPose.Native.std_shared_ptr_op_UserWorkerOfDefault_get(ptr);
+                return new UserWorker<Datum>(p, false);
+            }
+
+            #endregion
+
+        }
+
+        private sealed class StdSharedPtrUserWorkerOfCustomImp : StdSharedPtrImp<UserWorker<CustomDatum>>
+        {
+
+            #region Methods
+
+            public override IntPtr Create(IntPtr ptr)
+            {
+                return OpenPose.Native.std_shared_ptr_op_UserWorkerOfCustom_new(ptr);
+            }
+
+            public override void Delete(IntPtr ptr)
+            {
+                if (ptr != IntPtr.Zero)
+                    OpenPose.Native.std_shared_ptr_op_UserWorkerOfCustom_delete(ptr);
+            }
+
+            public override UserWorker<CustomDatum> Get(IntPtr ptr)
+            {
+                var p = OpenPose.Native.std_shared_ptr_op_UserWorkerOfCustom_get(ptr);
+                return new UserWorker<CustomDatum>(p, false);
             }
 
             #endregion
