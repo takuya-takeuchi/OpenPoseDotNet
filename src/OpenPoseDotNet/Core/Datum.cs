@@ -20,6 +20,18 @@ namespace OpenPoseDotNet
 
         #region Properties
 
+        public Mat CvInputData
+        {
+            get
+            {
+                this.ThrowIfDisposed();
+                var ret = Native.op_core_datum_get_cvInputData(this.NativePtr);
+
+                // Datum.cvInputData is not pointer. Therefore, this object must not be disposed.
+                return new Mat(ret, false);
+            }
+        }
+
         public Mat CvOutputData
         {
             get
@@ -148,6 +160,9 @@ namespace OpenPoseDotNet
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern ulong op_core_datum_get_frameNumber(IntPtr datum);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern IntPtr op_core_datum_get_cvInputData(IntPtr datum);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern IntPtr op_core_datum_get_cvOutputData(IntPtr datum);

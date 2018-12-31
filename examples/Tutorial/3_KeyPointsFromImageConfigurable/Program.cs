@@ -59,12 +59,12 @@ namespace KeyPointsFromImageConfigurable
 
         #region Helpers
 
-        private static void Display(SharedHandle<StdVector<Datum>> datumsPtr)
+        private static void Display(StdSharedPtr<StdVector<Datum>> datumsPtr)
         {
             // User's displaying/saving/other processing here
             // datum.cvOutputData: rendered frame with pose or heatmaps
             // datum.poseKeypoints: Array<float> with the estimated pose
-            if (datumsPtr != null && datumsPtr.GetData(out var data) && !data.Empty)
+            if (datumsPtr != null && datumsPtr.TryGet(out var data) && !data.Empty)
             {
                 // Display image
                 var temp = data.ToArray();
@@ -77,10 +77,10 @@ namespace KeyPointsFromImageConfigurable
             }
         }
 
-        private static void PrintKeypoints(SharedHandle<StdVector<Datum>> datumsPtr)
+        private static void PrintKeypoints(StdSharedPtr<StdVector<Datum>> datumsPtr)
         {
             // Example: How to use the pose keypoints
-            if (datumsPtr != null && datumsPtr.GetData(out var data) && !data.Empty)
+            if (datumsPtr != null && datumsPtr.TryGet(out var data) && !data.Empty)
             {
                 // Alternative 1
                 var temp = data.ToArray();
@@ -132,7 +132,7 @@ namespace KeyPointsFromImageConfigurable
 
                 // Configuring OpenPose
                 OpenPose.Log("Configuring OpenPose...", Priority.High);
-                using (var opWrapper = new Wrapper(ThreadManagerMode.Asynchronous))
+                using (var opWrapper = new Wrapper<Datum>(ThreadManagerMode.Asynchronous))
                 {
                     // Pose configuration (use WrapperStructPose{} for default and recommended configuration)
                     using (var pose = new WrapperStructPose(!Flags.BodyDisabled,

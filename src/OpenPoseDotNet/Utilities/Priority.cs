@@ -1,4 +1,5 @@
-﻿namespace OpenPoseDotNet
+﻿// ReSharper disable once CheckNamespace
+namespace OpenPoseDotNet
 {
 
     public enum Priority : byte
