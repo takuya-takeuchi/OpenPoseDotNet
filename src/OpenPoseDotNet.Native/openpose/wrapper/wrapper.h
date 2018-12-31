@@ -3,158 +3,446 @@
 
 #include "../shared.h"
 #include <opencv2/core/mat.hpp>
+#include "../defines.h"
+#include "../custom/customWrapper.h"
 
 typedef std::vector<op::Datum> TDatums;
-typedef std::shared_ptr<TDatums> TDatumsSP;
-typedef std::shared_ptr<op::Worker<TDatumsSP>> TWorker;
 
 MAKE_SHARED_PTR_FUNC(std::vector<op::Datum>, TDatums)
 
-DLLEXPORT op::Wrapper* op_wrapper_new(const op::ThreadManagerMode threadManagerMode)
+DLLEXPORT void* op_wrapper_new(const data_type dataType, const op::ThreadManagerMode threadManagerMode)
 {
-    return new op::Wrapper{ threadManagerMode };
+    switch(dataType)
+    {
+        case data_type::Default:
+            return new op::Wrapper{ threadManagerMode };
+        case data_type::Custom:
+            return new CustomWrapper{ threadManagerMode };
+    }
+
+    return nullptr;
 }
 
-DLLEXPORT void op_wrapper_delete(op::Wrapper* wrapper)
+DLLEXPORT void op_wrapper_delete(const data_type dataType, void* wrapper)
 {
-    delete wrapper;
+    switch(dataType)
+    {
+        case data_type::Default:
+            delete ((op::Wrapper*)wrapper);
+            break;
+        case data_type::Custom:
+            delete ((CustomWrapper*)wrapper);
+            break;
+    }
 }
 
-DLLEXPORT void op_wrapper_disableMultiThreading(op::Wrapper* wrapper)
+DLLEXPORT void op_wrapper_disableMultiThreading(const data_type dataType, void* wrapper)
 {
-    wrapper->disableMultiThreading();
+    switch(dataType)
+    {
+        case data_type::Default:
+            ((op::Wrapper*)wrapper)->disableMultiThreading();
+            break;
+        case data_type::Custom:
+            ((CustomWrapper*)wrapper)->disableMultiThreading();
+            break;
+    }
 }
 
-DLLEXPORT void op_wrapper_setWorker(op::Wrapper* wrapper, const op::WorkerType workerType, const TWorker* worker, const bool workerOnNewThread = true)
+DLLEXPORT void op_wrapper_setWorker(const data_type dataType, void* wrapper, const op::WorkerType workerType, void* worker, const bool workerOnNewThread = true)
 {
-    auto& tmp = *worker;
-    wrapper->setWorker(workerType, tmp, workerOnNewThread);
+    switch(dataType)
+    {
+        case data_type::Default:
+            {
+                auto& tmp = *(static_cast<DefaultWorker*>(worker));
+                ((op::Wrapper*)wrapper)->setWorker(workerType, tmp, workerOnNewThread);
+            }
+            break;
+        case data_type::Custom:
+            {
+                auto& tmp = *(static_cast<CustomWorker*>(worker));
+                ((CustomWrapper*)wrapper)->setWorker(workerType, tmp, workerOnNewThread);
+            }
+            break;
+    }
 }
 
-DLLEXPORT void op_wrapper_configure_pose(op::Wrapper* wrapper, op::WrapperStructPose* wrapperStructPose)
+DLLEXPORT void op_wrapper_configure_pose(const data_type dataType, void* wrapper, op::WrapperStructPose* wrapperStructPose)
 {
     auto& tmp = *wrapperStructPose;
-    wrapper->configure(tmp);
+    
+    switch(dataType)
+    {
+        case data_type::Default:
+            ((op::Wrapper*)wrapper)->configure(tmp);
+            break;
+        case data_type::Custom:
+            ((CustomWrapper*)wrapper)->configure(tmp);
+            break;
+    }
 }
 
-DLLEXPORT void op_wrapper_configure_face(op::Wrapper* wrapper, op::WrapperStructFace* wrapperStructFace)
+DLLEXPORT void op_wrapper_configure_face(const data_type dataType, void* wrapper, op::WrapperStructFace* wrapperStructFace)
 {
     auto& tmp = *wrapperStructFace;
-    wrapper->configure(tmp);
+    
+    switch(dataType)
+    {
+        case data_type::Default:
+            ((op::Wrapper*)wrapper)->configure(tmp);
+            break;
+        case data_type::Custom:
+            ((CustomWrapper*)wrapper)->configure(tmp);
+            break;
+    }
 }
 
-DLLEXPORT void op_wrapper_configure_hand(op::Wrapper* wrapper, op::WrapperStructHand* wrapperStructHand)
+DLLEXPORT void op_wrapper_configure_hand(const data_type dataType, void* wrapper, op::WrapperStructHand* wrapperStructHand)
 {
     auto& tmp = *wrapperStructHand;
-    wrapper->configure(tmp);
+    
+    switch(dataType)
+    {
+        case data_type::Default:
+            ((op::Wrapper*)wrapper)->configure(tmp);
+            break;
+        case data_type::Custom:
+            ((CustomWrapper*)wrapper)->configure(tmp);
+            break;
+    }
 }
 
-DLLEXPORT void op_wrapper_configure_extra(op::Wrapper* wrapper, op::WrapperStructExtra* wrapperStructExtra)
+DLLEXPORT void op_wrapper_configure_extra(const data_type dataType, void* wrapper, op::WrapperStructExtra* wrapperStructExtra)
 {
     auto& tmp = *wrapperStructExtra;
-    wrapper->configure(tmp);
+    
+    switch(dataType)
+    {
+        case data_type::Default:
+            ((op::Wrapper*)wrapper)->configure(tmp);
+            break;
+        case data_type::Custom:
+            ((CustomWrapper*)wrapper)->configure(tmp);
+            break;
+    }
 }
 
-DLLEXPORT void op_wrapper_configure_input(op::Wrapper* wrapper, op::WrapperStructInput* wrapperStructInput)
+DLLEXPORT void op_wrapper_configure_input(const data_type dataType, void* wrapper, op::WrapperStructInput* wrapperStructInput)
 {
     auto& tmp = *wrapperStructInput;
-    wrapper->configure(tmp);
+    
+    switch(dataType)
+    {
+        case data_type::Default:
+            ((op::Wrapper*)wrapper)->configure(tmp);
+            break;
+        case data_type::Custom:
+            ((CustomWrapper*)wrapper)->configure(tmp);
+            break;
+    }
 }
 
-DLLEXPORT void op_wrapper_configure_output(op::Wrapper* wrapper, op::WrapperStructOutput* wrapperStructOutput)
+DLLEXPORT void op_wrapper_configure_output(const data_type dataType, void* wrapper, op::WrapperStructOutput* wrapperStructOutput)
 {
     auto& tmp = *wrapperStructOutput;
-    wrapper->configure(tmp);
+    
+    switch(dataType)
+    {
+        case data_type::Default:
+            ((op::Wrapper*)wrapper)->configure(tmp);
+            break;
+        case data_type::Custom:
+            ((CustomWrapper*)wrapper)->configure(tmp);
+            break;
+    }
 }
 
-DLLEXPORT void op_wrapper_configure_gui(op::Wrapper* wrapper, op::WrapperStructGui* wrapperStructGui)
+DLLEXPORT void op_wrapper_configure_gui(const data_type dataType, void* wrapper, op::WrapperStructGui* wrapperStructGui)
 {
     auto& tmp = *wrapperStructGui;
-    wrapper->configure(tmp);
+    
+    switch(dataType)
+    {
+        case data_type::Default:
+            ((op::Wrapper*)wrapper)->configure(tmp);
+            break;
+        case data_type::Custom:
+            ((CustomWrapper*)wrapper)->configure(tmp);
+            break;
+    }
 }
 
-DLLEXPORT void op_wrapper_exec(op::Wrapper* wrapper)
+DLLEXPORT void op_wrapper_exec(const data_type dataType, void* wrapper)
 {
-    wrapper->exec();
+    switch(dataType)
+    {
+        case data_type::Default:
+            ((op::Wrapper*)wrapper)->exec();
+            break;
+        case data_type::Custom:
+            ((CustomWrapper*)wrapper)->exec();
+            break;
+    }
 }
 
-DLLEXPORT void op_wrapper_start(op::Wrapper* wrapper)
+DLLEXPORT void op_wrapper_start(const data_type dataType, void* wrapper)
 {
-    wrapper->start();
+    switch(dataType)
+    {
+        case data_type::Default:
+            ((op::Wrapper*)wrapper)->start();
+            break;
+        case data_type::Custom:
+            ((CustomWrapper*)wrapper)->start();
+            break;
+    }
 }
 
-DLLEXPORT void op_wrapper_stop(op::Wrapper* wrapper)
+DLLEXPORT void op_wrapper_stop(const data_type dataType, void* wrapper)
 {
-    wrapper->stop();
+    switch(dataType)
+    {
+        case data_type::Default:
+            ((op::Wrapper*)wrapper)->stop();
+            break;
+        case data_type::Custom:
+            ((CustomWrapper*)wrapper)->stop();
+            break;
+    }
 }
 
-DLLEXPORT bool op_wrapper_isRunning(op::Wrapper* wrapper)
+DLLEXPORT bool op_wrapper_isRunning(const data_type dataType, void* wrapper)
 {
-    return wrapper->isRunning();
-}
+    bool ret = false;
 
-DLLEXPORT bool op_wrapper_tryEmplace(op::Wrapper* wrapper, TDatumsSP* tDatums)
-{
-    auto& tmp = *tDatums;
-    return wrapper->tryEmplace(tmp);
-}
+    switch(dataType)
+    {
+        case data_type::Default:
+            ret = ((op::Wrapper*)wrapper)->isRunning();
+            break;
+        case data_type::Custom:
+            ret = ((CustomWrapper*)wrapper)->isRunning();
+            break;
+    }
 
-DLLEXPORT bool op_wrapper_waitAndEmplace(op::Wrapper* wrapper, TDatumsSP* tDatums)
-{
-    auto& tmp = *tDatums;
-    return wrapper->waitAndEmplace(tmp);
-}
-
-DLLEXPORT bool op_wrapper_tryPush(op::Wrapper* wrapper, TDatumsSP* tDatums)
-{
-    auto& tmp = *tDatums;
-    return wrapper->tryPush(tmp);
-}
-
-DLLEXPORT bool op_wrapper_waitAndPush(op::Wrapper* wrapper, TDatumsSP* tDatums)
-{
-    auto& tmp = *tDatums;
-    return wrapper->waitAndPush(tmp);
-}
-
-DLLEXPORT bool op_wrapper_tryPop(op::Wrapper* wrapper, TDatumsSP** tDatums)
-{
-    TDatumsSP tmp;
-    const auto ret = wrapper->tryPop(tmp);
-    *tDatums = new TDatumsSP(tmp);
     return ret;
 }
 
-DLLEXPORT bool op_wrapper_waitAndPop(op::Wrapper* wrapper, TDatumsSP** tDatums)
+DLLEXPORT bool op_wrapper_tryEmplace(const data_type dataType, void* wrapper, void* tDatums)
 {
-    TDatumsSP tmp;
-    const auto ret = wrapper->waitAndPop(tmp);
-    *tDatums = new TDatumsSP(tmp);
+    bool ret = false;
+
+    switch(dataType)
+    {
+        case data_type::Default:
+            {
+                auto& tmp = *(static_cast<DefaultDatums*>(tDatums));
+                ret = ((op::Wrapper*)wrapper)->tryEmplace(tmp);
+            }
+            break;
+        case data_type::Custom:
+            {
+                auto& tmp = *(static_cast<CustomDatums*>(tDatums));
+                ret = ((CustomWrapper*)wrapper)->tryEmplace(tmp);
+            }
+            break;
+    }
+
     return ret;
 }
 
-DLLEXPORT bool op_wrapper_emplaceAndPop(op::Wrapper* wrapper, TDatumsSP* tDatums)
+DLLEXPORT bool op_wrapper_waitAndEmplace(const data_type dataType, void* wrapper, void* tDatums)
 {
-    auto& tmp = *tDatums;
-    return wrapper->emplaceAndPop(tmp);
+    bool ret = false;
+
+    switch(dataType)
+    {
+        case data_type::Default:
+            {
+                auto& tmp = *(static_cast<DefaultDatums*>(tDatums));
+                ret = ((op::Wrapper*)wrapper)->waitAndEmplace(tmp);
+            }
+            break;
+        case data_type::Custom:
+            {
+                auto& tmp = *(static_cast<CustomDatums*>(tDatums));
+                ret = ((CustomWrapper*)wrapper)->waitAndEmplace(tmp);
+            }
+            break;
+    }
+
+    return ret;
 }
 
-DLLEXPORT TDatumsSP* op_wrapper_emplaceAndPop_cvMat(op::Wrapper* wrapper, cv::Mat* cvMat)
+DLLEXPORT bool op_wrapper_tryPush(const data_type dataType, void* wrapper, void* tDatums)
 {
-    const auto& tmp = *cvMat;
-	auto ret = wrapper->emplaceAndPop(tmp);
-    return new TDatumsSP(ret);
+    bool ret = false;
+
+    switch(dataType)
+    {
+        case data_type::Default:
+            {
+                auto& tmp = *(static_cast<DefaultDatums*>(tDatums));
+                ret = ((op::Wrapper*)wrapper)->tryPush(tmp);
+            }
+            break;
+        case data_type::Custom:
+            {
+                auto& tmp = *(static_cast<CustomDatums*>(tDatums));
+                ret = ((CustomWrapper*)wrapper)->tryPush(tmp);
+            }
+            break;
+    }
+
+    return ret;
 }
 
-DLLEXPORT TDatumsSP* op_wrapper_emplaceAndPop_rawImage(op::Wrapper* wrapper,
-                                                       void* data,
-                                                       const int width,
-                                                       const int height,
-                                                       const int type)
+DLLEXPORT bool op_wrapper_waitAndPush(const data_type dataType, void* wrapper, void* tDatums)
 {
-    cv::Mat mat(height, width, type, data);
-    const auto ret = wrapper->emplaceAndPop(mat);
-    return new TDatumsSP(ret);
+    bool ret = false;
+
+    switch(dataType)
+    {
+        case data_type::Default:
+            {
+                auto& tmp = *(static_cast<DefaultDatums*>(tDatums));
+                ret = ((op::Wrapper*)wrapper)->waitAndPush(tmp);
+            }
+            break;
+        case data_type::Custom:
+            {
+                auto& tmp = *(static_cast<CustomDatums*>(tDatums));
+                ret = ((CustomWrapper*)wrapper)->waitAndPush(tmp);
+            }
+            break;
+    }
+
+    return ret;
+}
+
+DLLEXPORT bool op_wrapper_tryPop(const data_type dataType, void* wrapper, void** tDatums)
+{
+    bool ret = false;
+
+    switch(dataType)
+    {
+        case data_type::Default:
+            {
+                DefaultDatums tmp;
+                ret = ((op::Wrapper*)wrapper)->tryPop(tmp);
+                *tDatums = new DefaultDatums(tmp);
+            }
+            break;
+        case data_type::Custom:
+            {
+                CustomDatums tmp;
+                ret = ((CustomWrapper*)wrapper)->tryPop(tmp);
+                *tDatums = new CustomDatums(tmp);
+            }
+            break;
+    }
+
+    return ret;
+}
+
+DLLEXPORT bool op_wrapper_waitAndPop(const data_type dataType, void* wrapper, void** tDatums)
+{
+    bool ret = false;
+
+    switch(dataType)
+    {
+        case data_type::Default:
+            {
+                DefaultDatums tmp;
+                ret = ((op::Wrapper*)wrapper)->waitAndPop(tmp);
+                *tDatums = new DefaultDatums(tmp);
+            }
+            break;
+        case data_type::Custom:
+            {
+                CustomDatums tmp;
+                ret = ((CustomWrapper*)wrapper)->waitAndPop(tmp);
+                *tDatums = new CustomDatums(tmp);
+            }
+            break;
+    }
+
+    return ret;
+}
+
+DLLEXPORT bool op_wrapper_emplaceAndPop(const data_type dataType, void* wrapper, void* tDatums)
+{
+    bool ret = false;
+
+    switch(dataType)
+    {
+        case data_type::Default:
+            {
+                auto& tmp = *(static_cast<DefaultDatums*>(tDatums));
+                ret = ((op::Wrapper*)wrapper)->emplaceAndPop(tmp);
+            }
+            break;
+        case data_type::Custom:
+            {
+                auto& tmp = *(static_cast<CustomDatums*>(tDatums));
+                ret = ((CustomWrapper*)wrapper)->emplaceAndPop(tmp);
+            }
+            break;
+    }
+
+    return ret;
+}
+
+DLLEXPORT void* op_wrapper_emplaceAndPop_cvMat(const data_type dataType, void* wrapper, cv::Mat* cvMat)
+{
+    switch(dataType)
+    {
+        case data_type::Default:
+            {
+                const auto& tmp = *cvMat;
+                const auto ret = ((op::Wrapper*)wrapper)->emplaceAndPop(tmp);
+                return new DefaultDatums(ret);
+            }
+            break;
+        case data_type::Custom:
+            {
+                const auto& tmp = *cvMat;
+                const auto ret = ((CustomWrapper*)wrapper)->emplaceAndPop(tmp);
+                return new CustomDatums(ret);
+            }
+            break;
+    }
+
+    return nullptr;
+}
+
+DLLEXPORT void* op_wrapper_emplaceAndPop_rawImage(const data_type dataType,
+                                                  void* wrapper,
+                                                  void* data,
+                                                  const int width,
+                                                  const int height,
+                                                  const int type)
+{
+    switch(dataType)
+    {
+        case data_type::Default:
+            {
+                cv::Mat mat(height, width, type, data);
+                const auto ret = ((op::Wrapper*)wrapper)->emplaceAndPop(mat);
+                return new DefaultDatums(ret);
+            }
+            break;
+        case data_type::Custom:
+            {
+                cv::Mat mat(height, width, type, data);
+                const auto ret = ((CustomWrapper*)wrapper)->emplaceAndPop(mat);
+                return new CustomDatums(ret);
+            }
+            break;
+    }
+
+    return nullptr;
 }
 
 #endif
