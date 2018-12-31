@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace OpenPoseDotNet
 {
 
-    public sealed class Wrapper<T> : WrapperBase<T>
+    public sealed class Wrapper<T> : OpenPoseObject
     {
 
         #region Fields
@@ -56,7 +56,7 @@ namespace OpenPoseDotNet
 
         #region Properties
 
-        public override bool IsRunning
+        public bool IsRunning
         {
             get
             {
@@ -70,7 +70,7 @@ namespace OpenPoseDotNet
 
         #region Methods
 
-        public override void Configure(WrapperStructPose pose)
+        public void Configure(WrapperStructPose pose)
         {
             if (pose == null)
                 throw new ArgumentNullException(nameof(pose));
@@ -80,7 +80,7 @@ namespace OpenPoseDotNet
             OpenPose.Native.op_wrapper_configure_pose(this._DataType, this.NativePtr, pose.NativePtr);
         }
 
-        public override void Configure(WrapperStructHand hand)
+        public void Configure(WrapperStructHand hand)
         {
             if (hand == null)
                 throw new ArgumentNullException(nameof(hand));
@@ -90,7 +90,7 @@ namespace OpenPoseDotNet
             OpenPose.Native.op_wrapper_configure_hand(this._DataType, this.NativePtr, hand.NativePtr);
         }
 
-        public override void Configure(WrapperStructFace face)
+        public void Configure(WrapperStructFace face)
         {
             if (face == null)
                 throw new ArgumentNullException(nameof(face));
@@ -100,7 +100,7 @@ namespace OpenPoseDotNet
             OpenPose.Native.op_wrapper_configure_face(this._DataType, this.NativePtr, face.NativePtr);
         }
         
-        public override void Configure(WrapperStructExtra extra)
+        public void Configure(WrapperStructExtra extra)
         {
             if (extra == null)
                 throw new ArgumentNullException(nameof(extra));
@@ -110,7 +110,7 @@ namespace OpenPoseDotNet
             OpenPose.Native.op_wrapper_configure_extra(this._DataType, this.NativePtr, extra.NativePtr);
         }
 
-        public override void Configure(WrapperStructInput input)
+        public void Configure(WrapperStructInput input)
         {
             if (input == null)
                 throw new ArgumentNullException(nameof(input));
@@ -120,7 +120,7 @@ namespace OpenPoseDotNet
             OpenPose.Native.op_wrapper_configure_input(this._DataType, this.NativePtr, input.NativePtr);
         }
 
-        public override void Configure(WrapperStructOutput output)
+        public void Configure(WrapperStructOutput output)
         {
             if (output == null)
                 throw new ArgumentNullException(nameof(output));
@@ -130,7 +130,7 @@ namespace OpenPoseDotNet
             OpenPose.Native.op_wrapper_configure_output(this._DataType, this.NativePtr, output.NativePtr);
         }
 
-        public override void Configure(WrapperStructGui gui)
+        public void Configure(WrapperStructGui gui)
         {
             if (gui == null)
                 throw new ArgumentNullException(nameof(gui));
@@ -140,14 +140,14 @@ namespace OpenPoseDotNet
             OpenPose.Native.op_wrapper_configure_gui(this._DataType, this.NativePtr, gui.NativePtr);
         }
 
-        public override void DisableMultiThreading()
+        public void DisableMultiThreading()
         {
             this.ThrowIfDisposed();
 
             OpenPose.Native.op_wrapper_disableMultiThreading(this._DataType, this.NativePtr);
         }
 
-        public override SharedHandle<StdVector<T>> EmplaceAndPop(Mat mat)
+        public SharedHandle<StdVector<T>> EmplaceAndPop(Mat mat)
         {
             if (mat == null)
                 throw new ArgumentNullException(nameof(mat));
@@ -161,28 +161,29 @@ namespace OpenPoseDotNet
                                                   OpenPose.Native.op_shared_ptr_TDatums_delete);
         }
 
-        public override void Exec()
+        public void Exec()
         {
             this.ThrowIfDisposed();
 
             OpenPose.Native.op_wrapper_exec(this._DataType, this.NativePtr);
         }
 
-        public override void SetWorker<U>(WorkerType workerType, StdSharedPtr<U> worker, bool workerOnNewThread = true)
+        public void SetWorker<U>(WorkerType workerType, StdSharedPtr<U> worker, bool workerOnNewThread = true)
+            where U : Worker<T>
         {
             this.ThrowIfDisposed();
 
             OpenPose.Native.op_wrapper_setWorker(this._DataType, this.NativePtr, workerType, worker.NativePtr, workerOnNewThread);
         }
 
-        public override void Start()
+        public void Start()
         {
             this.ThrowIfDisposed();
 
             OpenPose.Native.op_wrapper_start(this._DataType, this.NativePtr);
         }
 
-        public override void Stop()
+        public void Stop()
         {
             this.ThrowIfDisposed();
 
