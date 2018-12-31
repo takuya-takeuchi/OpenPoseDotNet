@@ -48,9 +48,6 @@ void UserWorker<TDatums>::work(TDatums& tDatums)
     this->m_process_function(pDatums);
 }
 
-typedef std::shared_ptr<std::vector<op::Datum>> DefaultDatums;
-typedef std::shared_ptr<std::vector<CustomDatum>> CustomDatums;
-
 typedef UserWorker<DefaultDatums> DefaultUserWorker;
 typedef UserWorker<CustomDatums> CustomUserWorker;
 

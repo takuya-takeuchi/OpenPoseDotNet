@@ -30,6 +30,12 @@ namespace OpenPoseDotNet
                 // Datum.cvInputData is not pointer. Therefore, this object must not be disposed.
                 return new Mat(ret, false);
             }
+            set
+            {
+                this.ThrowIfDisposed();
+                value?.ThrowIfDisposed();
+                Native.op_core_datum_set_cvInputData(this.NativePtr, value?.NativePtr ?? IntPtr.Zero);
+            }
         }
 
         public Mat CvOutputData
@@ -41,6 +47,12 @@ namespace OpenPoseDotNet
 
                 // Datum.cvOutputData is not pointer. Therefore, this object must not be disposed.
                 return new Mat(ret, false);
+            }
+            set
+            {
+                this.ThrowIfDisposed();
+                value?.ThrowIfDisposed();
+                Native.op_core_datum_set_cvOutputData(this.NativePtr, value?.NativePtr ?? IntPtr.Zero);
             }
         }
 
@@ -165,7 +177,13 @@ namespace OpenPoseDotNet
             public static extern IntPtr op_core_datum_get_cvInputData(IntPtr datum);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void op_core_datum_set_cvInputData(IntPtr datum, IntPtr mat);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern IntPtr op_core_datum_get_cvOutputData(IntPtr datum);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void op_core_datum_set_cvOutputData(IntPtr datum, IntPtr mat);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern IntPtr op_core_datum_get_poseKeypoints(IntPtr datum);

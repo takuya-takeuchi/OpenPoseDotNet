@@ -27,16 +27,20 @@ namespace OpenPoseDotNet
         {
             var types = new[]
             {
-                new { Type = typeof(StdVector<Datum>),        ElementType = ElementTypes.StdVectorOfDatum },
-                new { Type = typeof(StdVector<CustomDatum>),  ElementType = ElementTypes.StdVectorOfCustomDatum },
-                new { Type = typeof(PoseExtractorCaffe),      ElementType = ElementTypes.PoseExtractorCaffe },
-                new { Type = typeof(Producer),                ElementType = ElementTypes.Producer },
-                new { Type = typeof(DatumProducer<Datum>),    ElementType = ElementTypes.DatumProducerOfDatum },
-                new { Type = typeof(WDatumProducer<Datum>),   ElementType = ElementTypes.WDatumProducerOfDatum },
-                new { Type = typeof(Gui),                     ElementType = ElementTypes.Gui },
-                new { Type = typeof(WGui<Datum>),             ElementType = ElementTypes.WGui },
-                new { Type = typeof(UserWorker<Datum>),       ElementType = ElementTypes.UserWorkerOfDefault },
-                new { Type = typeof(UserWorker<CustomDatum>), ElementType = ElementTypes.UserWorkerOfCustom },
+                new { Type = typeof(StdVector<Datum>),                ElementType = ElementTypes.StdVectorOfDatum },
+                new { Type = typeof(StdVector<CustomDatum>),          ElementType = ElementTypes.StdVectorOfCustomDatum },
+                new { Type = typeof(PoseExtractorCaffe),              ElementType = ElementTypes.PoseExtractorCaffe },
+                new { Type = typeof(Producer),                        ElementType = ElementTypes.Producer },
+                new { Type = typeof(DatumProducer<Datum>),            ElementType = ElementTypes.DatumProducerOfDatum },
+                new { Type = typeof(WDatumProducer<Datum>),           ElementType = ElementTypes.WDatumProducerOfDatum },
+                new { Type = typeof(Gui),                             ElementType = ElementTypes.Gui },
+                new { Type = typeof(WGui<Datum>),                     ElementType = ElementTypes.WGui },
+                new { Type = typeof(UserWorker<Datum>),               ElementType = ElementTypes.UserWorkerOfDefault },
+                new { Type = typeof(UserWorker<CustomDatum>),         ElementType = ElementTypes.UserWorkerOfCustom },
+                new { Type = typeof(UserWorkerConsumer<Datum>),       ElementType = ElementTypes.UserWorkerConsumerOfDefault },
+                new { Type = typeof(UserWorkerConsumer<CustomDatum>), ElementType = ElementTypes.UserWorkerConsumerOfCustom },
+                new { Type = typeof(UserWorkerProducer<Datum>),       ElementType = ElementTypes.UserWorkerProducerOfDefault },
+                new { Type = typeof(UserWorkerProducer<CustomDatum>), ElementType = ElementTypes.UserWorkerProducerOfCustom }
             };
 
             foreach (var type in types)
@@ -44,8 +48,12 @@ namespace OpenPoseDotNet
 
             var subtypes = new[]
             {
-                new { Type = typeof(UserWorker<Datum>),       ElementType = ElementSubTypes.UserWorkerOfDefault },
-                new { Type = typeof(UserWorker<CustomDatum>), ElementType = ElementSubTypes.UserWorkerOfCustom },
+                new { Type = typeof(UserWorker<Datum>),               ElementType = ElementSubTypes.UserWorkerOfDefault },
+                new { Type = typeof(UserWorker<CustomDatum>),         ElementType = ElementSubTypes.UserWorkerOfCustom },
+                new { Type = typeof(UserWorkerConsumer<Datum>),       ElementType = ElementSubTypes.UserWorkerConsumerOfDefault },
+                new { Type = typeof(UserWorkerConsumer<CustomDatum>), ElementType = ElementSubTypes.UserWorkerConsumerOfCustom },
+                new { Type = typeof(UserWorkerProducer<Datum>),       ElementType = ElementSubTypes.UserWorkerProducerOfDefault },
+                new { Type = typeof(UserWorkerProducer<CustomDatum>), ElementType = ElementSubTypes.UserWorkerProducerOfCustom }
             };
 
             foreach (var type in subtypes)
@@ -146,6 +154,14 @@ namespace OpenPoseDotNet
                         return new StdSharedPtrUserWorkerOfDefaultImp() as StdSharedPtrImp<T>;
                     case ElementTypes.UserWorkerOfCustom:
                         return new StdSharedPtrUserWorkerOfCustomImp() as StdSharedPtrImp<T>;
+                    case ElementTypes.UserWorkerConsumerOfDefault:
+                        return new StdSharedPtrUserWorkerConsumerOfDefaultImp() as StdSharedPtrImp<T>;
+                    case ElementTypes.UserWorkerConsumerOfCustom:
+                        return new StdSharedPtrUserWorkerConsumerOfCustomImp() as StdSharedPtrImp<T>;
+                    case ElementTypes.UserWorkerProducerOfDefault:
+                        return new StdSharedPtrUserWorkerProducerOfDefaultImp() as StdSharedPtrImp<T>;
+                    case ElementTypes.UserWorkerProducerOfCustom:
+                        return new StdSharedPtrUserWorkerProducerOfCustomImp() as StdSharedPtrImp<T>;
                 }
             }
             else
@@ -161,6 +177,14 @@ namespace OpenPoseDotNet
                             return new StdSharedPtrUserWorkerOfDefaultImp() as StdSharedPtrImp<T>;
                         case ElementSubTypes.UserWorkerOfCustom:
                             return new StdSharedPtrUserWorkerOfCustomImp() as StdSharedPtrImp<T>;
+                        case ElementSubTypes.UserWorkerConsumerOfDefault:
+                            return new StdSharedPtrUserWorkerConsumerOfDefaultImp() as StdSharedPtrImp<T>;
+                        case ElementSubTypes.UserWorkerConsumerOfCustom:
+                            return new StdSharedPtrUserWorkerConsumerOfCustomImp() as StdSharedPtrImp<T>;
+                        case ElementSubTypes.UserWorkerProducerOfDefault:
+                            return new StdSharedPtrUserWorkerProducerOfDefaultImp() as StdSharedPtrImp<T>;
+                        case ElementSubTypes.UserWorkerProducerOfCustom:
+                            return new StdSharedPtrUserWorkerProducerOfCustomImp() as StdSharedPtrImp<T>;
                     }
                 }
             }
@@ -193,7 +217,15 @@ namespace OpenPoseDotNet
 
             UserWorkerOfDefault,
 
-            UserWorkerOfCustom
+            UserWorkerOfCustom,
+
+            UserWorkerConsumerOfDefault,
+
+            UserWorkerConsumerOfCustom,
+
+            UserWorkerProducerOfDefault,
+
+            UserWorkerProducerOfCustom
 
         }
 
@@ -202,7 +234,15 @@ namespace OpenPoseDotNet
 
             UserWorkerOfDefault,
 
-            UserWorkerOfCustom
+            UserWorkerOfCustom,
+
+            UserWorkerConsumerOfDefault,
+
+            UserWorkerConsumerOfCustom,
+
+            UserWorkerProducerOfDefault,
+
+            UserWorkerProducerOfCustom
 
         }
 
@@ -477,6 +517,110 @@ namespace OpenPoseDotNet
             {
                 var p = OpenPose.Native.std_shared_ptr_op_UserWorkerOfCustom_get(ptr);
                 return new UserWorker<CustomDatum>(p, false);
+            }
+
+            #endregion
+
+        }
+
+        private sealed class StdSharedPtrUserWorkerConsumerOfDefaultImp : StdSharedPtrImp<UserWorkerConsumer<Datum>>
+        {
+
+            #region Methods
+
+            public override IntPtr Create(IntPtr ptr)
+            {
+                return OpenPose.Native.std_shared_ptr_op_UserWorkerConsumerOfDefault_new(ptr);
+            }
+
+            public override void Delete(IntPtr ptr)
+            {
+                if (ptr != IntPtr.Zero)
+                    OpenPose.Native.std_shared_ptr_op_UserWorkerConsumerOfDefault_delete(ptr);
+            }
+
+            public override UserWorkerConsumer<Datum> Get(IntPtr ptr)
+            {
+                var p = OpenPose.Native.std_shared_ptr_op_UserWorkerConsumerOfDefault_get(ptr);
+                return new UserWorkerConsumer<Datum>(p, false);
+            }
+
+            #endregion
+
+        }
+
+        private sealed class StdSharedPtrUserWorkerConsumerOfCustomImp : StdSharedPtrImp<UserWorkerConsumer<CustomDatum>>
+        {
+
+            #region Methods
+
+            public override IntPtr Create(IntPtr ptr)
+            {
+                return OpenPose.Native.std_shared_ptr_op_UserWorkerConsumerOfCustom_new(ptr);
+            }
+
+            public override void Delete(IntPtr ptr)
+            {
+                if (ptr != IntPtr.Zero)
+                    OpenPose.Native.std_shared_ptr_op_UserWorkerConsumerOfCustom_delete(ptr);
+            }
+
+            public override UserWorkerConsumer<CustomDatum> Get(IntPtr ptr)
+            {
+                var p = OpenPose.Native.std_shared_ptr_op_UserWorkerConsumerOfCustom_get(ptr);
+                return new UserWorkerConsumer<CustomDatum>(p, false);
+            }
+
+            #endregion
+
+        }
+
+        private sealed class StdSharedPtrUserWorkerProducerOfDefaultImp : StdSharedPtrImp<UserWorkerProducer<Datum>>
+        {
+
+            #region Methods
+
+            public override IntPtr Create(IntPtr ptr)
+            {
+                return OpenPose.Native.std_shared_ptr_op_UserWorkerProducerOfDefault_new(ptr);
+            }
+
+            public override void Delete(IntPtr ptr)
+            {
+                if (ptr != IntPtr.Zero)
+                    OpenPose.Native.std_shared_ptr_op_UserWorkerProducerOfDefault_delete(ptr);
+            }
+
+            public override UserWorkerProducer<Datum> Get(IntPtr ptr)
+            {
+                var p = OpenPose.Native.std_shared_ptr_op_UserWorkerProducerOfDefault_get(ptr);
+                return new UserWorkerProducer<Datum>(p, false);
+            }
+
+            #endregion
+
+        }
+
+        private sealed class StdSharedPtrUserWorkerProducerOfCustomImp : StdSharedPtrImp<UserWorkerProducer<CustomDatum>>
+        {
+
+            #region Methods
+
+            public override IntPtr Create(IntPtr ptr)
+            {
+                return OpenPose.Native.std_shared_ptr_op_UserWorkerProducerOfCustom_new(ptr);
+            }
+
+            public override void Delete(IntPtr ptr)
+            {
+                if (ptr != IntPtr.Zero)
+                    OpenPose.Native.std_shared_ptr_op_UserWorkerProducerOfCustom_delete(ptr);
+            }
+
+            public override UserWorkerProducer<CustomDatum> Get(IntPtr ptr)
+            {
+                var p = OpenPose.Native.std_shared_ptr_op_UserWorkerProducerOfCustom_get(ptr);
+                return new UserWorkerProducer<CustomDatum>(p, false);
             }
 
             #endregion

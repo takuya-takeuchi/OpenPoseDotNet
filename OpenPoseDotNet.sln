@@ -37,6 +37,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Thread1_OpenPoseReadAndDisp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Thread2_UserProcessingFunction", "examples\TutorialDeveloper\Thread2_UserProcessingFunction\Thread2_UserProcessingFunction.csproj", "{AC1046B5-6759-4265-9F92-FD8125CA9E31}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Thread3_UserInputProcessingAndOutput", "examples\TutorialDeveloper\Thread3_UserInputProcessingAndOutput\Thread3_UserInputProcessingAndOutput.csproj", "{15AD37EF-292A-4EAF-8273-7A02DC7B2B67}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{AC1046B5-6759-4265-9F92-FD8125CA9E31}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC1046B5-6759-4265-9F92-FD8125CA9E31}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AC1046B5-6759-4265-9F92-FD8125CA9E31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15AD37EF-292A-4EAF-8273-7A02DC7B2B67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15AD37EF-292A-4EAF-8273-7A02DC7B2B67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15AD37EF-292A-4EAF-8273-7A02DC7B2B67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15AD37EF-292A-4EAF-8273-7A02DC7B2B67}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -106,6 +112,7 @@ Global
 		{95CADA78-0D0A-43F6-85BA-F62B2E502B70} = {6F92A36C-28EB-4D84-9CB1-3ADD31A2AAAF}
 		{AB105522-5C8C-4A0B-8B3C-CC10DE6247D5} = {6F92A36C-28EB-4D84-9CB1-3ADD31A2AAAF}
 		{AC1046B5-6759-4265-9F92-FD8125CA9E31} = {6F92A36C-28EB-4D84-9CB1-3ADD31A2AAAF}
+		{15AD37EF-292A-4EAF-8273-7A02DC7B2B67} = {6F92A36C-28EB-4D84-9CB1-3ADD31A2AAAF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9D8118C7-92BF-487E-83ED-EFB9BF807E08}

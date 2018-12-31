@@ -5,6 +5,7 @@ namespace OpenPoseDotNet
 {
 
     public sealed class Wrapper<T> : OpenPoseObject
+        where T : Datum
     {
 
         #region Fields

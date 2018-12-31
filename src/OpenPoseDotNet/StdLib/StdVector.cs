@@ -113,6 +113,12 @@ namespace OpenPoseDotNet
 
         #region Methods
 
+        public void EmplaceBack()
+        {
+            this.ThrowIfDisposed();
+            this._Imp.EmplaceBack(this.NativePtr);
+        }
+
         public TItem[] ToArray()
         {
             this.ThrowIfDisposed();
@@ -221,6 +227,8 @@ namespace OpenPoseDotNet
 
             public abstract bool Empty(IntPtr ptr);
 
+            public abstract void EmplaceBack(IntPtr ptr);
+
             public abstract IntPtr GetElementPtr(IntPtr ptr);
 
             public abstract int GetSize(IntPtr ptr);
@@ -275,6 +283,11 @@ namespace OpenPoseDotNet
             public override bool Empty(IntPtr ptr)
             {
                 return OpenPose.Native.std_vector_int32_t_empty(ptr);
+            }
+
+            public override void EmplaceBack(IntPtr ptr)
+            {
+                OpenPose.Native.std_vector_int32_t_emplace_back(ptr);
             }
 
             public override IntPtr GetElementPtr(IntPtr ptr)
@@ -349,6 +362,11 @@ namespace OpenPoseDotNet
                 return OpenPose.Native.std_vector_uint32_t_empty(ptr);
             }
 
+            public override void EmplaceBack(IntPtr ptr)
+            {
+                OpenPose.Native.std_vector_uint32_t_emplace_back(ptr);
+            }
+
             public override IntPtr GetElementPtr(IntPtr ptr)
             {
                 return OpenPose.Native.std_vector_uint32_t_getPointer(ptr);
@@ -419,6 +437,11 @@ namespace OpenPoseDotNet
             public override bool Empty(IntPtr ptr)
             {
                 return OpenPose.Native.std_vector_float_empty(ptr);
+            }
+
+            public override void EmplaceBack(IntPtr ptr)
+            {
+                OpenPose.Native.std_vector_float_emplace_back(ptr);
             }
 
             public override IntPtr GetElementPtr(IntPtr ptr)
@@ -493,6 +516,11 @@ namespace OpenPoseDotNet
                 return OpenPose.Native.std_vector_double_empty(ptr);
             }
 
+            public override void EmplaceBack(IntPtr ptr)
+            {
+                OpenPose.Native.std_vector_double_emplace_back(ptr);
+            }
+
             public override IntPtr GetElementPtr(IntPtr ptr)
             {
                 return OpenPose.Native.std_vector_double_getPointer(ptr);
@@ -563,6 +591,11 @@ namespace OpenPoseDotNet
             public override bool Empty(IntPtr ptr)
             {
                 return OpenPose.Native.std_vector_ErrorMode_empty(ptr);
+            }
+
+            public override void EmplaceBack(IntPtr ptr)
+            {
+                OpenPose.Native.std_vector_ErrorMode_emplace_back(ptr);
             }
 
             public override IntPtr GetElementPtr(IntPtr ptr)
@@ -637,6 +670,11 @@ namespace OpenPoseDotNet
                 return OpenPose.Native.std_vector_LogMode_empty(ptr);
             }
 
+            public override void EmplaceBack(IntPtr ptr)
+            {
+                OpenPose.Native.std_vector_LogMode_emplace_back(ptr);
+            }
+
             public override IntPtr GetElementPtr(IntPtr ptr)
             {
                 return OpenPose.Native.std_vector_LogMode_getPointer(ptr);
@@ -707,6 +745,11 @@ namespace OpenPoseDotNet
             public override bool Empty(IntPtr ptr)
             {
                 return OpenPose.Native.std_vector_PointOfInt32_t_empty(ptr);
+            }
+
+            public override void EmplaceBack(IntPtr ptr)
+            {
+                OpenPose.Native.std_vector_PointOfInt32_t_emplace_back(ptr);
             }
 
             public override IntPtr GetElementPtr(IntPtr ptr)
@@ -782,6 +825,11 @@ namespace OpenPoseDotNet
                 return OpenPose.Native.std_vector_op_ArrayOfFloat_empty(ptr);
             }
 
+            public override void EmplaceBack(IntPtr ptr)
+            {
+                OpenPose.Native.std_vector_op_ArrayOfFloat_emplace_back(ptr);
+            }
+
             public override IntPtr GetElementPtr(IntPtr ptr)
             {
                 return OpenPose.Native.std_vector_op_ArrayOfFloat_getPointer(ptr);
@@ -852,6 +900,11 @@ namespace OpenPoseDotNet
             public override bool Empty(IntPtr ptr)
             {
                 return OpenPose.Native.std_vector_Datum_empty(ptr);
+            }
+
+            public override void EmplaceBack(IntPtr ptr)
+            {
+                OpenPose.Native.std_vector_Datum_emplace_back(ptr);
             }
 
             public override IntPtr GetElementPtr(IntPtr ptr)
@@ -926,6 +979,11 @@ namespace OpenPoseDotNet
                 return OpenPose.Native.std_vector_CustomDatum_empty(ptr);
             }
 
+            public override void EmplaceBack(IntPtr ptr)
+            {
+                OpenPose.Native.std_vector_CustomDatum_emplace_back(ptr);
+            }
+
             public override IntPtr GetElementPtr(IntPtr ptr)
             {
                 return OpenPose.Native.std_vector_CustomDatum_getPointer(ptr);
@@ -995,6 +1053,11 @@ namespace OpenPoseDotNet
             public override bool Empty(IntPtr ptr)
             {
                 return OpenPose.Native.std_vector_HeatMapType_empty(ptr);
+            }
+
+            public override void EmplaceBack(IntPtr ptr)
+            {
+                OpenPose.Native.std_vector_HeatMapType_emplace_back(ptr);
             }
 
             public override IntPtr GetElementPtr(IntPtr ptr)

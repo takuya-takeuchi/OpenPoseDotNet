@@ -5,6 +5,7 @@ namespace OpenPoseDotNet
 {
 
     public class Worker<T> : OpenPoseObject
+        where T : Datum
     {
 
         #region Fields
