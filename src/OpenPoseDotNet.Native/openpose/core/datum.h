@@ -28,6 +28,11 @@ DLLEXPORT unsigned long long op_core_datum_get_frameNumber(op::Datum* datum)
     return datum->frameNumber;
 }
 
+DLLEXPORT cv::Mat* op_core_datum_get_cvInputData(op::Datum* datum)
+{
+    return &datum->cvInputData;
+}
+
 DLLEXPORT cv::Mat* op_core_datum_get_cvOutputData(op::Datum* datum)
 {
     return &datum->cvOutputData;
