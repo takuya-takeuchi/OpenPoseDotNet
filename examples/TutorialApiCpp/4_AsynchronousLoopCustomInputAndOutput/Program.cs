@@ -14,12 +14,6 @@ namespace AsynchronousLoopCustomInputAndOutput
     internal class Program
     {
 
-        #region Fields
-
-        private static string ImagePath;
-
-        #endregion
-
         #region Constructor
 
         static Program()
