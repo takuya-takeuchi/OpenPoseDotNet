@@ -102,7 +102,7 @@ namespace WholeBodyFromImage
 
                 // Configuring OpenPose
                 OpenPose.Log("Configuring OpenPose...", Priority.High);
-                using (var opWrapper = new Wrapper(ThreadManagerMode.Asynchronous))
+                using (var opWrapper = new Wrapper<Datum>(ThreadManagerMode.Asynchronous))
                 {
                     // Add hand and face
                     using (var face = new WrapperStructFace(true))

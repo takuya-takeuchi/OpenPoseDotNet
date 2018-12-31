@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace OpenPoseDotNet
 {
 
-    public sealed class Wrapper : WrapperBase<Datum>
+    public sealed class Wrapper<T> : WrapperBase<T>
     {
 
         #region Fields
@@ -31,21 +31,23 @@ namespace OpenPoseDotNet
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Wrapper"/> class with the specified ThreadManager synchronization mode.
+        /// Initializes a new instance of the <see cref="Wrapper{T}"/> class with the specified ThreadManager synchronization mode.
         /// </summary>
         /// <param name="threadManagerMode"></param>
         public Wrapper(ThreadManagerMode threadManagerMode = ThreadManagerMode.Synchronous)
         {
-            this._DataType = OpenPose.DataType.Default;
-            //switch (type)
-            //{
-            //    case ElementTypes.Datum:
-            //        this._DataType = OpenPose.DataType.Default;
-            //        break;
-            //    case ElementTypes.CustomDatum:
-            //        this._DataType = OpenPose.DataType.Custom;
-            //        break;
-            //}
+            if (!SupportTypes.TryGetValue(typeof(T), out var type))
+                throw new NotSupportedException($"{typeof(T).Name} does not support");
+
+            switch (type)
+            {
+                case ElementTypes.Datum:
+                    this._DataType = OpenPose.DataType.Default;
+                    break;
+                case ElementTypes.CustomDatum:
+                    this._DataType = OpenPose.DataType.Custom;
+                    break;
+            }
 
             this.NativePtr = OpenPose.Native.op_wrapper_new(this._DataType, threadManagerMode);
         }
@@ -145,7 +147,7 @@ namespace OpenPoseDotNet
             OpenPose.Native.op_wrapper_disableMultiThreading(this._DataType, this.NativePtr);
         }
 
-        public override SharedHandle<StdVector<Datum>> EmplaceAndPop(Mat mat)
+        public override SharedHandle<StdVector<T>> EmplaceAndPop(Mat mat)
         {
             if (mat == null)
                 throw new ArgumentNullException(nameof(mat));
@@ -153,10 +155,10 @@ namespace OpenPoseDotNet
             mat.ThrowIfDisposed();
 
             var ret = OpenPose.Native.op_wrapper_emplaceAndPop_cvMat(this._DataType, this.NativePtr, mat.NativePtr);
-            return new SharedHandle<StdVector<Datum>>(ret, 
-                                                      ptr => new StdVector<Datum>(ptr, false), 
-                                                      OpenPose.Native.op_shared_ptr_TDatums_getter,
-                                                      OpenPose.Native.op_shared_ptr_TDatums_delete);
+            return new SharedHandle<StdVector<T>>(ret, 
+                                                  ptr => new StdVector<T>(ptr, false), 
+                                                  OpenPose.Native.op_shared_ptr_TDatums_getter,
+                                                  OpenPose.Native.op_shared_ptr_TDatums_delete);
         }
 
         public override void Exec()

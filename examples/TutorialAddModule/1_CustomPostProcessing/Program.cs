@@ -66,7 +66,7 @@ namespace CustomPostProcessing
 
                 // Configuring OpenPose
                 OpenPose.Log("Configuring OpenPose...", Priority.High);
-                using (var opWrapper = new CustomWrapper())
+                using (var opWrapper = new Wrapper<CustomDatum>())
                 {
                     // Pose configuration (use WrapperStructPose{} for default and recommended configuration)
                     using (var pose = new WrapperStructPose(!Flags.BodyDisabled,

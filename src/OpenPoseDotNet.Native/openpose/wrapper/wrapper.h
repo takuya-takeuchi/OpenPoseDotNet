@@ -4,7 +4,6 @@
 #include "../shared.h"
 #include <opencv2/core/mat.hpp>
 #include "../defines.h"
-#include "../custom/customWrapper.h"
 
 typedef std::vector<op::Datum> TDatums;
 
@@ -15,7 +14,7 @@ DLLEXPORT void* op_wrapper_new(const data_type dataType, const op::ThreadManager
     switch(dataType)
     {
         case data_type::Default:
-            return new op::Wrapper{ threadManagerMode };
+            return new DefaultWrapper{ threadManagerMode };
         case data_type::Custom:
             return new CustomWrapper{ threadManagerMode };
     }
@@ -28,7 +27,7 @@ DLLEXPORT void op_wrapper_delete(const data_type dataType, void* wrapper)
     switch(dataType)
     {
         case data_type::Default:
-            delete ((op::Wrapper*)wrapper);
+            delete ((DefaultWrapper*)wrapper);
             break;
         case data_type::Custom:
             delete ((CustomWrapper*)wrapper);
@@ -41,7 +40,7 @@ DLLEXPORT void op_wrapper_disableMultiThreading(const data_type dataType, void* 
     switch(dataType)
     {
         case data_type::Default:
-            ((op::Wrapper*)wrapper)->disableMultiThreading();
+            ((DefaultWrapper*)wrapper)->disableMultiThreading();
             break;
         case data_type::Custom:
             ((CustomWrapper*)wrapper)->disableMultiThreading();
@@ -56,7 +55,7 @@ DLLEXPORT void op_wrapper_setWorker(const data_type dataType, void* wrapper, con
         case data_type::Default:
             {
                 auto& tmp = *(static_cast<DefaultWorker*>(worker));
-                ((op::Wrapper*)wrapper)->setWorker(workerType, tmp, workerOnNewThread);
+                ((DefaultWrapper*)wrapper)->setWorker(workerType, tmp, workerOnNewThread);
             }
             break;
         case data_type::Custom:
@@ -75,7 +74,7 @@ DLLEXPORT void op_wrapper_configure_pose(const data_type dataType, void* wrapper
     switch(dataType)
     {
         case data_type::Default:
-            ((op::Wrapper*)wrapper)->configure(tmp);
+            ((DefaultWrapper*)wrapper)->configure(tmp);
             break;
         case data_type::Custom:
             ((CustomWrapper*)wrapper)->configure(tmp);
@@ -90,7 +89,7 @@ DLLEXPORT void op_wrapper_configure_face(const data_type dataType, void* wrapper
     switch(dataType)
     {
         case data_type::Default:
-            ((op::Wrapper*)wrapper)->configure(tmp);
+            ((DefaultWrapper*)wrapper)->configure(tmp);
             break;
         case data_type::Custom:
             ((CustomWrapper*)wrapper)->configure(tmp);
@@ -105,7 +104,7 @@ DLLEXPORT void op_wrapper_configure_hand(const data_type dataType, void* wrapper
     switch(dataType)
     {
         case data_type::Default:
-            ((op::Wrapper*)wrapper)->configure(tmp);
+            ((DefaultWrapper*)wrapper)->configure(tmp);
             break;
         case data_type::Custom:
             ((CustomWrapper*)wrapper)->configure(tmp);
@@ -120,7 +119,7 @@ DLLEXPORT void op_wrapper_configure_extra(const data_type dataType, void* wrappe
     switch(dataType)
     {
         case data_type::Default:
-            ((op::Wrapper*)wrapper)->configure(tmp);
+            ((DefaultWrapper*)wrapper)->configure(tmp);
             break;
         case data_type::Custom:
             ((CustomWrapper*)wrapper)->configure(tmp);
@@ -135,7 +134,7 @@ DLLEXPORT void op_wrapper_configure_input(const data_type dataType, void* wrappe
     switch(dataType)
     {
         case data_type::Default:
-            ((op::Wrapper*)wrapper)->configure(tmp);
+            ((DefaultWrapper*)wrapper)->configure(tmp);
             break;
         case data_type::Custom:
             ((CustomWrapper*)wrapper)->configure(tmp);
@@ -150,7 +149,7 @@ DLLEXPORT void op_wrapper_configure_output(const data_type dataType, void* wrapp
     switch(dataType)
     {
         case data_type::Default:
-            ((op::Wrapper*)wrapper)->configure(tmp);
+            ((DefaultWrapper*)wrapper)->configure(tmp);
             break;
         case data_type::Custom:
             ((CustomWrapper*)wrapper)->configure(tmp);
@@ -165,7 +164,7 @@ DLLEXPORT void op_wrapper_configure_gui(const data_type dataType, void* wrapper,
     switch(dataType)
     {
         case data_type::Default:
-            ((op::Wrapper*)wrapper)->configure(tmp);
+            ((DefaultWrapper*)wrapper)->configure(tmp);
             break;
         case data_type::Custom:
             ((CustomWrapper*)wrapper)->configure(tmp);
@@ -178,7 +177,7 @@ DLLEXPORT void op_wrapper_exec(const data_type dataType, void* wrapper)
     switch(dataType)
     {
         case data_type::Default:
-            ((op::Wrapper*)wrapper)->exec();
+            ((DefaultWrapper*)wrapper)->exec();
             break;
         case data_type::Custom:
             ((CustomWrapper*)wrapper)->exec();
@@ -191,7 +190,7 @@ DLLEXPORT void op_wrapper_start(const data_type dataType, void* wrapper)
     switch(dataType)
     {
         case data_type::Default:
-            ((op::Wrapper*)wrapper)->start();
+            ((DefaultWrapper*)wrapper)->start();
             break;
         case data_type::Custom:
             ((CustomWrapper*)wrapper)->start();
@@ -204,7 +203,7 @@ DLLEXPORT void op_wrapper_stop(const data_type dataType, void* wrapper)
     switch(dataType)
     {
         case data_type::Default:
-            ((op::Wrapper*)wrapper)->stop();
+            ((DefaultWrapper*)wrapper)->stop();
             break;
         case data_type::Custom:
             ((CustomWrapper*)wrapper)->stop();
@@ -219,7 +218,7 @@ DLLEXPORT bool op_wrapper_isRunning(const data_type dataType, void* wrapper)
     switch(dataType)
     {
         case data_type::Default:
-            ret = ((op::Wrapper*)wrapper)->isRunning();
+            ret = ((DefaultWrapper*)wrapper)->isRunning();
             break;
         case data_type::Custom:
             ret = ((CustomWrapper*)wrapper)->isRunning();
@@ -238,7 +237,7 @@ DLLEXPORT bool op_wrapper_tryEmplace(const data_type dataType, void* wrapper, vo
         case data_type::Default:
             {
                 auto& tmp = *(static_cast<DefaultDatums*>(tDatums));
-                ret = ((op::Wrapper*)wrapper)->tryEmplace(tmp);
+                ret = ((DefaultWrapper*)wrapper)->tryEmplace(tmp);
             }
             break;
         case data_type::Custom:
@@ -261,7 +260,7 @@ DLLEXPORT bool op_wrapper_waitAndEmplace(const data_type dataType, void* wrapper
         case data_type::Default:
             {
                 auto& tmp = *(static_cast<DefaultDatums*>(tDatums));
-                ret = ((op::Wrapper*)wrapper)->waitAndEmplace(tmp);
+                ret = ((DefaultWrapper*)wrapper)->waitAndEmplace(tmp);
             }
             break;
         case data_type::Custom:
@@ -284,7 +283,7 @@ DLLEXPORT bool op_wrapper_tryPush(const data_type dataType, void* wrapper, void*
         case data_type::Default:
             {
                 auto& tmp = *(static_cast<DefaultDatums*>(tDatums));
-                ret = ((op::Wrapper*)wrapper)->tryPush(tmp);
+                ret = ((DefaultWrapper*)wrapper)->tryPush(tmp);
             }
             break;
         case data_type::Custom:
@@ -307,7 +306,7 @@ DLLEXPORT bool op_wrapper_waitAndPush(const data_type dataType, void* wrapper, v
         case data_type::Default:
             {
                 auto& tmp = *(static_cast<DefaultDatums*>(tDatums));
-                ret = ((op::Wrapper*)wrapper)->waitAndPush(tmp);
+                ret = ((DefaultWrapper*)wrapper)->waitAndPush(tmp);
             }
             break;
         case data_type::Custom:
@@ -330,7 +329,7 @@ DLLEXPORT bool op_wrapper_tryPop(const data_type dataType, void* wrapper, void**
         case data_type::Default:
             {
                 DefaultDatums tmp;
-                ret = ((op::Wrapper*)wrapper)->tryPop(tmp);
+                ret = ((DefaultWrapper*)wrapper)->tryPop(tmp);
                 *tDatums = new DefaultDatums(tmp);
             }
             break;
@@ -355,7 +354,7 @@ DLLEXPORT bool op_wrapper_waitAndPop(const data_type dataType, void* wrapper, vo
         case data_type::Default:
             {
                 DefaultDatums tmp;
-                ret = ((op::Wrapper*)wrapper)->waitAndPop(tmp);
+                ret = ((DefaultWrapper*)wrapper)->waitAndPop(tmp);
                 *tDatums = new DefaultDatums(tmp);
             }
             break;
@@ -380,7 +379,7 @@ DLLEXPORT bool op_wrapper_emplaceAndPop(const data_type dataType, void* wrapper,
         case data_type::Default:
             {
                 auto& tmp = *(static_cast<DefaultDatums*>(tDatums));
-                ret = ((op::Wrapper*)wrapper)->emplaceAndPop(tmp);
+                ret = ((DefaultWrapper*)wrapper)->emplaceAndPop(tmp);
             }
             break;
         case data_type::Custom:
@@ -401,7 +400,7 @@ DLLEXPORT void* op_wrapper_emplaceAndPop_cvMat(const data_type dataType, void* w
         case data_type::Default:
             {
                 const auto& tmp = *cvMat;
-                const auto ret = ((op::Wrapper*)wrapper)->emplaceAndPop(tmp);
+                const auto ret = ((DefaultWrapper*)wrapper)->emplaceAndPop(tmp);
                 return new DefaultDatums(ret);
             }
             break;
@@ -429,7 +428,7 @@ DLLEXPORT void* op_wrapper_emplaceAndPop_rawImage(const data_type dataType,
         case data_type::Default:
             {
                 cv::Mat mat(height, width, type, data);
-                const auto ret = ((op::Wrapper*)wrapper)->emplaceAndPop(mat);
+                const auto ret = ((DefaultWrapper*)wrapper)->emplaceAndPop(mat);
                 return new DefaultDatums(ret);
             }
             break;

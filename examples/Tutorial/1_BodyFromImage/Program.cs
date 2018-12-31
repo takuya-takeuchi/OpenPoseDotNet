@@ -84,7 +84,7 @@ namespace BodyFromImage
 
                 // Configuring OpenPose
                 OpenPose.Log("Configuring OpenPose...", Priority.High);
-                using (var opWrapper = new Wrapper(ThreadManagerMode.Asynchronous))
+                using (var opWrapper = new Wrapper<Datum>(ThreadManagerMode.Asynchronous))
                 {
                     // Set to single-thread (for sequential processing and/or debugging and/or reducing latency)
                     if (Flags.DisableMultiThread)

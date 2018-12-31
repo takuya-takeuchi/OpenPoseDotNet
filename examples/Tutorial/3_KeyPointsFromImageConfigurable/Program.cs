@@ -132,7 +132,7 @@ namespace KeyPointsFromImageConfigurable
 
                 // Configuring OpenPose
                 OpenPose.Log("Configuring OpenPose...", Priority.High);
-                using (var opWrapper = new Wrapper(ThreadManagerMode.Asynchronous))
+                using (var opWrapper = new Wrapper<Datum>(ThreadManagerMode.Asynchronous))
                 {
                     // Pose configuration (use WrapperStructPose{} for default and recommended configuration)
                     using (var pose = new WrapperStructPose(!Flags.BodyDisabled,

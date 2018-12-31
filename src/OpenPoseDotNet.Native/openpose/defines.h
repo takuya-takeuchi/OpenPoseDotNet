@@ -9,6 +9,7 @@
 #define MAKE_DEFINE(__TYPE__, __TYPENAME__)\
 typedef std::vector<__TYPE__> ##__TYPENAME__##DatumsNoPtr;\
 typedef std::shared_ptr<##__TYPENAME__##DatumsNoPtr> ##__TYPENAME__##Datums;\
+typedef op::WrapperT<##__TYPENAME__##DatumsNoPtr> ##__TYPENAME__##Wrapper;\
 typedef op::ThreadManager<##__TYPENAME__##Datums> ##__TYPENAME__##ThreadManager;\
 typedef std::shared_ptr<op::Worker<##__TYPENAME__##Datums>> ##__TYPENAME__##Worker;\
 typedef op::DatumProducer<##__TYPENAME__##DatumsNoPtr> ##__TYPENAME__##DatumProducer;\
