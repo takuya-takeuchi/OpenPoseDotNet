@@ -26,6 +26,8 @@ DLLEXPORT __TYPE__* std_shared_ptr_##__TYPENAME__##_get(std::shared_ptr<__TYPE__
 
 #pragma endregion template
 
+MAKE_FUNC(std::vector<op::Datum>, StdVectorOfDatum)
+MAKE_FUNC(std::vector<CustomDatum>, StdVectorOfCustomDatum)
 MAKE_FUNC(op::PoseExtractorCaffe, op_PoseExtractorCaffe)
 MAKE_FUNC(op::Producer, op_Producer)
 MAKE_FUNC(DefaultDatumProducer, op_DatumProducerOfDatum)

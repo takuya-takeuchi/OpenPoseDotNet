@@ -426,8 +426,34 @@ namespace OpenPoseDotNet
 
             #region share_ptr
 
+            #region std::vector<op::Datum>
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern IntPtr std_shared_ptr_StdVectorOfDatum_new(IntPtr ptr);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void std_shared_ptr_StdVectorOfDatum_delete(IntPtr p);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern IntPtr std_shared_ptr_StdVectorOfDatum_get(IntPtr p);
+
+            #endregion
+
+            #region std::vector<CustomDatum>
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern IntPtr std_shared_ptr_StdVectorOfCustomDatum_new(IntPtr ptr);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void std_shared_ptr_StdVectorOfCustomDatum_delete(IntPtr p);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern IntPtr std_shared_ptr_StdVectorOfCustomDatum_get(IntPtr p);
+
+            #endregion
+
             #region op::PoseExtractorCaffe
-            
+
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern IntPtr std_shared_ptr_op_PoseExtractorCaffe_new(IntPtr ptr);
 

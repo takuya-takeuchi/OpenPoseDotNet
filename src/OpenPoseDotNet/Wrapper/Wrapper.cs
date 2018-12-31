@@ -147,7 +147,7 @@ namespace OpenPoseDotNet
             OpenPose.Native.op_wrapper_disableMultiThreading(this._DataType, this.NativePtr);
         }
 
-        public SharedHandle<StdVector<T>> EmplaceAndPop(Mat mat)
+        public StdSharedPtr<StdVector<T>> EmplaceAndPop(Mat mat)
         {
             if (mat == null)
                 throw new ArgumentNullException(nameof(mat));
@@ -155,10 +155,7 @@ namespace OpenPoseDotNet
             mat.ThrowIfDisposed();
 
             var ret = OpenPose.Native.op_wrapper_emplaceAndPop_cvMat(this._DataType, this.NativePtr, mat.NativePtr);
-            return new SharedHandle<StdVector<T>>(ret, 
-                                                  ptr => new StdVector<T>(ptr, false), 
-                                                  OpenPose.Native.op_shared_ptr_TDatums_getter,
-                                                  OpenPose.Native.op_shared_ptr_TDatums_delete);
+            return new StdSharedPtr<StdVector<T>>(ret);
         }
 
         public void Exec()
