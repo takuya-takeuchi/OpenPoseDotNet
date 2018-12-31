@@ -74,6 +74,18 @@ namespace OpenPoseDotNet
             }
         }
 
+        public Array<float> PoseHeatMaps
+        {
+            get
+            {
+                this.ThrowIfDisposed();
+                var ret = Native.op_core_datum_get_poseHeatMaps(this.NativePtr);
+
+                // Datum.poseKeypoints is not pointer. Therefore, this object must not be disposed.
+                return new Array<float>(ret, false);
+            }
+        }
+
         public Array<float> PoseKeyPoints
         {
             get
@@ -98,12 +110,37 @@ namespace OpenPoseDotNet
             }
         }
 
+        public Array<float> FaceHeatMaps
+        {
+            get
+            {
+                this.ThrowIfDisposed();
+                var ret = Native.op_core_datum_get_faceHeatMaps(this.NativePtr);
+
+                // Datum.poseKeypoints is not pointer. Therefore, this object must not be disposed.
+                return new Array<float>(ret, false);
+            }
+        }
+
         public Array<float>[] HandKeyPoints
         {
             get
             {
                 this.ThrowIfDisposed();
                 var ret = Native.op_core_datum_get_handKeypoints(this.NativePtr);
+
+                // Datum.poseKeypoints is not pointer. Therefore, this object must not be disposed.
+                using (var array = new StdArray<Array<float>>(ret, 2, false))
+                    return array.ToArray();
+            }
+        }
+
+        public Array<float>[] HandHeatMaps
+        {
+            get
+            {
+                this.ThrowIfDisposed();
+                var ret = Native.op_core_datum_get_handHeatMaps(this.NativePtr);
 
                 // Datum.poseKeypoints is not pointer. Therefore, this object must not be disposed.
                 using (var array = new StdArray<Array<float>>(ret, 2, false))
@@ -189,10 +226,19 @@ namespace OpenPoseDotNet
             public static extern IntPtr op_core_datum_get_poseKeypoints(IntPtr datum);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern IntPtr op_core_datum_get_poseHeatMaps(IntPtr datum);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern IntPtr op_core_datum_get_faceKeypoints(IntPtr datum);
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern IntPtr op_core_datum_get_faceHeatMaps(IntPtr datum);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern IntPtr op_core_datum_get_handKeypoints(IntPtr datum);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern IntPtr op_core_datum_get_handHeatMaps(IntPtr datum);
 
 
 

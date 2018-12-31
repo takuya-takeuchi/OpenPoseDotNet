@@ -87,6 +87,19 @@ namespace OpenPoseDotNet
             }
         }
 
+        public float this[IEnumerable<int> indexes]
+        {
+            get
+            {
+                this.ThrowIfDisposed();
+                using (var vector = new StdVector<int>(indexes))
+                {
+                    OpenPose.Native.op_core_Array_operator_indexes(this.NativePtr, this.ArrayElementType, vector.NativePtr, out var ret);
+                    return ret;
+                }
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -153,9 +166,6 @@ namespace OpenPoseDotNet
             return str;
         }
 
-        #endregion
-
-        #region Helpers
         #endregion
 
         #endregion

@@ -43,6 +43,9 @@ namespace OpenPoseDotNet
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern ErrorType op_core_Array_empty(IntPtr array, ArrayElementType type, out bool ret);
 
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern ErrorType op_core_Array_operator_indexes(IntPtr array, ArrayElementType type, IntPtr indexes, out float ret);
+
             #endregion
 
             #region std::shared_ptr

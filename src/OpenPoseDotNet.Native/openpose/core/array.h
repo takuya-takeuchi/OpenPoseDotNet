@@ -133,4 +133,20 @@ DLLEXPORT int op_core_Array_empty(void* array, array_element_type type, bool* re
     return ERR_COMMON_TYPE_NOT_SUPPORT;
 }
 
+DLLEXPORT int op_core_Array_operator_indexes(void* array, array_element_type type, std::vector<int>* indexes, void* ret)
+{
+    switch(type)
+    {
+        case array_element_type::Float:
+            {
+                auto& tmp = *static_cast<op::Array<float>*>(array);
+                auto& tmp_indexes = *indexes;
+                *((float*)ret) = tmp[tmp_indexes];
+            }
+            break;
+    }
+
+    return ERR_COMMON_TYPE_NOT_SUPPORT;
+}
+
 #endif

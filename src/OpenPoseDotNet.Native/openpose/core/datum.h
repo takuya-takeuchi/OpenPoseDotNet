@@ -68,4 +68,19 @@ DLLEXPORT std::array<op::Array<float>, 2>* op_core_datum_get_handKeypoints(op::D
     return &datum->handKeypoints;
 }
 
+DLLEXPORT op::Array<float>* op_core_datum_get_poseHeatMaps(op::Datum* datum)
+{
+    return &datum->poseHeatMaps;
+}
+
+DLLEXPORT op::Array<float>* op_core_datum_get_faceHeatMaps(op::Datum* datum)
+{
+    return &datum->faceHeatMaps;
+}
+
+DLLEXPORT std::array<op::Array<float>, 2>* op_core_datum_get_handHeatMaps(op::Datum* datum)
+{
+    return &datum->handHeatMaps;
+}
+
 #endif
