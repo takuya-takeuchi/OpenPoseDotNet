@@ -13,8 +13,17 @@ namespace OpenPoseDotNet
 
             #region op::Arrray
 
+            public enum ArrayElementType
+            {
+
+                Float,
+
+                Double
+
+            }
+
             #region float
-            
+
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern void op_core_Array_float_delete(IntPtr array);
 
@@ -76,6 +85,28 @@ namespace OpenPoseDotNet
             public static extern double op_core_Array_double_operator_indexes(IntPtr array, IntPtr indexes);
 
             #endregion
+
+            #endregion
+
+            #region op::Point
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern IntPtr op_core_point_int_new(int x, int y);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void op_core_point_int_delete(IntPtr point);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern IntPtr op_core_point_float_new(float x, float y);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void op_core_point_float_delete(IntPtr point);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern IntPtr op_core_point_double_new(double x, double y);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void op_core_point_double_delete(IntPtr point);
 
             #endregion
 
