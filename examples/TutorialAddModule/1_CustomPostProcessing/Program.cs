@@ -161,26 +161,26 @@ namespace CustomPostProcessing
 
                         // Custom post-processing
                         var userPostProcessing = new UserPostProcessing(/* Your class arguments here */);
-                        var wUserPostProcessing = new WUserPostProcessing(
-                            userPostProcessing
-                        );
-                        // Add custom processing
-                        const bool workerProcessingOnNewThread = false;
-                        opWrapper.SetWorker(WorkerType.PostProcessing, wUserPostProcessing, workerProcessingOnNewThread);
+                        using (var wUserPostProcessing = new StdSharedPtr<UserWorker<CustomDatum>>(new WUserPostProcessing(userPostProcessing)))
+                        {
+                            // Add custom processing
+                            const bool workerProcessingOnNewThread = false;
+                            opWrapper.SetWorker(WorkerType.PostProcessing, wUserPostProcessing, workerProcessingOnNewThread);
 
-                        // Set to single-thread (for sequential processing and/or debugging and/or reducing latency)
-                        if (Flags.DisableMultiThread)
-                            opWrapper.DisableMultiThreading();
+                            // Set to single-thread (for sequential processing and/or debugging and/or reducing latency)
+                            if (Flags.DisableMultiThread)
+                                opWrapper.DisableMultiThreading();
 
-                        OpenPose.Log("Starting thread(s)...", Priority.High);
-                        // Start, run & stop threads - it blocks this thread until all others have finished
-                        opWrapper.Exec();
+                            OpenPose.Log("Starting thread(s)...", Priority.High);
+                            // Start, run & stop threads - it blocks this thread until all others have finished
+                            opWrapper.Exec();
 
-                        // Measuring total time
-                        timeBegin.Stop();
-                        var totalTimeSec = timeBegin.ElapsedMilliseconds * 1000;
-                        var message = $"OpenPose demo successfully finished. Total time: {totalTimeSec} seconds.";
-                        OpenPose.Log(message, Priority.High);
+                            // Measuring total time
+                            timeBegin.Stop();
+                            var totalTimeSec = timeBegin.ElapsedMilliseconds * 1000;
+                            var message = $"OpenPose demo successfully finished. Total time: {totalTimeSec} seconds.";
+                            OpenPose.Log(message, Priority.High);
+                        }
                     }
                 }
 

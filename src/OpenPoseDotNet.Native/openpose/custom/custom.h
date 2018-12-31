@@ -3,8 +3,8 @@
 
 #include "../shared.h"
 #include "customDatum.h"
-#include "customWorker.h"
 #include "customWrapper.h"
+#include "../user/userWorker.h"
 
 MAKE_SHARED_PTR_FUNC(std::vector<CustomDatum>, CustomDatum)
 
@@ -28,37 +28,6 @@ DLLEXPORT void op_CustomDatum_set_data(CustomDatum* datum, void* data)
     datum->data = data;
 }
 
-DLLEXPORT TCustomWorker* op_CustomWorker_new(void (*initializationOnThread_function)(), void (*process_function)(TCustomDatumsSP*))
-{
-    return new TCustomWorker(new CustomWorker(initializationOnThread_function, process_function));
-}
-
-DLLEXPORT void op_CustomWorker_delete(TCustomWorker* worker)
-{
-    auto content = worker->get();
-    delete content;
-    delete worker;
-}
-
-DLLEXPORT bool op_CustomWorker_checkAndWork(TCustomWorker* worker, TCustomDatumsSP* datums)
-{
-    auto content = worker->get();
-    TCustomDatumsSP& tmp = *datums;
-    return content->checkAndWork(tmp);
-}
-
-DLLEXPORT bool op_CustomWorker_isRunning(TCustomWorker* worker)
-{
-    auto content = worker->get();
-    return content->isRunning();
-}
-
-DLLEXPORT void op_CustomWorker_stop(TCustomWorker* worker)
-{
-    auto content = worker->get();
-    content->stop();
-}
-
 DLLEXPORT CustomWrapper* op_custom_wrapper_new(const op::ThreadManagerMode threadManagerMode)
 {
     return new CustomWrapper{ threadManagerMode };
@@ -74,7 +43,7 @@ DLLEXPORT void op_custom_wrapper_disableMultiThreading(CustomWrapper* wrapper)
     wrapper->disableMultiThreading();
 }
 
-DLLEXPORT void op_custom_wrapper_setWorker(CustomWrapper* wrapper, const op::WorkerType workerType, const TCustomWorker* worker, const bool workerOnNewThread = true)
+DLLEXPORT void op_custom_wrapper_setWorker(CustomWrapper* wrapper, const op::WorkerType workerType, const CustomDatumUserWorkerPtr* worker, const bool workerOnNewThread = true)
 {
     auto& tmp = *worker;
     wrapper->setWorker(workerType, tmp, workerOnNewThread);

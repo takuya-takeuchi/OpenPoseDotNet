@@ -3,7 +3,6 @@
 
 #include "../shared.h"
 #include "customDatum.h"
-#include "customWorker.h"
 
 typedef op::WrapperT<std::vector<CustomDatum>> CustomWrapper;
 
