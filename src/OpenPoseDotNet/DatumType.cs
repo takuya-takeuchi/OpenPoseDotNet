@@ -4,9 +4,9 @@
     internal enum DatumType
     {
 
-        Datum,
+        Default,
 
-        CustomDatum
+        Custom
 
     }
 

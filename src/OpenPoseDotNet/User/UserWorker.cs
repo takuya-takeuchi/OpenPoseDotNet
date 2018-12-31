@@ -40,8 +40,8 @@ namespace OpenPoseDotNet
         {
             var types = new[]
             {
-                new { Type = typeof(Datum),       ElementType = DatumType.Datum },
-                new { Type = typeof(CustomDatum), ElementType = DatumType.CustomDatum }
+                new { Type = typeof(Datum),       ElementType = DatumType.Default },
+                new { Type = typeof(CustomDatum), ElementType = DatumType.Custom }
             };
 
             foreach (var type in types)
@@ -56,10 +56,10 @@ namespace OpenPoseDotNet
 
             switch (type)
             {
-                case DatumType.Datum:
+                case DatumType.Default:
                     this._DataType = OpenPose.DataType.Default;
                     break;
-                case DatumType.CustomDatum:
+                case DatumType.Custom:
                     this._DataType = OpenPose.DataType.Custom;
                     break;
             }
@@ -81,10 +81,10 @@ namespace OpenPoseDotNet
 
             switch (type)
             {
-                case DatumType.Datum:
+                case DatumType.Default:
                     this._DataType = OpenPose.DataType.Default;
                     break;
-                case DatumType.CustomDatum:
+                case DatumType.Custom:
                     this._DataType = OpenPose.DataType.Custom;
                     break;
             }
