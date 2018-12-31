@@ -39,6 +39,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Thread2_UserProcessingFunct
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Thread3_UserInputProcessingAndOutput", "examples\TutorialDeveloper\Thread3_UserInputProcessingAndOutput\Thread3_UserInputProcessingAndOutput.csproj", "{15AD37EF-292A-4EAF-8273-7A02DC7B2B67}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Thread4_UserInputProcessingOutputAndDatum", "examples\TutorialDeveloper\Thread4_UserInputProcessingOutputAndDatum\Thread4_UserInputProcessingOutputAndDatum.csproj", "{31D44458-1529-48CB-ACDB-49DCAEB15A51}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -93,6 +95,10 @@ Global
 		{15AD37EF-292A-4EAF-8273-7A02DC7B2B67}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15AD37EF-292A-4EAF-8273-7A02DC7B2B67}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{15AD37EF-292A-4EAF-8273-7A02DC7B2B67}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31D44458-1529-48CB-ACDB-49DCAEB15A51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31D44458-1529-48CB-ACDB-49DCAEB15A51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31D44458-1529-48CB-ACDB-49DCAEB15A51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31D44458-1529-48CB-ACDB-49DCAEB15A51}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -113,6 +119,7 @@ Global
 		{AB105522-5C8C-4A0B-8B3C-CC10DE6247D5} = {6F92A36C-28EB-4D84-9CB1-3ADD31A2AAAF}
 		{AC1046B5-6759-4265-9F92-FD8125CA9E31} = {6F92A36C-28EB-4D84-9CB1-3ADD31A2AAAF}
 		{15AD37EF-292A-4EAF-8273-7A02DC7B2B67} = {6F92A36C-28EB-4D84-9CB1-3ADD31A2AAAF}
+		{31D44458-1529-48CB-ACDB-49DCAEB15A51} = {6F92A36C-28EB-4D84-9CB1-3ADD31A2AAAF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9D8118C7-92BF-487E-83ED-EFB9BF807E08}
