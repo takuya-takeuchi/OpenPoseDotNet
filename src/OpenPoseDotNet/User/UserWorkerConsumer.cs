@@ -4,7 +4,7 @@
 namespace OpenPoseDotNet
 {
 
-    public class UserWorker<T> : Worker<T>
+    public class UserWorkerConsumer<T> : WorkerConsumer<T>
         where T : Datum
     {
 
@@ -12,17 +12,17 @@ namespace OpenPoseDotNet
 
         private readonly OpenPose.DataType _DataType;
 
-        private readonly UserWorkerDelegateMediator _Mediator;
+        private readonly UserWorkerConsumerDelegateMediator _Mediator;
 
         #endregion
 
         #region Constructors
 
-        protected UserWorker() :
+        protected UserWorkerConsumer() :
             base(IntPtr.Zero)
         {
             this._DataType = GenericHelpers.CheckDatumSupportTypes<T>();
-            this._Mediator = new UserWorkerDelegateMediator(this._DataType)
+            this._Mediator = new UserWorkerConsumerDelegateMediator(this._DataType)
             {
                 InitializationOnThread = this.OnInitializationOnThread,
                 Work = this.OnWork
@@ -32,7 +32,7 @@ namespace OpenPoseDotNet
             this.NativePtr = this._Mediator.NativePtr;
         }
 
-        internal UserWorker(IntPtr ptr, bool isEnabledDispose = true) :
+        internal UserWorkerConsumer(IntPtr ptr, bool isEnabledDispose = true) :
             base(ptr, isEnabledDispose)
         {
             this._DataType = GenericHelpers.CheckDatumSupportTypes<T>();
@@ -48,7 +48,7 @@ namespace OpenPoseDotNet
             get
             {
                 this.ThrowIfDisposed();
-                return OpenPose.Native.op_UserWorker_isRunning(this._DataType, this.NativePtr);
+                return OpenPose.Native.op_UserWorkerConsumer_isRunning(this._DataType, this.NativePtr);
             }
         }
 
@@ -64,10 +64,10 @@ namespace OpenPoseDotNet
         public void Stop()
         {
             this.ThrowIfDisposed();
-            OpenPose.Native.op_UserWorker_stop(this._DataType, this.NativePtr);
+            OpenPose.Native.op_UserWorkerConsumer_stop(this._DataType, this.NativePtr);
         }
 
-        protected virtual void Work(T[] datums)
+        protected virtual void WorkConsumer(T[] datums)
         {
             this.ThrowIfDisposed();
         }
@@ -84,7 +84,7 @@ namespace OpenPoseDotNet
             if (this.NativePtr == IntPtr.Zero)
                 return;
 
-            OpenPose.Native.op_UserWorker_delete(this._DataType, this.NativePtr);
+            OpenPose.Native.op_UserWorkerConsumer_delete(this._DataType, this.NativePtr);
 
             this._Mediator?.Dispose();
         }
@@ -102,7 +102,7 @@ namespace OpenPoseDotNet
         {
             if (ptr == IntPtr.Zero)
             {
-                this.Work(null);
+                this.WorkConsumer(null);
                 return;
             }
 
@@ -110,12 +110,12 @@ namespace OpenPoseDotNet
             var content = OpenPose.Native.std_shared_ptr_TDatum_get(this._DataType, ptr);
             if (content == IntPtr.Zero)
             {
-                this.Work(null);
+                this.WorkConsumer(null);
                 return;
             }
 
             using (var vector = new StdVector<T>(content, false))
-                this.Work(vector.ToArray());
+                this.WorkConsumer(vector.ToArray());
         }
 
         #endregion

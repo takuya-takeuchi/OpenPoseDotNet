@@ -118,8 +118,11 @@ namespace OpenPoseDotNet
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern void std_vector_int32_t_delete(IntPtr vector);
 
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void std_vector_int32_t_emplace_back(IntPtr vector);
+
             #endregion
-            
+
             #region uint32_t
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
@@ -146,6 +149,9 @@ namespace OpenPoseDotNet
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern void std_vector_uint32_t_delete(IntPtr vector);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void std_vector_uint32_t_emplace_back(IntPtr vector);
 
             #endregion
 
@@ -176,6 +182,9 @@ namespace OpenPoseDotNet
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern void std_vector_float_delete(IntPtr vector);
 
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void std_vector_float_emplace_back(IntPtr vector);
+
             #endregion
 
             #region double
@@ -204,6 +213,9 @@ namespace OpenPoseDotNet
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern void std_vector_double_delete(IntPtr vector);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void std_vector_double_emplace_back(IntPtr vector);
 
             #endregion
 
@@ -234,6 +246,9 @@ namespace OpenPoseDotNet
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern void std_vector_ErrorMode_delete(IntPtr vector);
 
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void std_vector_ErrorMode_emplace_back(IntPtr vector);
+
             #endregion
 
             #region LogMode
@@ -263,6 +278,9 @@ namespace OpenPoseDotNet
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern void std_vector_LogMode_delete(IntPtr vector);
 
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void std_vector_LogMode_emplace_back(IntPtr vector);
+
             #endregion
 
             #region Point<int>
@@ -291,6 +309,9 @@ namespace OpenPoseDotNet
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern void std_vector_PointOfInt32_t_delete(IntPtr vector);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void std_vector_PointOfInt32_t_emplace_back(IntPtr vector);
 
             #endregion
 
@@ -327,6 +348,9 @@ namespace OpenPoseDotNet
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern void std_vector_op_ArrayOfFloat_copy(IntPtr vector, IntPtr[] dst);
 
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void std_vector_op_ArrayOfFloat_emplace_back(IntPtr vector);
+
             #endregion
 
             #region Datum
@@ -358,6 +382,9 @@ namespace OpenPoseDotNet
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern void std_vector_Datum_copy(IntPtr vector, IntPtr[] dst);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void std_vector_Datum_emplace_back(IntPtr vector);
 
             #endregion
 
@@ -391,6 +418,9 @@ namespace OpenPoseDotNet
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern void std_vector_CustomDatum_copy(IntPtr vector, IntPtr[] dst);
 
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void std_vector_CustomDatum_emplace_back(IntPtr vector);
+
             #endregion
 
             #region HeatMapType
@@ -419,6 +449,9 @@ namespace OpenPoseDotNet
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern void std_vector_HeatMapType_delete(IntPtr vector);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void std_vector_HeatMapType_emplace_back(IntPtr vector);
 
             #endregion
 
@@ -553,6 +586,58 @@ namespace OpenPoseDotNet
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern IntPtr std_shared_ptr_op_UserWorkerOfCustom_get(IntPtr p);
+
+            #endregion
+
+            #region op::UserWorkerConsumer<Datum>
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern IntPtr std_shared_ptr_op_UserWorkerConsumerOfDefault_new(IntPtr ptr);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void std_shared_ptr_op_UserWorkerConsumerOfDefault_delete(IntPtr p);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern IntPtr std_shared_ptr_op_UserWorkerConsumerOfDefault_get(IntPtr p);
+
+            #endregion
+
+            #region op::UserWorkerConsumer<CustomDatum>
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern IntPtr std_shared_ptr_op_UserWorkerConsumerOfCustom_new(IntPtr ptr);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void std_shared_ptr_op_UserWorkerConsumerOfCustom_delete(IntPtr p);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern IntPtr std_shared_ptr_op_UserWorkerConsumerOfCustom_get(IntPtr p);
+
+            #endregion
+
+            #region op::UserWorkerProducer<Datum>
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern IntPtr std_shared_ptr_op_UserWorkerProducerOfDefault_new(IntPtr ptr);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void std_shared_ptr_op_UserWorkerProducerOfDefault_delete(IntPtr p);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern IntPtr std_shared_ptr_op_UserWorkerProducerOfDefault_get(IntPtr p);
+
+            #endregion
+
+            #region op::UserWorkerProducer<CustomDatum>
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern IntPtr std_shared_ptr_op_UserWorkerProducerOfCustom_new(IntPtr ptr);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void std_shared_ptr_op_UserWorkerProducerOfCustom_delete(IntPtr p);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern IntPtr std_shared_ptr_op_UserWorkerProducerOfCustom_get(IntPtr p);
 
             #endregion
 

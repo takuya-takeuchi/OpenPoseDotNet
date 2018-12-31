@@ -5,6 +5,7 @@ namespace OpenPoseDotNet
 {
 
     public sealed class WGui<T> : WorkerConsumer<T>
+        where T : Datum
     {
 
         #region Fields

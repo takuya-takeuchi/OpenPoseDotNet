@@ -5,6 +5,7 @@ namespace OpenPoseDotNet
 {
 
     public sealed class WDatumProducer<T> : WorkerProducer<T>
+        where T : Datum
     {
 
         #region Fields

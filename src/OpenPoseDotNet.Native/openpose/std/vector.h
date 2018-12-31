@@ -48,6 +48,11 @@ DLLEXPORT bool std_vector_##__TYPENAME__##_empty(std::vector<__TYPE__> *vector)\
 {\
     return vector->empty();\
 }\
+\
+DLLEXPORT void std_vector_##__TYPENAME__##_emplace_back(std::vector<__TYPE__> *vector)\
+{\
+    return vector->emplace_back();\
+}\
 
 #define MAKE_FUNC_CLASS(__TYPE__, __TYPENAME__)\
 DLLEXPORT std::vector<__TYPE__>* std_vector_##__TYPENAME__##_new1()\
@@ -90,6 +95,11 @@ DLLEXPORT bool std_vector_##__TYPENAME__##_empty(std::vector<__TYPE__> *vector)\
 {\
     return vector->empty();\
 }\
+\
+DLLEXPORT void std_vector_##__TYPENAME__##_emplace_back(std::vector<__TYPE__> *vector)\
+{\
+    return vector->emplace_back();\
+}\
 
 #define MAKE_FUNC_REF(__TYPE__, __TYPENAME__)\
 DLLEXPORT std::vector<__TYPE__>* std_vector_##__TYPENAME__##_new1()\
@@ -104,7 +114,7 @@ DLLEXPORT std::vector<__TYPE__>* std_vector_##__TYPENAME__##_new2(size_t size)\
 \
 DLLEXPORT std::vector<__TYPE__>* std_vector_##__TYPENAME__##_new3(__TYPE__** data, size_t dataLength)\
 {\
-    const auto ret = new std::vector<op::Array<float>>();\
+    const auto ret = new std::vector<__TYPE__>();\
     ret->reserve(dataLength);\
     for (auto index = 0; index < dataLength; index++) ret->push_back(*data[index]);\
     return ret;\
@@ -176,6 +186,11 @@ DLLEXPORT void std_vector_##__TYPENAME__##_copy(std::vector<__TYPE__*> *vector, 
 DLLEXPORT bool std_vector_##__TYPENAME__##_delete(std::vector<__TYPE__*> *vector)\
 {\
     return vector->empty();\
+}\
+\
+DLLEXPORT void std_vector_##__TYPENAME__##_emplace_back(std::vector<__TYPE__*> *vector)\
+{\
+    return vector->emplace_back();\
 }\
 
 #pragma endregion template

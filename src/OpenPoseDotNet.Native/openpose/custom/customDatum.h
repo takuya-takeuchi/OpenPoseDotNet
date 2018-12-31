@@ -16,7 +16,4 @@ public:
 typedef std::vector<CustomDatum> TCustomDatums;
 typedef std::shared_ptr<TCustomDatums> TCustomDatumsSP;
 
-#define CUSTOM_DATUM_BASE_NO_PTR std::vector<CustomDatum>
-#define CUSTOM_DATUM_BASE std::shared_ptr<CUSTOM_DATUM_BASE_NO_PTR>
-
 #endif
