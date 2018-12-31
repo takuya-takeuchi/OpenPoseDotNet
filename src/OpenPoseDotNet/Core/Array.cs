@@ -12,6 +12,8 @@ namespace OpenPoseDotNet
 
         private static readonly Dictionary<Type, OpenPose.Native.ArrayElementType> SupportTypes = new Dictionary<Type, OpenPose.Native.ArrayElementType>();
 
+        private readonly ArrayImp<T> _Imp;
+
         #endregion
 
         #region Constructors
@@ -33,8 +35,10 @@ namespace OpenPoseDotNet
             if (!SupportTypes.TryGetValue(typeof(T), out var type))
                 throw new NotSupportedException($"{typeof(T).Name} does not support");
 
-            this.NativePtr = ptr;
             this.ArrayElementType = type;
+            this._Imp = CreateImp();
+
+            this.NativePtr = ptr;
         }
 
         #endregion
@@ -51,7 +55,7 @@ namespace OpenPoseDotNet
             get
             {
                 this.ThrowIfDisposed();
-                this.ThrowIfHasError(OpenPose.Native.op_core_Array_gets(this.NativePtr, this.ArrayElementType, index, out var ret));
+                var ret = this._Imp.Gets(this.NativePtr, index);
                 using (var vector = new StdVector<float>(ret))
                     return vector.ToArray();
             }
@@ -62,8 +66,7 @@ namespace OpenPoseDotNet
             get
             {
                 this.ThrowIfDisposed();
-                this.ThrowIfHasError(OpenPose.Native.op_core_Array_empty(this.NativePtr, this.ArrayElementType, out var ret));
-                return ret;
+                return this._Imp.Empty(this.NativePtr);
             }
         }
 
@@ -72,8 +75,7 @@ namespace OpenPoseDotNet
             get
             {
                 this.ThrowIfDisposed();
-                this.ThrowIfHasError(OpenPose.Native.op_core_Array_getNumberDimensions(this.NativePtr, this.ArrayElementType, out var ret));
-                return ret;
+                return this._Imp.GetNumberDimensions(this.NativePtr);
             }
         }
 
@@ -82,21 +84,17 @@ namespace OpenPoseDotNet
             get
             {
                 this.ThrowIfDisposed();
-                this.ThrowIfHasError(OpenPose.Native.op_core_Array_getVolume(this.NativePtr, this.ArrayElementType, out var ret));
-                return ret;
+                return this._Imp.GetVolume(this.NativePtr);
             }
         }
 
-        public float this[IEnumerable<int> indexes]
+        public T this[IEnumerable<int> indexes]
         {
             get
             {
                 this.ThrowIfDisposed();
                 using (var vector = new StdVector<int>(indexes))
-                {
-                    OpenPose.Native.op_core_Array_operator_indexes(this.NativePtr, this.ArrayElementType, vector.NativePtr, out var ret);
-                    return ret;
-                }
+                    return this._Imp.Operator(this.NativePtr, vector.NativePtr);
             }
         }
 
@@ -107,7 +105,8 @@ namespace OpenPoseDotNet
         public int[] GetSize()
         {
             this.ThrowIfDisposed();
-            this.ThrowIfHasError(OpenPose.Native.op_core_Array_getSize2(this.NativePtr, this.ArrayElementType, out var ret));
+
+            var ret = this._Imp.GetSize(this.NativePtr);
             using (var vector = new StdVector<int>(ret))
                 return vector.ToArray();
         }
@@ -115,7 +114,8 @@ namespace OpenPoseDotNet
         public int GetSize(int index)
         {
             this.ThrowIfDisposed();
-            this.ThrowIfHasError(OpenPose.Native.op_core_Array_getSize(this.NativePtr, this.ArrayElementType, index, out var ret));
+
+            var ret = this._Imp.GetSize(this.NativePtr, index);
 
             // openpose/include/openpose/core/array.hpp says
             // 'It will return 0 if the requested dimension is higher than the number of dimensions'
@@ -138,7 +138,7 @@ namespace OpenPoseDotNet
             if (this.NativePtr == IntPtr.Zero)
                 return;
 
-            OpenPose.Native.op_core_array_delete(this.NativePtr);
+            this._Imp.Delete(this.NativePtr);
         }
 
         public override string ToString()
@@ -150,7 +150,7 @@ namespace OpenPoseDotNet
 
             try
             {
-                stdstr = OpenPose.Native.op_core_Array_toString(this.NativePtr, this.ArrayElementType);
+                stdstr = this._Imp.ToString(this.NativePtr);
                 str = StringHelper.FromStdString(stdstr) ?? "";
             }
             catch (Exception e)
@@ -167,6 +167,167 @@ namespace OpenPoseDotNet
         }
 
         #endregion
+
+        #region Helpers
+
+        private static ArrayImp<T> CreateImp()
+        {
+            if (SupportTypes.TryGetValue(typeof(T), out var type))
+            {
+                switch (type)
+                {
+                    case OpenPose.Native.ArrayElementType.Float:
+                        return new ArrayFloatImp() as ArrayImp<T>;
+                    case OpenPose.Native.ArrayElementType.Double:
+                        return new ArrayDoubleImp() as ArrayImp<T>;
+                }
+            }
+
+            throw new ArgumentOutOfRangeException(nameof(type), type, null);
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Implements
+
+        private abstract class ArrayImp<T>
+        {
+
+            #region Methods
+
+            public abstract void Delete(IntPtr ptr);
+
+            public abstract bool Empty(IntPtr ptr);
+
+            public abstract int GetSize(IntPtr ptr, int index);
+
+            public abstract IntPtr GetSize(IntPtr ptr);
+
+            public abstract uint GetNumberDimensions(IntPtr ptr);
+
+            public abstract uint GetVolume(IntPtr ptr);
+
+            public abstract IntPtr Gets(IntPtr ptr, int index);
+
+            public abstract T Operator(IntPtr ptr, IntPtr indexes);
+
+            public abstract IntPtr ToString(IntPtr ptr);
+
+            #endregion
+
+        }
+
+        private sealed class ArrayFloatImp : ArrayImp<float>
+        {
+
+            #region Methods
+
+            public override void Delete(IntPtr ptr)
+            {
+                OpenPose.Native.op_core_Array_float_delete(ptr);
+            }
+
+            public override bool Empty(IntPtr ptr)
+            {
+                return OpenPose.Native.op_core_Array_float_empty(ptr);
+            }
+
+            public override int GetSize(IntPtr ptr, int index)
+            {
+                return OpenPose.Native.op_core_Array_float_getSize(ptr, index);
+            }
+
+            public override IntPtr GetSize(IntPtr ptr)
+            {
+                return OpenPose.Native.op_core_Array_float_getSize2(ptr);
+            }
+
+            public override uint GetNumberDimensions(IntPtr ptr)
+            {
+                return OpenPose.Native.op_core_Array_float_getNumberDimensions(ptr);
+            }
+
+            public override uint GetVolume(IntPtr ptr)
+            {
+                return OpenPose.Native.op_core_Array_float_getVolume(ptr);
+            }
+
+            // vector<float>
+            public override IntPtr Gets(IntPtr ptr, int index)
+            {
+                return OpenPose.Native.op_core_Array_float_gets(ptr, index);
+            }
+
+            // vector<float>
+            public override float Operator(IntPtr ptr, IntPtr indexes)
+            {
+                return OpenPose.Native.op_core_Array_float_operator_indexes(ptr, indexes);
+            }
+
+            public override IntPtr ToString(IntPtr ptr)
+            {
+                return OpenPose.Native.op_core_Array_float_toString(ptr);
+            }
+
+            #endregion
+
+        }
+
+        private sealed class ArrayDoubleImp : ArrayImp<double>
+        {
+
+            #region Methods
+
+            public override void Delete(IntPtr ptr)
+            {
+                OpenPose.Native.op_core_Array_double_delete(ptr);
+            }
+
+            public override bool Empty(IntPtr ptr)
+            {
+                return OpenPose.Native.op_core_Array_double_empty(ptr);
+            }
+
+            public override int GetSize(IntPtr ptr, int index)
+            {
+                return OpenPose.Native.op_core_Array_double_getSize(ptr, index);
+            }
+
+            public override IntPtr GetSize(IntPtr ptr)
+            {
+                return OpenPose.Native.op_core_Array_double_getSize2(ptr);
+            }
+
+            public override uint GetNumberDimensions(IntPtr ptr)
+            {
+                return OpenPose.Native.op_core_Array_double_getNumberDimensions(ptr);
+            }
+
+            public override uint GetVolume(IntPtr ptr)
+            {
+                return OpenPose.Native.op_core_Array_double_getVolume(ptr);
+            }
+
+            public override IntPtr Gets(IntPtr ptr, int index)
+            {
+                return OpenPose.Native.op_core_Array_double_gets(ptr, index);
+            }
+
+            public override double Operator(IntPtr ptr, IntPtr indexes)
+            {
+                return OpenPose.Native.op_core_Array_double_operator_indexes(ptr, indexes);
+            }
+
+            public override IntPtr ToString(IntPtr ptr)
+            {
+                return OpenPose.Native.op_core_Array_double_toString(ptr);
+            }
+
+            #endregion
+
+        }
 
         #endregion
 
