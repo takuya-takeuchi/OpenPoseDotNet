@@ -1,7 +1,4 @@
-﻿using System;
-using System.Runtime.InteropServices;
-
-namespace OpenPoseDotNet
+﻿namespace OpenPoseDotNet
 {
 
     public static partial class OpenPose
