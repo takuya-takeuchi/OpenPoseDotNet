@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 // ReSharper disable once CheckNamespace
 namespace OpenPoseDotNet
@@ -7,14 +6,6 @@ namespace OpenPoseDotNet
 
     public class UserWorker<T> : Worker<T>
     {
-
-        #region Delegates
-
-        private delegate void InitializationOnThreadAction();
-
-        private delegate void ProcessAction(IntPtr datums);
-
-        #endregion
 
         #region Fields
 
@@ -92,6 +83,8 @@ namespace OpenPoseDotNet
                 return;
 
             OpenPose.Native.op_UserWorker_delete(this._DataType, this.NativePtr);
+
+            this._Mediator?.Dispose();
         }
 
         #endregion
