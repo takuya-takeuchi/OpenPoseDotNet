@@ -1,5 +1,5 @@
 ﻿/*
- * This sample program is ported by C# from examples/tutorial_developer/thread_3_user_input_processing_and_output.cpp.
+ * This sample program is ported by C# from examples/tutorial_developer/thread_4_user_input_processing_output_and_datum.cpp.
 */
 
 using System;
