@@ -48,16 +48,7 @@ namespace OpenPoseDotNet
             #region std::shared_ptr
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern void op_shared_ptr_TDatums_delete(IntPtr ptr);
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr op_shared_ptr_TDatums_getter(IntPtr ptr);
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern void op_shared_ptr_CustomDatums_delete(IntPtr ptr);
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr op_shared_ptr_CustomDatums_getter(IntPtr ptr);
+            public static extern IntPtr std_shared_ptr_TDatum_get(DataType dataType, IntPtr p);
 
             #endregion
 

@@ -4,7 +4,7 @@ using OpenPoseDotNet;
 namespace CustomPostProcessing
 {
 
-    internal sealed class WUserPostProcessing : CustomWorker
+    internal sealed class WUserPostProcessing : UserWorker<CustomDatum>
     {
 
         #region Fields

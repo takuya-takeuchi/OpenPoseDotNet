@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 // ReSharper disable once CheckNamespace
 namespace OpenPoseDotNet
@@ -8,25 +7,7 @@ namespace OpenPoseDotNet
     public class UserWorker<T> : Worker<T>
     {
 
-        #region Delegates
-
-        private delegate void InitializationOnThreadAction();
-
-        private delegate void ProcessAction(IntPtr datums);
-
-        #endregion
-
         #region Fields
-
-        private readonly InitializationOnThreadAction _InitializationOnThreadAction;
-
-        private readonly ProcessAction _ProcessAction;
-
-        private readonly IntPtr _InitializationOnThreadActionPointer;
-
-        private readonly IntPtr _ProcessActionPointer;
-
-        private static readonly Dictionary<Type, ElementTypes> SupportTypes = new Dictionary<Type, ElementTypes>();
 
         private readonly OpenPose.DataType _DataType;
 
@@ -36,34 +17,10 @@ namespace OpenPoseDotNet
 
         #region Constructors
 
-        static UserWorker()
-        {
-            var types = new[]
-            {
-                new { Type = typeof(Datum),       ElementType = ElementTypes.Datum },
-                new { Type = typeof(CustomDatum), ElementType = ElementTypes.CustomDatum }
-            };
-
-            foreach (var type in types)
-                SupportTypes.Add(type.Type, type.ElementType);
-        }
-
         protected UserWorker() :
             base(IntPtr.Zero)
         {
-            if (!SupportTypes.TryGetValue(typeof(T), out var type))
-                throw new NotSupportedException($"{typeof(T).Name} does not support");
-
-            switch (type)
-            {
-                case ElementTypes.Datum:
-                    this._DataType = OpenPose.DataType.Default;
-                    break;
-                case ElementTypes.CustomDatum:
-                    this._DataType = OpenPose.DataType.Custom;
-                    break;
-            }
-
+            this._DataType = GenericHelpers.CheckDatumSupportTypes<T>();
             this._Mediator = new UserWorkerDelegateMediator(this._DataType)
             {
                 InitializationOnThread = this.OnInitializationOnThread,
@@ -76,19 +33,7 @@ namespace OpenPoseDotNet
         internal UserWorker(IntPtr ptr, bool isEnabledDispose = true) :
             base(ptr, isEnabledDispose)
         {
-            if (!SupportTypes.TryGetValue(typeof(T), out var type))
-                throw new NotSupportedException($"{typeof(T).Name} does not support");
-
-            switch (type)
-            {
-                case ElementTypes.Datum:
-                    this._DataType = OpenPose.DataType.Default;
-                    break;
-                case ElementTypes.CustomDatum:
-                    this._DataType = OpenPose.DataType.Custom;
-                    break;
-            }
-
+            this._DataType = GenericHelpers.CheckDatumSupportTypes<T>();
             this.NativePtr = ptr;
         }
 
@@ -138,6 +83,8 @@ namespace OpenPoseDotNet
                 return;
 
             OpenPose.Native.op_UserWorker_delete(this._DataType, this.NativePtr);
+
+            this._Mediator?.Dispose();
         }
 
         #endregion
@@ -157,7 +104,8 @@ namespace OpenPoseDotNet
                 return;
             }
 
-            var content = OpenPose.Native.op_shared_ptr_TDatums_getter(ptr);
+            // ptr is shared_ptr<std::vector<DATUM>>
+            var content = OpenPose.Native.std_shared_ptr_TDatum_get(this._DataType, ptr);
             if (content == IntPtr.Zero)
             {
                 this.Work(null);
@@ -171,15 +119,6 @@ namespace OpenPoseDotNet
         #endregion
 
         #endregion
-
-        private enum ElementTypes
-        {
-
-            Datum,
-
-            CustomDatum
-
-        }
 
     }
 

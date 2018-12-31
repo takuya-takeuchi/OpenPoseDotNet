@@ -26,6 +26,8 @@ DLLEXPORT __TYPE__* std_shared_ptr_##__TYPENAME__##_get(std::shared_ptr<__TYPE__
 
 #pragma endregion template
 
+MAKE_FUNC(std::vector<op::Datum>, StdVectorOfDatum)
+MAKE_FUNC(std::vector<CustomDatum>, StdVectorOfCustomDatum)
 MAKE_FUNC(op::PoseExtractorCaffe, op_PoseExtractorCaffe)
 MAKE_FUNC(op::Producer, op_Producer)
 MAKE_FUNC(DefaultDatumProducer, op_DatumProducerOfDatum)
@@ -34,5 +36,22 @@ MAKE_FUNC(op::Gui, op_Gui)
 MAKE_FUNC(DefaultWGui, op_WGui)
 MAKE_FUNC(DefaultUserWorker, op_UserWorkerOfDefault)
 MAKE_FUNC(CustomUserWorker, op_UserWorkerOfCustom)
+
+DLLEXPORT void* std_shared_ptr_TDatum_get(const data_type dataType, void* p)
+{
+    void* ret = nullptr;
+
+    switch(dataType)
+    {
+        case data_type::Default:
+            ret = ((DefaultDatums*)p)->get();
+            break;
+        case data_type::Custom:
+            ret = ((CustomDatums*)p)->get();
+            break;
+    }
+
+    return ret;
+}
 
 #endif

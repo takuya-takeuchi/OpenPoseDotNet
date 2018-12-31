@@ -27,6 +27,8 @@ namespace OpenPoseDotNet
         {
             var types = new[]
             {
+                new { Type = typeof(StdVector<Datum>),        ElementType = ElementTypes.StdVectorOfDatum },
+                new { Type = typeof(StdVector<CustomDatum>),  ElementType = ElementTypes.StdVectorOfCustomDatum },
                 new { Type = typeof(PoseExtractorCaffe),      ElementType = ElementTypes.PoseExtractorCaffe },
                 new { Type = typeof(Producer),                ElementType = ElementTypes.Producer },
                 new { Type = typeof(DatumProducer<Datum>),    ElementType = ElementTypes.DatumProducerOfDatum },
@@ -79,6 +81,23 @@ namespace OpenPoseDotNet
             return this._Imp.Get(this.NativePtr);
         }
 
+        public bool TryGet(out T data)
+        {
+            data = default(T);
+
+            try
+            {
+                this.ThrowIfDisposed();
+            }
+            catch (ObjectDisposedException)
+            {
+                return false;
+            }
+
+            data = this._Imp.Get(this.NativePtr);
+            return true;
+        }
+
         #region Overrides
 
         /// <summary>
@@ -107,6 +126,10 @@ namespace OpenPoseDotNet
             {
                 switch (type)
                 {
+                    case ElementTypes.StdVectorOfDatum:
+                        return new StdSharedPtrStdVectorOfDatumImp() as StdSharedPtrImp<T>;
+                    case ElementTypes.StdVectorOfCustomDatum:
+                        return new StdSharedPtrStdVectorOfCustomDatumImp() as StdSharedPtrImp<T>;
                     case ElementTypes.PoseExtractorCaffe:
                         return new StdSharedPtrPoseExtractorCaffeImp() as StdSharedPtrImp<T>;
                     case ElementTypes.Producer:
@@ -152,6 +175,10 @@ namespace OpenPoseDotNet
         private enum ElementTypes
         {
 
+            StdVectorOfDatum,
+
+            StdVectorOfCustomDatum,
+
             PoseExtractorCaffe,
 
             Producer,
@@ -191,6 +218,58 @@ namespace OpenPoseDotNet
             public abstract void Delete(IntPtr ptr);
 
             public abstract U Get(IntPtr ptr);
+
+            #endregion
+
+        }
+
+        private sealed class StdSharedPtrStdVectorOfDatumImp : StdSharedPtrImp<StdVector<Datum>>
+        {
+
+            #region Methods
+
+            public override IntPtr Create(IntPtr ptr)
+            {
+                return OpenPose.Native.std_shared_ptr_StdVectorOfDatum_new(ptr);
+            }
+
+            public override void Delete(IntPtr ptr)
+            {
+                if (ptr != IntPtr.Zero)
+                    OpenPose.Native.std_shared_ptr_StdVectorOfDatum_delete(ptr);
+            }
+
+            public override StdVector<Datum> Get(IntPtr ptr)
+            {
+                var p = OpenPose.Native.std_shared_ptr_StdVectorOfDatum_get(ptr);
+                return new StdVector<Datum>(p, false);
+            }
+
+            #endregion
+
+        }
+
+        private sealed class StdSharedPtrStdVectorOfCustomDatumImp : StdSharedPtrImp<StdVector<CustomDatum>>
+        {
+
+            #region Methods
+
+            public override IntPtr Create(IntPtr ptr)
+            {
+                return OpenPose.Native.std_shared_ptr_StdVectorOfCustomDatum_new(ptr);
+            }
+
+            public override void Delete(IntPtr ptr)
+            {
+                if (ptr != IntPtr.Zero)
+                    OpenPose.Native.std_shared_ptr_StdVectorOfCustomDatum_delete(ptr);
+            }
+
+            public override StdVector<CustomDatum> Get(IntPtr ptr)
+            {
+                var p = OpenPose.Native.std_shared_ptr_StdVectorOfCustomDatum_get(ptr);
+                return new StdVector<CustomDatum>(p, false);
+            }
 
             #endregion
 

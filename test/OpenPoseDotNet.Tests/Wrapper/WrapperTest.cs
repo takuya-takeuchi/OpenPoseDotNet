@@ -12,8 +12,8 @@ namespace OpenPoseDotNet.Tests.Wrapper
         [TestMethod]
         public void Create()
         {
-            using (var _ = new OpenPoseDotNet.Wrapper())
-                Console.WriteLine($"{nameof(OpenPoseDotNet.Wrapper)} was created.");
+            using (var _ = new OpenPoseDotNet.Wrapper<Datum>())
+                Console.WriteLine($"{nameof(OpenPoseDotNet.Wrapper<Datum>)} was created.");
         }
 
         [TestMethod]
@@ -21,7 +21,7 @@ namespace OpenPoseDotNet.Tests.Wrapper
         {
             foreach (var mode in Enum.GetValues(typeof(ThreadManagerMode)).Cast<ThreadManagerMode>())
             {
-                var wrapper = new OpenPoseDotNet.Wrapper(mode);
+                var wrapper = new OpenPoseDotNet.Wrapper<Datum>(mode);
                 wrapper.Dispose();
             }
         }
