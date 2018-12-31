@@ -10,7 +10,7 @@ namespace OpenPoseDotNet
 
         #region Fields
 
-        private static readonly Dictionary<Type, ElementTypes> SupportTypes = new Dictionary<Type, ElementTypes>();
+        private static readonly Dictionary<Type, DatumType> SupportTypes = new Dictionary<Type, DatumType>();
 
         private readonly OpenPose.DataType _DataType;
 
@@ -22,8 +22,8 @@ namespace OpenPoseDotNet
         {
             var types = new[]
             {
-                new { Type = typeof(Datum),       ElementType = ElementTypes.Datum },
-                new { Type = typeof(CustomDatum), ElementType = ElementTypes.CustomDatum }
+                new { Type = typeof(Datum),       ElementType = DatumType.Datum },
+                new { Type = typeof(CustomDatum), ElementType = DatumType.CustomDatum }
             };
 
             foreach (var type in types)
@@ -42,10 +42,10 @@ namespace OpenPoseDotNet
 
             switch (type)
             {
-                case ElementTypes.Datum:
+                case DatumType.Datum:
                     this._DataType = OpenPose.DataType.Default;
                     break;
-                case ElementTypes.CustomDatum:
+                case DatumType.CustomDatum:
                     this._DataType = OpenPose.DataType.Custom;
                     break;
             }
@@ -62,10 +62,10 @@ namespace OpenPoseDotNet
 
             switch (type)
             {
-                case ElementTypes.Datum:
+                case DatumType.Datum:
                     this._DataType = OpenPose.DataType.Default;
                     break;
-                case ElementTypes.CustomDatum:
+                case DatumType.CustomDatum:
                     this._DataType = OpenPose.DataType.Custom;
                     break;
             }
@@ -95,15 +95,6 @@ namespace OpenPoseDotNet
         #endregion
 
         #endregion
-
-        private enum ElementTypes
-        {
-
-            Datum,
-
-            CustomDatum
-
-        }
 
     }
 
