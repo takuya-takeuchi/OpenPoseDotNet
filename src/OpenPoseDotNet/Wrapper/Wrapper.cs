@@ -135,7 +135,7 @@ namespace OpenPoseDotNet
             Native.op_wrapper_exec(this.NativePtr);
         }
 
-        public override void SetWorker(WorkerType workerType, OpenPoseObject worker, bool workerOnNewThread = true)
+        public override void SetWorker<U>(WorkerType workerType, StdSharedPtr<U> worker, bool workerOnNewThread = true)
         {
             this.ThrowIfDisposed();
 

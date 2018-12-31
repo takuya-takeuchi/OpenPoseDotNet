@@ -36,7 +36,8 @@ namespace OpenPoseDotNet
 
         public abstract void Exec();
 
-        public abstract void SetWorker(WorkerType workerType, OpenPoseObject worker, bool workerOnNewThread = true);
+        public abstract void SetWorker<U>(WorkerType workerType, StdSharedPtr<U> worker, bool workerOnNewThread = true)
+            where U : Worker<T>;
 
         public abstract void Start();
 
