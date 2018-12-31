@@ -104,7 +104,8 @@ namespace OpenPoseDotNet
                 return;
             }
 
-            var content = OpenPose.Native.op_shared_ptr_TDatums_getter(ptr);
+            // ptr is shared_ptr<std::vector<DATUM>>
+            var content = OpenPose.Native.std_shared_ptr_TDatum_get(this._DataType, ptr);
             if (content == IntPtr.Zero)
             {
                 this.Work(null);

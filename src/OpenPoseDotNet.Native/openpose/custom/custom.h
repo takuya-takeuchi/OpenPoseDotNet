@@ -5,8 +5,6 @@
 #include "customDatum.h"
 #include "../user/userWorker.h"
 
-MAKE_SHARED_PTR_FUNC(std::vector<CustomDatum>, CustomDatum)
-
 DLLEXPORT CustomDatum* op_CustomDatum_new()
 {
     return new CustomDatum();

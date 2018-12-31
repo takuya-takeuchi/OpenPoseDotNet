@@ -5,10 +5,6 @@
 #include <opencv2/core/mat.hpp>
 #include "../defines.h"
 
-typedef std::vector<op::Datum> TDatums;
-
-MAKE_SHARED_PTR_FUNC(std::vector<op::Datum>, TDatums)
-
 DLLEXPORT void* op_wrapper_new(const data_type dataType, const op::ThreadManagerMode threadManagerMode)
 {
     switch(dataType)

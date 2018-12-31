@@ -37,4 +37,21 @@ MAKE_FUNC(DefaultWGui, op_WGui)
 MAKE_FUNC(DefaultUserWorker, op_UserWorkerOfDefault)
 MAKE_FUNC(CustomUserWorker, op_UserWorkerOfCustom)
 
+DLLEXPORT void* std_shared_ptr_TDatum_get(const data_type dataType, void* p)
+{
+    void* ret = nullptr;
+
+    switch(dataType)
+    {
+        case data_type::Default:
+            ret = ((DefaultDatums*)p)->get();
+            break;
+        case data_type::Custom:
+            ret = ((CustomDatums*)p)->get();
+            break;
+    }
+
+    return ret;
+}
+
 #endif
