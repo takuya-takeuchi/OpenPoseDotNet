@@ -26,8 +26,6 @@ namespace OpenPoseDotNet
 
         private readonly IntPtr _ProcessActionPointer;
 
-        private static readonly Dictionary<Type, DatumType> SupportTypes = new Dictionary<Type, DatumType>();
-
         private readonly OpenPose.DataType _DataType;
 
         private readonly UserWorkerDelegateMediator _Mediator;
@@ -36,34 +34,10 @@ namespace OpenPoseDotNet
 
         #region Constructors
 
-        static UserWorker()
-        {
-            var types = new[]
-            {
-                new { Type = typeof(Datum),       ElementType = DatumType.Default },
-                new { Type = typeof(CustomDatum), ElementType = DatumType.Custom }
-            };
-
-            foreach (var type in types)
-                SupportTypes.Add(type.Type, type.ElementType);
-        }
-
         protected UserWorker() :
             base(IntPtr.Zero)
         {
-            if (!SupportTypes.TryGetValue(typeof(T), out var type))
-                throw new NotSupportedException($"{typeof(T).Name} does not support");
-
-            switch (type)
-            {
-                case DatumType.Default:
-                    this._DataType = OpenPose.DataType.Default;
-                    break;
-                case DatumType.Custom:
-                    this._DataType = OpenPose.DataType.Custom;
-                    break;
-            }
-
+            this._DataType = GenericHelpers.CheckDatumSupportTypes<T>();
             this._Mediator = new UserWorkerDelegateMediator(this._DataType)
             {
                 InitializationOnThread = this.OnInitializationOnThread,
@@ -76,19 +50,7 @@ namespace OpenPoseDotNet
         internal UserWorker(IntPtr ptr, bool isEnabledDispose = true) :
             base(ptr, isEnabledDispose)
         {
-            if (!SupportTypes.TryGetValue(typeof(T), out var type))
-                throw new NotSupportedException($"{typeof(T).Name} does not support");
-
-            switch (type)
-            {
-                case DatumType.Default:
-                    this._DataType = OpenPose.DataType.Default;
-                    break;
-                case DatumType.Custom:
-                    this._DataType = OpenPose.DataType.Custom;
-                    break;
-            }
-
+            this._DataType = GenericHelpers.CheckDatumSupportTypes<T>();
             this.NativePtr = ptr;
         }
 

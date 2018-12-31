@@ -10,25 +10,11 @@ namespace OpenPoseDotNet
 
         #region Fields
 
-        private static readonly Dictionary<Type, DatumType> SupportTypes = new Dictionary<Type, DatumType>();
-
         private readonly OpenPose.DataType _DataType;
 
         #endregion
 
         #region Constructors
-
-        static Wrapper()
-        {
-            var types = new[]
-            {
-                new { Type = typeof(Datum),       ElementType = DatumType.Default },
-                new { Type = typeof(CustomDatum), ElementType = DatumType.Custom }
-            };
-
-            foreach (var type in types)
-                SupportTypes.Add(type.Type, type.ElementType);
-        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Wrapper{T}"/> class with the specified ThreadManager synchronization mode.
@@ -36,19 +22,7 @@ namespace OpenPoseDotNet
         /// <param name="threadManagerMode"></param>
         public Wrapper(ThreadManagerMode threadManagerMode = ThreadManagerMode.Synchronous)
         {
-            if (!SupportTypes.TryGetValue(typeof(T), out var type))
-                throw new NotSupportedException($"{typeof(T).Name} does not support");
-
-            switch (type)
-            {
-                case DatumType.Default:
-                    this._DataType = OpenPose.DataType.Default;
-                    break;
-                case DatumType.Custom:
-                    this._DataType = OpenPose.DataType.Custom;
-                    break;
-            }
-
+            this._DataType = GenericHelpers.CheckDatumSupportTypes<T>();
             this.NativePtr = OpenPose.Native.op_wrapper_new(this._DataType, threadManagerMode);
         }
 
