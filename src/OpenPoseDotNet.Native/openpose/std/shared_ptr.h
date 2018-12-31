@@ -4,6 +4,7 @@
 #include "../shared.h"
 #include <memory>
 #include "../defines.h"
+#include "../user/userWorker.h"
 
 #pragma region template
 
@@ -31,5 +32,7 @@ MAKE_FUNC(DefaultDatumProducer, op_DatumProducerOfDatum)
 MAKE_FUNC(DefaultWDatumProducer, op_WDatumProducerOfDatum)
 MAKE_FUNC(op::Gui, op_Gui)
 MAKE_FUNC(DefaultWGui, op_WGui)
+MAKE_FUNC(DefaultUserWorker, op_UserWorkerOfDefault)
+MAKE_FUNC(CustomUserWorker, op_UserWorkerOfCustom)
 
 #endif

@@ -465,7 +465,7 @@ namespace OpenPoseDotNet
 
             #endregion
 
-            #region op::Gui
+            #region op::WGui
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern IntPtr std_shared_ptr_op_WGui_new(IntPtr ptr);
@@ -501,6 +501,32 @@ namespace OpenPoseDotNet
 
             [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
             public static extern IntPtr std_shared_ptr_op_WDatumProducerOfDatum_get(IntPtr p);
+
+            #endregion
+            
+            #region op::UserWorker<Datum>
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern IntPtr std_shared_ptr_op_UserWorkerOfDefault_new(IntPtr ptr);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void std_shared_ptr_op_UserWorkerOfDefault_delete(IntPtr p);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern IntPtr std_shared_ptr_op_UserWorkerOfDefault_get(IntPtr p);
+
+            #endregion
+
+            #region op::UserWorker<CustomDatum>
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern IntPtr std_shared_ptr_op_UserWorkerOfCustom_new(IntPtr ptr);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern void std_shared_ptr_op_UserWorkerOfCustom_delete(IntPtr p);
+
+            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+            public static extern IntPtr std_shared_ptr_op_UserWorkerOfCustom_get(IntPtr p);
 
             #endregion
 

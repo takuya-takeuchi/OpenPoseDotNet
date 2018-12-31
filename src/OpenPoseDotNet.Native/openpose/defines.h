@@ -4,6 +4,8 @@
 #include "shared.h"
 #include "custom/customDatum.h"
 
+#pragma region template
+
 #define MAKE_DEFINE(__TYPE__, __TYPENAME__)\
 typedef std::vector<__TYPE__> ##__TYPENAME__##DatumsNoPtr;\
 typedef std::shared_ptr<##__TYPENAME__##DatumsNoPtr> ##__TYPENAME__##Datums;\
