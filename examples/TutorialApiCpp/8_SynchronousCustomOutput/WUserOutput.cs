@@ -74,9 +74,9 @@ namespace SynchronousCustomOutput
                 OpenPose.Error(e.Message, -1, nameof(this.WorkConsumer));
             }
 
-            #endregion
-
         }
+
+        #endregion
 
     }
 
