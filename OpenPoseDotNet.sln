@@ -47,6 +47,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "5_AsynchronousLoopCustomOut
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "6_SynchronousCustomPostProcessing", "examples\TutorialApiCpp\6_SynchronousCustomPostProcessing\6_SynchronousCustomPostProcessing.csproj", "{BE9751F0-1054-4A0D-8E07-6C95CA06C60E}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "7_SynchronousCustomInput", "examples\TutorialApiCpp\7_SynchronousCustomInput\7_SynchronousCustomInput.csproj", "{B841A55C-FC48-463C-B273-50A45A519CD5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -117,6 +119,10 @@ Global
 		{BE9751F0-1054-4A0D-8E07-6C95CA06C60E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BE9751F0-1054-4A0D-8E07-6C95CA06C60E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BE9751F0-1054-4A0D-8E07-6C95CA06C60E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B841A55C-FC48-463C-B273-50A45A519CD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B841A55C-FC48-463C-B273-50A45A519CD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B841A55C-FC48-463C-B273-50A45A519CD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B841A55C-FC48-463C-B273-50A45A519CD5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -141,6 +147,7 @@ Global
 		{7BDCEE38-1409-4565-894D-FDAE12867228} = {9636645D-A6CD-44A2-B8B0-C3EA476F047F}
 		{41E16B6C-EA69-494E-BBC1-606B55DAD974} = {9636645D-A6CD-44A2-B8B0-C3EA476F047F}
 		{BE9751F0-1054-4A0D-8E07-6C95CA06C60E} = {9636645D-A6CD-44A2-B8B0-C3EA476F047F}
+		{B841A55C-FC48-463C-B273-50A45A519CD5} = {9636645D-A6CD-44A2-B8B0-C3EA476F047F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9D8118C7-92BF-487E-83ED-EFB9BF807E08}
