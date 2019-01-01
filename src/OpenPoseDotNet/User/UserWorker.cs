@@ -5,6 +5,7 @@ namespace OpenPoseDotNet
 {
 
     public class UserWorker<T> : Worker<T>
+        where T : Datum
     {
 
         #region Fields
@@ -26,6 +27,7 @@ namespace OpenPoseDotNet
                 InitializationOnThread = this.OnInitializationOnThread,
                 Work = this.OnWork
             };
+            this._Mediator.Setup();
 
             this.NativePtr = this._Mediator.NativePtr;
         }

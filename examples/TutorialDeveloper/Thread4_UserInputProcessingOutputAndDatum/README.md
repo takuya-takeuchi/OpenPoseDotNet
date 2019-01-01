@@ -1,4 +1,4 @@
-# Body From Image
+# Thread 4 User Input Processing Output And Datum
 
 ## Quick Start
 
@@ -19,10 +19,7 @@
 #### 3. Try Tutorial
 
 ````dos
-> cd <OpenPoseDotNet_dir>\examples\Tutorial\1_BodyFromImage
+> cd <OpenPoseDotNet_dir>\examples\TutorialDeveloper\Thread4_UserInputProcessingOutputAndDatum
 > CopyOpenPose.bat <Debug/Release>
-> dotnet run -c Release  -i "<OpenPoseDotNet_dir>\openpose\examples\med
-ia\COCO_val2014_000000000192.jpg"
+> dotnet run -c Release
 ````
-
-<img src="images/example_turorial_1.png"/>

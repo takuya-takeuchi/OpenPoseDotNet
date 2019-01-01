@@ -1,4 +1,4 @@
-# Whole Body From Image
+# Synchronous Custom All
 
 ## Quick Start
 
@@ -19,10 +19,9 @@
 #### 3. Try Tutorial
 
 ````dos
-> cd <OpenPoseDotNet_dir>\examples\Tutorial\2_WholeBodyFromImage
+> cd <OpenPoseDotNet_dir>\examples\TutorialApiCpp\9_SynchronousCustomAll
 > CopyOpenPose.bat <Debug/Release>
-> dotnet run -c Release  -i "<OpenPoseDotNet_dir>\openpose\examples\med
-ia\COCO_val2014_000000000241.jpg"
+> dotnet run -c Release
 ````
 
-<img src="images/example_turorial_2.png"/>
+<img src="images/example_turorial_9.gif"/>

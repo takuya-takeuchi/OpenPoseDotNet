@@ -5,6 +5,7 @@ namespace OpenPoseDotNet
 {
 
     public sealed class Wrapper<T> : OpenPoseObject
+        where T : Datum
     {
 
         #region Fields
@@ -72,7 +73,7 @@ namespace OpenPoseDotNet
 
             OpenPose.Native.op_wrapper_configure_face(this._DataType, this.NativePtr, face.NativePtr);
         }
-        
+
         public void Configure(WrapperStructExtra extra)
         {
             if (extra == null)
@@ -158,6 +159,26 @@ namespace OpenPoseDotNet
             this.ThrowIfDisposed();
 
             OpenPose.Native.op_wrapper_stop(this._DataType, this.NativePtr);
+        }
+
+        public bool WaitAndEmplace(StdSharedPtr<StdVector<T>> datums)
+        {
+            if (datums == null)
+                throw new ArgumentNullException(nameof(datums));
+
+            datums.ThrowIfDisposed();
+            this.ThrowIfDisposed();
+
+            return OpenPose.Native.op_wrapper_waitAndEmplace(this._DataType, this.NativePtr, datums.NativePtr);
+        }
+
+        public bool WaitAndPop(out StdSharedPtr<StdVector<T>> datums)
+        {
+            this.ThrowIfDisposed();
+
+            var ret = OpenPose.Native.op_wrapper_waitAndPop(this._DataType, this.NativePtr, out var tDatums);
+            datums = ret ? new StdSharedPtr<StdVector<T>>(tDatums) : null;
+            return ret;
         }
 
         #region Overrides

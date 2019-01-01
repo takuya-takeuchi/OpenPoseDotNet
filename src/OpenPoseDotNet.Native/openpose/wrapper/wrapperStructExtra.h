@@ -16,7 +16,7 @@ DLLEXPORT op::WrapperStructExtra* op_wrapperStructExtra_new(const bool reconstru
                                        ikThreads);
 }
 
-DLLEXPORT void op_wrapperStructExtra_delete(op::WrapperStructOutput* extra)
+DLLEXPORT void op_wrapperStructExtra_delete(op::WrapperStructExtra* extra)
 {
     delete extra;
 }

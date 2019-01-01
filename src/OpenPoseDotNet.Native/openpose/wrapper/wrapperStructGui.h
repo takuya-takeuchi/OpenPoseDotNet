@@ -12,9 +12,9 @@ DLLEXPORT op::WrapperStructGui* op_wrapperStructGui_new(const op::DisplayMode di
                                     fullScreen);
 }
 
-DLLEXPORT void op_wrapperStructGui_delete(op::WrapperStructOutput* extra)
+DLLEXPORT void op_wrapperStructGui_delete(op::WrapperStructGui* gui)
 {
-    delete extra;
+    delete gui;
 }
 
 #endif
