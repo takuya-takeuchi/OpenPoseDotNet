@@ -49,6 +49,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "6_SynchronousCustomPostProc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "7_SynchronousCustomInput", "examples\TutorialApiCpp\7_SynchronousCustomInput\7_SynchronousCustomInput.csproj", "{B841A55C-FC48-463C-B273-50A45A519CD5}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "8_SynchronousCustomOutput", "examples\TutorialApiCpp\8_SynchronousCustomOutput\8_SynchronousCustomOutput.csproj", "{674D6051-909F-4A63-B840-965B1CB2FFE7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "9_SynchronousCustomAll", "examples\TutorialApiCpp\9_SynchronousCustomAll\9_SynchronousCustomAll.csproj", "{3CD7D2F0-3EE8-415D-AFDB-126F4FF3104A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -123,6 +127,14 @@ Global
 		{B841A55C-FC48-463C-B273-50A45A519CD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B841A55C-FC48-463C-B273-50A45A519CD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B841A55C-FC48-463C-B273-50A45A519CD5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{674D6051-909F-4A63-B840-965B1CB2FFE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{674D6051-909F-4A63-B840-965B1CB2FFE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{674D6051-909F-4A63-B840-965B1CB2FFE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{674D6051-909F-4A63-B840-965B1CB2FFE7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3CD7D2F0-3EE8-415D-AFDB-126F4FF3104A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CD7D2F0-3EE8-415D-AFDB-126F4FF3104A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CD7D2F0-3EE8-415D-AFDB-126F4FF3104A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CD7D2F0-3EE8-415D-AFDB-126F4FF3104A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -148,6 +160,8 @@ Global
 		{41E16B6C-EA69-494E-BBC1-606B55DAD974} = {9636645D-A6CD-44A2-B8B0-C3EA476F047F}
 		{BE9751F0-1054-4A0D-8E07-6C95CA06C60E} = {9636645D-A6CD-44A2-B8B0-C3EA476F047F}
 		{B841A55C-FC48-463C-B273-50A45A519CD5} = {9636645D-A6CD-44A2-B8B0-C3EA476F047F}
+		{674D6051-909F-4A63-B840-965B1CB2FFE7} = {9636645D-A6CD-44A2-B8B0-C3EA476F047F}
+		{3CD7D2F0-3EE8-415D-AFDB-126F4FF3104A} = {9636645D-A6CD-44A2-B8B0-C3EA476F047F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9D8118C7-92BF-487E-83ED-EFB9BF807E08}
