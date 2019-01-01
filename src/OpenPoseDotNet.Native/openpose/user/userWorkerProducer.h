@@ -46,6 +46,9 @@ template<typename TDatums>
 TDatums UserWorkerProducer<TDatums>::workProducer()
 {
     const auto ret = this->m_process_function();
+    if (ret == nullptr)
+        return nullptr;
+        
     return *ret;
 }
 
