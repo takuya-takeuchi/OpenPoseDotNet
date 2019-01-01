@@ -1,7 +1,7 @@
 ﻿using System;
 using OpenPoseDotNet;
 
-namespace CustomPostProcessing
+namespace SynchronousCustomPostProcessing
 {
 
     internal sealed class WUserPostProcessing : UserWorker<CustomDatum>

@@ -3,7 +3,7 @@ using System.IO;
 using OpenPoseDotNet;
 using UserDatum = OpenPoseDotNet.CustomDatum;
 
-namespace Thread4_UserInputProcessingAndOutput
+namespace SynchronousCustomInput
 {
 
     // This worker will just read and return all the jpg files in a directory

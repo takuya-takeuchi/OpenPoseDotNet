@@ -7,7 +7,7 @@ using System.Diagnostics;
 using OpenPoseDotNet;
 using UserDatum = OpenPoseDotNet.CustomDatum;
 
-namespace CustomPostProcessing
+namespace SynchronousCustomPostProcessing
 {
 
     internal class Program

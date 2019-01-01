@@ -1,5 +1,5 @@
 ﻿/*
- * This sample program is ported by C# from examples/tutorial_api_cpp/7_synchronous_custom_input.cpp.
+ * This sample program is ported by C# from examples/tutorial_api_cpp/8_synchronous_custom_output.cpp.
 */
 
 using System;
@@ -7,33 +7,22 @@ using System.Diagnostics;
 using OpenPoseDotNet;
 using UserDatum = OpenPoseDotNet.CustomDatum;
 
-namespace SynchronousCustomInput
+namespace SynchronousCustomOutput
 {
 
     internal class Program
     {
 
-        #region Constructors
-
-        static Program()
-        {
-            // Custom OpenPose flags
-            // Producer
-            Flags.ImageDir = "examples/media/";    // Process a directory of images. Read all standard formats (jpg, png, bmp, etc.).
-        }
-
-        #endregion
-
         #region Methods
 
         private static void Main()
         {
-            TutorialApiCpp7();
+            TutorialApiCpp8();
         }
 
         #region Helpers
 
-        private static int TutorialApiCpp7()
+        private static int TutorialApiCpp8()
         {
             try
             {
@@ -52,6 +41,8 @@ namespace SynchronousCustomInput
                 // Profiler.setDefaultX(100);
 
                 // Applying user defined configuration - GFlags to program variables
+                // cameraSize
+                var cameraSize = OpenPose.FlagsToPoint(Flags.CameraResolution, "-1x-1");
                 // outputSize
                 var outputSize = OpenPose.FlagsToPoint(Flags.OutputResolution, "-1x-1");
                 // netInputSize
@@ -60,6 +51,10 @@ namespace SynchronousCustomInput
                 var faceNetInputSize = OpenPose.FlagsToPoint(Flags.FaceNetResolution, "368x368 (multiples of 16)");
                 // handNetInputSize
                 var handNetInputSize = OpenPose.FlagsToPoint(Flags.HandNetResolution, "368x368 (multiples of 16)");
+                // producerType
+                var tie = OpenPose.FlagsToProducer(Flags.ImageDir, Flags.Video, Flags.IpCamera, Flags.Camera, Flags.FlirCamera, Flags.FlirCameraIndex);
+                var producerType = tie.Item1;
+                var producerString = tie.Item2;
                 // poseModel
                 var poseModel = OpenPose.FlagsToPoseModel(Flags.ModelPose);
                 // JSON saving
@@ -71,22 +66,21 @@ namespace SynchronousCustomInput
                 var heatMapTypes = OpenPose.FlagsToHeatMaps(Flags.HeatmapsAddParts, Flags.HeatmapsAddBackground, Flags.HeatmapsAddPAFs);
                 var heatMapScale = OpenPose.FlagsToHeatMapScaleMode(Flags.HeatmapsScale);
                 // >1 camera view?
-                // var multipleView = (Flags.Enable3D || Flags.Views3D > 1 || Flags.FlirCamera);
-                const bool multipleView = false;
+                var multipleView = (Flags.Enable3D || Flags.Views3D > 1 || Flags.FlirCamera);
                 // Enabling Google Logging
                 const bool enableGoogleLogging = true;
 
                 // OpenPose wrapper
                 OpenPose.Log("Configuring OpenPose...", Priority.High);
-                using (var opWrapperT = new Wrapper<UserDatum>())
+                using (var opWrapperT = new Wrapper<UserDatum>(ThreadManagerMode.AsynchronousIn))
                 {
                     // Initializing the user custom classes
-                    // Frames producer (e.g., video, webcam, ...)
-                    using (var wUserInput = new StdSharedPtr<UserWorkerProducer<UserDatum>>(new WUserInput(Flags.ImageDir)))
+                    // GUI (Display)
+                    using (var wUserOutput = new StdSharedPtr<UserWorkerConsumer<UserDatum>>(new WUserOutput()))
                     {
                         // Add custom processing
-                        const bool workerInputOnNewThread = true;
-                        opWrapperT.SetWorker(WorkerType.Input, wUserInput, workerInputOnNewThread);
+                        const bool workerOutputOnNewThread = true;
+                        opWrapperT.SetWorker(WorkerType.Output, wUserOutput, workerOutputOnNewThread);
 
                         // Pose configuration (use WrapperStructPose{} for default and recommended configuration)
                         using (var pose = new WrapperStructPose(!Flags.BodyDisabled,
@@ -134,6 +128,20 @@ namespace SynchronousCustomInput
                                                                   Flags.Identification,
                                                                   Flags.Tracking,
                                                                   Flags.IkThreads))
+                        // Producer (use default to disable any input)
+                        using (var input = new WrapperStructInput(producerType,
+                                                                  producerString,
+                                                                  Flags.FrameFirst,
+                                                                  Flags.FrameStep,
+                                                                  Flags.FrameLast,
+                                                                  Flags.ProcessRealTime,
+                                                                  Flags.FrameFlip,
+                                                                  Flags.FrameRotate,
+                                                                  Flags.FramesRepeat,
+                                                                  cameraSize,
+                                                                  Flags.CameraParameterPath,
+                                                                  Flags.FrameUndistort,
+                                                                  Flags.Views3D))
                         // Output (comment or use default argument to disable any output)
                         using (var output = new WrapperStructOutput(Flags.CliVerbose,
                                                                     Flags.WriteKeyPoint,
@@ -152,17 +160,14 @@ namespace SynchronousCustomInput
                                                                     Flags.WriteBvh,
                                                                     Flags.UdpHost,
                                                                     Flags.UdpPort))
-                        // GUI (comment or use default argument to disable any visual output)
-                        using (var gui = new WrapperStructGui(OpenPose.FlagsToDisplayMode(Flags.Display, Flags.Enable3D),
-                                                              !Flags.NoGuiVerbose,
-                                                              Flags.FullScreen))
+                        // No GUI. Equivalent to: opWrapper.configure(op::WrapperStructGui{});
                         {
                             opWrapperT.Configure(pose);
                             opWrapperT.Configure(face);
                             opWrapperT.Configure(hand);
                             opWrapperT.Configure(extra);
+                            opWrapperT.Configure(input);
                             opWrapperT.Configure(output);
-                            opWrapperT.Configure(gui);
 
                             // No GUI. Equivalent to: opWrapper.configure(op::WrapperStructGui{});
                             // Set to single-thread (for sequential processing and/or debugging and/or reducing latency)
