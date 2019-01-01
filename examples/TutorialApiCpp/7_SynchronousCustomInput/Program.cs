@@ -7,7 +7,7 @@ using System.Diagnostics;
 using OpenPoseDotNet;
 using UserDatum = OpenPoseDotNet.CustomDatum;
 
-namespace Thread4_UserInputProcessingAndOutput
+namespace SynchronousCustomInput
 {
 
     internal class Program
