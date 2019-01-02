@@ -35,7 +35,7 @@ if (MSVC OR MSYS OR MINGW)
                         "${OPENPOSEDOTNET_ROOT_DIR}/openpose/3rdparty/windows/caffe3rdparty/include")
 else()
     find_package( OpenCV REQUIRED )
-    include_directories("../../openpose/include")
+    include_directories("${OPENPOSEDOTNET_ROOT_DIR}/openpose/include")
 endif()
 
 FILE(GLOB_RECURSE HEADERS ${PROJECT_SOURCE_DIR}/openpose/*.h)
@@ -50,11 +50,11 @@ configure_file(
 # include 3rdparty libraries
 if (MSVC OR MSYS OR MINGW)
     set(STATIC_LIBRARIES
-        ${OPENPOSEDOTNET_ROOT_DIR}/openpose/3rdparty/windows/opencv/x64/vc14/lib/opencv_world310
-        optimized ${OPENPOSEDOTNET_ROOT_DIR}/openpose/3rdparty/windows/caffe3rdparty/lib/gflags
-        optimized ${OPENPOSEDOTNET_ROOT_DIR}/openpose/build/src/openpose/Release/openpose
-        debug ${OPENPOSEDOTNET_ROOT_DIR}/openpose/3rdparty/windows/caffe3rdparty/lib/gflagsd
-        debug ${OPENPOSEDOTNET_ROOT_DIR}/openpose/build/src/openpose/Debug/openposed
+        ${OPENPOSEDOTNET_ROOT_DIR}/openpose/3rdparty/windows/opencv/x64/vc14/lib/opencv_world310.lib
+        optimized ${OPENPOSEDOTNET_ROOT_DIR}/openpose/3rdparty/windows/caffe3rdparty/lib/gflags.lib
+        optimized ${OPENPOSEDOTNET_ROOT_DIR}/openpose/build/src/openpose/Release/openpose.lib
+        debug ${OPENPOSEDOTNET_ROOT_DIR}/openpose/3rdparty/windows/caffe3rdparty/lib/gflagsd.lib
+        debug ${OPENPOSEDOTNET_ROOT_DIR}/openpose/build/src/openpose/Debug/openposed.lib
     )
 else()
     set(STATIC_LIBRARIES
