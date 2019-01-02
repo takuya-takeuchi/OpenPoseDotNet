@@ -57,8 +57,6 @@ if (MSVC OR MSYS OR MINGW)
         debug ${OPENPOSEDOTNET_ROOT_DIR}/openpose/build/src/openpose/Debug/openposed
     )
 else()
-    get_filename_component(OPENPOSEDOTNET_ROOT_DIR "../.." ABSOLUTE)
-    message("ROOT_DIR: ${ROOT_DIR}")
     set(STATIC_LIBRARIES
         opencv_imgproc
         optimized gflags
