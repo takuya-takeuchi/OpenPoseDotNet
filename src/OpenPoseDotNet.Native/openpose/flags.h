@@ -7,23 +7,23 @@
 #pragma region template
 
 #define MAKE_FUNC(__NAME__, __TYPE__)\
-DLLEXPORT __TYPE__ op_flags_get_##__NAME__##()\
+DLLEXPORT __TYPE__ op_flags_get_##__NAME__()\
 {\
     return FLAGS_##__NAME__;\
 }\
 \
-DLLEXPORT void op_flags_set_##__NAME__##(const __TYPE__ value)\
+DLLEXPORT void op_flags_set_##__NAME__(const __TYPE__ value)\
 {\
     FLAGS_##__NAME__ = value;\
 }\
 
 #define MAKE_FUNC_STRING(__NAME__)\
-DLLEXPORT std::string* op_flags_get_##__NAME__##()\
+DLLEXPORT std::string* op_flags_get_##__NAME__()\
 {\
     return new std::string(FLAGS_##__NAME__);\
 }\
 \
-DLLEXPORT void op_flags_set_##__NAME__##(const char* value)\
+DLLEXPORT void op_flags_set_##__NAME__(const char* value)\
 {\
     std::string str(value);\
     FLAGS_##__NAME__ = str;\
