@@ -25,9 +25,18 @@ if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release")
 endif()
 
-include_directories("../../openpose/include",
-                    "../../openpose/3rdparty/windows/opencv/include",
-                    "../../openpose/3rdparty/windows/caffe3rdparty/include")
+# get root directory path
+get_filename_component(OPENPOSEDOTNET_ROOT_DIR "../.." ABSOLUTE)
+
+# include 3rdparty libraries
+if (MSVC OR MSYS OR MINGW)
+    include_directories("${OPENPOSEDOTNET_ROOT_DIR}/openpose/include",
+                        "${OPENPOSEDOTNET_ROOT_DIR}/openpose/3rdparty/windows/opencv/include",
+                        "${OPENPOSEDOTNET_ROOT_DIR}/openpose/3rdparty/windows/caffe3rdparty/include")
+else()
+    find_package( OpenCV REQUIRED )
+    include_directories("../../openpose/include")
+endif()
 
 FILE(GLOB_RECURSE HEADERS ${PROJECT_SOURCE_DIR}/openpose/*.h)
 FILE(GLOB_RECURSE SOURCES ${PROJECT_SOURCE_DIR}/openpose/*.cpp)
@@ -37,13 +46,27 @@ configure_file(
     ${CMAKE_CURRENT_BINARY_DIR}/version.rc
     @ONLY)
 
-set(STATIC_LIBRARIES
-    ../../../openpose/3rdparty/windows/opencv/x64/vc14/lib/opencv_world310
-    optimized ../../../openpose/3rdparty/windows/caffe3rdparty/lib/gflags
-    optimized ../../../openpose/build/src/openpose/Release/openpose
-    debug ../../../openpose/3rdparty/windows/caffe3rdparty/lib/gflagsd
-    debug ../../../openpose/build/src/openpose/Debug/openposed
-)
+
+# include 3rdparty libraries
+if (MSVC OR MSYS OR MINGW)
+    set(STATIC_LIBRARIES
+        ${OPENPOSEDOTNET_ROOT_DIR}/openpose/3rdparty/windows/opencv/x64/vc14/lib/opencv_world310
+        optimized ${OPENPOSEDOTNET_ROOT_DIR}/openpose/3rdparty/windows/caffe3rdparty/lib/gflags
+        optimized ${OPENPOSEDOTNET_ROOT_DIR}/openpose/build/src/openpose/Release/openpose
+        debug ${OPENPOSEDOTNET_ROOT_DIR}/openpose/3rdparty/windows/caffe3rdparty/lib/gflagsd
+        debug ${OPENPOSEDOTNET_ROOT_DIR}/openpose/build/src/openpose/Debug/openposed
+    )
+else()
+    get_filename_component(OPENPOSEDOTNET_ROOT_DIR "../.." ABSOLUTE)
+    message("ROOT_DIR: ${ROOT_DIR}")
+    set(STATIC_LIBRARIES
+        opencv_imgproc
+        optimized gflags
+        optimized ${OPENPOSEDOTNET_ROOT_DIR}/openpose/build/src/openpose/libopenpose.so
+        debug gflagsd
+        debug ${OPENPOSEDOTNET_ROOT_DIR}/openpose/build/src/openpose/libopenposed.so
+    )
+endif()
 
 add_library(${PROJ_NAME} SHARED ${HEADERS}
                                 ${SOURCES}
