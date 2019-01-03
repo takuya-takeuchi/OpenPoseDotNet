@@ -15,7 +15,7 @@ DLLEXPORT void op_3rdparty_cv_bitwise_not(cv::Mat* src, cv::Mat* dst)
 DLLEXPORT cv::Mat* op_3rdparty_cv_imread(const char* path, const int flags)
 {
     std::string str(path);
-    auto& ret = cv::imread(str, flags);
+    const auto& ret = cv::imread(str, flags);
     return new cv::Mat(ret);
 }
 

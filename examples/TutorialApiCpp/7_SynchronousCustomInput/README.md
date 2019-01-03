@@ -23,3 +23,5 @@
 > CopyOpenPose.bat <Debug/Release>
 > dotnet run -c Release
 ````
+
+<img src="images/example_turorial_7.gif"/>
