@@ -34,6 +34,7 @@ if (MSVC OR MSYS OR MINGW)
                         "${OPENPOSEDOTNET_ROOT_DIR}/openpose/3rdparty/windows/opencv/include"
                         "${OPENPOSEDOTNET_ROOT_DIR}/openpose/3rdparty/windows/caffe3rdparty/include")
 else()
+    find_package( GFlags REQUIRED )
     find_package( OpenCV REQUIRED )
     include_directories("${OPENPOSEDOTNET_ROOT_DIR}/openpose/include")
 endif()
@@ -59,6 +60,8 @@ if (MSVC OR MSYS OR MINGW)
 elseif(APPLE)
     set(STATIC_LIBRARIES
         opencv_imgproc
+        opencv_imgcodecs
+        opencv_highgui
         optimized gflags
         optimized ${OPENPOSEDOTNET_ROOT_DIR}/openpose/build/src/openpose/libopenpose.dylib
         debug gflagsd
