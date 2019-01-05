@@ -36,6 +36,6 @@ rm 3rdparty/caffe/include/caffe/layers/clip_layer.hpp
 
 mkdir ${OUTPUT}
 cd ${OUTPUT}
-cmake ..
+cmake -D GPU_MODE=CPU_ONLY ..
 cmake --build . --config Release
 cd ${CURDIR}

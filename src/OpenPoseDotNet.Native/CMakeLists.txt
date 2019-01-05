@@ -30,10 +30,11 @@ get_filename_component(OPENPOSEDOTNET_ROOT_DIR "../.." ABSOLUTE)
 
 # include 3rdparty libraries
 if (MSVC OR MSYS OR MINGW)
-    include_directories("${OPENPOSEDOTNET_ROOT_DIR}/openpose/include",
-                        "${OPENPOSEDOTNET_ROOT_DIR}/openpose/3rdparty/windows/opencv/include",
+    include_directories("${OPENPOSEDOTNET_ROOT_DIR}/openpose/include"
+                        "${OPENPOSEDOTNET_ROOT_DIR}/openpose/3rdparty/windows/opencv/include"
                         "${OPENPOSEDOTNET_ROOT_DIR}/openpose/3rdparty/windows/caffe3rdparty/include")
 else()
+    find_package( GFlags REQUIRED )
     find_package( OpenCV REQUIRED )
     include_directories("${OPENPOSEDOTNET_ROOT_DIR}/openpose/include")
 endif()
@@ -56,7 +57,17 @@ if (MSVC OR MSYS OR MINGW)
         debug ${OPENPOSEDOTNET_ROOT_DIR}/openpose/3rdparty/windows/caffe3rdparty/lib/gflagsd.lib
         debug ${OPENPOSEDOTNET_ROOT_DIR}/openpose/build/src/openpose/Debug/openposed.lib
     )
-else()
+elseif(APPLE)
+    set(STATIC_LIBRARIES
+        opencv_imgproc
+        opencv_imgcodecs
+        opencv_highgui
+        optimized gflags
+        optimized ${OPENPOSEDOTNET_ROOT_DIR}/openpose/build/src/openpose/libopenpose.dylib
+        debug gflagsd
+        debug ${OPENPOSEDOTNET_ROOT_DIR}/openpose/build/src/openpose/libopenposed.dylib
+    )
+elseif(UNIX AND NOT APPLE)
     set(STATIC_LIBRARIES
         opencv_imgproc
         optimized gflags
@@ -64,6 +75,8 @@ else()
         debug gflagsd
         debug ${OPENPOSEDOTNET_ROOT_DIR}/openpose/build/src/openpose/libopenposed.so
     )
+else()
+    message(FATAL_ERROR "Failed to link library")
 endif()
 
 add_library(${PROJ_NAME} SHARED ${HEADERS}
@@ -74,6 +87,7 @@ target_link_libraries(${PROJ_NAME} ${STATIC_LIBRARIES})
 
 
 enable_language(CXX)
+set(CMAKE_CXX_FLAGS "-std=c++11 -stdlib=libc++")
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
