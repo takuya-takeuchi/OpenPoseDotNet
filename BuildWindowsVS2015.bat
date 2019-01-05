@@ -5,7 +5,7 @@
 @rem ***************************************
 
 if "%1"=="" ( 
-@echo Error: Speficy build configuration [Release/Debug]
+@echo Error: Specify build configuration [Release/Debug]
 @exit /B
 )
 
