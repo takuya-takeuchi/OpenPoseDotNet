@@ -24,7 +24,7 @@ namespace OpenPoseDotNet
             gui.ThrowIfDisposed();
 
             this._DataType = GenericHelpers.CheckDatumSupportTypes<T>();
-            this.NativePtr = OpenPose.Native.op_WGui_new(this._DataType, gui.NativePtr);
+            this.NativePtr = NativeMethods.op_WGui_new(this._DataType, gui.NativePtr);
         }
 
         internal WGui(IntPtr ptr, bool isEnabledDispose = true) :
@@ -49,7 +49,7 @@ namespace OpenPoseDotNet
             if (this.NativePtr == IntPtr.Zero)
                 return;
 
-            OpenPose.Native.op_WGui_delete(this._DataType, this.NativePtr);
+            NativeMethods.op_WGui_delete(this._DataType, this.NativePtr);
         }
 
         #endregion

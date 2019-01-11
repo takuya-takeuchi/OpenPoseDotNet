@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 
 // ReSharper disable once CheckNamespace
 namespace OpenPoseDotNet
@@ -24,12 +23,12 @@ namespace OpenPoseDotNet
             get
             {
                 this.ThrowIfDisposed();
-                return CustomDatumNative.op_CustomDatum_get_data(this.NativePtr);
+                return NativeMethods.op_CustomDatum_get_data(this.NativePtr);
             }
             set
             {
                 this.ThrowIfDisposed();
-                CustomDatumNative.op_CustomDatum_set_data(this.NativePtr, value);
+                NativeMethods.op_CustomDatum_set_data(this.NativePtr, value);
             }
         }
 
@@ -49,29 +48,12 @@ namespace OpenPoseDotNet
             if (this.NativePtr == IntPtr.Zero)
                 return;
 
-            CustomDatumNative.op_CustomDatum_delete(this.NativePtr);
+            NativeMethods.op_CustomDatum_delete(this.NativePtr);
         }
 
         #endregion
 
         #endregion
-
-        internal sealed class CustomDatumNative
-        {
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr op_CustomDatum_new();
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern void op_CustomDatum_delete(IntPtr datum);
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr op_CustomDatum_get_data(IntPtr datum);
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern void op_CustomDatum_set_data(IntPtr datum, IntPtr data);
-
-        }
 
     }
 

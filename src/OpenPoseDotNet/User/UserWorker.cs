@@ -48,7 +48,7 @@ namespace OpenPoseDotNet
             get
             {
                 this.ThrowIfDisposed();
-                return OpenPose.Native.op_UserWorker_isRunning(this._DataType, this.NativePtr);
+                return NativeMethods.op_UserWorker_isRunning(this._DataType, this.NativePtr);
             }
         }
 
@@ -64,7 +64,7 @@ namespace OpenPoseDotNet
         public void Stop()
         {
             this.ThrowIfDisposed();
-            OpenPose.Native.op_UserWorker_stop(this._DataType, this.NativePtr);
+            NativeMethods.op_UserWorker_stop(this._DataType, this.NativePtr);
         }
 
         protected virtual void Work(T[] datums)
@@ -84,7 +84,7 @@ namespace OpenPoseDotNet
             if (this.NativePtr == IntPtr.Zero)
                 return;
 
-            OpenPose.Native.op_UserWorker_delete(this._DataType, this.NativePtr);
+            NativeMethods.op_UserWorker_delete(this._DataType, this.NativePtr);
 
             this._Mediator?.Dispose();
         }
@@ -107,7 +107,7 @@ namespace OpenPoseDotNet
             }
 
             // ptr is shared_ptr<std::vector<DATUM>>
-            var content = OpenPose.Native.std_shared_ptr_TDatum_get(this._DataType, ptr);
+            var content = NativeMethods.std_shared_ptr_TDatum_get(this._DataType, ptr);
             if (content == IntPtr.Zero)
             {
                 this.Work(null);

@@ -15,10 +15,10 @@ namespace OpenPoseDotNet
             // Need not to delete str
             // Because string.c_str returns inner memory of string instance.
             // This inner memory will be deleted when string instance is deleted.
-            var str = OpenPose.Native.std_string_c_str(ptr);
+            var str = NativeMethods.std_string_c_str(ptr);
             var ret =  Marshal.PtrToStringAnsi(str);
             if (dispose && ptr != IntPtr.Zero)
-                OpenPose.Native.std_string_delete(ptr);
+                NativeMethods.std_string_delete(ptr);
             return ret;
         }
 

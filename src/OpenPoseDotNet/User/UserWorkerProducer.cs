@@ -48,7 +48,7 @@ namespace OpenPoseDotNet
             get
             {
                 this.ThrowIfDisposed();
-                return OpenPose.Native.op_UserWorkerProducer_isRunning(this._DataType, this.NativePtr);
+                return NativeMethods.op_UserWorkerProducer_isRunning(this._DataType, this.NativePtr);
             }
         }
 
@@ -64,7 +64,7 @@ namespace OpenPoseDotNet
         public void Stop()
         {
             this.ThrowIfDisposed();
-            OpenPose.Native.op_UserWorkerProducer_stop(this._DataType, this.NativePtr);
+            NativeMethods.op_UserWorkerProducer_stop(this._DataType, this.NativePtr);
         }
 
         protected virtual StdSharedPtr<StdVector<T>> WorkProducer()
@@ -85,7 +85,7 @@ namespace OpenPoseDotNet
             if (this.NativePtr == IntPtr.Zero)
                 return;
 
-            OpenPose.Native.op_UserWorkerProducer_delete(this._DataType, this.NativePtr);
+            NativeMethods.op_UserWorkerProducer_delete(this._DataType, this.NativePtr);
 
             this._Mediator?.Dispose();
         }

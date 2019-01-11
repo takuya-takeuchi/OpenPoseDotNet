@@ -26,12 +26,12 @@ namespace OpenPoseDotNet
             producerSharedPtr.ThrowIfDisposed();
 
             this._DataType = GenericHelpers.CheckDatumSupportTypes<T>();
-            this.NativePtr = OpenPose.Native.op_DatumProducer_new(this._DataType,
-                                                                  producerSharedPtr.NativePtr,
-                                                                  frameFirst,
-                                                                  frameStep,
-                                                                  frameLast,
-                                                                  IntPtr.Zero);
+            this.NativePtr = NativeMethods.op_DatumProducer_new(this._DataType,
+                                                                producerSharedPtr.NativePtr,
+                                                                frameFirst,
+                                                                frameStep,
+                                                                frameLast,
+                                                                IntPtr.Zero);
         }
         
         internal DatumProducer(IntPtr ptr, bool isEnabledDispose = true) :
@@ -57,7 +57,7 @@ namespace OpenPoseDotNet
             if (this.NativePtr == IntPtr.Zero)
                 return;
 
-            OpenPose.Native.op_DatumProducer_delete(this._DataType, this.NativePtr);
+            NativeMethods.op_DatumProducer_delete(this._DataType, this.NativePtr);
         }
 
         #endregion

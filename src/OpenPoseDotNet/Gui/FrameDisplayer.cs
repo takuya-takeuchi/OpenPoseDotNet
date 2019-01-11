@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using System.Text;
 
 // ReSharper disable once CheckNamespace
@@ -15,12 +14,9 @@ namespace OpenPoseDotNet
         {
             var windowNameBytes = Encoding.UTF8.GetBytes(windowName);
             using (var size = initialWindowedSize.ToNative())
-                this.NativePtr = Native.op_FrameDisplayer_new(windowNameBytes, size.NativePtr, fullScreen);
+                this.NativePtr = NativeMethods.op_FrameDisplayer_new(windowNameBytes, size.NativePtr, fullScreen);
         }
 
-        #endregion
-
-        #region Properties
         #endregion
 
         #region Methods
@@ -33,7 +29,7 @@ namespace OpenPoseDotNet
             this.ThrowIfDisposed();
             frame.ThrowIfDisposed();
 
-            Native.op_FrameDisplayer_displayFrame(this.NativePtr, frame.NativePtr, waitKeyValue);
+            NativeMethods.op_FrameDisplayer_displayFrame(this.NativePtr, frame.NativePtr, waitKeyValue);
         }
 
         #region Overrides
@@ -48,28 +44,12 @@ namespace OpenPoseDotNet
             if (this.NativePtr == IntPtr.Zero)
                 return;
 
-            Native.op_FrameDisplayer_delete(this.NativePtr);
+            NativeMethods.op_FrameDisplayer_delete(this.NativePtr);
         }
 
         #endregion
 
         #endregion
-
-        internal sealed class Native
-        {
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr op_FrameDisplayer_new(byte[] windowedName,
-                                                              IntPtr initialWindowedSize,
-                                                              bool fullScreen);
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern void op_FrameDisplayer_delete(IntPtr caffe);
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern void op_FrameDisplayer_displayFrame(IntPtr displayer, IntPtr frame, int waitKeyValue);
-
-        }
 
     }
 

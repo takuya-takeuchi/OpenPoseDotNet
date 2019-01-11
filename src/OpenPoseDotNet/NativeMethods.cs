@@ -1,4 +1,6 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace OpenPoseDotNet
 {
@@ -6,19 +8,55 @@ namespace OpenPoseDotNet
     internal static partial class NativeMethods
     {
 
-#if LINUX
-        public const string NativeLibrary = "libOpenPoseDotNet.Native.so";
+        #region P/Invoke
 
-        public const CallingConvention CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl;
-#elif MAC
-        public const string NativeLibrary = "libOpenPoseDotNet.Native.dylib";
+        [DllImport("kernel32", CallingConvention = CallingConvention.Winapi, SetLastError = true, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+        private static extern IntPtr LoadLibrary(string dllPath);
 
-        public const CallingConvention CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl;
-#else
-        public const string NativeLibrary = "OpenPoseDotNet.Native.dll";
+        #endregion
 
-        public const CallingConvention CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl;
-#endif
+        #region Fields
+
+        internal const string NativeLibrary = "OpenPoseDotNetNative";
+
+        internal const CallingConvention CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl;
+
+        private static readonly IDictionary<string, IntPtr> LoadedLibraries = new Dictionary<string, IntPtr>();
+
+        #endregion
+
+        #region Constructors
+
+        static NativeMethods()
+        {
+            if (!IsWindows())
+                return;
+
+            var fileName = $"{NativeLibrary}.dll";
+            if (LoadedLibraries.ContainsKey(fileName))
+                return;
+
+            var ret = LoadLibrary(fileName);
+            if (ret != IntPtr.Zero)
+            {
+                LoadedLibraries.Add(fileName, ret);
+            }
+        }
+
+        #endregion
+
+        #region Properties
+
+        public static bool IsWindows()
+        {
+            return Environment.OSVersion.Platform == PlatformID.Win32NT ||
+                   Environment.OSVersion.Platform == PlatformID.Win32S ||
+                   Environment.OSVersion.Platform == PlatformID.Win32Windows ||
+                   Environment.OSVersion.Platform == PlatformID.WinCE;
+        }
+
+        #endregion
 
     }
+
 }

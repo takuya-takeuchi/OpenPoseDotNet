@@ -150,7 +150,7 @@ namespace OpenPoseDotNet
 
                 public NativePoint(int x, int y)
                 {
-                    this.NativePtr = OpenPose.Native.op_core_point_int_new(x, y);
+                    this.NativePtr = NativeMethods.op_core_point_int_new(x, y);
                 }
 
                 public NativePoint(IntPtr ptr)
@@ -174,7 +174,7 @@ namespace OpenPoseDotNet
                     if (this.NativePtr == IntPtr.Zero)
                         return;
 
-                    OpenPose.Native.op_core_point_int_delete(this.NativePtr);
+                    NativeMethods.op_core_point_int_delete(this.NativePtr);
                 }
 
                 #endregion
@@ -209,7 +209,7 @@ namespace OpenPoseDotNet
 
                 public NativePoint(float x, float y)
                 {
-                    this.NativePtr = OpenPose.Native.op_core_point_float_new(x, y);
+                    this.NativePtr = NativeMethods.op_core_point_float_new(x, y);
                 }
 
                 public NativePoint(IntPtr ptr)
@@ -233,7 +233,7 @@ namespace OpenPoseDotNet
                     if (this.NativePtr == IntPtr.Zero)
                         return;
 
-                    OpenPose.Native.op_core_point_float_delete(this.NativePtr);
+                    NativeMethods.op_core_point_float_delete(this.NativePtr);
                 }
 
                 #endregion
@@ -268,7 +268,7 @@ namespace OpenPoseDotNet
 
                 public NativePoint(double x, double y)
                 {
-                    this.NativePtr = OpenPose.Native.op_core_point_double_new(x, y);
+                    this.NativePtr = NativeMethods.op_core_point_double_new(x, y);
                 }
 
                 public NativePoint(IntPtr ptr)
@@ -292,7 +292,7 @@ namespace OpenPoseDotNet
                     if (this.NativePtr == IntPtr.Zero)
                         return;
 
-                    OpenPose.Native.op_core_point_double_delete(this.NativePtr);
+                    NativeMethods.op_core_point_double_delete(this.NativePtr);
                 }
 
                 #endregion

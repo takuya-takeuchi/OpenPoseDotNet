@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 
 // ReSharper disable once CheckNamespace
 namespace OpenPoseDotNet
@@ -15,15 +14,15 @@ namespace OpenPoseDotNet
                    IntPtr isRunningSharedPtr)
         {
             using (var nativeOutputSize = outputSize.ToNative())
-                this.NativePtr = Native.op_Gui_new(nativeOutputSize.NativePtr,
-                                                   fullScreen,
-                                                   isRunningSharedPtr,
-                                                   IntPtr.Zero,
-                                                   IntPtr.Zero,
-                                                   IntPtr.Zero,
-                                                   IntPtr.Zero,
-                                                   IntPtr.Zero,
-                                                   DisplayMode.Display2D);
+                this.NativePtr = NativeMethods.op_Gui_new(nativeOutputSize.NativePtr,
+                                                          fullScreen,
+                                                          isRunningSharedPtr,
+                                                          IntPtr.Zero,
+                                                          IntPtr.Zero,
+                                                          IntPtr.Zero,
+                                                          IntPtr.Zero,
+                                                          IntPtr.Zero,
+                                                          DisplayMode.Display2D);
         }
 
         internal Gui(IntPtr ptr, bool isEnabledDispose = true) :
@@ -48,31 +47,12 @@ namespace OpenPoseDotNet
             if (this.NativePtr == IntPtr.Zero)
                 return;
 
-            Native.op_Gui_delete(this.NativePtr);
+            NativeMethods.op_Gui_delete(this.NativePtr);
         }
 
         #endregion
 
         #endregion
-
-        internal sealed class Native
-        {
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr op_Gui_new(IntPtr outputSize,
-                                                   bool fullScreen,
-                                                   IntPtr isRunningSharedPtr,
-                                                   IntPtr videoSeekSharedPtr,
-                                                   IntPtr poseExtractorNets,
-                                                   IntPtr faceExtractorNets,
-                                                   IntPtr handExtractorNets,
-                                                   IntPtr renderers,
-                                                   DisplayMode displayMode);
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern void op_Gui_delete(IntPtr gui);
-
-        }
 
     }
 

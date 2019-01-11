@@ -10,7 +10,7 @@ namespace OpenPoseDotNet
 
         #region Fields
 
-        private static readonly Dictionary<Type, OpenPose.Native.ArrayElementType> SupportTypes = new Dictionary<Type, OpenPose.Native.ArrayElementType>();
+        private static readonly Dictionary<Type, NativeMethods.ArrayElementType> SupportTypes = new Dictionary<Type, NativeMethods.ArrayElementType>();
 
         private readonly ArrayImp<T> _Imp;
 
@@ -22,7 +22,7 @@ namespace OpenPoseDotNet
         {
             var types = new[]
             {
-                new { Type = typeof(float), ElementType = OpenPose.Native.ArrayElementType.Float }
+                new { Type = typeof(float), ElementType = NativeMethods.ArrayElementType.Float }
             };
 
             foreach (var type in types)
@@ -45,7 +45,7 @@ namespace OpenPoseDotNet
 
         #region Properties
 
-        internal OpenPose.Native.ArrayElementType ArrayElementType
+        internal NativeMethods.ArrayElementType ArrayElementType
         {
             get;
         }
@@ -160,7 +160,7 @@ namespace OpenPoseDotNet
             finally
             {
                 if (stdstr != IntPtr.Zero)
-                    OpenPose.Native.std_string_delete(stdstr);
+                    NativeMethods.std_string_delete(stdstr);
             }
 
             return str;
@@ -176,9 +176,9 @@ namespace OpenPoseDotNet
             {
                 switch (type)
                 {
-                    case OpenPose.Native.ArrayElementType.Float:
+                    case NativeMethods.ArrayElementType.Float:
                         return new ArrayFloatImp() as ArrayImp<T>;
-                    case OpenPose.Native.ArrayElementType.Double:
+                    case NativeMethods.ArrayElementType.Double:
                         return new ArrayDoubleImp() as ArrayImp<T>;
                 }
             }
@@ -226,49 +226,49 @@ namespace OpenPoseDotNet
 
             public override void Delete(IntPtr ptr)
             {
-                OpenPose.Native.op_core_Array_float_delete(ptr);
+                NativeMethods.op_core_Array_float_delete(ptr);
             }
 
             public override bool Empty(IntPtr ptr)
             {
-                return OpenPose.Native.op_core_Array_float_empty(ptr);
+                return NativeMethods.op_core_Array_float_empty(ptr);
             }
 
             public override int GetSize(IntPtr ptr, int index)
             {
-                return OpenPose.Native.op_core_Array_float_getSize(ptr, index);
+                return NativeMethods.op_core_Array_float_getSize(ptr, index);
             }
 
             public override IntPtr GetSize(IntPtr ptr)
             {
-                return OpenPose.Native.op_core_Array_float_getSize2(ptr);
+                return NativeMethods.op_core_Array_float_getSize2(ptr);
             }
 
             public override uint GetNumberDimensions(IntPtr ptr)
             {
-                return OpenPose.Native.op_core_Array_float_getNumberDimensions(ptr);
+                return NativeMethods.op_core_Array_float_getNumberDimensions(ptr);
             }
 
             public override uint GetVolume(IntPtr ptr)
             {
-                return OpenPose.Native.op_core_Array_float_getVolume(ptr);
+                return NativeMethods.op_core_Array_float_getVolume(ptr);
             }
 
             // vector<float>
             public override IntPtr Gets(IntPtr ptr, int index)
             {
-                return OpenPose.Native.op_core_Array_float_gets(ptr, index);
+                return NativeMethods.op_core_Array_float_gets(ptr, index);
             }
 
             // vector<float>
             public override float Operator(IntPtr ptr, IntPtr indexes)
             {
-                return OpenPose.Native.op_core_Array_float_operator_indexes(ptr, indexes);
+                return NativeMethods.op_core_Array_float_operator_indexes(ptr, indexes);
             }
 
             public override IntPtr ToString(IntPtr ptr)
             {
-                return OpenPose.Native.op_core_Array_float_toString(ptr);
+                return NativeMethods.op_core_Array_float_toString(ptr);
             }
 
             #endregion
@@ -282,47 +282,47 @@ namespace OpenPoseDotNet
 
             public override void Delete(IntPtr ptr)
             {
-                OpenPose.Native.op_core_Array_double_delete(ptr);
+                NativeMethods.op_core_Array_double_delete(ptr);
             }
 
             public override bool Empty(IntPtr ptr)
             {
-                return OpenPose.Native.op_core_Array_double_empty(ptr);
+                return NativeMethods.op_core_Array_double_empty(ptr);
             }
 
             public override int GetSize(IntPtr ptr, int index)
             {
-                return OpenPose.Native.op_core_Array_double_getSize(ptr, index);
+                return NativeMethods.op_core_Array_double_getSize(ptr, index);
             }
 
             public override IntPtr GetSize(IntPtr ptr)
             {
-                return OpenPose.Native.op_core_Array_double_getSize2(ptr);
+                return NativeMethods.op_core_Array_double_getSize2(ptr);
             }
 
             public override uint GetNumberDimensions(IntPtr ptr)
             {
-                return OpenPose.Native.op_core_Array_double_getNumberDimensions(ptr);
+                return NativeMethods.op_core_Array_double_getNumberDimensions(ptr);
             }
 
             public override uint GetVolume(IntPtr ptr)
             {
-                return OpenPose.Native.op_core_Array_double_getVolume(ptr);
+                return NativeMethods.op_core_Array_double_getVolume(ptr);
             }
 
             public override IntPtr Gets(IntPtr ptr, int index)
             {
-                return OpenPose.Native.op_core_Array_double_gets(ptr, index);
+                return NativeMethods.op_core_Array_double_gets(ptr, index);
             }
 
             public override double Operator(IntPtr ptr, IntPtr indexes)
             {
-                return OpenPose.Native.op_core_Array_double_operator_indexes(ptr, indexes);
+                return NativeMethods.op_core_Array_double_operator_indexes(ptr, indexes);
             }
 
             public override IntPtr ToString(IntPtr ptr)
             {
-                return OpenPose.Native.op_core_Array_double_toString(ptr);
+                return NativeMethods.op_core_Array_double_toString(ptr);
             }
 
             #endregion

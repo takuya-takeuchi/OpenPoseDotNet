@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 
 // ReSharper disable once CheckNamespace
 namespace OpenPoseDotNet
@@ -24,7 +23,7 @@ namespace OpenPoseDotNet
             get
             {
                 this.ThrowIfDisposed();
-                return WebcamReaderNative.op_WebcamReader_isOpened(this.NativePtr);
+                return NativeMethods.op_WebcamReader_isOpened(this.NativePtr);
             }
         }
 
@@ -35,7 +34,7 @@ namespace OpenPoseDotNet
         public override double Get(int capProperty)
         {
             this.ThrowIfDisposed();
-            return WebcamReaderNative.op_WebcamReader_get(this.NativePtr, capProperty);
+            return NativeMethods.op_WebcamReader_get(this.NativePtr, capProperty);
         }
 
         #region Overrides
@@ -57,18 +56,6 @@ namespace OpenPoseDotNet
         #endregion
 
         #endregion
-
-        internal sealed class WebcamReaderNative
-        {
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern double op_WebcamReader_get(IntPtr reader, int capProperty);
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            [return: MarshalAs(UnmanagedType.U1)]
-            public static extern bool op_WebcamReader_isOpened(IntPtr reader);
-
-        }
 
     }
 

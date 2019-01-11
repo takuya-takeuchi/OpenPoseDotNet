@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 
 // ReSharper disable once CheckNamespace
 namespace OpenPoseDotNet
@@ -25,7 +24,7 @@ namespace OpenPoseDotNet
             get
             {
                 this.ThrowIfDisposed();
-                return Native.op_Producer_isOpened(this.NativePtr);
+                return NativeMethods.op_Producer_isOpened(this.NativePtr);
             }
         }
 
@@ -36,19 +35,19 @@ namespace OpenPoseDotNet
         public virtual double Get(int capProperty)
         {
             this.ThrowIfDisposed();
-            return Native.op_Producer_get(this.NativePtr, capProperty);
+            return NativeMethods.op_Producer_get(this.NativePtr, capProperty);
         }
 
         public virtual void Release()
         {
             this.ThrowIfDisposed();
-            Native.op_Producer_release(this.NativePtr);
+            NativeMethods.op_Producer_release(this.NativePtr);
         }
 
         public void SetProducerFpsMode(ProducerFpsMode fpsMode)
         {
             this.ThrowIfDisposed();
-            Native.op_Producer_setProducerFpsMode(this.NativePtr, fpsMode);
+            NativeMethods.op_Producer_setProducerFpsMode(this.NativePtr, fpsMode);
         }
 
         #region Overrides
@@ -70,24 +69,6 @@ namespace OpenPoseDotNet
         #endregion
 
         #endregion
-
-        internal sealed class Native
-        {
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern double op_Producer_get(IntPtr producer, int capProperty);
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern void op_Producer_setProducerFpsMode(IntPtr producer, ProducerFpsMode fpsMode);
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            [return: MarshalAs(UnmanagedType.U1)]
-            public static extern bool op_Producer_isOpened(IntPtr producer);
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern void op_Producer_release(IntPtr producer);
-
-        }
 
     }
 
