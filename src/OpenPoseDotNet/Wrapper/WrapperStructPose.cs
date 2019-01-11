@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using System.Text;
 
 // ReSharper disable once CheckNamespace
@@ -49,112 +48,72 @@ namespace OpenPoseDotNet
             using (var nativeNetInputSize = netInputSize.ToNative())
             using (var nativeOutputSize = outputSize.ToNative())
             using (var vector = new StdVector<HeatMapType>(heatMapTypes ?? new HeatMapType[0]))
-                this.NativePtr = Native.op_wrapperStructPose_new(enable,
-                                                                 nativeNetInputSize.NativePtr,
-                                                                 nativeOutputSize.NativePtr,
-                                                                 keyPointScale,
-                                                                 gpuNumber,
-                                                                 gpuNumberStart,
-                                                                 scalesNumber,
-                                                                 scaleGap,
-                                                                 renderMode,
-                                                                 poseModel,
-                                                                 blendOriginalFrame,
-                                                                 alphaKeyPoint,
-                                                                 alphaHeatMap,
-                                                                 defaultPartToRender,
-                                                                 modelFolderBytes,
-                                                                 vector.NativePtr,
-                                                                 heatMapScale,
-                                                                 addPartCandidates,
-                                                                 renderThreshold,
-                                                                 numberPeopleMax,
-                                                                 maximizePositives,
-                                                                 fpsMax,
-                                                                 enableGoogleLogging);
+                this.NativePtr = NativeMethods.op_wrapperStructPose_new(enable,
+                                                                        nativeNetInputSize.NativePtr,
+                                                                        nativeOutputSize.NativePtr,
+                                                                        keyPointScale,
+                                                                        gpuNumber,
+                                                                        gpuNumberStart,
+                                                                        scalesNumber,
+                                                                        scaleGap,
+                                                                        renderMode,
+                                                                        poseModel,
+                                                                        blendOriginalFrame,
+                                                                        alphaKeyPoint,
+                                                                        alphaHeatMap,
+                                                                        defaultPartToRender,
+                                                                        modelFolderBytes,
+                                                                        vector.NativePtr,
+                                                                        heatMapScale,
+                                                                        addPartCandidates,
+                                                                        renderThreshold,
+                                                                        numberPeopleMax,
+                                                                        maximizePositives,
+                                                                        fpsMax,
+                                                                        enableGoogleLogging);
         }
 
-    #endregion
+        #endregion
 
-    #region Properties
+        #region Properties
 
-    public bool Enable
-    {
-        get
+        public bool Enable
         {
-            this.ThrowIfDisposed();
-            return Native.op_wrapperStructPose_get_enable(this.NativePtr);
+            get
+            {
+                this.ThrowIfDisposed();
+                return NativeMethods.op_wrapperStructPose_get_enable(this.NativePtr);
+            }
+            set
+            {
+                this.ThrowIfDisposed();
+                NativeMethods.op_wrapperStructPose_set_enable(this.NativePtr, value);
+            }
         }
-        set
+
+        #endregion
+
+        #region Methods
+
+        #region Overrides
+
+        /// <summary>
+        /// Releases all unmanaged resources.
+        /// </summary>
+        protected override void DisposeUnmanaged()
         {
-            this.ThrowIfDisposed();
-            Native.op_wrapperStructPose_set_enable(this.NativePtr, value);
+            base.DisposeUnmanaged();
+
+            if (this.NativePtr == IntPtr.Zero)
+                return;
+
+            NativeMethods.op_wrapperStructPose_delete(this.NativePtr);
         }
-    }
 
-    #endregion
+        #endregion
 
-    #region Methods
-
-    #region Overrides
-
-    /// <summary>
-    /// Releases all unmanaged resources.
-    /// </summary>
-    protected override void DisposeUnmanaged()
-    {
-        base.DisposeUnmanaged();
-
-        if (this.NativePtr == IntPtr.Zero)
-            return;
-
-        Native.op_wrapperStructPose_delete(this.NativePtr);
-    }
-
-    #endregion
-
-    #endregion
-
-    internal sealed class Native
-    {
-
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-        public static extern IntPtr op_wrapperStructPose_new(bool enable,
-                                                             IntPtr netInputSize,
-                                                             IntPtr outputSize,
-                                                             ScaleMode keypointScale,
-                                                             int gpuNumber,
-                                                             int gpuNumberStart,
-                                                             int scalesNumber,
-                                                             float scaleGap,
-                                                             RenderMode renderMode,
-                                                             PoseModel poseModel,
-                                                             bool blendOriginalFrame,
-                                                             float alphaKeypoint,
-                                                             float alphaHeatMap,
-                                                             int defaultPartToRender,
-                                                             byte[] modelFolder,
-                                                             IntPtr heatMapTypes,
-                                                             ScaleMode heatMapScale,
-                                                             bool addPartCandidates,
-                                                             float renderThreshold,
-                                                             int numberPeopleMax,
-                                                             bool maximizePositives,
-                                                             double fpsMax,
-                                                             bool enableGoogleLogging);
-
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-        public static extern void op_wrapperStructPose_delete(IntPtr face);
-
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-        [return: MarshalAs(UnmanagedType.U1)]
-        public static extern bool op_wrapperStructPose_get_enable(IntPtr face);
-
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-        public static extern void op_wrapperStructPose_set_enable(IntPtr face, bool enable);
+        #endregion
 
     }
-
-}
 
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 
 // ReSharper disable once CheckNamespace
 namespace OpenPoseDotNet
@@ -14,9 +13,9 @@ namespace OpenPoseDotNet
                                 bool guiVerbose = false,
                                 bool fullScreen = false)
         {
-            this.NativePtr = Native.op_wrapperStructGui_new(displayMode,
-                                                            guiVerbose,
-                                                            fullScreen);
+            this.NativePtr = NativeMethods.op_wrapperStructGui_new(displayMode,
+                                                                   guiVerbose,
+                                                                   fullScreen);
         }
 
         #endregion
@@ -35,25 +34,12 @@ namespace OpenPoseDotNet
             if (this.NativePtr == IntPtr.Zero)
                 return;
 
-            Native.op_wrapperStructGui_delete(this.NativePtr);
+            NativeMethods.op_wrapperStructGui_delete(this.NativePtr);
         }
 
         #endregion
 
         #endregion
-
-        internal sealed class Native
-        {
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr op_wrapperStructGui_new(DisplayMode displayMode,
-                                                                bool guiVerbose,
-                                                                bool fullScreen);
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern void op_wrapperStructGui_delete(IntPtr face);
-
-        }
 
     }
 

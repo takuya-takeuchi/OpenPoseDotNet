@@ -1,7 +1,4 @@
-﻿using System;
-using System.Runtime.InteropServices;
-
-// ReSharper disable once CheckNamespace
+﻿// ReSharper disable once CheckNamespace
 namespace OpenPoseDotNet
 {
 
@@ -14,41 +11,24 @@ namespace OpenPoseDotNet
         {
             get
             {
-                var ret = Native.op_ConfigureLog_getLogModes();
+                var ret = NativeMethods.op_ConfigureLog_getLogModes();
                 using (var vector = new StdVector<LogMode>(ret))
                     return vector.ToArray();
             }
             set
             {
                 using (var vector = new StdVector<LogMode>(value ?? new LogMode[0]))
-                    Native.op_ConfigureLog_setLogModes(vector.NativePtr);
+                    NativeMethods.op_ConfigureLog_setLogModes(vector.NativePtr);
             }
         }
 
         public static Priority PriorityThreshold
         {
-            get => Native.op_ConfigureLog_getPriorityThreshold();
-            set => Native.op_ConfigureLog_setPriorityThreshold(value);
+            get => NativeMethods.op_ConfigureLog_getPriorityThreshold();
+            set => NativeMethods.op_ConfigureLog_setPriorityThreshold(value);
         }
 
         #endregion
-
-        internal sealed class Native
-        {
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern Priority op_ConfigureLog_getPriorityThreshold();
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr op_ConfigureLog_getLogModes();
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern void op_ConfigureLog_setPriorityThreshold(Priority priorityThreshold);
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern void op_ConfigureLog_setLogModes(IntPtr loggingModes);
-
-        }
 
     }
 

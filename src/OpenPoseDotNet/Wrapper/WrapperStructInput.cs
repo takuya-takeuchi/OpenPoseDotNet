@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using System.Text;
 
 // ReSharper disable once CheckNamespace
@@ -38,19 +37,19 @@ namespace OpenPoseDotNet
             var cameraParameterPathBytes = Encoding.UTF8.GetBytes(cameraParameterPath);
 
             using(var native = cameraResolution.ToNative())
-                this.NativePtr = Native.op_wrapperStructInput_new(producerType,
-                                                                  producerStringBytes,
-                                                                  frameFirst,
-                                                                  frameStep,
-                                                                  frameLast,
-                                                                  realTimeProcessing,
-                                                                  frameFlip,
-                                                                  frameRotate,
-                                                                  framesRepeat,
-                                                                  native.NativePtr,
-                                                                  cameraParameterPathBytes,
-                                                                  undistortImage,
-                                                                  numberViews);
+                this.NativePtr = NativeMethods.op_wrapperStructInput_new(producerType,
+                                                                         producerStringBytes,
+                                                                         frameFirst,
+                                                                         frameStep,
+                                                                         frameLast,
+                                                                         realTimeProcessing,
+                                                                         frameFlip,
+                                                                         frameRotate,
+                                                                         framesRepeat,
+                                                                         native.NativePtr,
+                                                                         cameraParameterPathBytes,
+                                                                         undistortImage,
+                                                                         numberViews);
         }
 
         #endregion
@@ -69,35 +68,12 @@ namespace OpenPoseDotNet
             if (this.NativePtr == IntPtr.Zero)
                 return;
 
-            Native.op_wrapperStructInput_delete(this.NativePtr);
+            NativeMethods.op_wrapperStructInput_delete(this.NativePtr);
         }
 
         #endregion
 
         #endregion
-
-        internal sealed class Native
-        {
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr op_wrapperStructInput_new(ProducerType producerType,
-                                                                  byte[] producerString,
-                                                                  ulong frameFirst,
-                                                                  ulong frameStep,
-                                                                  ulong frameLast,
-                                                                  bool realTimeProcessing,
-                                                                  bool frameFlip,
-                                                                  int frameRotate,
-                                                                  bool framesRepeat,
-                                                                  IntPtr cameraResolution,
-                                                                  byte[] cameraParameterPath,
-                                                                  bool undistortImage,
-                                                                  int numberViews);
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern void op_wrapperStructInput_delete(IntPtr face);
-
-        }
 
     }
 

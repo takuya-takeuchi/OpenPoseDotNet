@@ -24,7 +24,7 @@ namespace OpenPoseDotNet
             datumProducer.ThrowIfDisposed();
 
             this._DataType = GenericHelpers.CheckDatumSupportTypes<T>();
-            this.NativePtr = OpenPose.Native.op_WDatumProducer_new(this._DataType,
+            this.NativePtr = NativeMethods.op_WDatumProducer_new(this._DataType,
                                                                    datumProducer.NativePtr);
         }
         
@@ -51,7 +51,7 @@ namespace OpenPoseDotNet
             if (this.NativePtr == IntPtr.Zero)
                 return;
 
-            OpenPose.Native.op_WDatumProducer_delete(this._DataType, this.NativePtr);
+            NativeMethods.op_WDatumProducer_delete(this._DataType, this.NativePtr);
         }
 
         #endregion

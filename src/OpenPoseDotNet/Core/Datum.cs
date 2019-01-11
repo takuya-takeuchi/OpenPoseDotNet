@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 
 // ReSharper disable once CheckNamespace
 namespace OpenPoseDotNet
@@ -25,7 +24,7 @@ namespace OpenPoseDotNet
             get
             {
                 this.ThrowIfDisposed();
-                var ret = Native.op_core_datum_get_cvInputData(this.NativePtr);
+                var ret = NativeMethods.op_core_datum_get_cvInputData(this.NativePtr);
 
                 // Datum.cvInputData is not pointer. Therefore, this object must not be disposed.
                 return new Mat(ret, false);
@@ -34,7 +33,7 @@ namespace OpenPoseDotNet
             {
                 this.ThrowIfDisposed();
                 value?.ThrowIfDisposed();
-                Native.op_core_datum_set_cvInputData(this.NativePtr, value?.NativePtr ?? IntPtr.Zero);
+                NativeMethods.op_core_datum_set_cvInputData(this.NativePtr, value?.NativePtr ?? IntPtr.Zero);
             }
         }
 
@@ -43,7 +42,7 @@ namespace OpenPoseDotNet
             get
             {
                 this.ThrowIfDisposed();
-                var ret = Native.op_core_datum_get_cvOutputData(this.NativePtr);
+                var ret = NativeMethods.op_core_datum_get_cvOutputData(this.NativePtr);
 
                 // Datum.cvOutputData is not pointer. Therefore, this object must not be disposed.
                 return new Mat(ret, false);
@@ -52,7 +51,7 @@ namespace OpenPoseDotNet
             {
                 this.ThrowIfDisposed();
                 value?.ThrowIfDisposed();
-                Native.op_core_datum_set_cvOutputData(this.NativePtr, value?.NativePtr ?? IntPtr.Zero);
+                NativeMethods.op_core_datum_set_cvOutputData(this.NativePtr, value?.NativePtr ?? IntPtr.Zero);
             }
         }
 
@@ -61,7 +60,7 @@ namespace OpenPoseDotNet
             get
             {
                 this.ThrowIfDisposed();
-                return Native.op_core_datum_get_frameNumber(this.NativePtr);
+                return NativeMethods.op_core_datum_get_frameNumber(this.NativePtr);
             }
         }
 
@@ -70,7 +69,7 @@ namespace OpenPoseDotNet
             get
             {
                 this.ThrowIfDisposed();
-                return Native.op_core_datum_get_id(this.NativePtr);
+                return NativeMethods.op_core_datum_get_id(this.NativePtr);
             }
         }
 
@@ -79,7 +78,7 @@ namespace OpenPoseDotNet
             get
             {
                 this.ThrowIfDisposed();
-                var ret = Native.op_core_datum_get_poseHeatMaps(this.NativePtr);
+                var ret = NativeMethods.op_core_datum_get_poseHeatMaps(this.NativePtr);
 
                 // Datum.poseKeypoints is not pointer. Therefore, this object must not be disposed.
                 return new Array<float>(ret, false);
@@ -91,7 +90,7 @@ namespace OpenPoseDotNet
             get
             {
                 this.ThrowIfDisposed();
-                var ret = Native.op_core_datum_get_poseKeypoints(this.NativePtr);
+                var ret = NativeMethods.op_core_datum_get_poseKeypoints(this.NativePtr);
 
                 // Datum.poseKeypoints is not pointer. Therefore, this object must not be disposed.
                 return new Array<float>(ret, false);
@@ -103,7 +102,7 @@ namespace OpenPoseDotNet
             get
             {
                 this.ThrowIfDisposed();
-                var ret = Native.op_core_datum_get_faceKeypoints(this.NativePtr);
+                var ret = NativeMethods.op_core_datum_get_faceKeypoints(this.NativePtr);
 
                 // Datum.poseKeypoints is not pointer. Therefore, this object must not be disposed.
                 return new Array<float>(ret, false);
@@ -115,7 +114,7 @@ namespace OpenPoseDotNet
             get
             {
                 this.ThrowIfDisposed();
-                var ret = Native.op_core_datum_get_faceHeatMaps(this.NativePtr);
+                var ret = NativeMethods.op_core_datum_get_faceHeatMaps(this.NativePtr);
 
                 // Datum.poseKeypoints is not pointer. Therefore, this object must not be disposed.
                 return new Array<float>(ret, false);
@@ -127,7 +126,7 @@ namespace OpenPoseDotNet
             get
             {
                 this.ThrowIfDisposed();
-                var ret = Native.op_core_datum_get_handKeypoints(this.NativePtr);
+                var ret = NativeMethods.op_core_datum_get_handKeypoints(this.NativePtr);
 
                 // Datum.poseKeypoints is not pointer. Therefore, this object must not be disposed.
                 using (var array = new StdArray<Array<float>>(ret, 2, false))
@@ -140,7 +139,7 @@ namespace OpenPoseDotNet
             get
             {
                 this.ThrowIfDisposed();
-                var ret = Native.op_core_datum_get_handHeatMaps(this.NativePtr);
+                var ret = NativeMethods.op_core_datum_get_handHeatMaps(this.NativePtr);
 
                 // Datum.poseKeypoints is not pointer. Therefore, this object must not be disposed.
                 using (var array = new StdArray<Array<float>>(ret, 2, false))
@@ -153,7 +152,7 @@ namespace OpenPoseDotNet
             get
             {
                 this.ThrowIfDisposed();
-                return Native.op_core_datum_get_subId(this.NativePtr);
+                return NativeMethods.op_core_datum_get_subId(this.NativePtr);
             }
         }
 
@@ -162,7 +161,7 @@ namespace OpenPoseDotNet
             get
             {
                 this.ThrowIfDisposed();
-                return Native.op_core_datum_get_subIdMax(this.NativePtr);
+                return NativeMethods.op_core_datum_get_subIdMax(this.NativePtr);
             }
         }
 
@@ -182,67 +181,12 @@ namespace OpenPoseDotNet
             if (this.NativePtr == IntPtr.Zero)
                 return;
 
-            Native.op_core_datum_delete(this.NativePtr);
+            NativeMethods.op_core_datum_delete(this.NativePtr);
         }
 
         #endregion
 
         #endregion
-
-        internal sealed class Native
-        {
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr op_core_datum_new();
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern void op_core_datum_delete(IntPtr datum);
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern ulong op_core_datum_get_id(IntPtr datum);
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern ulong op_core_datum_get_subId(IntPtr datum);
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern ulong op_core_datum_get_subIdMax(IntPtr datum);
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern ulong op_core_datum_get_frameNumber(IntPtr datum);
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr op_core_datum_get_cvInputData(IntPtr datum);
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern void op_core_datum_set_cvInputData(IntPtr datum, IntPtr mat);
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr op_core_datum_get_cvOutputData(IntPtr datum);
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern void op_core_datum_set_cvOutputData(IntPtr datum, IntPtr mat);
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr op_core_datum_get_poseKeypoints(IntPtr datum);
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr op_core_datum_get_poseHeatMaps(IntPtr datum);
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr op_core_datum_get_faceKeypoints(IntPtr datum);
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr op_core_datum_get_faceHeatMaps(IntPtr datum);
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr op_core_datum_get_handKeypoints(IntPtr datum);
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr op_core_datum_get_handHeatMaps(IntPtr datum);
-
-
-
-        }
 
     }
 

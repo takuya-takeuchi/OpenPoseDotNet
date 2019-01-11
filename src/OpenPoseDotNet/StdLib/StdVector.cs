@@ -255,7 +255,7 @@ namespace OpenPoseDotNet
 
             public override IntPtr Create()
             {
-                return OpenPose.Native.std_vector_int32_t_new1();
+                return NativeMethods.std_vector_int32_t_new1();
             }
 
             public override IntPtr Create(int size)
@@ -263,7 +263,7 @@ namespace OpenPoseDotNet
                 if (size < 0)
                     throw new ArgumentOutOfRangeException(nameof(size));
 
-                return OpenPose.Native.std_vector_int32_t_new2(new IntPtr(size));
+                return NativeMethods.std_vector_int32_t_new2(new IntPtr(size));
             }
 
             public override IntPtr Create(IEnumerable<int> data)
@@ -272,32 +272,32 @@ namespace OpenPoseDotNet
                     throw new ArgumentNullException(nameof(data));
 
                 var array = data.ToArray();
-                return OpenPose.Native.std_vector_int32_t_new3(array, new IntPtr(array.Length));
+                return NativeMethods.std_vector_int32_t_new3(array, new IntPtr(array.Length));
             }
 
             public override void Dispose(IntPtr ptr)
             {
-                OpenPose.Native.std_vector_int32_t_delete(ptr);
+                NativeMethods.std_vector_int32_t_delete(ptr);
             }
 
             public override bool Empty(IntPtr ptr)
             {
-                return OpenPose.Native.std_vector_int32_t_empty(ptr);
+                return NativeMethods.std_vector_int32_t_empty(ptr);
             }
 
             public override void EmplaceBack(IntPtr ptr)
             {
-                OpenPose.Native.std_vector_int32_t_emplace_back(ptr);
+                NativeMethods.std_vector_int32_t_emplace_back(ptr);
             }
 
             public override IntPtr GetElementPtr(IntPtr ptr)
             {
-                return OpenPose.Native.std_vector_int32_t_getPointer(ptr);
+                return NativeMethods.std_vector_int32_t_getPointer(ptr);
             }
 
             public override int GetSize(IntPtr ptr)
             {
-                return OpenPose.Native.std_vector_int32_t_getSize(ptr).ToInt32();
+                return NativeMethods.std_vector_int32_t_getSize(ptr).ToInt32();
             }
 
             public override int[] ToArray(IntPtr ptr)
@@ -332,7 +332,7 @@ namespace OpenPoseDotNet
 
             public override IntPtr Create()
             {
-                return OpenPose.Native.std_vector_uint32_t_new1();
+                return NativeMethods.std_vector_uint32_t_new1();
             }
 
             public override IntPtr Create(int size)
@@ -340,7 +340,7 @@ namespace OpenPoseDotNet
                 if (size < 0)
                     throw new ArgumentOutOfRangeException(nameof(size));
 
-                return OpenPose.Native.std_vector_uint32_t_new2(new IntPtr(size));
+                return NativeMethods.std_vector_uint32_t_new2(new IntPtr(size));
             }
 
             public override IntPtr Create(IEnumerable<uint> data)
@@ -349,32 +349,32 @@ namespace OpenPoseDotNet
                     throw new ArgumentNullException(nameof(data));
 
                 var array = data.ToArray();
-                return OpenPose.Native.std_vector_uint32_t_new3(array, new IntPtr(array.Length));
+                return NativeMethods.std_vector_uint32_t_new3(array, new IntPtr(array.Length));
             }
 
             public override void Dispose(IntPtr ptr)
             {
-                OpenPose.Native.std_vector_uint32_t_delete(ptr);
+                NativeMethods.std_vector_uint32_t_delete(ptr);
             }
 
             public override bool Empty(IntPtr ptr)
             {
-                return OpenPose.Native.std_vector_uint32_t_empty(ptr);
+                return NativeMethods.std_vector_uint32_t_empty(ptr);
             }
 
             public override void EmplaceBack(IntPtr ptr)
             {
-                OpenPose.Native.std_vector_uint32_t_emplace_back(ptr);
+                NativeMethods.std_vector_uint32_t_emplace_back(ptr);
             }
 
             public override IntPtr GetElementPtr(IntPtr ptr)
             {
-                return OpenPose.Native.std_vector_uint32_t_getPointer(ptr);
+                return NativeMethods.std_vector_uint32_t_getPointer(ptr);
             }
 
             public override int GetSize(IntPtr ptr)
             {
-                return OpenPose.Native.std_vector_uint32_t_getSize(ptr).ToInt32();
+                return NativeMethods.std_vector_uint32_t_getSize(ptr).ToInt32();
             }
 
             public override uint[] ToArray(IntPtr ptr)
@@ -409,7 +409,7 @@ namespace OpenPoseDotNet
 
             public override IntPtr Create()
             {
-                return OpenPose.Native.std_vector_float_new1();
+                return NativeMethods.std_vector_float_new1();
             }
 
             public override IntPtr Create(int size)
@@ -417,7 +417,7 @@ namespace OpenPoseDotNet
                 if (size < 0)
                     throw new ArgumentOutOfRangeException(nameof(size));
 
-                return OpenPose.Native.std_vector_float_new2(new IntPtr(size));
+                return NativeMethods.std_vector_float_new2(new IntPtr(size));
             }
 
             public override IntPtr Create(IEnumerable<float> data)
@@ -426,32 +426,32 @@ namespace OpenPoseDotNet
                     throw new ArgumentNullException(nameof(data));
 
                 var array = data.ToArray();
-                return OpenPose.Native.std_vector_float_new3(array, new IntPtr(array.Length));
+                return NativeMethods.std_vector_float_new3(array, new IntPtr(array.Length));
             }
 
             public override void Dispose(IntPtr ptr)
             {
-                OpenPose.Native.std_vector_float_delete(ptr);
+                NativeMethods.std_vector_float_delete(ptr);
             }
 
             public override bool Empty(IntPtr ptr)
             {
-                return OpenPose.Native.std_vector_float_empty(ptr);
+                return NativeMethods.std_vector_float_empty(ptr);
             }
 
             public override void EmplaceBack(IntPtr ptr)
             {
-                OpenPose.Native.std_vector_float_emplace_back(ptr);
+                NativeMethods.std_vector_float_emplace_back(ptr);
             }
 
             public override IntPtr GetElementPtr(IntPtr ptr)
             {
-                return OpenPose.Native.std_vector_float_getPointer(ptr);
+                return NativeMethods.std_vector_float_getPointer(ptr);
             }
 
             public override int GetSize(IntPtr ptr)
             {
-                return OpenPose.Native.std_vector_float_getSize(ptr).ToInt32();
+                return NativeMethods.std_vector_float_getSize(ptr).ToInt32();
             }
 
             public override float[] ToArray(IntPtr ptr)
@@ -486,7 +486,7 @@ namespace OpenPoseDotNet
 
             public override IntPtr Create()
             {
-                return OpenPose.Native.std_vector_double_new1();
+                return NativeMethods.std_vector_double_new1();
             }
 
             public override IntPtr Create(int size)
@@ -494,7 +494,7 @@ namespace OpenPoseDotNet
                 if (size < 0)
                     throw new ArgumentOutOfRangeException(nameof(size));
 
-                return OpenPose.Native.std_vector_double_new2(new IntPtr(size));
+                return NativeMethods.std_vector_double_new2(new IntPtr(size));
             }
 
             public override IntPtr Create(IEnumerable<double> data)
@@ -503,32 +503,32 @@ namespace OpenPoseDotNet
                     throw new ArgumentNullException(nameof(data));
 
                 var array = data.ToArray();
-                return OpenPose.Native.std_vector_double_new3(array, new IntPtr(array.Length));
+                return NativeMethods.std_vector_double_new3(array, new IntPtr(array.Length));
             }
 
             public override void Dispose(IntPtr ptr)
             {
-                OpenPose.Native.std_vector_double_delete(ptr);
+                NativeMethods.std_vector_double_delete(ptr);
             }
 
             public override bool Empty(IntPtr ptr)
             {
-                return OpenPose.Native.std_vector_double_empty(ptr);
+                return NativeMethods.std_vector_double_empty(ptr);
             }
 
             public override void EmplaceBack(IntPtr ptr)
             {
-                OpenPose.Native.std_vector_double_emplace_back(ptr);
+                NativeMethods.std_vector_double_emplace_back(ptr);
             }
 
             public override IntPtr GetElementPtr(IntPtr ptr)
             {
-                return OpenPose.Native.std_vector_double_getPointer(ptr);
+                return NativeMethods.std_vector_double_getPointer(ptr);
             }
 
             public override int GetSize(IntPtr ptr)
             {
-                return OpenPose.Native.std_vector_double_getSize(ptr).ToInt32();
+                return NativeMethods.std_vector_double_getSize(ptr).ToInt32();
             }
 
             public override double[] ToArray(IntPtr ptr)
@@ -563,7 +563,7 @@ namespace OpenPoseDotNet
 
             public override IntPtr Create()
             {
-                return OpenPose.Native.std_vector_ErrorMode_new1();
+                return NativeMethods.std_vector_ErrorMode_new1();
             }
 
             public override IntPtr Create(int size)
@@ -571,7 +571,7 @@ namespace OpenPoseDotNet
                 if (size < 0)
                     throw new ArgumentOutOfRangeException(nameof(size));
 
-                return OpenPose.Native.std_vector_ErrorMode_new2(new IntPtr(size));
+                return NativeMethods.std_vector_ErrorMode_new2(new IntPtr(size));
             }
 
             public override IntPtr Create(IEnumerable<ErrorMode> data)
@@ -580,32 +580,32 @@ namespace OpenPoseDotNet
                     throw new ArgumentNullException(nameof(data));
 
                 var array = data.ToArray();
-                return OpenPose.Native.std_vector_ErrorMode_new3(array, new IntPtr(array.Length));
+                return NativeMethods.std_vector_ErrorMode_new3(array, new IntPtr(array.Length));
             }
 
             public override void Dispose(IntPtr ptr)
             {
-                OpenPose.Native.std_vector_ErrorMode_delete(ptr);
+                NativeMethods.std_vector_ErrorMode_delete(ptr);
             }
 
             public override bool Empty(IntPtr ptr)
             {
-                return OpenPose.Native.std_vector_ErrorMode_empty(ptr);
+                return NativeMethods.std_vector_ErrorMode_empty(ptr);
             }
 
             public override void EmplaceBack(IntPtr ptr)
             {
-                OpenPose.Native.std_vector_ErrorMode_emplace_back(ptr);
+                NativeMethods.std_vector_ErrorMode_emplace_back(ptr);
             }
 
             public override IntPtr GetElementPtr(IntPtr ptr)
             {
-                return OpenPose.Native.std_vector_ErrorMode_getPointer(ptr);
+                return NativeMethods.std_vector_ErrorMode_getPointer(ptr);
             }
 
             public override int GetSize(IntPtr ptr)
             {
-                return OpenPose.Native.std_vector_ErrorMode_getSize(ptr).ToInt32();
+                return NativeMethods.std_vector_ErrorMode_getSize(ptr).ToInt32();
             }
 
             public override ErrorMode[] ToArray(IntPtr ptr)
@@ -640,7 +640,7 @@ namespace OpenPoseDotNet
 
             public override IntPtr Create()
             {
-                return OpenPose.Native.std_vector_LogMode_new1();
+                return NativeMethods.std_vector_LogMode_new1();
             }
 
             public override IntPtr Create(int size)
@@ -648,7 +648,7 @@ namespace OpenPoseDotNet
                 if (size < 0)
                     throw new ArgumentOutOfRangeException(nameof(size));
 
-                return OpenPose.Native.std_vector_LogMode_new2(new IntPtr(size));
+                return NativeMethods.std_vector_LogMode_new2(new IntPtr(size));
             }
 
             public override IntPtr Create(IEnumerable<LogMode> data)
@@ -657,32 +657,32 @@ namespace OpenPoseDotNet
                     throw new ArgumentNullException(nameof(data));
 
                 var array = data.ToArray();
-                return OpenPose.Native.std_vector_LogMode_new3(array, new IntPtr(array.Length));
+                return NativeMethods.std_vector_LogMode_new3(array, new IntPtr(array.Length));
             }
 
             public override void Dispose(IntPtr ptr)
             {
-                OpenPose.Native.std_vector_LogMode_delete(ptr);
+                NativeMethods.std_vector_LogMode_delete(ptr);
             }
 
             public override bool Empty(IntPtr ptr)
             {
-                return OpenPose.Native.std_vector_LogMode_empty(ptr);
+                return NativeMethods.std_vector_LogMode_empty(ptr);
             }
 
             public override void EmplaceBack(IntPtr ptr)
             {
-                OpenPose.Native.std_vector_LogMode_emplace_back(ptr);
+                NativeMethods.std_vector_LogMode_emplace_back(ptr);
             }
 
             public override IntPtr GetElementPtr(IntPtr ptr)
             {
-                return OpenPose.Native.std_vector_LogMode_getPointer(ptr);
+                return NativeMethods.std_vector_LogMode_getPointer(ptr);
             }
 
             public override int GetSize(IntPtr ptr)
             {
-                return OpenPose.Native.std_vector_LogMode_getSize(ptr).ToInt32();
+                return NativeMethods.std_vector_LogMode_getSize(ptr).ToInt32();
             }
 
             public override LogMode[] ToArray(IntPtr ptr)
@@ -717,7 +717,7 @@ namespace OpenPoseDotNet
 
             public override IntPtr Create()
             {
-                return OpenPose.Native.std_vector_PointOfInt32_t_new1();
+                return NativeMethods.std_vector_PointOfInt32_t_new1();
             }
 
             public override IntPtr Create(int size)
@@ -725,7 +725,7 @@ namespace OpenPoseDotNet
                 if (size < 0)
                     throw new ArgumentOutOfRangeException(nameof(size));
 
-                return OpenPose.Native.std_vector_PointOfInt32_t_new2(new IntPtr(size));
+                return NativeMethods.std_vector_PointOfInt32_t_new2(new IntPtr(size));
             }
 
             public override IntPtr Create(IEnumerable<Point<int>> data)
@@ -733,33 +733,33 @@ namespace OpenPoseDotNet
                 if (data == null)
                     throw new ArgumentNullException(nameof(data));
 
-                var array = data.Select(p => new OpenPose.Native.NativePointOfInt32 { x = p.X, y = p.Y }).ToArray();
-                return OpenPose.Native.std_vector_PointOfInt32_t_new3(array, new IntPtr(array.Length));
+                var array = data.Select(p => new NativeMethods.NativePointOfInt32 { x = p.X, y = p.Y }).ToArray();
+                return NativeMethods.std_vector_PointOfInt32_t_new3(array, new IntPtr(array.Length));
             }
 
             public override void Dispose(IntPtr ptr)
             {
-                OpenPose.Native.std_vector_PointOfInt32_t_delete(ptr);
+                NativeMethods.std_vector_PointOfInt32_t_delete(ptr);
             }
 
             public override bool Empty(IntPtr ptr)
             {
-                return OpenPose.Native.std_vector_PointOfInt32_t_empty(ptr);
+                return NativeMethods.std_vector_PointOfInt32_t_empty(ptr);
             }
 
             public override void EmplaceBack(IntPtr ptr)
             {
-                OpenPose.Native.std_vector_PointOfInt32_t_emplace_back(ptr);
+                NativeMethods.std_vector_PointOfInt32_t_emplace_back(ptr);
             }
 
             public override IntPtr GetElementPtr(IntPtr ptr)
             {
-                return OpenPose.Native.std_vector_PointOfInt32_t_getPointer(ptr);
+                return NativeMethods.std_vector_PointOfInt32_t_getPointer(ptr);
             }
 
             public override int GetSize(IntPtr ptr)
             {
-                return OpenPose.Native.std_vector_PointOfInt32_t_getSize(ptr).ToInt32();
+                return NativeMethods.std_vector_PointOfInt32_t_getSize(ptr).ToInt32();
             }
 
             public override Point<int>[] ToArray(IntPtr ptr)
@@ -768,7 +768,7 @@ namespace OpenPoseDotNet
                 if (size == 0)
                     return new Point<int>[0];
 
-                var dst = new OpenPose.Native.NativePointOfInt32[size];
+                var dst = new NativeMethods.NativePointOfInt32[size];
                 var elementPtr = this.GetElementPtr(ptr);
                 InteropHelper.Copy(elementPtr, dst, dst.Length);
                 return dst.Select(p => new Point<int>(p.x, p.y)).ToArray();
@@ -794,7 +794,7 @@ namespace OpenPoseDotNet
 
             public override IntPtr Create()
             {
-                return OpenPose.Native.std_vector_op_ArrayOfFloat_new1();
+                return NativeMethods.std_vector_op_ArrayOfFloat_new1();
             }
 
             public override IntPtr Create(int size)
@@ -802,7 +802,7 @@ namespace OpenPoseDotNet
                 if (size < 0)
                     throw new ArgumentOutOfRangeException(nameof(size));
 
-                return OpenPose.Native.std_vector_op_ArrayOfFloat_new2(new IntPtr(size));
+                return NativeMethods.std_vector_op_ArrayOfFloat_new2(new IntPtr(size));
             }
 
             public override IntPtr Create(IEnumerable<Array<float>> data)
@@ -811,33 +811,33 @@ namespace OpenPoseDotNet
                     throw new ArgumentNullException(nameof(data));
 
                 var array = data.Select(d => d.NativePtr).ToArray();
-                return OpenPose.Native.std_vector_op_ArrayOfFloat_new3(array, new IntPtr(array.Length));
+                return NativeMethods.std_vector_op_ArrayOfFloat_new3(array, new IntPtr(array.Length));
             }
 
             public override void Dispose(IntPtr ptr)
             {
                 if (this.IsEnabledDispose)
-                    OpenPose.Native.std_vector_op_ArrayOfFloat_delete(ptr);
+                    NativeMethods.std_vector_op_ArrayOfFloat_delete(ptr);
             }
 
             public override bool Empty(IntPtr ptr)
             {
-                return OpenPose.Native.std_vector_op_ArrayOfFloat_empty(ptr);
+                return NativeMethods.std_vector_op_ArrayOfFloat_empty(ptr);
             }
 
             public override void EmplaceBack(IntPtr ptr)
             {
-                OpenPose.Native.std_vector_op_ArrayOfFloat_emplace_back(ptr);
+                NativeMethods.std_vector_op_ArrayOfFloat_emplace_back(ptr);
             }
 
             public override IntPtr GetElementPtr(IntPtr ptr)
             {
-                return OpenPose.Native.std_vector_op_ArrayOfFloat_getPointer(ptr);
+                return NativeMethods.std_vector_op_ArrayOfFloat_getPointer(ptr);
             }
 
             public override int GetSize(IntPtr ptr)
             {
-                return OpenPose.Native.std_vector_op_ArrayOfFloat_getSize(ptr).ToInt32();
+                return NativeMethods.std_vector_op_ArrayOfFloat_getSize(ptr).ToInt32();
             }
 
             public override Array<float>[] ToArray(IntPtr ptr)
@@ -847,7 +847,7 @@ namespace OpenPoseDotNet
                     return new Array<float>[0];
 
                 var dst = new IntPtr[size];
-                OpenPose.Native.std_vector_op_ArrayOfFloat_copy(ptr, dst);
+                NativeMethods.std_vector_op_ArrayOfFloat_copy(ptr, dst);
                 return dst.Select(p => new Array<float>(p, this.IsEnabledDispose)).ToArray();
             }
 
@@ -871,7 +871,7 @@ namespace OpenPoseDotNet
 
             public override IntPtr Create()
             {
-                return OpenPose.Native.std_vector_Datum_new1();
+                return NativeMethods.std_vector_Datum_new1();
             }
 
             public override IntPtr Create(int size)
@@ -879,7 +879,7 @@ namespace OpenPoseDotNet
                 if (size < 0)
                     throw new ArgumentOutOfRangeException(nameof(size));
 
-                return OpenPose.Native.std_vector_Datum_new2(new IntPtr(size));
+                return NativeMethods.std_vector_Datum_new2(new IntPtr(size));
             }
 
             public override IntPtr Create(IEnumerable<Datum> data)
@@ -888,33 +888,33 @@ namespace OpenPoseDotNet
                     throw new ArgumentNullException(nameof(data));
 
                 var array = data.Select(d => d.NativePtr).ToArray();
-                return OpenPose.Native.std_vector_Datum_new3(array, new IntPtr(array.Length));
+                return NativeMethods.std_vector_Datum_new3(array, new IntPtr(array.Length));
             }
 
             public override void Dispose(IntPtr ptr)
             {
                 if (this.IsEnabledDispose)
-                    OpenPose.Native.std_vector_Datum_delete(ptr);
+                    NativeMethods.std_vector_Datum_delete(ptr);
             }
 
             public override bool Empty(IntPtr ptr)
             {
-                return OpenPose.Native.std_vector_Datum_empty(ptr);
+                return NativeMethods.std_vector_Datum_empty(ptr);
             }
 
             public override void EmplaceBack(IntPtr ptr)
             {
-                OpenPose.Native.std_vector_Datum_emplace_back(ptr);
+                NativeMethods.std_vector_Datum_emplace_back(ptr);
             }
 
             public override IntPtr GetElementPtr(IntPtr ptr)
             {
-                return OpenPose.Native.std_vector_Datum_getPointer(ptr);
+                return NativeMethods.std_vector_Datum_getPointer(ptr);
             }
 
             public override int GetSize(IntPtr ptr)
             {
-                return OpenPose.Native.std_vector_Datum_getSize(ptr).ToInt32();
+                return NativeMethods.std_vector_Datum_getSize(ptr).ToInt32();
             }
 
             public override Datum[] ToArray(IntPtr ptr)
@@ -924,7 +924,7 @@ namespace OpenPoseDotNet
                     return new Datum[0];
 
                 var dst = new IntPtr[size];
-                OpenPose.Native.std_vector_Datum_copy(ptr, dst);
+                NativeMethods.std_vector_Datum_copy(ptr, dst);
                 return dst.Select(p => new Datum(p, this.IsEnabledDispose)).ToArray();
             }
 
@@ -948,7 +948,7 @@ namespace OpenPoseDotNet
 
             public override IntPtr Create()
             {
-                return OpenPose.Native.std_vector_CustomDatum_new1();
+                return NativeMethods.std_vector_CustomDatum_new1();
             }
 
             public override IntPtr Create(int size)
@@ -956,7 +956,7 @@ namespace OpenPoseDotNet
                 if (size < 0)
                     throw new ArgumentOutOfRangeException(nameof(size));
 
-                return OpenPose.Native.std_vector_CustomDatum_new2(new IntPtr(size));
+                return NativeMethods.std_vector_CustomDatum_new2(new IntPtr(size));
             }
 
             public override IntPtr Create(IEnumerable<CustomDatum> data)
@@ -965,33 +965,33 @@ namespace OpenPoseDotNet
                     throw new ArgumentNullException(nameof(data));
 
                 var array = data.Select(d => d.NativePtr).ToArray();
-                return OpenPose.Native.std_vector_CustomDatum_new3(array, new IntPtr(array.Length));
+                return NativeMethods.std_vector_CustomDatum_new3(array, new IntPtr(array.Length));
             }
 
             public override void Dispose(IntPtr ptr)
             {
                 if (this.IsEnabledDispose)
-                    OpenPose.Native.std_vector_CustomDatum_delete(ptr);
+                    NativeMethods.std_vector_CustomDatum_delete(ptr);
             }
 
             public override bool Empty(IntPtr ptr)
             {
-                return OpenPose.Native.std_vector_CustomDatum_empty(ptr);
+                return NativeMethods.std_vector_CustomDatum_empty(ptr);
             }
 
             public override void EmplaceBack(IntPtr ptr)
             {
-                OpenPose.Native.std_vector_CustomDatum_emplace_back(ptr);
+                NativeMethods.std_vector_CustomDatum_emplace_back(ptr);
             }
 
             public override IntPtr GetElementPtr(IntPtr ptr)
             {
-                return OpenPose.Native.std_vector_CustomDatum_getPointer(ptr);
+                return NativeMethods.std_vector_CustomDatum_getPointer(ptr);
             }
 
             public override int GetSize(IntPtr ptr)
             {
-                return OpenPose.Native.std_vector_CustomDatum_getSize(ptr).ToInt32();
+                return NativeMethods.std_vector_CustomDatum_getSize(ptr).ToInt32();
             }
 
             public override CustomDatum[] ToArray(IntPtr ptr)
@@ -1001,7 +1001,7 @@ namespace OpenPoseDotNet
                     return new CustomDatum[0];
 
                 var dst = new IntPtr[size];
-                OpenPose.Native.std_vector_CustomDatum_copy(ptr, dst);
+                NativeMethods.std_vector_CustomDatum_copy(ptr, dst);
                 return dst.Select(p => new CustomDatum(p, this.IsEnabledDispose)).ToArray();
             }
 
@@ -1025,7 +1025,7 @@ namespace OpenPoseDotNet
 
             public override IntPtr Create()
             {
-                return OpenPose.Native.std_vector_HeatMapType_new1();
+                return NativeMethods.std_vector_HeatMapType_new1();
             }
 
             public override IntPtr Create(int size)
@@ -1033,7 +1033,7 @@ namespace OpenPoseDotNet
                 if (size < 0)
                     throw new ArgumentOutOfRangeException(nameof(size));
 
-                return OpenPose.Native.std_vector_HeatMapType_new2(new IntPtr(size));
+                return NativeMethods.std_vector_HeatMapType_new2(new IntPtr(size));
             }
 
             public override IntPtr Create(IEnumerable<HeatMapType> data)
@@ -1042,32 +1042,32 @@ namespace OpenPoseDotNet
                     throw new ArgumentNullException(nameof(data));
 
                 var array = data.ToArray();
-                return OpenPose.Native.std_vector_HeatMapType_new3(array, new IntPtr(array.Length));
+                return NativeMethods.std_vector_HeatMapType_new3(array, new IntPtr(array.Length));
             }
 
             public override void Dispose(IntPtr ptr)
             {
-                OpenPose.Native.std_vector_HeatMapType_delete(ptr);
+                NativeMethods.std_vector_HeatMapType_delete(ptr);
             }
 
             public override bool Empty(IntPtr ptr)
             {
-                return OpenPose.Native.std_vector_HeatMapType_empty(ptr);
+                return NativeMethods.std_vector_HeatMapType_empty(ptr);
             }
 
             public override void EmplaceBack(IntPtr ptr)
             {
-                OpenPose.Native.std_vector_HeatMapType_emplace_back(ptr);
+                NativeMethods.std_vector_HeatMapType_emplace_back(ptr);
             }
 
             public override IntPtr GetElementPtr(IntPtr ptr)
             {
-                return OpenPose.Native.std_vector_HeatMapType_getPointer(ptr);
+                return NativeMethods.std_vector_HeatMapType_getPointer(ptr);
             }
 
             public override int GetSize(IntPtr ptr)
             {
-                return OpenPose.Native.std_vector_HeatMapType_getSize(ptr).ToInt32();
+                return NativeMethods.std_vector_HeatMapType_getSize(ptr).ToInt32();
             }
 
             public override HeatMapType[] ToArray(IntPtr ptr)

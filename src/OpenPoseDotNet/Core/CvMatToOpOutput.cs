@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 
 // ReSharper disable once CheckNamespace
 namespace OpenPoseDotNet
@@ -12,7 +11,7 @@ namespace OpenPoseDotNet
 
         public CvMatToOpOutput()
         {
-            this.NativePtr = Native.op_core_CvMatToOpOutput_new();
+            this.NativePtr = NativeMethods.op_core_CvMatToOpOutput_new();
         }
 
         #endregion
@@ -28,7 +27,7 @@ namespace OpenPoseDotNet
 
             using (var resolution = outputResolution.ToNative())
             {
-                var ret = Native.op_core_CvMatToOpOutput_createArray(this.NativePtr, cvInputData.NativePtr, scaleInputToOutput, resolution.NativePtr);
+                var ret = NativeMethods.op_core_CvMatToOpOutput_createArray(this.NativePtr, cvInputData.NativePtr, scaleInputToOutput, resolution.NativePtr);
                 return new Array<float>(ret);
             }
         }
@@ -45,28 +44,12 @@ namespace OpenPoseDotNet
             if (this.NativePtr == IntPtr.Zero)
                 return;
 
-            Native.op_core_CvMatToOpOutput_delete(this.NativePtr);
+            NativeMethods.op_core_CvMatToOpOutput_delete(this.NativePtr);
         }
 
         #endregion
 
         #endregion
-
-        internal sealed class Native
-        {
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr op_core_CvMatToOpOutput_new();
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern void op_core_CvMatToOpOutput_delete(IntPtr extractor);
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr op_core_CvMatToOpOutput_createArray(IntPtr output,
-                                                                            IntPtr cvInputData,
-                                                                            double scaleInputToOutput,
-                                                                            IntPtr outputResolution);
-        }
 
     }
 

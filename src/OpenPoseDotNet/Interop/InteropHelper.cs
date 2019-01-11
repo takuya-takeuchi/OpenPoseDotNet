@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using OpenPoseDotNet;
 
 namespace OpenPoseDotNet.Interop
 {
@@ -11,31 +10,31 @@ namespace OpenPoseDotNet.Interop
         public static unsafe void Copy(IntPtr ptrSource, byte[] dest, int elements)
         {
             fixed (byte* ptrDest = &dest[0])
-                OpenPose.Native.cstd_memcpy((IntPtr)ptrDest, ptrSource, (elements * sizeof(byte)));
+                NativeMethods.cstd_memcpy((IntPtr)ptrDest, ptrSource, (elements * sizeof(byte)));
         }
 
         public static unsafe void Copy(IntPtr ptrSource, uint[] dest, int elements)
         {
             fixed (uint* ptrDest = &dest[0])
-                OpenPose.Native.cstd_memcpy((IntPtr)ptrDest, ptrSource, (elements * sizeof(uint)));
+                NativeMethods.cstd_memcpy((IntPtr)ptrDest, ptrSource, (elements * sizeof(uint)));
         }
 
         public static unsafe void Copy(IntPtr ptrSource, ushort[] dest, int elements)
         {
             fixed (ushort* ptrDest = &dest[0])
-                OpenPose.Native.cstd_memcpy((IntPtr)ptrDest, ptrSource, (elements * sizeof(ushort)));
+                NativeMethods.cstd_memcpy((IntPtr)ptrDest, ptrSource, (elements * sizeof(ushort)));
         }
 
         public static unsafe void Copy(IntPtr ptrSource, sbyte[] dest, int elements)
         {
             fixed (sbyte* ptrDest = &dest[0])
-                OpenPose.Native.cstd_memcpy((IntPtr)ptrDest, ptrSource, (elements * sizeof(sbyte)));
+                NativeMethods.cstd_memcpy((IntPtr)ptrDest, ptrSource, (elements * sizeof(sbyte)));
         }
 
         public static unsafe void Copy(IntPtr ptrSource, ulong[] dest, int elements)
         {
             fixed (ulong* ptrDest = &dest[0])
-                OpenPose.Native.cstd_memcpy((IntPtr)ptrDest, ptrSource, (elements * sizeof(ulong)));
+                NativeMethods.cstd_memcpy((IntPtr)ptrDest, ptrSource, (elements * sizeof(ulong)));
         }
 
         public static void Copy(IntPtr ptrSource, ErrorMode[] dest, int elements)
@@ -65,46 +64,46 @@ namespace OpenPoseDotNet.Interop
                 dest[i] = (HeatMapType)tmp[i];
         }
 
-        public static unsafe void Copy(IntPtr ptrSource, OpenPose.Native.NativePointOfInt32[] dest, int elements)
+        public static unsafe void Copy(IntPtr ptrSource, NativeMethods.NativePointOfInt32[] dest, int elements)
         {
-            fixed (OpenPose.Native.NativePointOfInt32* ptrDest = &dest[0])
-                OpenPose.Native.cstd_memcpy((IntPtr)ptrDest, ptrSource, (elements * sizeof(OpenPose.Native.NativePointOfInt32)));
+            fixed (NativeMethods.NativePointOfInt32* ptrDest = &dest[0])
+                NativeMethods.cstd_memcpy((IntPtr)ptrDest, ptrSource, (elements * sizeof(NativeMethods.NativePointOfInt32)));
         }
 
         public static unsafe void Copy(uint[] source, IntPtr ptrDest, int elements)
         {
             fixed (uint* ptrSource = &source[0])
-                OpenPose.Native.cstd_memcpy(ptrDest, (IntPtr)ptrSource, (elements * sizeof(uint)));
+                NativeMethods.cstd_memcpy(ptrDest, (IntPtr)ptrSource, (elements * sizeof(uint)));
         }
 
         public static unsafe void Copy(ushort[] source, IntPtr ptrDest, int elements)
         {
             fixed (ushort* ptrSource = &source[0])
-                OpenPose.Native.cstd_memcpy(ptrDest, (IntPtr)ptrSource, (elements * sizeof(ushort)));
+                NativeMethods.cstd_memcpy(ptrDest, (IntPtr)ptrSource, (elements * sizeof(ushort)));
         }
 
         public static unsafe void Copy(sbyte[] source, IntPtr ptrDest, int elements)
         {
             fixed (sbyte* ptrSource = &source[0])
-                OpenPose.Native.cstd_memcpy(ptrDest, (IntPtr)ptrSource, (elements * sizeof(sbyte)));
+                NativeMethods.cstd_memcpy(ptrDest, (IntPtr)ptrSource, (elements * sizeof(sbyte)));
         }
 
         public static unsafe void Copy(ulong[] source, IntPtr ptrDest, int elements)
         {
             fixed (ulong* ptrSource = &source[0])
-                OpenPose.Native.cstd_memcpy(ptrDest, (IntPtr)ptrSource, (elements * sizeof(ulong)));
+                NativeMethods.cstd_memcpy(ptrDest, (IntPtr)ptrSource, (elements * sizeof(ulong)));
         }
 
         public static unsafe void Copy(ErrorMode[] source, IntPtr ptrDest, int elements)
         {
             fixed (ErrorMode* ptrSource = &source[0])
-                OpenPose.Native.cstd_memcpy(ptrDest, (IntPtr)ptrSource, (elements * Marshal.SizeOf<ErrorMode>()));
+                NativeMethods.cstd_memcpy(ptrDest, (IntPtr)ptrSource, (elements * Marshal.SizeOf<ErrorMode>()));
         }
 
         public static unsafe void Copy(LogMode[] source, IntPtr ptrDest, int elements)
         {
             fixed (LogMode* ptrSource = &source[0])
-                OpenPose.Native.cstd_memcpy(ptrDest, (IntPtr)ptrSource, (elements * Marshal.SizeOf<LogMode>()));
+                NativeMethods.cstd_memcpy(ptrDest, (IntPtr)ptrSource, (elements * Marshal.SizeOf<LogMode>()));
         }
 
     }

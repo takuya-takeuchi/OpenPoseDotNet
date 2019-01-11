@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 
 // ReSharper disable once CheckNamespace
 namespace OpenPoseDotNet
@@ -12,7 +11,7 @@ namespace OpenPoseDotNet
 
         public OpOutputToCvMat()
         {
-            this.NativePtr = Native.op_core_OpOutputToCvMat_new();
+            this.NativePtr = NativeMethods.op_core_OpOutputToCvMat_new();
         }
 
         #endregion
@@ -26,7 +25,7 @@ namespace OpenPoseDotNet
 
             outputData.ThrowIfDisposed();
 
-            var ret = Native.op_core_OpOutputToCvMat_formatToCvMat(this.NativePtr, outputData.NativePtr);
+            var ret = NativeMethods.op_core_OpOutputToCvMat_formatToCvMat(this.NativePtr, outputData.NativePtr);
             return new Mat(ret);
         }
 
@@ -42,27 +41,13 @@ namespace OpenPoseDotNet
             if (this.NativePtr == IntPtr.Zero)
                 return;
 
-            Native.op_core_OpOutputToCvMat_delete(this.NativePtr);
+            NativeMethods.op_core_OpOutputToCvMat_delete(this.NativePtr);
         }
 
         #endregion
 
         #endregion
-
-        internal sealed class Native
-        {
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr op_core_OpOutputToCvMat_new();
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern void op_core_OpOutputToCvMat_delete(IntPtr mat);
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr op_core_OpOutputToCvMat_formatToCvMat(IntPtr mat, IntPtr outputData);
-
-        }
-
+        
     }
 
 }

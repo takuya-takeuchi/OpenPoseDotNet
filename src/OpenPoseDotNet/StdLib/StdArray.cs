@@ -198,28 +198,28 @@ namespace OpenPoseDotNet
                 if (templateSize < 0)
                     throw new ArgumentOutOfRangeException(nameof(templateSize));
 
-                return OpenPose.Native.std_array_op_Array_float_new1(templateSize);
+                return NativeMethods.std_array_op_Array_float_new1(templateSize);
             }
 
             public override void Dispose(IntPtr ptr, int templateSize)
             {
                 if (this.IsEnabledDispose)
-                    OpenPose.Native.std_array_op_Array_float_delete(ptr, templateSize);
+                    NativeMethods.std_array_op_Array_float_delete(ptr, templateSize);
             }
 
             public override bool Empty(IntPtr ptr, int templateSize)
             {
-                return OpenPose.Native.std_array_op_Array_float_empty(ptr, templateSize);
+                return NativeMethods.std_array_op_Array_float_empty(ptr, templateSize);
             }
 
             public override IntPtr GetElementPtr(IntPtr ptr, int templateSize)
             {
-                return OpenPose.Native.std_array_op_Array_float_getPointer(ptr, templateSize);
+                return NativeMethods.std_array_op_Array_float_getPointer(ptr, templateSize);
             }
 
             public override int GetSize(IntPtr ptr, int templateSize)
             {
-                return OpenPose.Native.std_array_op_Array_float_getSize(ptr, templateSize).ToInt32();
+                return NativeMethods.std_array_op_Array_float_getSize(ptr, templateSize).ToInt32();
             }
 
             public override Array<float>[] ToArray(IntPtr ptr, int templateSize)
@@ -229,7 +229,7 @@ namespace OpenPoseDotNet
                     return new Array<float>[0];
 
                 var dst = new IntPtr[templateSize];
-                OpenPose.Native.std_array_op_Array_float_copy(ptr, dst, templateSize);
+                NativeMethods.std_array_op_Array_float_copy(ptr, dst, templateSize);
                 return dst.Select(p => new Array<float>(p, this.IsEnabledDispose)).ToArray();
             }
 

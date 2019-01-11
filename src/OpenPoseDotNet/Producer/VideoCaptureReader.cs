@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 
 // ReSharper disable once CheckNamespace
 namespace OpenPoseDotNet
@@ -24,7 +23,7 @@ namespace OpenPoseDotNet
             get
             {
                 this.ThrowIfDisposed();
-                return VideoCaptureReaderNative.op_VideoCaptureReader_isOpened(this.NativePtr);
+                return NativeMethods.op_VideoCaptureReader_isOpened(this.NativePtr);
             }
         }
 
@@ -35,13 +34,13 @@ namespace OpenPoseDotNet
         public override double Get(int capProperty)
         {
             this.ThrowIfDisposed();
-            return VideoCaptureReaderNative.op_VideoCaptureReader_get(this.NativePtr, capProperty);
+            return NativeMethods.op_VideoCaptureReader_get(this.NativePtr, capProperty);
         }
 
         public override void Release()
         {
             this.ThrowIfDisposed();
-            VideoCaptureReaderNative.op_VideoCaptureReader_release(this.NativePtr);
+            NativeMethods.op_VideoCaptureReader_release(this.NativePtr);
         }
 
         #region Overrides
@@ -63,21 +62,6 @@ namespace OpenPoseDotNet
         #endregion
 
         #endregion
-
-        internal sealed class VideoCaptureReaderNative
-        {
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern double op_VideoCaptureReader_get(IntPtr reader, int capProperty);
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            [return: MarshalAs(UnmanagedType.U1)]
-            public static extern bool op_VideoCaptureReader_isOpened(IntPtr reader);
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern void op_VideoCaptureReader_release(IntPtr reader);
-
-        }
 
     }
 
