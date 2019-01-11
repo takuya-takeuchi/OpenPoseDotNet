@@ -87,7 +87,11 @@ target_link_libraries(${PROJ_NAME} ${STATIC_LIBRARIES})
 
 
 enable_language(CXX)
-set(CMAKE_CXX_FLAGS "-std=c++11 -stdlib=libc++")
+if(APPLE)
+   set(CMAKE_CXX_FLAGS "-std=c++11 -stdlib=libc++")
+else()
+   set(CMAKE_CXX_FLAGS "-std=c++11")
+endif()
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
