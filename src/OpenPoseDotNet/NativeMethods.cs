@@ -17,6 +17,14 @@ namespace OpenPoseDotNet
 
         #region Fields
 
+        /// <summary>
+        /// Native library file name.
+        /// If Linux, it will be converted to  libOpenPoseDotNetNative.so
+        /// If MacOSX, it will be converted to  libOpenPoseDotNetNative.dylib
+        /// If Windows, it will be available after call LoadLibrary.
+        /// And this file name must not contain period. If it does,
+        /// CLR does not add extension (.dll) and CLR fails to load library
+        /// </summary>
         internal const string NativeLibrary = "OpenPoseDotNetNative";
 
         internal const CallingConvention CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl;
