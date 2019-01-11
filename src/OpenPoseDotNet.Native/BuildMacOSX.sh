@@ -12,7 +12,7 @@ fi
 CUDDIR=`pwd`
 OUTPUT=build
 
-mkdir ${OUTPUT} && cd ${OUTPUT}
+mkdir -p ${OUTPUT} && cd ${OUTPUT}
 cmake ..
 cmake --build . --config $1
 cd  ${CURDIR}
