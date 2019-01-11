@@ -5,11 +5,20 @@
     <Authors>Takuya Takeuchi</Authors>
     <Company>Takuya Takeuchi</Company>
     <Description>.NET wrapper for OpenPose written in C#</Description>
-    <Copyright>© Takuya Takeuchi 2018</Copyright>
+    <Copyright>© Takuya Takeuchi 2018</Copyright> 
     <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
     <RepositoryUrl>https://github.com/takuya-takeuchi/OpenPoseDotNet</RepositoryUrl>
-    <PackageTags>openpose .net machinelearning</PackageTags>
+    <PackageTags>openpose .net machinelearning human-pose-estimation</PackageTags>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <IsWindows>$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::get_Windows())))</IsWindows>
+    <IsLinux>$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::get_Linux())))</IsLinux>
+    <IsMac>$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::get_OSX())))</IsMac>
+    <DefineConstants Condition=" '$(IsWindows)' == 'true' ">$(DefineConstants);WINDOWS</DefineConstants>
+    <DefineConstants Condition=" '$(IsLinux)' == 'true' ">$(DefineConstants);LINUX</DefineConstants>
+    <DefineConstants Condition=" '$(IsMac)' == 'true' ">$(DefineConstants);MAC</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
