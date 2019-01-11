@@ -1,13 +1,13 @@
 cmake_minimum_required(VERSION 3.0.0)
-set(PROJ_NAME OpenPoseDotNet.Native)
+set(PROJ_NAME OpenPoseDotNetNative)
 
 project(${PROJ_NAME} VERSION 0.0.0)
 
 # Version info
-set(VERSION_MAJOR 0)
-set(VERSION_MINOR 1)
+set(VERSION_MAJOR 1)
+set(VERSION_MINOR 4)
 set(VERSION_PATCH 0)
-set(VERSION_DATE 20181124)
+set(VERSION_DATE 20190112)
 
 # Only GCC requires -fPIC
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")

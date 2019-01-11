@@ -20,8 +20,8 @@ if "%1"=="Release" (
 
 xcopy ..\..\openpose\build\bin\*  bin\%1\netcoreapp2.0 /q /y
 
-copy ..\..\src\OpenPoseDotNet.Native\build\%1\OpenPoseDotNet.Native.dll bin\%1\netcoreapp2.0 /y
-copy ..\..\src\OpenPoseDotNet.Native\build\%1\OpenPoseDotNet.Native.pdb bin\%1\netcoreapp2.0 /y
+copy ..\..\src\OpenPoseDotNet.Native\build\%1\OpenPoseDotNetNative.dll bin\%1\netcoreapp2.0 /y
+copy ..\..\src\OpenPoseDotNet.Native\build\%1\OpenPoseDotNetNative.pdb bin\%1\netcoreapp2.0 /y
 
 mkdir models\pose\body_25
 copy ..\..\openpose\models\pose\body_25\pose_deploy.prototxt models\pose\body_25 /y

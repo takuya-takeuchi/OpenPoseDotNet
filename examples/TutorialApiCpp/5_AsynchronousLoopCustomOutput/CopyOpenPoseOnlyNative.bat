@@ -19,8 +19,8 @@ if "%1"=="Release" (
 )
 
 if "%1"=="Release" (
-  copy ..\..\..\src\OpenPoseDotNet.Native\build\%1\OpenPoseDotNet.Native.dll bin\%1\netcoreapp2.0 /y
+  copy ..\..\..\src\OpenPoseDotNet.Native\build\%1\OpenPoseDotNetNative.dll bin\%1\netcoreapp2.0 /y
 ) else if "%1"=="Debug" (
-  copy ..\..\..\src\OpenPoseDotNet.Native\build\%1\OpenPoseDotNet.Native.dll bin\%1\netcoreapp2.0 /y
-  copy ..\..\..\src\OpenPoseDotNet.Native\build\%1\OpenPoseDotNet.Native.pdb bin\%1\netcoreapp2.0 /y
+  copy ..\..\..\src\OpenPoseDotNet.Native\build\%1\OpenPoseDotNetNative.dll bin\%1\netcoreapp2.0 /y
+  copy ..\..\..\src\OpenPoseDotNet.Native\build\%1\OpenPoseDotNetNative.pdb bin\%1\netcoreapp2.0 /y
 )
