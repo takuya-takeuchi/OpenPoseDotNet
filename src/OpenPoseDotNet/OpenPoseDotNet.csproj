@@ -19,6 +19,8 @@
     <DefineConstants Condition=" '$(IsWindows)' == 'true' ">$(DefineConstants);WINDOWS</DefineConstants>
     <DefineConstants Condition=" '$(IsLinux)' == 'true' ">$(DefineConstants);LINUX</DefineConstants>
     <DefineConstants Condition=" '$(IsMac)' == 'true' ">$(DefineConstants);MAC</DefineConstants>
+    <Version>1.4.0</Version>
+    <AssemblyVersion>1.4.0.0</AssemblyVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
