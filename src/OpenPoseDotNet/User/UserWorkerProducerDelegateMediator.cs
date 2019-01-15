@@ -20,9 +20,9 @@ namespace OpenPoseDotNet
 
         protected override IntPtr CreateObject()
         {
-            return OpenPose.Native.op_UserWorkerProducer_new(this.DataType,
-                                                             this.InitializationOnThreadActionPointer,
-                                                             this.ProcessAction2Pointer);
+            return NativeMethods.op_UserWorkerProducer_new(this.DataType,
+                                                           this.InitializationOnThreadActionPointer,
+                                                           this.ProcessAction2Pointer);
         }
 
         #endregion

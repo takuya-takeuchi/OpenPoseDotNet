@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 
 // ReSharper disable once CheckNamespace
 namespace OpenPoseDotNet
@@ -23,12 +22,12 @@ namespace OpenPoseDotNet
                                  float renderThreshold = 0.4f)
         {
             using(var native = netInputSize.ToNative())
-                this.NativePtr = Native.op_wrapperStructFace_new(enable,
-                                                                 native.NativePtr,
-                                                                 renderMode,
-                                                                 alphaKeyPoint,
-                                                                 alphaHeatMap,
-                                                                 renderThreshold);
+                this.NativePtr = NativeMethods.op_wrapperStructFace_new(enable,
+                                                                        native.NativePtr,
+                                                                        renderMode,
+                                                                        alphaKeyPoint,
+                                                                        alphaHeatMap,
+                                                                        renderThreshold);
         }
 
         #endregion
@@ -40,12 +39,12 @@ namespace OpenPoseDotNet
             get
             {
                 this.ThrowIfDisposed();
-                return Native.op_wrapperStructFace_get_enable(this.NativePtr);
+                return NativeMethods.op_wrapperStructFace_get_enable(this.NativePtr);
             }
             set
             {
                 this.ThrowIfDisposed();
-                Native.op_wrapperStructFace_set_enable(this.NativePtr, value);
+                NativeMethods.op_wrapperStructFace_set_enable(this.NativePtr, value);
             }
         }
 
@@ -65,35 +64,12 @@ namespace OpenPoseDotNet
             if (this.NativePtr == IntPtr.Zero)
                 return;
 
-            Native.op_wrapperStructFace_delete(this.NativePtr);
+            NativeMethods.op_wrapperStructFace_delete(this.NativePtr);
         }
 
         #endregion
 
         #endregion
-
-        internal sealed class Native
-        {
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr op_wrapperStructFace_new(bool enable,
-                                                                 IntPtr netInputSize,
-                                                                 RenderMode renderMode,
-                                                                 float alphaKeyPoint,
-                                                                 float alphaHeatMap,
-                                                                 float renderThreshold);
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern void op_wrapperStructFace_delete(IntPtr face);
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            [return: MarshalAs(UnmanagedType.U1)]
-            public static extern bool op_wrapperStructFace_get_enable(IntPtr face);
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern void op_wrapperStructFace_set_enable(IntPtr face, bool enable);
-
-        }
 
     }
 

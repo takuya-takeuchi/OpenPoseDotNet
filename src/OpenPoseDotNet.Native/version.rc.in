@@ -72,8 +72,8 @@ BEGIN
 			VALUE "FileDescription",  "OpenPose wrapper library"
 			VALUE "FileVersion",      VER_FILEVERSION_STR
 			VALUE "InternalName",     "OpenPoseDotNet.Native"
-			VALUE "LegalCopyright",   "Copyright (c) 2018 Takuya Takeuchi."
-			VALUE "OriginalFilename", "OpenPoseDotNet.Native.dll"
+			VALUE "LegalCopyright",   "Copyright (c) 2018-2019 Takuya Takeuchi."
+			VALUE "OriginalFilename", "OpenPoseDotNet.Native"
 			VALUE "ProductName",      "OpenPose.Net"
 			VALUE "ProductVersion",   VER_PRODUCTVERSION_STR
 		END

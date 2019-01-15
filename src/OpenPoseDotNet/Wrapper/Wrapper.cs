@@ -23,7 +23,7 @@ namespace OpenPoseDotNet
         public Wrapper(ThreadManagerMode threadManagerMode = ThreadManagerMode.Synchronous)
         {
             this._DataType = GenericHelpers.CheckDatumSupportTypes<T>();
-            this.NativePtr = OpenPose.Native.op_wrapper_new(this._DataType, threadManagerMode);
+            this.NativePtr = NativeMethods.op_wrapper_new(this._DataType, threadManagerMode);
         }
 
         #endregion
@@ -36,7 +36,7 @@ namespace OpenPoseDotNet
             {
                 this.ThrowIfDisposed();
 
-                return OpenPose.Native.op_wrapper_isRunning(this._DataType, this.NativePtr);
+                return NativeMethods.op_wrapper_isRunning(this._DataType, this.NativePtr);
             }
         }
 
@@ -51,7 +51,7 @@ namespace OpenPoseDotNet
 
             pose.ThrowIfDisposed();
 
-            OpenPose.Native.op_wrapper_configure_pose(this._DataType, this.NativePtr, pose.NativePtr);
+            NativeMethods.op_wrapper_configure_pose(this._DataType, this.NativePtr, pose.NativePtr);
         }
 
         public void Configure(WrapperStructHand hand)
@@ -61,7 +61,7 @@ namespace OpenPoseDotNet
 
             hand.ThrowIfDisposed();
 
-            OpenPose.Native.op_wrapper_configure_hand(this._DataType, this.NativePtr, hand.NativePtr);
+            NativeMethods.op_wrapper_configure_hand(this._DataType, this.NativePtr, hand.NativePtr);
         }
 
         public void Configure(WrapperStructFace face)
@@ -71,7 +71,7 @@ namespace OpenPoseDotNet
 
             face.ThrowIfDisposed();
 
-            OpenPose.Native.op_wrapper_configure_face(this._DataType, this.NativePtr, face.NativePtr);
+            NativeMethods.op_wrapper_configure_face(this._DataType, this.NativePtr, face.NativePtr);
         }
 
         public void Configure(WrapperStructExtra extra)
@@ -81,7 +81,7 @@ namespace OpenPoseDotNet
 
             extra.ThrowIfDisposed();
 
-            OpenPose.Native.op_wrapper_configure_extra(this._DataType, this.NativePtr, extra.NativePtr);
+            NativeMethods.op_wrapper_configure_extra(this._DataType, this.NativePtr, extra.NativePtr);
         }
 
         public void Configure(WrapperStructInput input)
@@ -91,7 +91,7 @@ namespace OpenPoseDotNet
 
             input.ThrowIfDisposed();
 
-            OpenPose.Native.op_wrapper_configure_input(this._DataType, this.NativePtr, input.NativePtr);
+            NativeMethods.op_wrapper_configure_input(this._DataType, this.NativePtr, input.NativePtr);
         }
 
         public void Configure(WrapperStructOutput output)
@@ -101,7 +101,7 @@ namespace OpenPoseDotNet
 
             output.ThrowIfDisposed();
 
-            OpenPose.Native.op_wrapper_configure_output(this._DataType, this.NativePtr, output.NativePtr);
+            NativeMethods.op_wrapper_configure_output(this._DataType, this.NativePtr, output.NativePtr);
         }
 
         public void Configure(WrapperStructGui gui)
@@ -111,14 +111,14 @@ namespace OpenPoseDotNet
 
             gui.ThrowIfDisposed();
 
-            OpenPose.Native.op_wrapper_configure_gui(this._DataType, this.NativePtr, gui.NativePtr);
+            NativeMethods.op_wrapper_configure_gui(this._DataType, this.NativePtr, gui.NativePtr);
         }
 
         public void DisableMultiThreading()
         {
             this.ThrowIfDisposed();
 
-            OpenPose.Native.op_wrapper_disableMultiThreading(this._DataType, this.NativePtr);
+            NativeMethods.op_wrapper_disableMultiThreading(this._DataType, this.NativePtr);
         }
 
         public StdSharedPtr<StdVector<T>> EmplaceAndPop(Mat mat)
@@ -128,7 +128,7 @@ namespace OpenPoseDotNet
 
             mat.ThrowIfDisposed();
 
-            var ret = OpenPose.Native.op_wrapper_emplaceAndPop_cvMat(this._DataType, this.NativePtr, mat.NativePtr);
+            var ret = NativeMethods.op_wrapper_emplaceAndPop_cvMat(this._DataType, this.NativePtr, mat.NativePtr);
             return new StdSharedPtr<StdVector<T>>(ret);
         }
 
@@ -136,7 +136,7 @@ namespace OpenPoseDotNet
         {
             this.ThrowIfDisposed();
 
-            OpenPose.Native.op_wrapper_exec(this._DataType, this.NativePtr);
+            NativeMethods.op_wrapper_exec(this._DataType, this.NativePtr);
         }
 
         public void SetWorker<U>(WorkerType workerType, StdSharedPtr<U> worker, bool workerOnNewThread = true)
@@ -144,21 +144,21 @@ namespace OpenPoseDotNet
         {
             this.ThrowIfDisposed();
 
-            OpenPose.Native.op_wrapper_setWorker(this._DataType, this.NativePtr, workerType, worker.NativePtr, workerOnNewThread);
+            NativeMethods.op_wrapper_setWorker(this._DataType, this.NativePtr, workerType, worker.NativePtr, workerOnNewThread);
         }
 
         public void Start()
         {
             this.ThrowIfDisposed();
 
-            OpenPose.Native.op_wrapper_start(this._DataType, this.NativePtr);
+            NativeMethods.op_wrapper_start(this._DataType, this.NativePtr);
         }
 
         public void Stop()
         {
             this.ThrowIfDisposed();
 
-            OpenPose.Native.op_wrapper_stop(this._DataType, this.NativePtr);
+            NativeMethods.op_wrapper_stop(this._DataType, this.NativePtr);
         }
 
         public bool WaitAndEmplace(StdSharedPtr<StdVector<T>> datums)
@@ -169,14 +169,14 @@ namespace OpenPoseDotNet
             datums.ThrowIfDisposed();
             this.ThrowIfDisposed();
 
-            return OpenPose.Native.op_wrapper_waitAndEmplace(this._DataType, this.NativePtr, datums.NativePtr);
+            return NativeMethods.op_wrapper_waitAndEmplace(this._DataType, this.NativePtr, datums.NativePtr);
         }
 
         public bool WaitAndPop(out StdSharedPtr<StdVector<T>> datums)
         {
             this.ThrowIfDisposed();
 
-            var ret = OpenPose.Native.op_wrapper_waitAndPop(this._DataType, this.NativePtr, out var tDatums);
+            var ret = NativeMethods.op_wrapper_waitAndPop(this._DataType, this.NativePtr, out var tDatums);
             datums = ret ? new StdSharedPtr<StdVector<T>>(tDatums) : null;
             return ret;
         }
@@ -193,7 +193,7 @@ namespace OpenPoseDotNet
             if (this.NativePtr == IntPtr.Zero)
                 return;
 
-            OpenPose.Native.op_wrapper_delete(this._DataType, this.NativePtr);
+            NativeMethods.op_wrapper_delete(this._DataType, this.NativePtr);
         }
 
         #endregion

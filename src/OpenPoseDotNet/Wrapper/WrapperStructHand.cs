@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 
 // ReSharper disable once CheckNamespace
 namespace OpenPoseDotNet
@@ -27,15 +26,15 @@ namespace OpenPoseDotNet
                                  float renderThreshold = 0.2f)
         {
             using (var native = netInputSize.ToNative())
-                this.NativePtr = Native.op_wrapperStructHand_new(enable,
-                                                             native.NativePtr,
-                                                             scalesNumber,
-                                                             scaleRange,
-                                                             tracking,
-                                                             renderMode,
-                                                             alphaKeyPoint,
-                                                             alphaHeatMap,
-                                                             renderThreshold);
+                this.NativePtr = NativeMethods.op_wrapperStructHand_new(enable,
+                                                                        native.NativePtr,
+                                                                        scalesNumber,
+                                                                        scaleRange,
+                                                                        tracking,
+                                                                        renderMode,
+                                                                        alphaKeyPoint,
+                                                                        alphaHeatMap,
+                                                                        renderThreshold);
         }
 
         #endregion
@@ -47,12 +46,12 @@ namespace OpenPoseDotNet
             get
             {
                 this.ThrowIfDisposed();
-                return Native.op_wrapperStructHand_get_enable(this.NativePtr);
+                return NativeMethods.op_wrapperStructHand_get_enable(this.NativePtr);
             }
             set
             {
                 this.ThrowIfDisposed();
-                Native.op_wrapperStructHand_set_enable(this.NativePtr, value);
+                NativeMethods.op_wrapperStructHand_set_enable(this.NativePtr, value);
             }
         }
 
@@ -72,38 +71,12 @@ namespace OpenPoseDotNet
             if (this.NativePtr == IntPtr.Zero)
                 return;
 
-            Native.op_wrapperStructHand_delete(this.NativePtr);
+            NativeMethods.op_wrapperStructHand_delete(this.NativePtr);
         }
 
         #endregion
 
         #endregion
-
-        internal sealed class Native
-        {
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr op_wrapperStructHand_new(bool enable,
-                                                                 IntPtr netInputSize,
-                                                                 int scalesNumber,
-                                                                 float scaleRange,
-                                                                 bool tracking,
-                                                                 RenderMode renderMode,
-                                                                 float alphaKeyPoint,
-                                                                 float alphaHeatMap,
-                                                                 float renderThreshold);
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern void op_wrapperStructHand_delete(IntPtr hand);
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            [return: MarshalAs(UnmanagedType.U1)]
-            public static extern bool op_wrapperStructHand_get_enable(IntPtr hand);
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern void op_wrapperStructHand_set_enable(IntPtr hand, bool enable);
-
-        }
 
     }
 

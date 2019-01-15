@@ -19,7 +19,7 @@ namespace OpenPoseDotNet
         public ThreadManager(ThreadManagerMode threadManagerMode = ThreadManagerMode.Synchronous)
         {
             this._DataType = GenericHelpers.CheckDatumSupportTypes<T>();
-            this.NativePtr = OpenPose.Native.op_ThreadManager_new(this._DataType, threadManagerMode);
+            this.NativePtr = NativeMethods.op_ThreadManager_new(this._DataType, threadManagerMode);
         }
 
         #endregion
@@ -30,37 +30,37 @@ namespace OpenPoseDotNet
             where W : Worker<T>
         {
             this.ThrowIfDisposed();
-            OpenPose.Native.op_ThreadManager_add(this._DataType, this.NativePtr, threadId, tWorker.NativePtr, queueInId, queueOutId);
+            NativeMethods.op_ThreadManager_add(this._DataType, this.NativePtr, threadId, tWorker.NativePtr, queueInId, queueOutId);
         }
 
         public void Exec()
         {
             this.ThrowIfDisposed();
-            OpenPose.Native.op_ThreadManager_exec(this._DataType, this.NativePtr);
+            NativeMethods.op_ThreadManager_exec(this._DataType, this.NativePtr);
         }
 
         public IntPtr GetIsRunningSharedPtr()
         {
             this.ThrowIfDisposed();
-            return OpenPose.Native.op_ThreadManager_getIsRunningSharedPtr(this._DataType, this.NativePtr);
+            return NativeMethods.op_ThreadManager_getIsRunningSharedPtr(this._DataType, this.NativePtr);
         }
 
         public void Reset()
         {
             this.ThrowIfDisposed();
-            OpenPose.Native.op_ThreadManager_reset(this._DataType, this.NativePtr);
+            NativeMethods.op_ThreadManager_reset(this._DataType, this.NativePtr);
         }
 
         public void Start()
         {
             this.ThrowIfDisposed();
-            OpenPose.Native.op_ThreadManager_start(this._DataType, this.NativePtr);
+            NativeMethods.op_ThreadManager_start(this._DataType, this.NativePtr);
         }
 
         public void Stop()
         {
             this.ThrowIfDisposed();
-            OpenPose.Native.op_ThreadManager_stop(this._DataType, this.NativePtr);
+            NativeMethods.op_ThreadManager_stop(this._DataType, this.NativePtr);
         }
 
         #region Overrides
@@ -75,7 +75,7 @@ namespace OpenPoseDotNet
             if (this.NativePtr == IntPtr.Zero)
                 return;
 
-            OpenPose.Native.op_ThreadManager_delete(this._DataType, this.NativePtr);
+            NativeMethods.op_ThreadManager_delete(this._DataType, this.NativePtr);
         }
 
         #endregion

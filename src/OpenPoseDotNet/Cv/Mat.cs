@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 
 // ReSharper disable once CheckNamespace
 namespace OpenPoseDotNet
@@ -31,7 +30,7 @@ namespace OpenPoseDotNet
             get
             {
                 this.ThrowIfDisposed();
-                return Native.op_3rdparty_cv_mat_channels(this.NativePtr);
+                return NativeMethods.op_3rdparty_cv_mat_channels(this.NativePtr);
             }
         }
 
@@ -40,7 +39,7 @@ namespace OpenPoseDotNet
             get
             {
                 this.ThrowIfDisposed();
-                return Native.op_3rdparty_cv_mat_cols(this.NativePtr);
+                return NativeMethods.op_3rdparty_cv_mat_cols(this.NativePtr);
             }
         }
 
@@ -49,7 +48,7 @@ namespace OpenPoseDotNet
             get
             {
                 this.ThrowIfDisposed();
-                return Native.op_3rdparty_cv_mat_empty(this.NativePtr);
+                return NativeMethods.op_3rdparty_cv_mat_empty(this.NativePtr);
             }
         }
 
@@ -58,7 +57,7 @@ namespace OpenPoseDotNet
             get
             {
                 this.ThrowIfDisposed();
-                return Native.op_3rdparty_cv_mat_rows(this.NativePtr);
+                return NativeMethods.op_3rdparty_cv_mat_rows(this.NativePtr);
             }
         }
 
@@ -78,39 +77,12 @@ namespace OpenPoseDotNet
             if (this.NativePtr == IntPtr.Zero)
                 return;
 
-            Native.op_3rdparty_cv_mat_delete(this.NativePtr);
+            NativeMethods.op_3rdparty_cv_mat_delete(this.NativePtr);
         }
 
         #endregion
 
-        #region Event Handlers
         #endregion
-
-        #region Helpers
-        #endregion
-
-        #endregion
-
-        internal sealed class Native
-        {
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern void op_3rdparty_cv_mat_delete(IntPtr mat);
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            [return: MarshalAs(UnmanagedType.U1)]
-            public static extern bool op_3rdparty_cv_mat_empty(IntPtr mat);
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern int op_3rdparty_cv_mat_rows(IntPtr mat);
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern int op_3rdparty_cv_mat_cols(IntPtr mat);
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern int op_3rdparty_cv_mat_channels(IntPtr mat);
-
-        }
 
     }
 

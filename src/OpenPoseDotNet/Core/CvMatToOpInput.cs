@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 
 // ReSharper disable once CheckNamespace
 namespace OpenPoseDotNet
@@ -12,7 +11,7 @@ namespace OpenPoseDotNet
 
         public CvMatToOpInput(PoseModel poseModel = PoseModel.Body25)
         {
-            this.NativePtr = Native.op_core_CvMatToOpInput_new(poseModel);
+            this.NativePtr = NativeMethods.op_core_CvMatToOpInput_new(poseModel);
         }
 
         #endregion
@@ -29,7 +28,7 @@ namespace OpenPoseDotNet
             using (var scaleVector = new StdVector<double>(scaleInputToNetInputs))
             using (var netInputSizesVector = new StdVector<Point<int>>(netInputSizes))
             {
-                var ret = Native.op_core_CvMatToOpInput_createArray(this.NativePtr, cvInputData.NativePtr, scaleVector.NativePtr, netInputSizesVector.NativePtr);
+                var ret = NativeMethods.op_core_CvMatToOpInput_createArray(this.NativePtr, cvInputData.NativePtr, scaleVector.NativePtr, netInputSizesVector.NativePtr);
                 using (var vector = new StdVector<Array<float>>(ret))
                     return vector.ToArray();
             }
@@ -47,29 +46,12 @@ namespace OpenPoseDotNet
             if (this.NativePtr == IntPtr.Zero)
                 return;
 
-            Native.op_core_CvMatToOpInput_delete(this.NativePtr);
+            NativeMethods.op_core_CvMatToOpInput_delete(this.NativePtr);
         }
 
         #endregion
 
         #endregion
-
-        internal sealed class Native
-        {
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr op_core_CvMatToOpInput_new(PoseModel poseModel);
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern void op_core_CvMatToOpInput_delete(IntPtr extractor);
-
-            [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-            public static extern IntPtr op_core_CvMatToOpInput_createArray(IntPtr output,
-                                                                           IntPtr cvInputData,
-                                                                           IntPtr scaleInputToNetInputs,
-                                                                           IntPtr netInputSizes);
-
-        }
 
     }
 

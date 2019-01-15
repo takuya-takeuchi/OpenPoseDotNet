@@ -1,13 +1,13 @@
 cmake_minimum_required(VERSION 3.0.0)
-set(PROJ_NAME OpenPoseDotNet.Native)
+set(PROJ_NAME OpenPoseDotNetNative)
 
 project(${PROJ_NAME} VERSION 0.0.0)
 
 # Version info
-set(VERSION_MAJOR 0)
-set(VERSION_MINOR 1)
+set(VERSION_MAJOR 1)
+set(VERSION_MINOR 4)
 set(VERSION_PATCH 0)
-set(VERSION_DATE 20181124)
+set(VERSION_DATE 20190115)
 
 # Only GCC requires -fPIC
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
@@ -87,7 +87,11 @@ target_link_libraries(${PROJ_NAME} ${STATIC_LIBRARIES})
 
 
 enable_language(CXX)
-set(CMAKE_CXX_FLAGS "-std=c++11 -stdlib=libc++")
+if(APPLE)
+   set(CMAKE_CXX_FLAGS "-std=c++11 -stdlib=libc++")
+elseif(UNIX AND NOT APPLE)
+   set(CMAKE_CXX_FLAGS "-std=c++11")
+endif()
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
