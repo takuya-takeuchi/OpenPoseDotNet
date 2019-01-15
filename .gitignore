@@ -308,3 +308,16 @@ __pycache__/
 # Custom
 src/OpenPoseDotNet.Native/*.bat
 src/OpenPoseDotNet.Native/build*
+
+
+# native nuget package
+!nuget/*
+!nuget/ref/native/*/**
+
+!nuget/ref/.keepfolder
+!nuget/lib/.keepfolder
+
+nuget/*.nupkg
+nuget/runtimes/linux-x64/native/*.so
+nuget/runtimes/osx-x64/native/*.dylib
+nuget/runtimes/win-x64/native/*.dll
