@@ -12,9 +12,4 @@
  <Target Name="EmitNugetPackageRootMessage">
    <Message Importance="High" Text='$(NugetPackageRoot)' />
  </Target>
-
-  <ImportGroup>
-    <Import Project="$(NuGetPackageRoot)dlibdotnet.native\$(NativeDependenciesVersion)\build\DlibDotNet.Native.targets"
-            Condition="Exists('$(NuGetPackageRoot)dlibdotnet.native\$(NativeDependenciesVersion)\build\DlibDotNet.Native.targets')" />
-  </ImportGroup>
 </Project>
