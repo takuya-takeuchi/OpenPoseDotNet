@@ -9,50 +9,39 @@
   </PropertyGroup>
 
   <Target Name="TestMessage" AfterTargets="Build" >
-    <Message Text="DlibDotNet.Native Build Message" Importance="high"/>
+    <Message Text="OpenPoseDotNet.Native Build Message" Importance="high"/>
     <Message Text="Platform: $(Platform)" Importance="high"/>
     <Message Text="OS: $(OS)" Importance="high"/>
   </Target>
 
   <ItemGroup Condition="'$(OS)' == 'Windows_NT'">
-    <Content Include="$(MSBuildThisFileDirectory)..\runtimes\win-x64\native\DlibDotNetNative.dll">
+    <Content Include="$(MSBuildThisFileDirectory)..\runtimes\win-x64\native\OpenPoseDotNetNative.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Link>DlibDotNetNative.dll</Link>
+      <Link>OpenPoseDotNetNative.dll</Link>
     </Content>
-    <Content Include="$(MSBuildThisFileDirectory)..\runtimes\win-x64\native\DlibDotNetNativeDnn.dll">
+    <Content Include="$(MSBuildThisFileDirectory)..\lib\netstandard2.0\OpenPoseDotNet.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Link>DlibDotNetNativeDnn.dll</Link>
     </Content>
   </ItemGroup>
 
   <ItemGroup Condition=" '$(OS)' == 'Unix'">
-    <Content Include="$(MSBuildThisFileDirectory)..\runtimes\linux-x64\native\libDlibDotNetNative.so">
+    <Content Include="$(MSBuildThisFileDirectory)..\runtimes\linux-x64\native\libOpenPoseDotNetNative.so">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Link>libDlibDotNetNative.so</Link>
-      <DeploymentContent>True</DeploymentContent>
+      <Link>libOpenPoseDotNetNative.so</Link>
     </Content>
-    <Content Include="$(MSBuildThisFileDirectory)..\runtimes\linux-x64\native\libDlibDotNetNativeDnn.so">
+    <Content Include="$(MSBuildThisFileDirectory)..\lib\netstandard2.0\OpenPoseDotNet.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Link>libDlibDotNetNativeDnn.so</Link>
-      <DeploymentContent>True</DeploymentContent>
     </Content>
-    <ReferenceCopyLocalPaths Include="$(MSBuildThisFileDirectory)..\runtimes\linux-x64\native\libDlibDotNetNative.so" />
-    <ReferenceCopyLocalPaths Include="$(MSBuildThisFileDirectory)..\runtimes\linux-x64\native\libDlibDotNetNativeDnn.so" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(OS)' == 'Osx'">
-    <Content Include="$(MSBuildThisFileDirectory)..\runtimes\osx-x64\native\DlibDotNetNative.dylib">
+    <Content Include="$(MSBuildThisFileDirectory)..\runtimes\osx-x64\native\libOpenPoseDotNetNative.dylib">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Link>DlibDotNetNative.dylib</Link>
-      <DeploymentContent>True</DeploymentContent>
+      <Link>libOpenPoseDotNetNative.dylib</Link>
     </Content>
-    <Content Include="$(MSBuildThisFileDirectory)..\runtimes\osx-x64\native\DlibDotNetNativeDnn.dylib">
+    <Content Include="$(MSBuildThisFileDirectory)..\lib\netstandard2.0\OpenPoseDotNet.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Link>DlibDotNetNativeDnn.dylib</Link>
-      <DeploymentContent>True</DeploymentContent>
     </Content>
-    <ReferenceCopyLocalPaths Include="$(MSBuildThisFileDirectory)..\runtimes\osx-x64\native\DlibDotNetNative.dylib" />
-    <ReferenceCopyLocalPaths Include="$(MSBuildThisFileDirectory)..\runtimes\osx-x64\native\DlibDotNetNativeDnn.dylib" />
   </ItemGroup>
 
 </Project>

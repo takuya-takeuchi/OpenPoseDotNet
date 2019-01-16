@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <NativeDependenciesVersion>1.4.0.20190115</NativeDependenciesVersion>
+    <NativeDependenciesVersion>1.4.0.20190117</NativeDependenciesVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="$(NugetPackageRoot)==''">
@@ -12,9 +12,4 @@
  <Target Name="EmitNugetPackageRootMessage">
    <Message Importance="High" Text='$(NugetPackageRoot)' />
  </Target>
-
-  <ImportGroup>
-    <Import Project="$(NuGetPackageRoot)dlibdotnet.native\$(NativeDependenciesVersion)\build\DlibDotNet.Native.targets"
-            Condition="Exists('$(NuGetPackageRoot)dlibdotnet.native\$(NativeDependenciesVersion)\build\DlibDotNet.Native.targets')" />
-  </ImportGroup>
 </Project>

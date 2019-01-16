@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 namespace OpenPoseDotNet
 {
 
-    internal static partial class NativeMethods
+    internal sealed partial class NativeMethods
     {
 
         #region UserWorker

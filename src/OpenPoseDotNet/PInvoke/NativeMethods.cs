@@ -4,7 +4,7 @@
 namespace OpenPoseDotNet
 {
 
-    internal static partial class NativeMethods
+    internal sealed partial class NativeMethods
     {
 
         #region Fields
