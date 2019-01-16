@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <Target Name="TestMessage" AfterTargets="Build" >
-    <Message Text="DlibDotNet.Native Build Message" Importance="high"/>
+    <Message Text="OpenPoseDotNet.Native Build Message" Importance="high"/>
     <Message Text="Platform: $(Platform)" Importance="high"/>
     <Message Text="OS: $(OS)" Importance="high"/>
   </Target>
@@ -19,6 +19,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Link>OpenPoseDotNetNative.dll</Link>
     </Content>
+    <Content Include="$(MSBuildThisFileDirectory)..\lib\netstandard2.0\OpenPoseDotNet.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup Condition=" '$(OS)' == 'Unix'">
@@ -26,12 +29,18 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Link>libOpenPoseDotNetNative.so</Link>
     </Content>
+    <Content Include="$(MSBuildThisFileDirectory)..\lib\netstandard2.0\OpenPoseDotNet.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup Condition=" '$(OS)' == 'Osx'">
     <Content Include="$(MSBuildThisFileDirectory)..\runtimes\osx-x64\native\libOpenPoseDotNetNative.dylib">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Link>libOpenPoseDotNetNative.dylib</Link>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)..\lib\netstandard2.0\OpenPoseDotNet.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
