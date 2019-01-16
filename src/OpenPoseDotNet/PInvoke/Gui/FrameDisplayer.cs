@@ -6,7 +6,7 @@ using System.Text;
 namespace OpenPoseDotNet
 {
     
-    internal static partial class NativeMethods
+    internal sealed partial class NativeMethods
     {
 
         [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
