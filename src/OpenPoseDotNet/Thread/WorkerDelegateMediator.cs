@@ -10,10 +10,13 @@ namespace OpenPoseDotNet
 
         #region Delegates
 
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         protected delegate void InitializationOnThreadActionDelegate();
 
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         protected delegate void ProcessActionDelegate(IntPtr datums);
 
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         protected delegate IntPtr ProcessAction2Delegate();
 
         #endregion
