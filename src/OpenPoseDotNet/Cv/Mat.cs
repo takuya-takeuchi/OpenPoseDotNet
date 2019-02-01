@@ -7,12 +7,6 @@ namespace OpenPoseDotNet
     public sealed class Mat : OpenPoseObject
     {
 
-        #region Events
-        #endregion
-
-        #region Fields
-        #endregion
-
         #region Constructors
 
         internal Mat(IntPtr ptr, bool isEnabledDispose = true) :
@@ -58,6 +52,16 @@ namespace OpenPoseDotNet
             {
                 this.ThrowIfDisposed();
                 return NativeMethods.op_3rdparty_cv_mat_rows(this.NativePtr);
+            }
+        }
+
+        public MatType Type
+        {
+            get
+            {
+                this.ThrowIfDisposed();
+                var value = NativeMethods.op_3rdparty_cv_mat_type(this.NativePtr);
+                return new MatType(value);
             }
         }
 
