@@ -132,6 +132,20 @@ namespace OpenPoseDotNet
             return new StdSharedPtr<StdVector<T>>(ret);
         }
 
+        public StdSharedPtr<StdVector<T>> EmplaceAndPop(byte[] image, int width, int height, int type)
+        {
+            if (image == null)
+                throw new ArgumentNullException(nameof(image));
+
+            var ret = NativeMethods.op_wrapper_emplaceAndPop_rawImage(this._DataType,
+                                                                      this.NativePtr,
+                                                                      image,
+                                                                      width,
+                                                                      height,
+                                                                      type);
+            return new StdSharedPtr<StdVector<T>>(ret);
+        }
+
         public void Exec()
         {
             this.ThrowIfDisposed();

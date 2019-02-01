@@ -60,6 +60,16 @@ DLLEXPORT bool op_3rdparty_cv_mat_empty(cv::Mat* mat)
     return mat->empty();
 }
 
+DLLEXPORT void* op_3rdparty_cv_mat_data(cv::Mat* mat)
+{
+    return mat->data;
+}
+
+DLLEXPORT int op_3rdparty_cv_mat_type(cv::Mat* mat)
+{
+    return mat->type();
+}
+
 #pragma endregion cv::Mat
 
 #endif

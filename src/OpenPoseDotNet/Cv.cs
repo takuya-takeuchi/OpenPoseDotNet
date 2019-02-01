@@ -8,18 +8,6 @@ namespace OpenPoseDotNet
     public static class Cv
     {
 
-        #region Events
-        #endregion
-
-        #region Fields
-        #endregion
-
-        #region Constructors
-        #endregion
-
-        #region Properties
-        #endregion
-
         #region Methods
 
         public static void BitwiseNot(Mat src, Mat dst)

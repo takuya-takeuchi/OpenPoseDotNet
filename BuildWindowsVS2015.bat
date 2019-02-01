@@ -12,7 +12,9 @@ if "%1"=="" (
 set CURDIR=%cd%
 set OUTPUT=build
 cd openpose
-mkdir %OUTPUT%
+if not exist %OUTPUT% (
+   mkdir %OUTPUT%
+)
 cd %OUTPUT%
 cmake -G "Visual Studio 14 2015 Win64" ^
       ..
