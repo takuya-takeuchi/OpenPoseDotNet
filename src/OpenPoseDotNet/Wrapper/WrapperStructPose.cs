@@ -41,9 +41,13 @@ namespace OpenPoseDotNet
                                  int numberPeopleMax = -1,
                                  bool maximizePositives = false,
                                  double fpsMax = -1d,
+                                 string prototxtPath = "",
+                                 string caffeModelPath = "",
                                  bool enableGoogleLogging = true)
         {
             var modelFolderBytes = Encoding.UTF8.GetBytes(modelFolder ?? "");
+            var prototxtPathBytes = Encoding.UTF8.GetBytes(prototxtPath ?? "");
+            var caffeModelPathBytes = Encoding.UTF8.GetBytes(caffeModelPath ?? "");
 
             using (var nativeNetInputSize = netInputSize.ToNative())
             using (var nativeOutputSize = outputSize.ToNative())
@@ -70,6 +74,8 @@ namespace OpenPoseDotNet
                                                                         numberPeopleMax,
                                                                         maximizePositives,
                                                                         fpsMax,
+                                                                        prototxtPathBytes,
+                                                                        caffeModelPathBytes,
                                                                         enableGoogleLogging);
         }
 

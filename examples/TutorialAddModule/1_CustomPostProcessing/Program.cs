@@ -91,6 +91,8 @@ namespace CustomPostProcessing
                                                             Flags.NumberPeopleMax,
                                                             Flags.MaximizePositives,
                                                             Flags.FpsMax,
+                                                            Flags.PrototxtPath,
+                                                            Flags.CaffeModelPath,
                                                             enableGoogleLogging))
                     // Face configuration (use op::WrapperStructFace{} to disable it)
                     using (var face = new WrapperStructFace(Flags.Face,

@@ -25,6 +25,8 @@ DLLEXPORT op::WrapperStructPose* op_wrapperStructPose_new(const bool enable,
                                                           const int numberPeopleMax,
                                                           const bool maximizePositives,
                                                           const double fpsMax,
+                                                          const char* protoTxtPath,
+                                                          const char* caffeModelPath,
                                                           const bool enableGoogleLogging)
 {
     const auto& tmp_heatMapTypes = *heatMapTypes;
@@ -50,6 +52,8 @@ DLLEXPORT op::WrapperStructPose* op_wrapperStructPose_new(const bool enable,
                                      numberPeopleMax,
                                      maximizePositives,
                                      fpsMax,
+                                     std::string(protoTxtPath),
+                                     std::string(caffeModelPath),
                                      enableGoogleLogging);
 }
 

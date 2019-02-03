@@ -33,6 +33,8 @@ namespace OpenPoseDotNet
                                                              int numberPeopleMax,
                                                              bool maximizePositives,
                                                              double fpsMax,
+                                                             byte[] protoTxtPath,
+                                                             byte[] caffeModelPath,
                                                              bool enableGoogleLogging);
 
         [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]

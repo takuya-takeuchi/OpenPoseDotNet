@@ -47,6 +47,12 @@ namespace OpenPoseDotNet
         public static extern void op_flags_set_body_disable(bool value);
 
         [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        public static extern IntPtr op_flags_get_caffemodel_path();
+
+        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        public static extern void op_flags_set_caffemodel_path(byte[] value);
+
+        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
         public static extern int op_flags_get_camera();
 
         [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
@@ -416,6 +422,12 @@ namespace OpenPoseDotNet
 
         [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
         public static extern void op_flags_set_ip_camera(byte[] value);
+
+        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        public static extern IntPtr op_flags_get_prototxt_path();
+
+        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        public static extern void op_flags_set_prototxt_path(byte[] value);
 
         [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
         public static extern IntPtr op_flags_get_model_folder();

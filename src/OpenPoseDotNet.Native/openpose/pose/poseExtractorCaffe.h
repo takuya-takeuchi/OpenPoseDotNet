@@ -10,6 +10,8 @@ DLLEXPORT op::PoseExtractorCaffe* op_PoseExtractorCaffe_new(const op::PoseModel 
                                                             const op::ScaleMode heatMapScale,
                                                             const bool addPartCandidates,
                                                             const bool maximizePositives,
+                                                            const char* protoTxtPath,
+                                                            const char* caffeModelPath,
                                                             const bool enableGoogleLogging)
 {
     return new op::PoseExtractorCaffe(poseModel,
@@ -19,6 +21,8 @@ DLLEXPORT op::PoseExtractorCaffe* op_PoseExtractorCaffe_new(const op::PoseModel 
                                       heatMapScale,
                                       addPartCandidates,
                                       maximizePositives,
+                                      std::string(protoTxtPath),
+                                      std::string(caffeModelPath),
                                       enableGoogleLogging);
 }
 
