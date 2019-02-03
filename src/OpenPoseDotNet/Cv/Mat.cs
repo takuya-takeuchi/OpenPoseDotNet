@@ -102,7 +102,7 @@ namespace OpenPoseDotNet
                 var stride = data.Stride;
                 var scan0 = data.Scan0;
 
-                var line = channels * width * height;
+                var line = channels * width;
                 var src = NativeMethods.op_3rdparty_cv_mat_data(this.NativePtr);
 
                 unsafe
