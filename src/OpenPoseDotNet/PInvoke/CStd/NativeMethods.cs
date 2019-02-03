@@ -17,6 +17,10 @@ namespace OpenPoseDotNet
         [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
         public static extern unsafe IntPtr cstd_memcpy(byte* dest, IntPtr src, int count);
 
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        public static extern unsafe IntPtr cstd_memcpy(byte* dest, byte* src, int count);
+
     }
 
 }
