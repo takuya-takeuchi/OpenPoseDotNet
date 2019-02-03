@@ -20,6 +20,7 @@ namespace OpenPoseDotNet
                                                                byte[] writeImages,
                                                                byte[] writeImagesFormat,
                                                                byte[] writeVideo,
+                                                               bool writeVideoWithAudio,
                                                                double writeVideoFps,
                                                                byte[] writeHeatMaps,
                                                                byte[] writeHeatMapsFormat,

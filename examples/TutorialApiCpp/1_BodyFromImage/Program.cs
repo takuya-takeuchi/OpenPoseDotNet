@@ -32,6 +32,7 @@ namespace BodyFromImage
 
             var disableMultiThreadArgument = app.Argument("disableMultiThread", "Disable MultiThread");
             var inputImageOption = app.Option("-i|--image", "Input image", CommandOptionType.SingleValue);
+            var noDisplay = app.Option("--no_display", "Enable to disable the visual display.", CommandOptionType.NoValue);
 
             app.OnExecute(() =>
             {
@@ -48,6 +49,7 @@ namespace BodyFromImage
 
                 ImagePath = path;
 
+                Flags.NoDisplay = noDisplay.HasValue();
                 TutorialApiCpp1();
 
                 return 0;
@@ -60,19 +62,71 @@ namespace BodyFromImage
 
         private static void Display(StdSharedPtr<StdVector<Datum>> datumsPtr)
         {
-            // User's displaying/saving/other processing here
-            // datum.cvOutputData: rendered frame with pose or heatmaps
-            // datum.poseKeypoints: Array<float> with the estimated pose
-            if (datumsPtr != null && datumsPtr.TryGet(out var data) && !data.Empty)
+            try
             {
-                // Display image
-                var temp = data.ToArray();
-                Cv.ImShow("User worker GUI", temp[0].CvOutputData);
-                Cv.WaitKey();
+                // User's displaying/saving/other processing here
+                // datum.cvOutputData: rendered frame with pose or heatmaps
+                // datum.poseKeypoints: Array<float> with the estimated pose
+                if (datumsPtr != null && datumsPtr.TryGet(out var data) && !data.Empty)
+                {
+                    // Display image
+                    var temp = data.ToArray();
+                    Cv.ImShow("User worker GUI", temp[0].CvOutputData);
+                    Cv.WaitKey();
+                }
+                else
+                {
+                    OpenPose.Log("Nullptr or empty datumsPtr found.", Priority.High);
+                }
             }
-            else
+            catch (Exception e)
             {
-                OpenPose.Log("Nullptr or empty datumsPtr found.", Priority.High);
+                OpenPose.Error(e.Message, -1, nameof(Display));
+            }
+        }
+
+        private static void PrintKeypoints(StdSharedPtr<StdVector<Datum>> datumsPtr)
+        {
+            try
+            {
+                // Example: How to use the pose keypoints
+                if (datumsPtr != null && datumsPtr.TryGet(out var data) && !data.Empty)
+                {
+                    // Alternative 1
+                    var temp = data.ToArray();
+                    OpenPose.Log($"Body keypoints: {temp[0].PoseKeyPoints}");
+
+                    // // Alternative 2
+                    // op::log(datumsPtr->at(0).poseKeypoints);
+
+                    // // Alternative 3
+                    // std::cout << datumsPtr->at(0).poseKeypoints << std::endl;
+
+                    // // Alternative 4 - Accesing each element of the keypoints
+                    // op::log("\nKeypoints:");
+                    // const auto& poseKeypoints = datumsPtr->at(0).poseKeypoints;
+                    // op::log("Person pose keypoints:");
+                    // for (auto person = 0 ; person < poseKeypoints.getSize(0) ; person++)
+                    // {
+                    //     op::log("Person " + std::to_string(person) + " (x, y, score):");
+                    //     for (auto bodyPart = 0 ; bodyPart < poseKeypoints.getSize(1) ; bodyPart++)
+                    //     {
+                    //         std::string valueToPrint;
+                    //         for (auto xyscore = 0 ; xyscore < poseKeypoints.getSize(2) ; xyscore++)
+                    //             valueToPrint += std::to_string(   poseKeypoints[{person, bodyPart, xyscore}]   ) + " ";
+                    //         op::log(valueToPrint);
+                    //     }
+                    // }
+                    // op::log(" ");
+                }
+                else
+                {
+                    OpenPose.Log("Nullptr or empty datumsPtr found.", Priority.High);
+                }
+            }
+            catch (Exception e)
+            {
+                OpenPose.Error(e.Message, -1, nameof(PrintKeypoints));
             }
         }
 
@@ -101,7 +155,8 @@ namespace BodyFromImage
                         if (datumProcessed != null)
                         {
                             PrintKeypoints(datumProcessed);
-                            Display(datumProcessed);
+                            if (!Flags.NoDisplay)
+                                Display(datumProcessed);
                         }
                         else
                         {
@@ -118,44 +173,6 @@ namespace BodyFromImage
             catch (Exception)
             {
                 return -1;
-            }
-        }
-
-        private static void PrintKeypoints(StdSharedPtr<StdVector<Datum>> datumsPtr)
-        {
-            // Example: How to use the pose keypoints
-            if (datumsPtr != null && datumsPtr.TryGet(out var data) && !data.Empty)
-            {
-                // Alternative 1
-                var temp = data.ToArray();
-                OpenPose.Log($"Body keypoints: {temp[0].PoseKeyPoints}");
-
-                // // Alternative 2
-                // op::log(datumsPtr->at(0).poseKeypoints);
-
-                // // Alternative 3
-                // std::cout << datumsPtr->at(0).poseKeypoints << std::endl;
-
-                // // Alternative 4 - Accesing each element of the keypoints
-                // op::log("\nKeypoints:");
-                // const auto& poseKeypoints = datumsPtr->at(0).poseKeypoints;
-                // op::log("Person pose keypoints:");
-                // for (auto person = 0 ; person < poseKeypoints.getSize(0) ; person++)
-                // {
-                //     op::log("Person " + std::to_string(person) + " (x, y, score):");
-                //     for (auto bodyPart = 0 ; bodyPart < poseKeypoints.getSize(1) ; bodyPart++)
-                //     {
-                //         std::string valueToPrint;
-                //         for (auto xyscore = 0 ; xyscore < poseKeypoints.getSize(2) ; xyscore++)
-                //             valueToPrint += std::to_string(   poseKeypoints[{person, bodyPart, xyscore}]   ) + " ";
-                //         op::log(valueToPrint);
-                //     }
-                // }
-                // op::log(" ");
-            }
-            else
-            {
-                OpenPose.Log("Nullptr or empty datumsPtr found.", Priority.High);
             }
         }
 

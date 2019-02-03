@@ -33,6 +33,7 @@ namespace KeyPointsFromImageConfigurable
 
             var disableMultiThreadArgument = app.Argument("disableMultiThread", "Disable MultiThread");
             var inputImageOption = app.Option("-i|--image", "Input image", CommandOptionType.SingleValue);
+            var noDisplay = app.Option("--no_display", "Enable to disable the visual display.", CommandOptionType.NoValue);
 
             app.OnExecute(() =>
             {
@@ -49,6 +50,7 @@ namespace KeyPointsFromImageConfigurable
 
                 ImagePath = path;
 
+                Flags.NoDisplay = noDisplay.HasValue();
                 TutorialApiCpp3();
 
                 return 0;
@@ -59,52 +61,11 @@ namespace KeyPointsFromImageConfigurable
 
         #region Helpers
 
-        private static void Display(StdSharedPtr<StdVector<Datum>> datumsPtr)
-        {
-            // User's displaying/saving/other processing here
-            // datum.cvOutputData: rendered frame with pose or heatmaps
-            // datum.poseKeypoints: Array<float> with the estimated pose
-            if (datumsPtr != null && datumsPtr.TryGet(out var data) && !data.Empty)
-            {
-                // Display image
-                var temp = data.ToArray();
-                Cv.ImShow("User worker GUI", temp[0].CvOutputData);
-                Cv.WaitKey();
-            }
-            else
-            {
-                OpenPose.Log("Nullptr or empty datumsPtr found.", Priority.High);
-            }
-        }
-
-        private static void PrintKeypoints(StdSharedPtr<StdVector<Datum>> datumsPtr)
-        {
-            // Example: How to use the pose keypoints
-            if (datumsPtr != null && datumsPtr.TryGet(out var data) && !data.Empty)
-            {
-                // Alternative 1
-                var temp = data.ToArray();
-                OpenPose.Log($"Body keypoints: {temp[0].PoseKeyPoints}");
-                OpenPose.Log($"Face keypoints: {temp[0].FaceKeyPoints}");
-                OpenPose.Log($"Left hand keypoints: {temp[0].HandKeyPoints[0]}");
-                OpenPose.Log($"Right hand keypoints: {temp[0].HandKeyPoints[1]}");
-            }
-            else
-            {
-                OpenPose.Log("Nullptr or empty datumsPtr found.", Priority.High);
-            }
-        }
-
-        private static int TutorialApiCpp3()
+        private static void ConfigureWrapper(Wrapper<Datum> opWrapper)
         {
             try
             {
-                OpenPose.Log("Starting OpenPose demo...", Priority.High);
-
-                // logging_level
-                OpenPose.Check(0 <= Flags.LoggingLevel && Flags.LoggingLevel <= 255, "Wrong logging_level value.");
-                ConfigureLog.PriorityThreshold = (Priority)Flags.LoggingLevel;
-                Profiler.SetDefaultX((ulong)Flags.ProfileSpeed);
+                // Configuring OpenPose
 
                 // Applying user defined configuration - GFlags to program variables
                 // outputSize
@@ -130,105 +91,178 @@ namespace KeyPointsFromImageConfigurable
                 // Enabling Google Logging
                 const bool enableGoogleLogging = true;
 
-                // Configuring OpenPose
-                OpenPose.Log("Configuring OpenPose...", Priority.High);
+                // Pose configuration (use WrapperStructPose{} for default and recommended configuration)
+                var pose = new WrapperStructPose(!Flags.BodyDisabled,
+                                                 netInputSize,
+                                                 outputSize,
+                                                 keypointScale,
+                                                 Flags.NumGpu,
+                                                 Flags.NumGpuStart,
+                                                 Flags.ScaleNumber,
+                                                 (float) Flags.ScaleGap,
+                                                 OpenPose.FlagsToRenderMode(Flags.RenderPose, multipleView),
+                                                 poseModel,
+                                                 !Flags.DisableBlending,
+                                                 (float) Flags.AlphaPose,
+                                                 (float) Flags.AlphaHeatmap,
+                                                 Flags.PartToShow,
+                                                 Flags.ModelFolder,
+                                                 heatMapTypes,
+                                                 heatMapScale,
+                                                 Flags.PartCandidates,
+                                                 (float) Flags.RenderThreshold,
+                                                 Flags.NumberPeopleMax,
+                                                 Flags.MaximizePositives,
+                                                 Flags.FpsMax,
+                                                 Flags.PrototxtPath,
+                                                 Flags.CaffeModelPath,
+                                                 enableGoogleLogging);
+                // Face configuration (use op::WrapperStructFace{} to disable it)
+                var face = new WrapperStructFace(Flags.Face,
+                                                 faceNetInputSize,
+                                                 OpenPose.FlagsToRenderMode(Flags.FaceRender, multipleView, Flags.RenderPose),
+                                                 (float) Flags.FaceAlphaPose,
+                                                 (float) Flags.FaceAlphaHeatmap,
+                                                 (float) Flags.FaceRenderThreshold);
+                // Hand configuration (use op::WrapperStructHand{} to disable it)
+                var hand = new WrapperStructHand(Flags.Hand,
+                                                 handNetInputSize,
+                                                 Flags.HandScaleNumber,
+                                                 (float) Flags.HandScaleRange, Flags.HandTracking,
+                                                 OpenPose.FlagsToRenderMode(Flags.HandRender, multipleView, Flags.RenderPose),
+                                                 (float) Flags.HandAlphaPose,
+                                                 (float) Flags.HandAlphaHeatmap,
+                                                 (float) Flags.HandRenderThreshold);
+                // Extra functionality configuration (use op::WrapperStructExtra{} to disable it)
+                var extra = new WrapperStructExtra(Flags.Enable3D,
+                                                   Flags.MinViews3D,
+                                                   Flags.Identification,
+                                                   Flags.Tracking,
+                                                   Flags.IkThreads);
+                // Output (comment or use default argument to disable any output)
+                var output = new WrapperStructOutput(Flags.CliVerbose,
+                                                     Flags.WriteKeyPoint,
+                                                     OpenPose.StringToDataFormat(Flags.WriteKeyPointFormat),
+                                                     Flags.WriteJson,
+                                                     Flags.WriteCocoJson,
+                                                     Flags.WriteCocoFootJson,
+                                                     Flags.WriteCocoJsonVariant,
+                                                     Flags.WriteImages,
+                                                     Flags.WriteImagesFormat,
+                                                     Flags.WriteVideo,
+                                                     Flags.WriteVideoWithAudio,
+                                                     Flags.WriteVideoFps,
+                                                     Flags.WriteHeatmaps,
+                                                     Flags.WriteHeatmapsFormat,
+                                                     Flags.WriteVideoAdam,
+                                                     Flags.WriteBvh,
+                                                     Flags.UdpHost,
+                                                     Flags.UdpPort);
+
+                opWrapper.Configure(pose);
+                opWrapper.Configure(face);
+                opWrapper.Configure(hand);
+                opWrapper.Configure(extra);
+                opWrapper.Configure(output);
+
+                // No GUI. Equivalent to: opWrapper.configure(op::WrapperStructGui{});
+                // Set to single-thread (for sequential processing and/or debugging and/or reducing latency)
+                if (Flags.DisableMultiThread)
+                    opWrapper.DisableMultiThreading();
+
+                // Return successful message
+                OpenPose.Log("Stopping OpenPose...", Priority.High);
+            }
+            catch (Exception e)
+            {
+                OpenPose.Error(e.Message, -1, nameof(ConfigureWrapper));
+            }
+        }
+
+        private static void Display(StdSharedPtr<StdVector<Datum>> datumsPtr)
+        {
+            try
+            {
+                // User's displaying/saving/other processing here
+                // datum.cvOutputData: rendered frame with pose or heatmaps
+                // datum.poseKeypoints: Array<float> with the estimated pose
+                if (datumsPtr != null && datumsPtr.TryGet(out var data) && !data.Empty)
+                {
+                    // Display image
+                    var temp = data.ToArray();
+                    Cv.ImShow("User worker GUI", temp[0].CvOutputData);
+                    Cv.WaitKey();
+                }
+                else
+                {
+                    OpenPose.Log("Nullptr or empty datumsPtr found.", Priority.High);
+                }
+            }
+            catch (Exception e)
+            {
+                OpenPose.Error(e.Message, -1, nameof(Display));
+            }
+        }
+
+        private static void PrintKeypoints(StdSharedPtr<StdVector<Datum>> datumsPtr)
+        {
+            try
+            {
+                // Example: How to use the pose keypoints
+                if (datumsPtr != null && datumsPtr.TryGet(out var data) && !data.Empty)
+                {
+                    // Alternative 1
+                    var temp = data.ToArray();
+                    OpenPose.Log($"Body keypoints: {temp[0].PoseKeyPoints}");
+                    OpenPose.Log($"Face keypoints: {temp[0].FaceKeyPoints}");
+                    OpenPose.Log($"Left hand keypoints: {temp[0].HandKeyPoints[0]}");
+                    OpenPose.Log($"Right hand keypoints: {temp[0].HandKeyPoints[1]}");
+                }
+                else
+                {
+                    OpenPose.Log("Nullptr or empty datumsPtr found.", Priority.High);
+                }
+            }
+            catch (Exception e)
+            {
+                OpenPose.Error(e.Message, -1, nameof(PrintKeypoints));
+            }
+        }
+
+        private static int TutorialApiCpp3()
+        {
+            try
+            {
+                OpenPose.Log("Starting OpenPose demo...", Priority.High);
+
+                // logging_level
+                OpenPose.Check(0 <= Flags.LoggingLevel && Flags.LoggingLevel <= 255, "Wrong logging_level value.");
+                ConfigureLog.PriorityThreshold = (Priority)Flags.LoggingLevel;
+                Profiler.SetDefaultX((ulong)Flags.ProfileSpeed);
+
                 using (var opWrapper = new Wrapper<Datum>(ThreadManagerMode.Asynchronous))
                 {
-                    // Pose configuration (use WrapperStructPose{} for default and recommended configuration)
-                    using (var pose = new WrapperStructPose(!Flags.BodyDisabled,
-                                                            netInputSize,
-                                                            outputSize,
-                                                            keypointScale,
-                                                            Flags.NumGpu,
-                                                            Flags.NumGpuStart,
-                                                            Flags.ScaleNumber,
-                                                            (float)Flags.ScaleGap, 
-                                                            OpenPose.FlagsToRenderMode(Flags.RenderPose, multipleView),
-                                                            poseModel, 
-                                                            !Flags.DisableBlending, 
-                                                            (float)Flags.AlphaPose,
-                                                            (float)Flags.AlphaHeatmap,
-                                                            Flags.PartToShow, 
-                                                            Flags.ModelFolder, 
-                                                            heatMapTypes, 
-                                                            heatMapScale, 
-                                                            Flags.PartCandidates,
-                                                            (float)Flags.RenderThreshold,
-                                                            Flags.NumberPeopleMax, 
-                                                            Flags.MaximizePositives, 
-                                                            Flags.FpsMax,
-                                                            Flags.PrototxtPath,
-                                                            Flags.CaffeModelPath,
-                                                            enableGoogleLogging))
-                    // Face configuration (use op::WrapperStructFace{} to disable it)
-                    using (var face = new WrapperStructFace(Flags.Face, 
-                                                            faceNetInputSize,
-                                                            OpenPose.FlagsToRenderMode(Flags.FaceRender, multipleView, Flags.RenderPose),
-                                                            (float)Flags.FaceAlphaPose,
-                                                            (float)Flags.FaceAlphaHeatmap,
-                                                            (float)Flags.FaceRenderThreshold))
-                    // Hand configuration (use op::WrapperStructHand{} to disable it)
-                    using (var hand = new WrapperStructHand(Flags.Hand, 
-                                                            handNetInputSize, 
-                                                            Flags.HandScaleNumber,
-                                                            (float)Flags.HandScaleRange, Flags.HandTracking,
-                                                            OpenPose.FlagsToRenderMode(Flags.HandRender, multipleView, Flags.RenderPose),
-                                                            (float)Flags.HandAlphaPose,
-                                                            (float)Flags.HandAlphaHeatmap,
-                                                            (float)Flags.HandRenderThreshold))
-                    // Extra functionality configuration (use op::WrapperStructExtra{} to disable it)
-                    using (var extra = new WrapperStructExtra(Flags.Enable3D,
-                                                              Flags.MinViews3D,
-                                                              Flags.Identification,
-                                                              Flags.Tracking,
-                                                              Flags.IkThreads))
-                    // Output (comment or use default argument to disable any output)
-                    using (var output = new WrapperStructOutput(Flags.CliVerbose,
-                                                                Flags.WriteKeyPoint,
-                                                                OpenPose.StringToDataFormat(Flags.WriteKeyPointFormat),
-                                                                Flags.WriteJson,
-                                                                Flags.WriteCocoJson,
-                                                                Flags.WriteCocoFootJson,
-                                                                Flags.WriteCocoJsonVariant,
-                                                                Flags.WriteImages,
-                                                                Flags.WriteImagesFormat,
-                                                                Flags.WriteVideo,
-                                                                Flags.WriteVideoFps,
-                                                                Flags.WriteHeatmaps,
-                                                                Flags.WriteHeatmapsFormat,
-                                                                Flags.WriteVideoAdam,
-                                                                Flags.WriteBvh, 
-                                                                Flags.UdpHost,
-                                                                Flags.UdpPort))
+                    // Configuring OpenPose
+                    OpenPose.Log("Configuring OpenPose...", Priority.High);
+                    ConfigureWrapper(opWrapper);
+
+                    // Starting OpenPose
+                    OpenPose.Log("Starting thread(s)...", Priority.High);
+                    opWrapper.Start();
+
+                    // Process and display image
+                    using (var imageToProcess = Cv.ImRead(ImagePath))
+                    using (var datumProcessed = opWrapper.EmplaceAndPop(imageToProcess))
                     {
-                        opWrapper.Configure(pose);
-                        opWrapper.Configure(face);
-                        opWrapper.Configure(hand);
-                        opWrapper.Configure(extra);
-                        opWrapper.Configure(output);
-
-                        // No GUI. Equivalent to: opWrapper.configure(op::WrapperStructGui{});
-                        // Set to single-thread (for sequential processing and/or debugging and/or reducing latency)
-                        if (Flags.DisableMultiThread)
-                            opWrapper.DisableMultiThreading();
-
-                        // Starting OpenPose
-                        OpenPose.Log("Starting thread(s)...", Priority.High);
-                        opWrapper.Start();
-
-                        // Process and display image
-                        using (var imageToProcess = Cv.ImRead(ImagePath))
-                        using (var datumProcessed = opWrapper.EmplaceAndPop(imageToProcess))
+                        if (datumProcessed != null)
                         {
-                            if (datumProcessed != null)
-                            {
-                                PrintKeypoints(datumProcessed);
+                            PrintKeypoints(datumProcessed);
+                            if (!Flags.NoDisplay)
                                 Display(datumProcessed);
-                            }
-                            else
-                            {
-                                OpenPose.Log("Image could not be processed.", Priority.High);
-                            }
+                        }
+                        else
+                        {
+                            OpenPose.Log("Image could not be processed.", Priority.High);
                         }
                     }
                 }

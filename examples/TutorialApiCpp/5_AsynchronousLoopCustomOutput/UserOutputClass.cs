@@ -1,7 +1,7 @@
 ﻿using OpenPoseDotNet;
 using UserDatum = OpenPoseDotNet.CustomDatum;
 
-namespace AsynchronousLoopCustomInputAndOutput
+namespace AsynchronousLoopCustomOutput
 {
 
     // This worker will just read and return all the jpg files in a directory

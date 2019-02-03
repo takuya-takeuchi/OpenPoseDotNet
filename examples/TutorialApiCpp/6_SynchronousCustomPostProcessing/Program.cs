@@ -155,6 +155,7 @@ namespace SynchronousCustomPostProcessing
                                                                     Flags.WriteImages,
                                                                     Flags.WriteImagesFormat,
                                                                     Flags.WriteVideo,
+                                                                    Flags.WriteVideoWithAudio,
                                                                     Flags.WriteVideoFps,
                                                                     Flags.WriteHeatmaps,
                                                                     Flags.WriteHeatmapsFormat,

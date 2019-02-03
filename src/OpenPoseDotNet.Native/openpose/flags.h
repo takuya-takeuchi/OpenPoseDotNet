@@ -90,6 +90,7 @@ MAKE_FUNC(scale_number, int32_t)
 MAKE_FUNC(tracking, int32_t)
 MAKE_FUNC(write_coco_json_variant, int32_t)
 MAKE_FUNC(write_video_fps, double)
+MAKE_FUNC(write_video_with_audio, bool)
         
 MAKE_FUNC_STRING(caffemodel_path)
 MAKE_FUNC_STRING(camera_resolution)

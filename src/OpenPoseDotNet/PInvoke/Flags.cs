@@ -538,6 +538,13 @@ namespace OpenPoseDotNet
         public static extern void op_flags_set_write_video_adam(byte[] value);
 
         [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool op_flags_get_write_video_with_audio();
+
+        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        public static extern void op_flags_set_write_video_with_audio(bool value);
+
+        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
         public static extern IntPtr op_flags_get_video();
 
         [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]

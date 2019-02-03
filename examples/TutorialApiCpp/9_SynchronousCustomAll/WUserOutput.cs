@@ -60,12 +60,16 @@ namespace SynchronousCustomAll
                         OpenPose.Log($"Right hand heatmaps size: [{handHeatMaps[1].GetSize(0)}, {handHeatMaps[1].GetSize(1)}, {handHeatMaps[1].GetSize(2)}, {handHeatMaps[1].GetSize(3)}]");
                     }
 
-                    // Display rendered output image
-                    Cv.ImShow("User worker GUI", datumsPtr[0].CvOutputData);
-                    // Display image and sleeps at least 1 ms (it usually sleeps ~5-10 msec to display the image)
-                    var key = (char)Cv.WaitKey(500);
-                    if (key == 27)
-                        this.Stop();
+                    // Display results (if enabled)
+                    if (!Flags.NoDisplay)
+                    {
+                        // Display rendered output image
+                        Cv.ImShow("User worker GUI", datumsPtr[0].CvOutputData);
+                        // Display image and sleeps at least 1 ms (it usually sleeps ~5-10 msec to display the image)
+                        var key = (char)Cv.WaitKey(500);
+                        if (key == 27)
+                            this.Stop();
+                    }
                 }
             }
             catch (Exception e)

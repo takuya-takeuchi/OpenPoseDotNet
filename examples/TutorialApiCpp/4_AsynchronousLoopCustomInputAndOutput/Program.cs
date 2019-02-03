@@ -5,6 +5,7 @@
 
 using System;
 using System.Diagnostics;
+using Microsoft.Extensions.CommandLineUtils;
 using OpenPoseDotNet;
 using UserDatum = OpenPoseDotNet.CustomDatum;
 
@@ -26,10 +27,27 @@ namespace AsynchronousLoopCustomInputAndOutput
         #endregion
 
         #region Methods
-
-        private static void Main()
+        
+        private static void Main(string[] args)
         {
-            TutorialApiCpp4();
+            var app = new CommandLineApplication(false)
+            {
+                Name = nameof(AsynchronousLoopCustomInputAndOutput)
+            };
+
+            app.HelpOption("-h|--help");
+
+            var noDisplay = app.Option("--no_display", "Enable to disable the visual display.", CommandOptionType.NoValue);
+
+            app.OnExecute(() =>
+            {
+                Flags.NoDisplay = noDisplay.HasValue();
+                TutorialApiCpp4();
+
+                return 0;
+            });
+
+            app.Execute(args);
         }
 
         #region Helpers
@@ -134,6 +152,7 @@ namespace AsynchronousLoopCustomInputAndOutput
                                                                 Flags.WriteImages,
                                                                 Flags.WriteImagesFormat,
                                                                 Flags.WriteVideo,
+                                                                Flags.WriteVideoWithAudio,
                                                                 Flags.WriteVideoFps,
                                                                 Flags.WriteHeatmaps,
                                                                 Flags.WriteHeatmapsFormat,
@@ -172,7 +191,8 @@ namespace AsynchronousLoopCustomInputAndOutput
                                     // Pop frame
                                     if (successfullyEmplaced && opWrapperT.WaitAndPop(out var datumProcessed))
                                     {
-                                        userWantsToExit = userOutputClass.Display(datumProcessed);
+                                        if (!Flags.NoDisplay)
+                                            userWantsToExit = userOutputClass.Display(datumProcessed);
                                         userOutputClass.PrintKeyPoints(datumProcessed);
                                         datumProcessed.Dispose();
                                     }

@@ -4,6 +4,7 @@
 
 using System;
 using System.Diagnostics;
+using Microsoft.Extensions.CommandLineUtils;
 using OpenPoseDotNet;
 using UserDatum = OpenPoseDotNet.CustomDatum;
 
@@ -26,9 +27,26 @@ namespace SynchronousCustomAll
 
         #region Methods
 
-        private static void Main()
+        private static void Main(string[] args)
         {
-            TutorialApiCpp9();
+            var app = new CommandLineApplication(false)
+            {
+                Name = nameof(SynchronousCustomAll)
+            };
+
+            app.HelpOption("-h|--help");
+
+            var noDisplay = app.Option("--no_display", "Enable to disable the visual display.", CommandOptionType.NoValue);
+
+            app.OnExecute(() =>
+            {
+                Flags.NoDisplay = noDisplay.HasValue();
+                TutorialApiCpp9();
+
+                return 0;
+            });
+
+            app.Execute(args);
         }
 
         #region Helpers
@@ -155,6 +173,7 @@ namespace SynchronousCustomAll
                                                                     Flags.WriteImages,
                                                                     Flags.WriteImagesFormat,
                                                                     Flags.WriteVideo,
+                                                                    Flags.WriteVideoWithAudio,
                                                                     Flags.WriteVideoFps,
                                                                     Flags.WriteHeatmaps,
                                                                     Flags.WriteHeatmapsFormat,

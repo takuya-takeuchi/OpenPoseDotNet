@@ -23,7 +23,9 @@ namespace AsynchronousLoopCustomInputAndOutput
 
         public UserInputClass(string directoryPath)
         {
-            this._ImageFiles = Directory.GetFiles(directoryPath, "*.jpg");
+            // For all basic image formats
+            // If we want only e.g., "jpg" + "png" images
+            this._ImageFiles = OpenPose.GetFilesOnDirectory(directoryPath, Extensions.Images);
             if (this._ImageFiles.Length == 0)
                 OpenPose.Error("No images found on: " + directoryPath, -1, nameof(UserInputClass));
         }

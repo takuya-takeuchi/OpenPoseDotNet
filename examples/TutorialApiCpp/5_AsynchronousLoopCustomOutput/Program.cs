@@ -5,10 +5,11 @@
 
 using System;
 using System.Diagnostics;
+using Microsoft.Extensions.CommandLineUtils;
 using OpenPoseDotNet;
 using UserDatum = OpenPoseDotNet.CustomDatum;
 
-namespace AsynchronousLoopCustomInputAndOutput
+namespace AsynchronousLoopCustomOutput
 {
 
     internal class Program
@@ -16,9 +17,26 @@ namespace AsynchronousLoopCustomInputAndOutput
 
         #region Methods
 
-        private static void Main()
+        private static void Main(string[] args)
         {
-            TutorialApiCpp5();
+            var app = new CommandLineApplication(false)
+            {
+                Name = nameof(AsynchronousLoopCustomOutput)
+            };
+
+            app.HelpOption("-h|--help");
+
+            var noDisplay = app.Option("--no_display", "Enable to disable the visual display.", CommandOptionType.NoValue);
+
+            app.OnExecute(() =>
+            {
+                Flags.NoDisplay = noDisplay.HasValue();
+                TutorialApiCpp5();
+
+                return 0;
+            });
+
+            app.Execute(args);
         }
 
         #region Helpers
@@ -143,6 +161,7 @@ namespace AsynchronousLoopCustomInputAndOutput
                                                                 Flags.WriteImages,
                                                                 Flags.WriteImagesFormat,
                                                                 Flags.WriteVideo,
+                                                                Flags.WriteVideoWithAudio,
                                                                 Flags.WriteVideoFps,
                                                                 Flags.WriteHeatmaps,
                                                                 Flags.WriteHeatmapsFormat,
@@ -175,10 +194,15 @@ namespace AsynchronousLoopCustomInputAndOutput
                             // Pop frame
                             if (opWrapperT.WaitAndPop(out var datumProcessed))
                             {
-                                userWantsToExit = userOutputClass.Display(datumProcessed);
+                                if (!Flags.NoDisplay)
+                                    userWantsToExit = userOutputClass.Display(datumProcessed);
                                 userOutputClass.PrintKeyPoints(datumProcessed);
                                 datumProcessed.Dispose();
                             }
+                            // If OpenPose finished reading images
+                            else if (!opWrapperT.IsRunning)
+                                break;
+                            // Something else happened
                             else
                                 OpenPose.Log("Processed datum could not be emplaced.", Priority.High, -1, nameof(TutorialApiCpp5));
                         }

@@ -751,6 +751,12 @@ namespace OpenPoseDotNet
                 NativeMethods.op_flags_set_write_video(str);
             }
         }
+        
+        public static bool WriteVideoWithAudio
+        {
+            get => NativeMethods.op_flags_get_write_video_with_audio();
+            set => NativeMethods.op_flags_set_write_video_with_audio(value);
+        }
 
         public static string WriteVideoAdam
         {
@@ -766,6 +772,16 @@ namespace OpenPoseDotNet
                 NativeMethods.op_flags_set_write_video_adam(str);
             }
         }
+
+        #region ExampleOnly
+
+        public static bool NoDisplay
+        {
+            get;
+            set;
+        }
+
+        #endregion
 
         #endregion
 

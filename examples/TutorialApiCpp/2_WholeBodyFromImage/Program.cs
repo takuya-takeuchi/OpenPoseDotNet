@@ -32,6 +32,7 @@ namespace WholeBodyFromImage
 
             var disableMultiThreadArgument = app.Argument("disableMultiThread", "Disable MultiThread");
             var inputImageOption = app.Option("-i|--image", "Input image", CommandOptionType.SingleValue);
+            var noDisplay = app.Option("--no_display", "Enable to disable the visual display.", CommandOptionType.NoValue);
 
             app.OnExecute(() =>
             {
@@ -48,6 +49,7 @@ namespace WholeBodyFromImage
 
                 ImagePath = path;
 
+                Flags.NoDisplay = noDisplay.HasValue();
                 TutorialApiCpp2();
 
                 return 0;
@@ -60,37 +62,51 @@ namespace WholeBodyFromImage
 
         private static void Display(StdSharedPtr<StdVector<Datum>> datumsPtr)
         {
-            // User's displaying/saving/other processing here
-            // datum.cvOutputData: rendered frame with pose or heatmaps
-            // datum.poseKeypoints: Array<float> with the estimated pose
-            if (datumsPtr != null && datumsPtr.TryGet(out var data) && !data.Empty)
+            try
             {
-                // Display image
-                var temp = data.ToArray();
-                Cv.ImShow("User worker GUI", temp[0].CvOutputData);
-                Cv.WaitKey();
+                // User's displaying/saving/other processing here
+                // datum.cvOutputData: rendered frame with pose or heatmaps
+                // datum.poseKeypoints: Array<float> with the estimated pose
+                if (datumsPtr != null && datumsPtr.TryGet(out var data) && !data.Empty)
+                {
+                    // Display image
+                    var temp = data.ToArray();
+                    Cv.ImShow("User worker GUI", temp[0].CvOutputData);
+                    Cv.WaitKey();
+                }
+                else
+                {
+                    OpenPose.Log("Nullptr or empty datumsPtr found.", Priority.High);
+                }
             }
-            else
+            catch (Exception e)
             {
-                OpenPose.Log("Nullptr or empty datumsPtr found.", Priority.High);
+                OpenPose.Error(e.Message, -1, nameof(Display));
             }
         }
 
         private static void PrintKeypoints(StdSharedPtr<StdVector<Datum>> datumsPtr)
         {
-            // Example: How to use the pose keypoints
-            if (datumsPtr != null && datumsPtr.TryGet(out var data) && !data.Empty)
+            try
             {
-                // Alternative 1
-                var temp = data.ToArray();
-                OpenPose.Log($"Body keypoints: {temp[0].PoseKeyPoints}");
-                OpenPose.Log($"Face keypoints: {temp[0].FaceKeyPoints}");
-                OpenPose.Log($"Left hand keypoints: {temp[0].HandKeyPoints[0]}");
-                OpenPose.Log($"Right hand keypoints: {temp[0].HandKeyPoints[1]}");
+                // Example: How to use the pose keypoints
+                if (datumsPtr != null && datumsPtr.TryGet(out var data) && !data.Empty)
+                {
+                    // Alternative 1
+                    var temp = data.ToArray();
+                    OpenPose.Log($"Body keypoints: {temp[0].PoseKeyPoints}");
+                    OpenPose.Log($"Face keypoints: {temp[0].FaceKeyPoints}");
+                    OpenPose.Log($"Left hand keypoints: {temp[0].HandKeyPoints[0]}");
+                    OpenPose.Log($"Right hand keypoints: {temp[0].HandKeyPoints[1]}");
+                }
+                else
+                {
+                    OpenPose.Log("Nullptr or empty datumsPtr found.", Priority.High);
+                }
             }
-            else
+            catch (Exception e)
             {
-                OpenPose.Log("Nullptr or empty datumsPtr found.", Priority.High);
+                OpenPose.Error(e.Message, -1, nameof(PrintKeypoints));
             }
         }
 
@@ -126,7 +142,8 @@ namespace WholeBodyFromImage
                             if (datumProcessed != null)
                             {
                                 PrintKeypoints(datumProcessed);
-                                Display(datumProcessed);
+                                if (!Flags.NoDisplay)
+                                    Display(datumProcessed);
                             }
                             else
                             {
