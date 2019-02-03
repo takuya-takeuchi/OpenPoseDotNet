@@ -13,22 +13,24 @@ namespace OpenPoseDotNet
 
         [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
         public static extern IntPtr op_PoseExtractorCaffe_new(PoseModel poseModel,
-            byte[] modelFolder,
-            int gpuId,
-            IntPtr heatMapTypes,
-            ScaleMode heatMapScale,
-            bool addPartCandidates,
-            bool maximizePositives,
-            bool enableGoogleLogging);
+                                                              byte[] modelFolder,
+                                                              int gpuId,
+                                                              IntPtr heatMapTypes,
+                                                              ScaleMode heatMapScale,
+                                                              bool addPartCandidates,
+                                                              bool maximizePositives,
+                                                              byte[] protoTxtPath,
+                                                              byte[] caffeModelPath,
+                                                              bool enableGoogleLogging);
 
         [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
         public static extern void op_PoseExtractorCaffe_delete(IntPtr caffe);
 
         [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
         public static extern void op_PoseExtractorCaffe_forwardPass(IntPtr caffe,
-            IntPtr inputNetData,
-            IntPtr inputDataSize,
-            IntPtr scaleRatios);
+                                                                    IntPtr inputNetData,
+                                                                    IntPtr inputDataSize,
+                                                                    IntPtr scaleRatios);
 
     }
 

@@ -14,6 +14,21 @@ namespace OpenPoseDotNet
             set => NativeMethods.op_flags_set_body_disable(value);
         }
 
+        public static string CaffeModelPath
+        {
+            get
+            {
+                var stdstr = NativeMethods.op_flags_get_caffemodel_path();
+                var ret = StringHelper.FromStdString(stdstr, true);
+                return ret;
+            }
+            set
+            {
+                var str = Encoding.UTF8.GetBytes(value ?? "");
+                NativeMethods.op_flags_set_caffemodel_path(str);
+            }
+        }
+
         public static bool Face
         {
             get => NativeMethods.op_flags_get_face();
@@ -205,7 +220,7 @@ namespace OpenPoseDotNet
             get => NativeMethods.op_flags_get_hand_scale_range();
             set => NativeMethods.op_flags_set_hand_scale_range(value);
         }
-        
+
         public static bool HandTracking
         {
             get => NativeMethods.op_flags_get_hand_tracking();
@@ -511,7 +526,22 @@ namespace OpenPoseDotNet
             get => NativeMethods.op_flags_get_profile_speed();
             set => NativeMethods.op_flags_set_profile_speed(value);
         }
-        
+
+        public static string PrototxtPath
+        {
+            get
+            {
+                var stdstr = NativeMethods.op_flags_get_prototxt_path();
+                var ret = StringHelper.FromStdString(stdstr, true);
+                return ret;
+            }
+            set
+            {
+                var str = Encoding.UTF8.GetBytes(value ?? "");
+                NativeMethods.op_flags_set_prototxt_path(str);
+            }
+        }
+
         public static string ModelFolder
         {
             get
@@ -740,5 +770,5 @@ namespace OpenPoseDotNet
         #endregion
 
     }
-    
+
 }

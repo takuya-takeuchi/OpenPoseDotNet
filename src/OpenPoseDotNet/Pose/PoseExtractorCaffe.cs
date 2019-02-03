@@ -19,12 +19,16 @@ namespace OpenPoseDotNet
                                   ScaleMode heatMapScale = ScaleMode.ZeroToOne,
                                   bool addPartCandidates = false,
                                   bool maximizePositives = false,
+                                  string prototxtPath = null,
+                                  string caffeModelPath = null,
                                   bool enableGoogleLogging = true)
         {
             if (!Directory.Exists(modelFolder))
                 throw new DirectoryNotFoundException($"{modelFolder} is not found.");
 
             var modelFolderBytes = Encoding.UTF8.GetBytes(modelFolder);
+            var prototxtPathBytes = Encoding.UTF8.GetBytes(prototxtPath ?? "");
+            var caffeModelPathBytes = Encoding.UTF8.GetBytes(caffeModelPath ?? "");
             using (var types = new StdVector<HeatMapType>(heatMapTypes ?? new HeatMapType[0]))
                 this.NativePtr = NativeMethods.op_PoseExtractorCaffe_new(poseModel,
                                                                          modelFolderBytes,
@@ -33,6 +37,8 @@ namespace OpenPoseDotNet
                                                                          heatMapScale,
                                                                          addPartCandidates,
                                                                          maximizePositives,
+                                                                         prototxtPathBytes,
+                                                                         caffeModelPathBytes,
                                                                          enableGoogleLogging);
         }
 
