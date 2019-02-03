@@ -99,16 +99,46 @@ namespace BodyFromImage
 
                     // Process and display image
                     using (var bmp = (Bitmap)Image.FromFile(ImagePath))
-                    using (var datumProcessed = opWrapper.EmplaceAndPop(bmp))
                     {
-                        if (datumProcessed != null)
+                        BitmapData data = null;
+                        try
                         {
-                            PrintKeypoints(datumProcessed);
-                            Display(datumProcessed);
+                            var width = bmp.Width;
+                            var height = bmp.Height;
+                            data = bmp.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
+
+                            var stride = data.Stride;
+                            var scan0 = data.Scan0;
+
+                            unsafe
+                            {
+                                var line = width * 3;
+                                var image = new byte[line * height];
+                                var ps = (byte*)scan0;
+                                for (var h = 0; h < height; h++)
+                                {
+                                    Marshal.Copy((IntPtr)ps, image, line * h, line);
+                                    ps += stride;
+                                }
+
+                                using (var datumProcessed = opWrapper.EmplaceAndPop(image, width, height, MatType.CV_8UC3))
+                                {
+                                    if (datumProcessed != null)
+                                    {
+                                        PrintKeypoints(datumProcessed);
+                                        Display(datumProcessed);
+                                    }
+                                    else
+                                    {
+                                        OpenPose.Log("Image could not be processed.", Priority.High);
+                                    }
+                                }
+                            }
                         }
-                        else
+                        finally
                         {
-                            OpenPose.Log("Image could not be processed.", Priority.High);
+                            if (data != null)
+                                bmp.UnlockBits(data);
                         }
                     }
                 }

@@ -1,4 +1,4 @@
-# Body From Image from Bitmap
+# Body From Image from Raw Image data
 
 ## Quick Start
 

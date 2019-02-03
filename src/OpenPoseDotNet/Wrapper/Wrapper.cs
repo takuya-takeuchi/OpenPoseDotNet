@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 // ReSharper disable once CheckNamespace
 namespace OpenPoseDotNet
@@ -129,6 +131,76 @@ namespace OpenPoseDotNet
             mat.ThrowIfDisposed();
 
             var ret = NativeMethods.op_wrapper_emplaceAndPop_cvMat(this._DataType, this.NativePtr, mat.NativePtr);
+            return new StdSharedPtr<StdVector<T>>(ret);
+        }
+
+        public StdSharedPtr<StdVector<T>> EmplaceAndPop(Bitmap bitmap)
+        {
+            if (bitmap == null)
+                throw new ArgumentNullException(nameof(bitmap));
+
+            byte[] image = null;
+            var format = bitmap.PixelFormat;
+            var width = bitmap.Width;
+            var height = bitmap.Height;
+            var size = new Size(width, height);
+
+            int type;
+            switch (format)
+            {
+                case PixelFormat.Format24bppRgb:
+                    type = MatType.CV_8UC3;
+                    break;
+                case PixelFormat.Format32bppArgb:
+                    type = MatType.CV_8UC4;
+                    break;
+                case PixelFormat.Format8bppIndexed:
+                    type = MatType.CV_8UC1;
+                    break;
+                default:
+                    throw new ArgumentException($"{bitmap.PixelFormat} is not supported.");
+            }
+
+            BitmapData data = null;
+
+            try
+            {
+                var channels = MatType.Channels(type);
+
+                data = bitmap.LockBits(new Rectangle(Point.Empty, size), ImageLockMode.ReadOnly, format);
+
+                var stride = data.Stride;
+                var scan0 = data.Scan0;
+                var line = width * channels;
+                image = new byte[line * height];
+
+                unsafe
+                {
+                    fixed (byte* pi = &image[0])
+                    {
+                        var ppi = pi;
+                        var ps = (byte*)scan0;
+                        for (var h = 0; h < height; h++)
+                        {
+                            NativeMethods.cstd_memcpy(ppi, ps, line);
+                            ps += stride;
+                            ppi += line;
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                if (data != null)
+                    bitmap.UnlockBits(data);
+            }
+
+            var ret = NativeMethods.op_wrapper_emplaceAndPop_rawImage(this._DataType,
+                                                                      this.NativePtr,
+                                                                      image,
+                                                                      width,
+                                                                      height,
+                                                                      type);
             return new StdSharedPtr<StdVector<T>>(ret);
         }
 
