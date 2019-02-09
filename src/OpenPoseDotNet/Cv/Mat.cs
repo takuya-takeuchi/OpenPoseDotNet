@@ -120,7 +120,7 @@ namespace OpenPoseDotNet
             finally
             {
                 if (data != null)
-                    bitmap?.UnlockBits(data);
+                    bitmap.UnlockBits(data);
             }
 
             return bitmap;

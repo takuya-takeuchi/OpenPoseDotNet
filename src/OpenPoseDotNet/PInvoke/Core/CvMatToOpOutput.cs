@@ -8,13 +8,13 @@ namespace OpenPoseDotNet
     internal sealed partial class NativeMethods
     {
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern IntPtr op_core_CvMatToOpOutput_new();
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void op_core_CvMatToOpOutput_delete(IntPtr extractor);
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern IntPtr op_core_CvMatToOpOutput_createArray(IntPtr output,
                                                                         IntPtr cvInputData,
                                                                         double scaleInputToOutput,

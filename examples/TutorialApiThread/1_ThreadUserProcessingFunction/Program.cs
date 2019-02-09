@@ -3,7 +3,6 @@
 */
 
 using System;
-using System.Diagnostics;
 using OpenPoseDotNet;
 
 namespace ThreadUserProcessingFunction

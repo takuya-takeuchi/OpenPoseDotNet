@@ -1,5 +1,4 @@
-﻿using System.IO;
-using OpenPoseDotNet;
+﻿using OpenPoseDotNet;
 using UserDatum = OpenPoseDotNet.CustomDatum;
 
 namespace AsynchronousLoopCustomInputAndOutput

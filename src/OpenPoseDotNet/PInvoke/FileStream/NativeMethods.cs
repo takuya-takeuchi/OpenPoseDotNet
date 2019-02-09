@@ -8,10 +8,10 @@ namespace OpenPoseDotNet
     internal sealed partial class NativeMethods
     {
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern IntPtr op_loadImage(byte[] fullFilePath, LoadImageFlag openCvFlags);
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern DataFormat op_stringToDataFormat(byte[] dataFormat);
 
     }

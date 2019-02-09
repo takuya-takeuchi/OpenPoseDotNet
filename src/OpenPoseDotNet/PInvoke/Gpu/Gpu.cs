@@ -7,10 +7,10 @@ namespace OpenPoseDotNet
     internal sealed partial class NativeMethods
     {
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern int op_getGpuNumber();
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern GpuMode op_getGpuMode();
 
     }

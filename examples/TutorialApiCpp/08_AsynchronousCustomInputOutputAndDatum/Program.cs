@@ -51,7 +51,7 @@ namespace AsynchronousLoopCustomInputAndOutput
 
         #region Helpers
 
-        private static void ConfigureWrapper(Wrapper<CustomDatum> opWrapperT)
+        private static void ConfigureWrapper(Wrapper<UserDatum> opWrapperT)
         {
             try
             {

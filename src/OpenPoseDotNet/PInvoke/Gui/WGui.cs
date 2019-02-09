@@ -10,10 +10,10 @@ namespace OpenPoseDotNet
 
         #region op::WGui
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern IntPtr op_WGui_new(OpenPose.DataType dataType, IntPtr gui);
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void op_WGui_delete(OpenPose.DataType dataType, IntPtr wgui);
 
         #endregion

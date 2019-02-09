@@ -38,13 +38,13 @@ namespace OpenPoseDotNet
 
         }
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern IntPtr op_getTimerInit();
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern double op_getTimeSeconds(IntPtr timerInit);
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void op_printTime(IntPtr timerInit,
                                                byte[] firstMessage,
                                                byte[] secondMessage,
@@ -52,7 +52,7 @@ namespace OpenPoseDotNet
 
         #region utilities/check
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void op_check(bool condition,
                                            byte[] message,
                                            int line,
@@ -63,20 +63,20 @@ namespace OpenPoseDotNet
 
         #region utilities/errorAndLog
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void op_dLog(byte[] message,
                                                   Priority priority,
                                                   int line,
                                                   byte[] function,
                                                   byte[] file);
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void op_error(byte[] message,
                                            int line,
                                            byte[] function,
                                            byte[] file);
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void op_log(byte[] message,
                                          Priority priority,
                                          int line,
@@ -87,33 +87,33 @@ namespace OpenPoseDotNet
 
         #region utilities/flagsToOpenPose
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern IntPtr op_flagsToPoint(byte[] pointString, byte[] pointExample);
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void op_flagsToPoint_xy(byte[] pointString, byte[] pointExample, out int x, out int y);
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern RenderMode op_flagsToRenderMode(int renderFlag, bool gpuBuggy, int renderPoseFlag);
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern PoseModel op_flagsToPoseModel(byte[] poseModeString);
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern ScaleMode op_flagsToScaleMode(int keyPointScale);
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern IntPtr op_flagsToHeatMaps(bool heatMapsAddParts,
                                                        bool heatMapsAddBkg,
                                                        bool heatMapsAddPAFs);
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern ScaleMode op_flagsToHeatMapScaleMode(int heatMapScale);
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern Detector op_flagsToDetector(int detector);
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void op_flagsToProducer(byte[] imageDirectory,
                                                      byte[] videoPath,
                                                      byte[] ipCameraPath,
@@ -123,7 +123,7 @@ namespace OpenPoseDotNet
                                                      out ProducerType item1,
                                                      out IntPtr item2);
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern DisplayMode op_flagsToDisplayMode(int display, bool enabled3d);
 
         #endregion

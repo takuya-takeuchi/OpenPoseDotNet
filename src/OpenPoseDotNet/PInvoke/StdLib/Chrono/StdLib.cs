@@ -10,7 +10,7 @@ namespace OpenPoseDotNet
 
         #region string
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void std_chrono_time_point_delete(IntPtr timePoint);
 
         #endregion
