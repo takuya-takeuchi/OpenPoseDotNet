@@ -107,6 +107,16 @@ namespace OpenPoseDotNet
 
         #endregion
 
+        #region op::Rectangle
+
+        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        public static extern IntPtr op_core_rectangle_float_new(float x, float y, float width, float height);
+
+        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        public static extern void op_core_rectangle_float_delete(IntPtr rectangle);
+
+        #endregion
+
     }
 
 }

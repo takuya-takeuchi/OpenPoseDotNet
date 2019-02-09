@@ -10,6 +10,7 @@ namespace OpenPoseDotNet
 
         [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
         public static extern IntPtr op_wrapperStructFace_new(bool enable,
+                                                             Detector detector,
                                                              IntPtr netInputSize,
                                                              RenderMode renderMode,
                                                              float alphaKeyPoint,

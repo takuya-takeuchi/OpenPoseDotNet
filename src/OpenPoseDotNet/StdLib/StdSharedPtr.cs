@@ -27,20 +27,24 @@ namespace OpenPoseDotNet
         {
             var types = new[]
             {
-                new { Type = typeof(StdVector<Datum>),                ElementType = ElementTypes.StdVectorOfDatum },
-                new { Type = typeof(StdVector<CustomDatum>),          ElementType = ElementTypes.StdVectorOfCustomDatum },
-                new { Type = typeof(PoseExtractorCaffe),              ElementType = ElementTypes.PoseExtractorCaffe },
-                new { Type = typeof(Producer),                        ElementType = ElementTypes.Producer },
-                new { Type = typeof(DatumProducer<Datum>),            ElementType = ElementTypes.DatumProducerOfDatum },
-                new { Type = typeof(WDatumProducer<Datum>),           ElementType = ElementTypes.WDatumProducerOfDatum },
-                new { Type = typeof(Gui),                             ElementType = ElementTypes.Gui },
-                new { Type = typeof(WGui<Datum>),                     ElementType = ElementTypes.WGui },
-                new { Type = typeof(UserWorker<Datum>),               ElementType = ElementTypes.UserWorkerOfDefault },
-                new { Type = typeof(UserWorker<CustomDatum>),         ElementType = ElementTypes.UserWorkerOfCustom },
-                new { Type = typeof(UserWorkerConsumer<Datum>),       ElementType = ElementTypes.UserWorkerConsumerOfDefault },
-                new { Type = typeof(UserWorkerConsumer<CustomDatum>), ElementType = ElementTypes.UserWorkerConsumerOfCustom },
-                new { Type = typeof(UserWorkerProducer<Datum>),       ElementType = ElementTypes.UserWorkerProducerOfDefault },
-                new { Type = typeof(UserWorkerProducer<CustomDatum>), ElementType = ElementTypes.UserWorkerProducerOfCustom }
+                new { Type = typeof(Datum),                                ElementType = ElementTypes.Datum },
+                new { Type = typeof(CustomDatum),                          ElementType = ElementTypes.CustomDatum },
+                new { Type = typeof(StdVector<Datum>),                     ElementType = ElementTypes.StdVectorOfDatum },
+                new { Type = typeof(StdVector<CustomDatum>),               ElementType = ElementTypes.StdVectorOfCustomDatum },
+                new { Type = typeof(StdVector<StdSharedPtr<Datum>>),       ElementType = ElementTypes.StdVectorOfStdSharedPtrOfDatum },
+                new { Type = typeof(StdVector<StdSharedPtr<CustomDatum>>), ElementType = ElementTypes.StdVectorOfStdSharedPtrOfCustomDatum },
+                new { Type = typeof(PoseExtractorCaffe),                   ElementType = ElementTypes.PoseExtractorCaffe },
+                new { Type = typeof(Producer),                             ElementType = ElementTypes.Producer },
+                new { Type = typeof(DatumProducer<Datum>),                 ElementType = ElementTypes.DatumProducerOfDatum },
+                new { Type = typeof(WDatumProducer<Datum>),                ElementType = ElementTypes.WDatumProducerOfDatum },
+                new { Type = typeof(Gui),                                  ElementType = ElementTypes.Gui },
+                new { Type = typeof(WGui<Datum>),                          ElementType = ElementTypes.WGui },
+                new { Type = typeof(UserWorker<Datum>),                    ElementType = ElementTypes.UserWorkerOfDefault },
+                new { Type = typeof(UserWorker<CustomDatum>),              ElementType = ElementTypes.UserWorkerOfCustom },
+                new { Type = typeof(UserWorkerConsumer<Datum>),            ElementType = ElementTypes.UserWorkerConsumerOfDefault },
+                new { Type = typeof(UserWorkerConsumer<CustomDatum>),      ElementType = ElementTypes.UserWorkerConsumerOfCustom },
+                new { Type = typeof(UserWorkerProducer<Datum>),            ElementType = ElementTypes.UserWorkerProducerOfDefault },
+                new { Type = typeof(UserWorkerProducer<CustomDatum>),      ElementType = ElementTypes.UserWorkerProducerOfCustom }
             };
 
             foreach (var type in types)
@@ -59,6 +63,12 @@ namespace OpenPoseDotNet
             foreach (var type in subtypes)
                 SupportSubTypes.Add(type.Type, type.ElementType);
         }
+        
+        //public StdSharedPtr()
+        //{
+        //    this._Imp = CreateImp();
+        //    this.NativePtr = this._Imp.Create();
+        //}
 
         public StdSharedPtr(T obj)
         {
@@ -70,10 +80,13 @@ namespace OpenPoseDotNet
             this._Imp = CreateImp();
             this.NativePtr = this._Imp.Create(obj.NativePtr);
             this._Obj = obj;
+            
+            // set object will be destructed by native domain
             obj.IsEnableDispose = false;
         }
 
-        internal StdSharedPtr(IntPtr sharedPtr)
+        internal StdSharedPtr(IntPtr sharedPtr, bool isEnabledDispose = true) :
+            base(isEnabledDispose)
         {
             this._Imp = CreateImp();
             this.NativePtr = sharedPtr;
@@ -87,6 +100,17 @@ namespace OpenPoseDotNet
         {
             this.ThrowIfDisposed();
             return this._Imp.Get(this.NativePtr);
+        }
+
+        public void Reset(T obj)
+        {
+            this.ThrowIfDisposed();
+            obj.ThrowIfDisposed();
+
+            // set object will be destructed by native domain
+            obj.IsEnableDispose = false;
+
+            this._Imp.Reset(this.NativePtr, obj);
         }
 
         public bool TryGet(out T data)
@@ -134,10 +158,18 @@ namespace OpenPoseDotNet
             {
                 switch (type)
                 {
+                    case ElementTypes.Datum:
+                        return new StdSharedPtrDatumImp() as StdSharedPtrImp<T>;
+                    case ElementTypes.CustomDatum:
+                        return new StdSharedPtrCustomDatumImp() as StdSharedPtrImp<T>;
                     case ElementTypes.StdVectorOfDatum:
                         return new StdSharedPtrStdVectorOfDatumImp() as StdSharedPtrImp<T>;
                     case ElementTypes.StdVectorOfCustomDatum:
                         return new StdSharedPtrStdVectorOfCustomDatumImp() as StdSharedPtrImp<T>;
+                    case ElementTypes.StdVectorOfStdSharedPtrOfDatum:
+                        return new StdSharedPtrStdVectorStdSharedPtrOfDatumImp() as StdSharedPtrImp<T>;
+                    case ElementTypes.StdVectorOfStdSharedPtrOfCustomDatum:
+                        return new StdSharedPtrStdVectorStdSharedPtrOfCustomDatumImp() as StdSharedPtrImp<T>;
                     case ElementTypes.PoseExtractorCaffe:
                         return new StdSharedPtrPoseExtractorCaffeImp() as StdSharedPtrImp<T>;
                     case ElementTypes.Producer:
@@ -199,9 +231,17 @@ namespace OpenPoseDotNet
         private enum ElementTypes
         {
 
+            Datum,
+
+            CustomDatum,
+
             StdVectorOfDatum,
 
             StdVectorOfCustomDatum,
+
+            StdVectorOfStdSharedPtrOfDatum,
+
+            StdVectorOfStdSharedPtrOfCustomDatum,
 
             PoseExtractorCaffe,
 
@@ -253,11 +293,87 @@ namespace OpenPoseDotNet
 
             #region Methods
 
+            public abstract IntPtr Create();
+
             public abstract IntPtr Create(IntPtr ptr);
 
             public abstract void Delete(IntPtr ptr);
 
             public abstract U Get(IntPtr ptr);
+
+            public abstract void Reset(IntPtr ptr, U obj);
+
+            #endregion
+
+        }
+
+        private sealed class StdSharedPtrDatumImp : StdSharedPtrImp<Datum>
+        {
+
+            #region Methods
+
+            public override IntPtr Create()
+            {
+                return NativeMethods.std_shared_ptr_Datum_new();
+            }
+
+            public override IntPtr Create(IntPtr ptr)
+            {
+                return NativeMethods.std_shared_ptr_Datum_new2(ptr);
+            }
+
+            public override void Delete(IntPtr ptr)
+            {
+                if (ptr != IntPtr.Zero)
+                    NativeMethods.std_shared_ptr_Datum_delete(ptr);
+            }
+
+            public override Datum Get(IntPtr ptr)
+            {
+                var p = NativeMethods.std_shared_ptr_Datum_get(ptr);
+                return new Datum(p, false);
+            }
+
+            public override void Reset(IntPtr ptr, Datum obj)
+            {
+                NativeMethods.std_shared_ptr_Datum_reset(ptr, obj.NativePtr);
+            }
+
+            #endregion
+
+        }
+
+        private sealed class StdSharedPtrCustomDatumImp : StdSharedPtrImp<CustomDatum>
+        {
+
+            #region Methods
+
+            public override IntPtr Create()
+            {
+                return NativeMethods.std_shared_ptr_CustomDatum_new();
+            }
+
+            public override IntPtr Create(IntPtr ptr)
+            {
+                return NativeMethods.std_shared_ptr_CustomDatum_new2(ptr);
+            }
+
+            public override void Delete(IntPtr ptr)
+            {
+                if (ptr != IntPtr.Zero)
+                    NativeMethods.std_shared_ptr_CustomDatum_delete(ptr);
+            }
+
+            public override CustomDatum Get(IntPtr ptr)
+            {
+                var p = NativeMethods.std_shared_ptr_CustomDatum_get(ptr);
+                return new CustomDatum(p, false);
+            }
+
+            public override void Reset(IntPtr ptr, CustomDatum obj)
+            {
+                NativeMethods.std_shared_ptr_CustomDatum_reset(ptr, obj.NativePtr);
+            }
 
             #endregion
 
@@ -268,9 +384,14 @@ namespace OpenPoseDotNet
 
             #region Methods
 
+            public override IntPtr Create()
+            {
+                return NativeMethods.std_shared_ptr_StdVectorOfDatum_new();
+            }
+
             public override IntPtr Create(IntPtr ptr)
             {
-                return NativeMethods.std_shared_ptr_StdVectorOfDatum_new(ptr);
+                return NativeMethods.std_shared_ptr_StdVectorOfDatum_new2(ptr);
             }
 
             public override void Delete(IntPtr ptr)
@@ -285,6 +406,11 @@ namespace OpenPoseDotNet
                 return new StdVector<Datum>(p, false);
             }
 
+            public override void Reset(IntPtr ptr, StdVector<Datum> obj)
+            {
+                NativeMethods.std_shared_ptr_StdVectorOfDatum_reset(ptr, obj.NativePtr);
+            }
+
             #endregion
 
         }
@@ -294,9 +420,14 @@ namespace OpenPoseDotNet
 
             #region Methods
 
+            public override IntPtr Create()
+            {
+                return NativeMethods.std_shared_ptr_StdVectorOfCustomDatum_new();
+            }
+
             public override IntPtr Create(IntPtr ptr)
             {
-                return NativeMethods.std_shared_ptr_StdVectorOfCustomDatum_new(ptr);
+                return NativeMethods.std_shared_ptr_StdVectorOfCustomDatum_new2(ptr);
             }
 
             public override void Delete(IntPtr ptr)
@@ -311,6 +442,83 @@ namespace OpenPoseDotNet
                 return new StdVector<CustomDatum>(p, false);
             }
 
+            public override void Reset(IntPtr ptr, StdVector<CustomDatum> obj)
+            {
+                NativeMethods.std_shared_ptr_StdVectorOfCustomDatum_reset(ptr, obj.NativePtr);
+            }
+
+            #endregion
+
+        }
+        
+        private sealed class StdSharedPtrStdVectorStdSharedPtrOfDatumImp : StdSharedPtrImp<StdVector<StdSharedPtr<Datum>>>
+        {
+
+            #region Methods
+
+            public override IntPtr Create()
+            {
+                return NativeMethods.std_shared_ptr_StdVectorOfStdSharedPtrOfDatum_new();
+            }
+
+            public override IntPtr Create(IntPtr ptr)
+            {
+                return NativeMethods.std_shared_ptr_StdVectorOfStdSharedPtrOfDatum_new2(ptr);
+            }
+
+            public override void Delete(IntPtr ptr)
+            {
+                if (ptr != IntPtr.Zero)
+                    NativeMethods.std_shared_ptr_StdVectorOfStdSharedPtrOfDatum_delete(ptr);
+            }
+
+            public override StdVector<StdSharedPtr<Datum>> Get(IntPtr ptr)
+            {
+                var p = NativeMethods.std_shared_ptr_StdVectorOfStdSharedPtrOfDatum_get(ptr);
+                return new StdVector<StdSharedPtr<Datum>>(p, false);
+            }
+
+            public override void Reset(IntPtr ptr, StdVector<StdSharedPtr<Datum>> obj)
+            {
+                NativeMethods.std_shared_ptr_StdVectorOfStdSharedPtrOfDatum_reset(ptr, obj.NativePtr);
+            }
+
+            #endregion
+
+        }
+
+        private sealed class StdSharedPtrStdVectorStdSharedPtrOfCustomDatumImp : StdSharedPtrImp<StdVector<StdSharedPtr<CustomDatum>>>
+        {
+
+            #region Methods
+
+            public override IntPtr Create()
+            {
+                return NativeMethods.std_shared_ptr_StdVectorOfStdSharedPtrOfCustomDatum_new();
+            }
+
+            public override IntPtr Create(IntPtr ptr)
+            {
+                return NativeMethods.std_shared_ptr_StdVectorOfStdSharedPtrOfCustomDatum_new2(ptr);
+            }
+
+            public override void Delete(IntPtr ptr)
+            {
+                if (ptr != IntPtr.Zero)
+                    NativeMethods.std_shared_ptr_StdVectorOfStdSharedPtrOfCustomDatum_delete(ptr);
+            }
+
+            public override StdVector<StdSharedPtr<CustomDatum>> Get(IntPtr ptr)
+            {
+                var p = NativeMethods.std_shared_ptr_StdVectorOfStdSharedPtrOfCustomDatum_get(ptr);
+                return new StdVector<StdSharedPtr<CustomDatum>>(p, false);
+            }
+
+            public override void Reset(IntPtr ptr, StdVector<StdSharedPtr<CustomDatum>> obj)
+            {
+                NativeMethods.std_shared_ptr_StdVectorOfStdSharedPtrOfCustomDatum_reset(ptr, obj.NativePtr);
+            }
+
             #endregion
 
         }
@@ -320,9 +528,14 @@ namespace OpenPoseDotNet
 
             #region Methods
 
+            public override IntPtr Create()
+            {
+                return NativeMethods.std_shared_ptr_op_PoseExtractorCaffe_new();
+            }
+
             public override IntPtr Create(IntPtr ptr)
             {
-                return NativeMethods.std_shared_ptr_op_PoseExtractorCaffe_new(ptr);
+                return NativeMethods.std_shared_ptr_op_PoseExtractorCaffe_new2(ptr);
             }
 
             public override void Delete(IntPtr ptr)
@@ -337,6 +550,11 @@ namespace OpenPoseDotNet
                 return new PoseExtractorCaffe(p, false);
             }
 
+            public override void Reset(IntPtr ptr, PoseExtractorCaffe obj)
+            {
+                NativeMethods.std_shared_ptr_op_PoseExtractorCaffe_reset(ptr, obj.NativePtr);
+            }
+
             #endregion
 
         }
@@ -346,9 +564,14 @@ namespace OpenPoseDotNet
 
             #region Methods
 
+            public override IntPtr Create()
+            {
+                return NativeMethods.std_shared_ptr_op_Producer_new();
+            }
+
             public override IntPtr Create(IntPtr ptr)
             {
-                return NativeMethods.std_shared_ptr_op_Producer_new(ptr);
+                return NativeMethods.std_shared_ptr_op_Producer_new2(ptr);
             }
 
             public override void Delete(IntPtr ptr)
@@ -363,6 +586,11 @@ namespace OpenPoseDotNet
                 return new ConcreteProducer(p, false);
             }
 
+            public override void Reset(IntPtr ptr, Producer obj)
+            {
+                NativeMethods.std_shared_ptr_op_Producer_reset(ptr, obj.NativePtr);
+            }
+
             #endregion
 
         }
@@ -372,9 +600,14 @@ namespace OpenPoseDotNet
 
             #region Methods
 
+            public override IntPtr Create()
+            {
+                return NativeMethods.std_shared_ptr_op_DatumProducerOfDatum_new();
+            }
+
             public override IntPtr Create(IntPtr ptr)
             {
-                return NativeMethods.std_shared_ptr_op_DatumProducerOfDatum_new(ptr);
+                return NativeMethods.std_shared_ptr_op_DatumProducerOfDatum_new2(ptr);
             }
 
             public override void Delete(IntPtr ptr)
@@ -389,6 +622,11 @@ namespace OpenPoseDotNet
                 return new DatumProducer<Datum>(p, false);
             }
 
+            public override void Reset(IntPtr ptr, DatumProducer<Datum> obj)
+            {
+                NativeMethods.std_shared_ptr_op_DatumProducerOfDatum_reset(ptr, obj.NativePtr);
+            }
+
             #endregion
 
         }
@@ -398,9 +636,14 @@ namespace OpenPoseDotNet
 
             #region Methods
 
+            public override IntPtr Create()
+            {
+                return NativeMethods.std_shared_ptr_op_WDatumProducerOfDatum_new();
+            }
+
             public override IntPtr Create(IntPtr ptr)
             {
-                return NativeMethods.std_shared_ptr_op_WDatumProducerOfDatum_new(ptr);
+                return NativeMethods.std_shared_ptr_op_WDatumProducerOfDatum_new2(ptr);
             }
 
             public override void Delete(IntPtr ptr)
@@ -415,6 +658,11 @@ namespace OpenPoseDotNet
                 return new WDatumProducer<Datum>(p, false);
             }
 
+            public override void Reset(IntPtr ptr, WDatumProducer<Datum> obj)
+            {
+                NativeMethods.std_shared_ptr_op_WDatumProducerOfDatum_reset(ptr, obj.NativePtr);
+            }
+
             #endregion
 
         }
@@ -424,9 +672,14 @@ namespace OpenPoseDotNet
 
             #region Methods
 
+            public override IntPtr Create()
+            {
+                return NativeMethods.std_shared_ptr_op_Gui_new();
+            }
+
             public override IntPtr Create(IntPtr ptr)
             {
-                return NativeMethods.std_shared_ptr_op_Gui_new(ptr);
+                return NativeMethods.std_shared_ptr_op_Gui_new2(ptr);
             }
 
             public override void Delete(IntPtr ptr)
@@ -441,6 +694,11 @@ namespace OpenPoseDotNet
                 return new Gui(p, false);
             }
 
+            public override void Reset(IntPtr ptr, Gui obj)
+            {
+                NativeMethods.std_shared_ptr_op_Gui_reset(ptr, obj.NativePtr);
+            }
+
             #endregion
 
         }
@@ -450,9 +708,14 @@ namespace OpenPoseDotNet
 
             #region Methods
 
+            public override IntPtr Create()
+            {
+                return NativeMethods.std_shared_ptr_op_WGui_new();
+            }
+
             public override IntPtr Create(IntPtr ptr)
             {
-                return NativeMethods.std_shared_ptr_op_WGui_new(ptr);
+                return NativeMethods.std_shared_ptr_op_WGui_new2(ptr);
             }
 
             public override void Delete(IntPtr ptr)
@@ -467,6 +730,11 @@ namespace OpenPoseDotNet
                 return new WGui<Datum>(p, false);
             }
 
+            public override void Reset(IntPtr ptr, WGui<Datum> obj)
+            {
+                NativeMethods.std_shared_ptr_op_WGui_reset(ptr, obj.NativePtr);
+            }
+
             #endregion
 
         }
@@ -476,9 +744,14 @@ namespace OpenPoseDotNet
 
             #region Methods
 
+            public override IntPtr Create()
+            {
+                return NativeMethods.std_shared_ptr_op_UserWorkerOfDefault_new();
+            }
+
             public override IntPtr Create(IntPtr ptr)
             {
-                return NativeMethods.std_shared_ptr_op_UserWorkerOfDefault_new(ptr);
+                return NativeMethods.std_shared_ptr_op_UserWorkerOfDefault_new2(ptr);
             }
 
             public override void Delete(IntPtr ptr)
@@ -493,6 +766,11 @@ namespace OpenPoseDotNet
                 return new UserWorker<Datum>(p, false);
             }
 
+            public override void Reset(IntPtr ptr, UserWorker<Datum> obj)
+            {
+                NativeMethods.std_shared_ptr_op_UserWorkerOfDefault_reset(ptr, obj.NativePtr);
+            }
+
             #endregion
 
         }
@@ -502,9 +780,14 @@ namespace OpenPoseDotNet
 
             #region Methods
 
+            public override IntPtr Create()
+            {
+                return NativeMethods.std_shared_ptr_op_UserWorkerOfCustom_new();
+            }
+
             public override IntPtr Create(IntPtr ptr)
             {
-                return NativeMethods.std_shared_ptr_op_UserWorkerOfCustom_new(ptr);
+                return NativeMethods.std_shared_ptr_op_UserWorkerOfCustom_new2(ptr);
             }
 
             public override void Delete(IntPtr ptr)
@@ -519,6 +802,11 @@ namespace OpenPoseDotNet
                 return new UserWorker<CustomDatum>(p, false);
             }
 
+            public override void Reset(IntPtr ptr, UserWorker<CustomDatum> obj)
+            {
+                NativeMethods.std_shared_ptr_op_UserWorkerOfCustom_reset(ptr, obj.NativePtr);
+            }
+
             #endregion
 
         }
@@ -528,9 +816,14 @@ namespace OpenPoseDotNet
 
             #region Methods
 
+            public override IntPtr Create()
+            {
+                return NativeMethods.std_shared_ptr_op_UserWorkerConsumerOfDefault_new();
+            }
+
             public override IntPtr Create(IntPtr ptr)
             {
-                return NativeMethods.std_shared_ptr_op_UserWorkerConsumerOfDefault_new(ptr);
+                return NativeMethods.std_shared_ptr_op_UserWorkerConsumerOfDefault_new2(ptr);
             }
 
             public override void Delete(IntPtr ptr)
@@ -545,6 +838,11 @@ namespace OpenPoseDotNet
                 return new UserWorkerConsumer<Datum>(p, false);
             }
 
+            public override void Reset(IntPtr ptr, UserWorkerConsumer<Datum> obj)
+            {
+                NativeMethods.std_shared_ptr_op_UserWorkerConsumerOfDefault_reset(ptr, obj.NativePtr);
+            }
+
             #endregion
 
         }
@@ -554,9 +852,14 @@ namespace OpenPoseDotNet
 
             #region Methods
 
+            public override IntPtr Create()
+            {
+                return NativeMethods.std_shared_ptr_op_UserWorkerConsumerOfCustom_new();
+            }
+
             public override IntPtr Create(IntPtr ptr)
             {
-                return NativeMethods.std_shared_ptr_op_UserWorkerConsumerOfCustom_new(ptr);
+                return NativeMethods.std_shared_ptr_op_UserWorkerConsumerOfCustom_new2(ptr);
             }
 
             public override void Delete(IntPtr ptr)
@@ -571,6 +874,11 @@ namespace OpenPoseDotNet
                 return new UserWorkerConsumer<CustomDatum>(p, false);
             }
 
+            public override void Reset(IntPtr ptr, UserWorkerConsumer<CustomDatum> obj)
+            {
+                NativeMethods.std_shared_ptr_op_UserWorkerConsumerOfCustom_reset(ptr, obj.NativePtr);
+            }
+
             #endregion
 
         }
@@ -580,9 +888,14 @@ namespace OpenPoseDotNet
 
             #region Methods
 
+            public override IntPtr Create()
+            {
+                return NativeMethods.std_shared_ptr_op_UserWorkerProducerOfDefault_new();
+            }
+
             public override IntPtr Create(IntPtr ptr)
             {
-                return NativeMethods.std_shared_ptr_op_UserWorkerProducerOfDefault_new(ptr);
+                return NativeMethods.std_shared_ptr_op_UserWorkerProducerOfDefault_new2(ptr);
             }
 
             public override void Delete(IntPtr ptr)
@@ -597,6 +910,11 @@ namespace OpenPoseDotNet
                 return new UserWorkerProducer<Datum>(p, false);
             }
 
+            public override void Reset(IntPtr ptr, UserWorkerProducer<Datum> obj)
+            {
+                NativeMethods.std_shared_ptr_op_UserWorkerProducerOfDefault_reset(ptr, obj.NativePtr);
+            }
+
             #endregion
 
         }
@@ -606,9 +924,14 @@ namespace OpenPoseDotNet
 
             #region Methods
 
+            public override IntPtr Create()
+            {
+                return NativeMethods.std_shared_ptr_op_UserWorkerProducerOfCustom_new();
+            }
+
             public override IntPtr Create(IntPtr ptr)
             {
-                return NativeMethods.std_shared_ptr_op_UserWorkerProducerOfCustom_new(ptr);
+                return NativeMethods.std_shared_ptr_op_UserWorkerProducerOfCustom_new2(ptr);
             }
 
             public override void Delete(IntPtr ptr)
@@ -621,6 +944,11 @@ namespace OpenPoseDotNet
             {
                 var p = NativeMethods.std_shared_ptr_op_UserWorkerProducerOfCustom_get(ptr);
                 return new UserWorkerProducer<CustomDatum>(p, false);
+            }
+
+            public override void Reset(IntPtr ptr, UserWorkerProducer<CustomDatum> obj)
+            {
+                NativeMethods.std_shared_ptr_op_UserWorkerProducerOfCustom_reset(ptr, obj.NativePtr);
             }
 
             #endregion

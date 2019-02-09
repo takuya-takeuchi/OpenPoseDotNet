@@ -4,20 +4,20 @@
 #include "../shared.h"
 
 DLLEXPORT op::WrapperStructHand* op_wrapperStructHand_new(const bool enable,
+                                                          const op::Detector detector,
                                                           const op::Point<int>* netInputSize,
                                                           const int scalesNumber,
                                                           const float scaleRange,
-                                                          const bool tracking,
                                                           const op::RenderMode renderMode,
                                                           const float alphaKeypoint,
                                                           const float alphaHeatMap,
                                                           const float renderThreshold)
 {
     return new op::WrapperStructHand(enable,
+                                     detector,
                                      *netInputSize,
                                      scalesNumber,
                                      scaleRange,
-                                     tracking,
                                      renderMode,
                                      alphaKeypoint,
                                      alphaHeatMap,

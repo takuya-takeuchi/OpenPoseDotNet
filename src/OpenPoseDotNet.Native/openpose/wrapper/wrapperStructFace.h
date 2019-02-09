@@ -4,6 +4,7 @@
 #include "../shared.h"
 
 DLLEXPORT op::WrapperStructFace* op_wrapperStructFace_new(const bool enable,
+                                                          const op::Detector detector,
                                                           const op::Point<int>* netInputSize,
                                                           const op::RenderMode renderMode,
                                                           const float alphaKeypoint,
@@ -11,6 +12,7 @@ DLLEXPORT op::WrapperStructFace* op_wrapperStructFace_new(const bool enable,
                                                           const float renderThreshold)
 {
     return new op::WrapperStructFace(enable,
+                                     detector,
                                      *netInputSize,
                                      renderMode,
                                      alphaKeypoint,

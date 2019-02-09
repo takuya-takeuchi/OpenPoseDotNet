@@ -20,6 +20,36 @@ namespace OpenPoseDotNet
 
         }
 
+        [StructLayout(LayoutKind.Explicit)]
+        internal struct NativeRectangleOfFloat
+        {
+
+            [FieldOffset(0)]
+            public float x;
+
+            [FieldOffset(4)]
+            public float y;
+
+            [FieldOffset(8)]
+            public float width;
+
+            [FieldOffset(12)]
+            public float height;
+
+        }
+
+        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        public static extern IntPtr op_getTimerInit();
+
+        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        public static extern double op_getTimeSeconds(IntPtr timerInit);
+
+        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        public static extern void op_printTime(IntPtr timerInit,
+                                               byte[] firstMessage,
+                                               byte[] secondMessage,
+                                               Priority priority);
+
         #region utilities/check
 
         [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
@@ -79,6 +109,9 @@ namespace OpenPoseDotNet
 
         [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
         public static extern ScaleMode op_flagsToHeatMapScaleMode(int heatMapScale);
+
+        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        public static extern Detector op_flagsToDetector(int detector);
 
         [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
         public static extern void op_flagsToProducer(byte[] imageDirectory,

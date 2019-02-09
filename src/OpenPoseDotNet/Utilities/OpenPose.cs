@@ -11,6 +11,35 @@ namespace OpenPoseDotNet
 
         #region Methods
 
+        public static StdTimePoint GetTimerInit()
+        {
+            var ret = NativeMethods.op_getTimerInit();
+            return new StdTimePoint(ret);
+        }
+
+        public static double GetTimerSeconds(StdTimePoint timePoint)
+        {
+            if (timePoint == null)
+                throw new ArgumentNullException(nameof(timePoint));
+
+            timePoint.ThrowIfDisposed();
+
+            return NativeMethods.op_getTimeSeconds(timePoint.NativePtr);
+        }
+
+        public static void PrintTime(StdTimePoint timePoint, string firstMessage, string secondMessage, Priority priority)
+        {
+            if (timePoint == null)
+                throw new ArgumentNullException(nameof(timePoint));
+
+            timePoint.ThrowIfDisposed();
+
+            var firstMessageBytes = Encoding.UTF8.GetBytes(firstMessage ?? "");
+            var secondMessageBytes = Encoding.UTF8.GetBytes(secondMessage ?? "");
+
+            NativeMethods.op_printTime(timePoint.NativePtr, firstMessageBytes, secondMessageBytes, priority);
+        }
+
         #region utilities/check
 
         public static void Check(bool condition,
@@ -132,6 +161,10 @@ namespace OpenPoseDotNet
             return NativeMethods.op_flagsToHeatMapScaleMode(heatMapScale);
         }
 
+        public static Detector FlagsToDetector(int detector)
+        {
+            return NativeMethods.op_flagsToDetector(detector);
+        }
 
         public static Tuple<ProducerType, string> FlagsToProducer(string imageDirectory,
                                                                   string videoPath,

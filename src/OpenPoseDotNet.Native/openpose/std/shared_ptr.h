@@ -11,7 +11,12 @@
 #pragma region template
 
 #define MAKE_FUNC(__TYPE__, __TYPENAME__)\
-DLLEXPORT std::shared_ptr<__TYPE__>* std_shared_ptr_##__TYPENAME__##_new(__TYPE__* ptr)\
+DLLEXPORT std::shared_ptr<__TYPE__>* std_shared_ptr_##__TYPENAME__##_new()\
+{\
+    return new std::shared_ptr<__TYPE__>();\
+}\
+\
+DLLEXPORT std::shared_ptr<__TYPE__>* std_shared_ptr_##__TYPENAME__##_new2(__TYPE__* ptr)\
 {\
     return new std::shared_ptr<__TYPE__>(ptr);\
 }\
@@ -25,11 +30,20 @@ DLLEXPORT __TYPE__* std_shared_ptr_##__TYPENAME__##_get(std::shared_ptr<__TYPE__
 {\
     return p->get();\
 }\
+\
+DLLEXPORT void std_shared_ptr_##__TYPENAME__##_reset(std::shared_ptr<__TYPE__>* p, __TYPE__* obj)\
+{\
+    p->reset(obj);\
+}\
 
 #pragma endregion template
 
+MAKE_FUNC(op::Datum, Datum)
+MAKE_FUNC(CustomDatum, CustomDatum)
 MAKE_FUNC(std::vector<op::Datum>, StdVectorOfDatum)
 MAKE_FUNC(std::vector<CustomDatum>, StdVectorOfCustomDatum)
+MAKE_FUNC(std::vector<std::shared_ptr<op::Datum>>, StdVectorOfStdSharedPtrOfDatum)
+MAKE_FUNC(std::vector<std::shared_ptr<CustomDatum>>, StdVectorOfStdSharedPtrOfCustomDatum)
 MAKE_FUNC(op::PoseExtractorCaffe, op_PoseExtractorCaffe)
 MAKE_FUNC(op::Producer, op_Producer)
 MAKE_FUNC(DefaultDatumProducer, op_DatumProducerOfDatum)

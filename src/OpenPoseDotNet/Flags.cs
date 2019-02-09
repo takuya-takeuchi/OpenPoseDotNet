@@ -221,12 +221,6 @@ namespace OpenPoseDotNet
             set => NativeMethods.op_flags_set_hand_scale_range(value);
         }
 
-        public static bool HandTracking
-        {
-            get => NativeMethods.op_flags_get_hand_tracking();
-            set => NativeMethods.op_flags_set_hand_tracking(value);
-        }
-
         public static bool Identification
         {
             get => NativeMethods.op_flags_get_identification();
@@ -327,6 +321,18 @@ namespace OpenPoseDotNet
         {
             get => NativeMethods.op_flags_get_write_coco_json_variant();
             set => NativeMethods.op_flags_set_write_coco_json_variant(value);
+        }
+
+        public static int FaceDetector
+        {
+            get => NativeMethods.op_flags_get_face_detector();
+            set => NativeMethods.op_flags_set_face_detector(value);
+        }
+
+        public static int HandDetector
+        {
+            get => NativeMethods.op_flags_get_hand_detector();
+            set => NativeMethods.op_flags_set_hand_detector(value);
         }
 
         public static int HeatmapsScale
@@ -751,6 +757,12 @@ namespace OpenPoseDotNet
                 NativeMethods.op_flags_set_write_video(str);
             }
         }
+        
+        public static bool WriteVideoWithAudio
+        {
+            get => NativeMethods.op_flags_get_write_video_with_audio();
+            set => NativeMethods.op_flags_set_write_video_with_audio(value);
+        }
 
         public static string WriteVideoAdam
         {
@@ -766,6 +778,16 @@ namespace OpenPoseDotNet
                 NativeMethods.op_flags_set_write_video_adam(str);
             }
         }
+
+        #region ExampleOnly
+
+        public static bool NoDisplay
+        {
+            get;
+            set;
+        }
+
+        #endregion
 
         #endregion
 

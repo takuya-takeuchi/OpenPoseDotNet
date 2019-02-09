@@ -60,7 +60,15 @@ namespace OpenPoseDotNet
 
         [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
         [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool op_wrapper_waitAndEmplace_cvMat(OpenPose.DataType dataType, IntPtr wrapper, IntPtr tDatums);
+
+        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool op_wrapper_waitAndPop(OpenPose.DataType dataType, IntPtr wrapper, out IntPtr tDatums);
+
+        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool op_wrapper_emplaceAndPop(OpenPose.DataType dataType, IntPtr wrapper, IntPtr tDatums);
 
         [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
         public static extern IntPtr op_wrapper_emplaceAndPop_cvMat(OpenPose.DataType dataType, IntPtr wrapper, IntPtr mat);

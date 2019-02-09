@@ -123,21 +123,35 @@ namespace OpenPoseDotNet
             NativeMethods.op_wrapper_disableMultiThreading(this._DataType, this.NativePtr);
         }
 
-        public StdSharedPtr<StdVector<T>> EmplaceAndPop(Mat mat)
+        public StdSharedPtr<StdVector<StdSharedPtr<T>>> EmplaceAndPop(Mat mat)
         {
             if (mat == null)
                 throw new ArgumentNullException(nameof(mat));
 
             mat.ThrowIfDisposed();
+            this.ThrowIfDisposed();
 
             var ret = NativeMethods.op_wrapper_emplaceAndPop_cvMat(this._DataType, this.NativePtr, mat.NativePtr);
-            return new StdSharedPtr<StdVector<T>>(ret);
+            return new StdSharedPtr<StdVector<StdSharedPtr<T>>>(ret);
         }
 
-        public StdSharedPtr<StdVector<T>> EmplaceAndPop(Bitmap bitmap)
+        public bool EmplaceAndPop(StdSharedPtr<StdVector<StdSharedPtr<T>>> datums)
+        {
+            if (datums == null)
+                throw new ArgumentNullException(nameof(datums));
+
+            datums.ThrowIfDisposed();
+            this.ThrowIfDisposed();
+
+            return NativeMethods.op_wrapper_emplaceAndPop(this._DataType, this.NativePtr, datums.NativePtr);
+        }
+
+        public StdSharedPtr<StdVector<StdSharedPtr<T>>> EmplaceAndPop(Bitmap bitmap)
         {
             if (bitmap == null)
                 throw new ArgumentNullException(nameof(bitmap));
+
+            this.ThrowIfDisposed();
 
             byte[] image = null;
             var format = bitmap.PixelFormat;
@@ -201,13 +215,15 @@ namespace OpenPoseDotNet
                                                                       width,
                                                                       height,
                                                                       type);
-            return new StdSharedPtr<StdVector<T>>(ret);
+            return new StdSharedPtr<StdVector<StdSharedPtr<T>>>(ret);
         }
 
-        public StdSharedPtr<StdVector<T>> EmplaceAndPop(byte[] image, int width, int height, int type)
+        public StdSharedPtr<StdVector<StdSharedPtr<T>>> EmplaceAndPop(byte[] image, int width, int height, int type)
         {
             if (image == null)
                 throw new ArgumentNullException(nameof(image));
+
+            this.ThrowIfDisposed();
 
             var ret = NativeMethods.op_wrapper_emplaceAndPop_rawImage(this._DataType,
                                                                       this.NativePtr,
@@ -215,7 +231,7 @@ namespace OpenPoseDotNet
                                                                       width,
                                                                       height,
                                                                       type);
-            return new StdSharedPtr<StdVector<T>>(ret);
+            return new StdSharedPtr<StdVector<StdSharedPtr<T>>>(ret);
         }
 
         public void Exec()
@@ -247,7 +263,7 @@ namespace OpenPoseDotNet
             NativeMethods.op_wrapper_stop(this._DataType, this.NativePtr);
         }
 
-        public bool WaitAndEmplace(StdSharedPtr<StdVector<T>> datums)
+        public bool WaitAndEmplace(StdSharedPtr<StdVector<StdSharedPtr<T>>> datums)
         {
             if (datums == null)
                 throw new ArgumentNullException(nameof(datums));
@@ -258,12 +274,23 @@ namespace OpenPoseDotNet
             return NativeMethods.op_wrapper_waitAndEmplace(this._DataType, this.NativePtr, datums.NativePtr);
         }
 
-        public bool WaitAndPop(out StdSharedPtr<StdVector<T>> datums)
+        public bool WaitAndEmplace(Mat mat)
+        {
+            if (mat == null)
+                throw new ArgumentNullException(nameof(mat));
+
+            mat.ThrowIfDisposed();
+            this.ThrowIfDisposed();
+
+            return NativeMethods.op_wrapper_waitAndEmplace_cvMat(this._DataType, this.NativePtr, mat.NativePtr);
+        }
+
+        public bool WaitAndPop(out StdSharedPtr<StdVector<StdSharedPtr<T>>> datums)
         {
             this.ThrowIfDisposed();
 
             var ret = NativeMethods.op_wrapper_waitAndPop(this._DataType, this.NativePtr, out var tDatums);
-            datums = ret ? new StdSharedPtr<StdVector<T>>(tDatums) : null;
+            datums = ret ? new StdSharedPtr<StdVector<StdSharedPtr<T>>>(tDatums) : null;
             return ret;
         }
 

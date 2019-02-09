@@ -9,6 +9,14 @@ namespace OpenPoseDotNet
 
         #region Constructors
 
+        public CustomDatum()
+        {
+            if(this.NativePtr != IntPtr.Zero)
+                NativeMethods.op_core_datum_delete(this.NativePtr);
+
+            this.NativePtr = NativeMethods.op_CustomDatum_new();
+        }
+
         internal CustomDatum(IntPtr ptr, bool isEnabledDispose = true) :
             base(ptr, isEnabledDispose)
         {

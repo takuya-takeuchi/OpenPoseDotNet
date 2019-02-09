@@ -229,17 +229,22 @@ namespace OpenPoseDotNet
         public static extern void op_flags_set_hand_scale_range(double value);
 
         [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-        [return: MarshalAs(UnmanagedType.U1)]
-        public static extern bool op_flags_get_hand_tracking();
-
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-        public static extern void op_flags_set_hand_tracking(bool value);
-
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
         public static extern int op_flags_get_heatmaps_scale();
 
         [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
         public static extern void op_flags_set_heatmaps_scale(int value);
+
+        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        public static extern int op_flags_get_face_detector();
+
+        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        public static extern void op_flags_set_face_detector(int value);
+
+        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        public static extern int op_flags_get_hand_detector();
+
+        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        public static extern void op_flags_set_hand_detector(int value);
 
         [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
         [return: MarshalAs(UnmanagedType.U1)]
@@ -536,6 +541,13 @@ namespace OpenPoseDotNet
 
         [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
         public static extern void op_flags_set_write_video_adam(byte[] value);
+
+        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool op_flags_get_write_video_with_audio();
+
+        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        public static extern void op_flags_set_write_video_with_audio(bool value);
 
         [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
         public static extern IntPtr op_flags_get_video();

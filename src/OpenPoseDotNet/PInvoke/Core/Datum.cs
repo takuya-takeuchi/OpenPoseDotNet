@@ -56,7 +56,17 @@ namespace OpenPoseDotNet
         [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
         public static extern IntPtr op_core_datum_get_handHeatMaps(IntPtr datum);
 
+        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        public static extern IntPtr op_core_datum_get_faceRectangles(IntPtr datum);
 
+        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        public static extern void op_core_datum_set_faceRectangles(IntPtr datum, IntPtr rectangles);
+
+        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        public static extern IntPtr op_core_datum_get_handRectangles(IntPtr datum);
+
+        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        public static extern void op_core_datum_set_handRectangles(IntPtr datum, IntPtr rectangles);
 
     }
 

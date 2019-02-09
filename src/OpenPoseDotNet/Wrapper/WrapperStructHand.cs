@@ -15,22 +15,131 @@ namespace OpenPoseDotNet
 
         #region Constructors
 
-        public WrapperStructHand(bool enable = false,
-                                 Point<int> netInputSize = default (Point<int>),
-                                 int scalesNumber = 1,
-                                 float scaleRange = 0.4f,
-                                 bool tracking = false,
-                                 RenderMode renderMode = RenderMode.Gpu,
-                                 float alphaKeyPoint = OpenPose.HandDefaultAlphaKeyPoint,
-                                 float alphaHeatMap = OpenPose.HandDefaultAlphaHeatMap,
-                                 float renderThreshold = 0.2f)
+        public WrapperStructHand() :
+            this(false)
+        {
+        }
+
+        public WrapperStructHand(bool enable) :
+            this(enable,
+                Detector.Body)
+        {
+        }
+
+        public WrapperStructHand(bool enable,
+                                 Detector detector) :
+            this(enable,
+                detector,
+                new Point<int>(368, 368))
+        {
+        }
+
+        public WrapperStructHand(bool enable,
+                                 Detector detector,
+                                 Point<int> netInputSize) :
+            this(enable,
+                detector,
+                netInputSize,
+                1)
+        {
+        }
+
+        public WrapperStructHand(bool enable,
+                                 Detector detector,
+                                 Point<int> netInputSize,
+                                 int scalesNumber) :
+            this(enable,
+                detector,
+                netInputSize,
+                scalesNumber,
+                0.4f)
+        {
+        }
+
+        public WrapperStructHand(bool enable,
+                                 Detector detector,
+                                 Point<int> netInputSize,
+                                 int scalesNumber,
+                                 float scaleRange) :
+            this(enable,
+                detector,
+                netInputSize,
+                scalesNumber,
+                scaleRange,
+                RenderMode.Gpu)
+        {
+        }
+
+        public WrapperStructHand(bool enable,
+                                 Detector detector,
+                                 Point<int> netInputSize,
+                                 int scalesNumber,
+                                 float scaleRange,
+                                 RenderMode renderMode) :
+            this(enable,
+                detector,
+                netInputSize,
+                scalesNumber,
+                scaleRange,
+                renderMode,
+                OpenPose.HandDefaultAlphaKeyPoint)
+        {
+        }
+
+        public WrapperStructHand(bool enable,
+                                 Detector detector,
+                                 Point<int> netInputSize,
+                                 int scalesNumber,
+                                 float scaleRange,
+                                 RenderMode renderMode,
+                                 float alphaKeyPoint) :
+            this(enable,
+                detector,
+                netInputSize,
+                scalesNumber,
+                scaleRange,
+                renderMode,
+                alphaKeyPoint,
+                OpenPose.HandDefaultAlphaHeatMap)
+        {
+        }
+
+        public WrapperStructHand(bool enable,
+                                 Detector detector,
+                                 Point<int> netInputSize,
+                                 int scalesNumber,
+                                 float scaleRange,
+                                 RenderMode renderMode,
+                                 float alphaKeyPoint,
+                                 float alphaHeatMap) :
+            this(enable,
+                detector,
+                netInputSize,
+                scalesNumber,
+                scaleRange,
+                renderMode,
+                alphaKeyPoint,
+                alphaHeatMap,
+                0.2f)
+        {
+        }
+
+        public WrapperStructHand(bool enable,
+                                 Detector detector,
+                                 Point<int> netInputSize,
+                                 int scalesNumber,
+                                 float scaleRange,
+                                 RenderMode renderMode,
+                                 float alphaKeyPoint,
+                                 float alphaHeatMap,
+                                 float renderThreshold)
         {
             using (var native = netInputSize.ToNative())
                 this.NativePtr = NativeMethods.op_wrapperStructHand_new(enable,
+                                                                        detector,
                                                                         native.NativePtr,
                                                                         scalesNumber,
                                                                         scaleRange,
-                                                                        tracking,
                                                                         renderMode,
                                                                         alphaKeyPoint,
                                                                         alphaHeatMap,

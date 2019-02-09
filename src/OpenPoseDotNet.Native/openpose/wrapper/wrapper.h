@@ -270,6 +270,29 @@ DLLEXPORT bool op_wrapper_waitAndEmplace(const data_type dataType, void* wrapper
     return ret;
 }
 
+DLLEXPORT bool op_wrapper_waitAndEmplace_cvMat(const data_type dataType, void* wrapper, cv::Mat* cvMat)
+{
+    bool ret = false;
+
+    switch(dataType)
+    {
+        case data_type::Default:
+            {
+                auto& tmp = *cvMat;
+                ret = ((DefaultWrapper*)wrapper)->waitAndEmplace(tmp);
+            }
+            break;
+        case data_type::Custom:
+            {
+                auto& tmp = *cvMat;
+                ret = ((CustomWrapper*)wrapper)->waitAndEmplace(tmp);
+            }
+            break;
+    }
+
+    return ret;
+}
+
 DLLEXPORT bool op_wrapper_tryPush(const data_type dataType, void* wrapper, void* tDatums)
 {
     bool ret = false;

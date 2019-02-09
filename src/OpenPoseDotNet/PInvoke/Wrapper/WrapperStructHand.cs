@@ -10,10 +10,10 @@ namespace OpenPoseDotNet
 
         [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
         public static extern IntPtr op_wrapperStructHand_new(bool enable,
+                                                             Detector detector,
                                                              IntPtr netInputSize,
                                                              int scalesNumber,
                                                              float scaleRange,
-                                                             bool tracking,
                                                              RenderMode renderMode,
                                                              float alphaKeyPoint,
                                                              float alphaHeatMap,
