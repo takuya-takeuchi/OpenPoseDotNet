@@ -65,46 +65,6 @@ namespace OpenPoseDemo
                 // Enabling Google Logging
                 const bool enableGoogleLogging = true;
 
-                // Configuring OpenPose
-                OpenPose.Log("Configuring OpenPose...", Priority.High);
-                using (var opWrapper = new Wrapper<Datum>())
-                {
-                    // Configuring OpenPose
-                    OpenPose.Log("Configuring OpenPose...", Priority.High);
-                    ConfigureWrapper(opWrapper);
-
-                    // Start, run, and stop processing - exec() blocks this thread until OpenPose wrapper has finished
-                    OpenPose.Log("Starting thread(s)...", Priority.High);
-                    opWrapper.Exec();
-
-                        // Start, run, and stop processing - exec() blocks this thread until OpenPose wrapper has finished
-                        OpenPose.Log("Starting thread(s)...", Priority.High);
-                        opWrapper.Exec();
-
-                        // Measuring total time
-                        timer.Stop();
-                        var totalTimeSec = timer.ElapsedMilliseconds * 1000;
-                        var message = $"OpenPose demo successfully finished. Total time: {totalTimeSec} seconds.";
-                        OpenPose.Log(message, Priority.High);
-                    }
-                }
-
-                // Return successful message
-                return 0;
-            }
-            catch (Exception)
-            {
-                return -1;
-            }
-        }
-
-        #endregion
-
-        #endregion
-
-    }
-
-}
                 // Pose configuration (use WrapperStructPose{} for default and recommended configuration)
                 var pose = new WrapperStructPose(!Flags.BodyDisabled,
                                                  netInputSize,
@@ -223,5 +183,32 @@ namespace OpenPoseDemo
             {
                 OpenPose.Log("Starting OpenPose demo...", Priority.High);
                 using (var opTimer = OpenPose.GetTimerInit())
+                using (var opWrapper = new Wrapper<Datum>())
+                {
+                    // Configuring OpenPose
+                    OpenPose.Log("Configuring OpenPose...", Priority.High);
+                    ConfigureWrapper(opWrapper);
+
+                    // Start, run, and stop processing - exec() blocks this thread until OpenPose wrapper has finished
+                    OpenPose.Log("Starting thread(s)...", Priority.High);
+                    opWrapper.Exec();
+
                     // Measuring total time
-                    OpenPose.PrintTime(opTimer, "OpenPose demo successfully finished. Total time: ", " seconds.", Priority.High);
+                    OpenPose.PrintTime(opTimer, "OpenPose demo successfully finished. Total time: ", " seconds.", Priority.High);                }
+
+                // Return successful message
+                return 0;
+            }
+            catch (Exception)
+            {
+                return -1;
+            }
+        }
+
+        #endregion
+
+        #endregion
+
+    }
+
+}
