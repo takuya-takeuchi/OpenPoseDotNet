@@ -71,7 +71,7 @@ namespace BodyFromImageDefault
                 {
                     // Display image
                     var temp = data.ToArray();
-                    Cv.ImShow("User worker GUI", temp[0].Get().CvOutputData);
+                    Cv.ImShow($"{OpenPose.OpenPoseNameAndVersion()} - Tutorial C++ API", temp[0].Get().CvOutputData);
                     Cv.WaitKey();
                 }
                 else

@@ -463,4 +463,19 @@ DLLEXPORT void* op_wrapper_emplaceAndPop_rawImage(const data_type dataType,
     return nullptr;
 }
 
+DLLEXPORT void op_wrapper_setDefaultMaxSizeQueues(const data_type dataType,
+                                                  void* wrapper,
+                                                  const long long defaultMaxSizeQueues)
+{
+    switch(dataType)
+    {
+        case data_type::Default:
+            ((DefaultWrapper*)wrapper)->setDefaultMaxSizeQueues(defaultMaxSizeQueues);
+            break;
+        case data_type::Custom:
+            ((CustomWrapper*)wrapper)->setDefaultMaxSizeQueues(defaultMaxSizeQueues);
+            break;
+    }
+}
+
 #endif

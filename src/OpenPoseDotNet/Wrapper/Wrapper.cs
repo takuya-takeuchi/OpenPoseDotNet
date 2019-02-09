@@ -249,6 +249,12 @@ namespace OpenPoseDotNet
             NativeMethods.op_wrapper_setWorker(this._DataType, this.NativePtr, workerType, worker.NativePtr, workerOnNewThread);
         }
 
+        public void SetDefaultMaxSizeQueues(long defaultMaxSizeQueues = -1)
+        {
+            this.ThrowIfDisposed();
+            NativeMethods.op_wrapper_setDefaultMaxSizeQueues(this._DataType, this.NativePtr, defaultMaxSizeQueues);
+        }
+
         public void Start()
         {
             this.ThrowIfDisposed();

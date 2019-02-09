@@ -1,6 +1,6 @@
 ﻿
 /*
- * This sample program is ported by C# from examples/tutorial_api_cpp/04_keypoints_from_images.cpp.
+ * This sample program is ported by C# from examples/tutorial_api_cpp/07_hand_from_image.cpp.
 */
 
 using System;
@@ -8,11 +8,17 @@ using System.IO;
 using Microsoft.Extensions.CommandLineUtils;
 using OpenPoseDotNet;
 
-namespace KeyPointsFromImages
+namespace HandFromImage
 {
 
     internal class Program
     {
+
+        #region Fields
+
+        private static string ImagePath;
+
+        #endregion
 
         #region Methods
 
@@ -20,13 +26,13 @@ namespace KeyPointsFromImages
         {
             var app = new CommandLineApplication(false)
             {
-                Name = nameof(KeyPointsFromImages)
+                Name = nameof(HandFromImage)
             };
 
             app.HelpOption("-h|--help");
 
             var disableMultiThreadArgument = app.Argument("disableMultiThread", "Disable MultiThread");
-            var imageDirOption = app.Option("-i|--imageDir", "Process a directory of images. Read all standard formats (jpg, png, bmp, etc.).", CommandOptionType.SingleValue);
+            var inputImageOption = app.Option("-i|--image", "Input image", CommandOptionType.SingleValue);
             var noDisplay = app.Option("--no_display", "Enable to disable the visual display.", CommandOptionType.NoValue);
 
             app.OnExecute(() =>
@@ -34,17 +40,17 @@ namespace KeyPointsFromImages
                 if (disableMultiThreadArgument.Value != null)
                     Flags.DisableMultiThread = true;
 
-                var path = imageDirOption.Value();
-                if (string.IsNullOrWhiteSpace(path) || !Directory.Exists(path))
+                var path = inputImageOption.Value();
+                if (string.IsNullOrWhiteSpace(path) || !File.Exists(path))
                 {
-                    Console.WriteLine("Argument 'imageDir' is invalid or not found.");
+                    Console.WriteLine($"Argument 'image' is invalid or not found.");
                     app.ShowHelp();
                     return -1;
                 }
 
-                Flags.ImageDir = path;
-                Flags.NoDisplay = noDisplay.HasValue();
+                ImagePath = path;
 
+                Flags.NoDisplay = noDisplay.HasValue();
                 TutorialApiCpp();
 
                 return 0;
@@ -89,30 +95,31 @@ namespace KeyPointsFromImages
                 var multipleView = (Flags.Enable3D || Flags.Views3D > 1);
                 // Face and hand detectors
                 var faceDetector = OpenPose.FlagsToDetector(Flags.FaceDetector);
-                var handDetector = OpenPose.FlagsToDetector(Flags.HandDetector);
+                var handDetector = Detector.Provided;
                 // Enabling Google Logging
                 const bool enableGoogleLogging = true;
 
                 // Pose configuration (use WrapperStructPose{} for default and recommended configuration)
-                var pose = new WrapperStructPose(!Flags.BodyDisabled,
+                const bool bodyEnable = false;
+                var pose = new WrapperStructPose(bodyEnable,
                                                  netInputSize,
                                                  outputSize,
                                                  keypointScale,
                                                  Flags.NumGpu,
                                                  Flags.NumGpuStart,
                                                  Flags.ScaleNumber,
-                                                 (float) Flags.ScaleGap,
+                                                 (float)Flags.ScaleGap,
                                                  OpenPose.FlagsToRenderMode(Flags.RenderPose, multipleView),
                                                  poseModel,
                                                  !Flags.DisableBlending,
-                                                 (float) Flags.AlphaPose,
-                                                 (float) Flags.AlphaHeatmap,
+                                                 (float)Flags.AlphaPose,
+                                                 (float)Flags.AlphaHeatmap,
                                                  Flags.PartToShow,
                                                  Flags.ModelFolder,
                                                  heatMapTypes,
                                                  heatMapScale,
                                                  Flags.PartCandidates,
-                                                 (float) Flags.RenderThreshold,
+                                                 (float)Flags.RenderThreshold,
                                                  Flags.NumberPeopleMax,
                                                  Flags.MaximizePositives,
                                                  Flags.FpsMax,
@@ -124,19 +131,19 @@ namespace KeyPointsFromImages
                                                  faceDetector,
                                                  faceNetInputSize,
                                                  OpenPose.FlagsToRenderMode(Flags.FaceRender, multipleView, Flags.RenderPose),
-                                                 (float) Flags.FaceAlphaPose,
-                                                 (float) Flags.FaceAlphaHeatmap,
-                                                 (float) Flags.FaceRenderThreshold);
+                                                 (float)Flags.FaceAlphaPose,
+                                                 (float)Flags.FaceAlphaHeatmap,
+                                                 (float)Flags.FaceRenderThreshold);
                 // Hand configuration (use op::WrapperStructHand{} to disable it)
-                var hand = new WrapperStructHand(Flags.Hand,
+                var hand = new WrapperStructHand(true,
                                                  handDetector,
                                                  handNetInputSize,
                                                  Flags.HandScaleNumber,
-                                                 (float) Flags.HandScaleRange,
+                                                 (float)Flags.HandScaleRange,
                                                  OpenPose.FlagsToRenderMode(Flags.HandRender, multipleView, Flags.RenderPose),
-                                                 (float) Flags.HandAlphaPose,
-                                                 (float) Flags.HandAlphaHeatmap,
-                                                 (float) Flags.HandRenderThreshold);
+                                                 (float)Flags.HandAlphaPose,
+                                                 (float)Flags.HandAlphaHeatmap,
+                                                 (float)Flags.HandRenderThreshold);
                 // Extra functionality configuration (use op::WrapperStructExtra{} to disable it)
                 var extra = new WrapperStructExtra(Flags.Enable3D,
                                                    Flags.MinViews3D,
@@ -183,32 +190,28 @@ namespace KeyPointsFromImages
             }
         }
 
-        private static bool Display(StdSharedPtr<StdVector<StdSharedPtr<Datum>>> datumsPtr)
+        private static void Display(StdSharedPtr<StdVector<StdSharedPtr<Datum>>> datumsPtr)
         {
             try
             {
                 // User's displaying/saving/other processing here
                 // datum.cvOutputData: rendered frame with pose or heatmaps
                 // datum.poseKeypoints: Array<float> with the estimated pose
-                var key = 32;
                 if (datumsPtr != null && datumsPtr.TryGet(out var data) && !data.Empty)
                 {
-                    // Display image and sleeps at least 1 ms (it usually sleeps ~5-10 msec to display the image)
-                    var temp = data.ToArray();
-                    Cv.ImShow($"{OpenPose.OpenPoseNameAndVersion()} - Tutorial C++ API", temp[0].Get().CvOutputData);
-                    key = Cv.WaitKey(1);
+                    // Display image
+                    var temp = data.ToArray()[0].Get();
+                    Cv.ImShow($"{OpenPose.OpenPoseNameAndVersion()} - Tutorial C++ API", temp.CvOutputData);
+                    Cv.WaitKey();
                 }
                 else
                 {
                     OpenPose.Log("Nullptr or empty datumsPtr found.", Priority.High);
                 }
-
-                return (key == 27);
             }
             catch (Exception e)
             {
                 OpenPose.Error(e.Message, -1, nameof(Display));
-                return true;
             }
         }
 
@@ -220,11 +223,11 @@ namespace KeyPointsFromImages
                 if (datumsPtr != null && datumsPtr.TryGet(out var data) && !data.Empty)
                 {
                     // Alternative 1
-                    var temp = data.ToArray();
-                    OpenPose.Log($"Body keypoints: {temp[0].Get().PoseKeyPoints}");
-                    OpenPose.Log($"Face keypoints: {temp[0].Get().FaceKeyPoints}");
-                    OpenPose.Log($"Left hand keypoints: {temp[0].Get().HandKeyPoints[0]}");
-                    OpenPose.Log($"Right hand keypoints: {temp[0].Get().HandKeyPoints[1]}");
+                    var temp = data.ToArray()[0].Get();
+                    OpenPose.Log($"Body keypoints: {temp.PoseKeyPoints}");
+                    OpenPose.Log($"Face keypoints: {temp.FaceKeyPoints}");
+                    OpenPose.Log($"Left hand keypoints: {temp.HandKeyPoints[0]}");
+                    OpenPose.Log($"Right hand keypoints: {temp.HandKeyPoints[1]}");
                 }
                 else
                 {
@@ -254,35 +257,65 @@ namespace KeyPointsFromImages
                         OpenPose.Log("Starting thread(s)...", Priority.High);
                         opWrapper.Start();
 
-                        // Read frames on directory
-                        var imagePaths = OpenPose.GetFilesOnDirectory(Flags.ImageDir, Extensions.Images);
-                        // Process and display images
-                        foreach (var imagePath in imagePaths)
+                        // Read image and face rectangle locations
+                        using (var imageToProcess = Cv.ImRead(ImagePath))
                         {
-                            // Process and display image
-                            using (var imageToProcess = Cv.ImRead(imagePath))
-                            using (var datumProcessed = opWrapper.EmplaceAndPop(imageToProcess))
+                            var handRectangles = new[]
                             {
-                                if (datumProcessed != null)
+                                // Left/Right hands of person 0
+                                new []
                                 {
-                                    PrintKeypoints(datumProcessed);
+                                    new Rectangle<float>( 320.035889f, 377.675049f, 69.300949f, 69.300949f ),   // Left hand
+                                    new Rectangle<float>(        0.0f,        0.0f,       0.0f,       0.0f )    // Right hand
+                                },
+                                // Left/Right hands of person 1
+                                new []
+                                {
+                                    new Rectangle<float>( 80.155792f, 407.673492f, 80.812706f, 80.812706f ),    // Left hand
+                                    new Rectangle<float>( 46.449715f, 404.559753f, 98.898178f, 98.898178f )     // Right hand
+                                },
+                                // Left/Right hands of person 2
+                                new []
+                                {
+                                    new Rectangle<float>( 185.692673f, 303.112244f, 157.587555f, 157.587555f ), // Left hand
+                                    new Rectangle<float>(  88.984360f, 268.866547f, 117.818230f, 117.818230f )  // Right hand
+                                }
+                            };
+
+                            // Create new datum
+                            using (var vector = new StdVector<StdSharedPtr<Datum>>())
+                            using (var datumsPtr = new StdSharedPtr<StdVector<StdSharedPtr<Datum>>>(vector))
+                            using (var datumPtr = new Datum())
+                            {
+                                datumsPtr.Get().EmplaceBack();
+                                var datum = datumsPtr.Get().At(0);
+
+                                // C# cannot set pointer object by using assignment operator
+                                datum.Reset(datumPtr);
+
+                                // Fill datum with image and handRectangles
+                                datumPtr.CvInputData = imageToProcess;
+                                datumPtr.HandRectangles = handRectangles;
+
+                                // Process and display image
+                                opWrapper.EmplaceAndPop(datumsPtr);
+
+                                if (datumsPtr.Get() != null)
+                                {
+                                    PrintKeypoints(datumsPtr);
                                     if (!Flags.NoDisplay)
-                                    {
-                                        var userWantsToExit = Display(datumProcessed);
-                                        if (userWantsToExit)
-                                        {
-                                            OpenPose.Log("User pressed Esc to exit demo.", Priority.High);
-                                            break;
-                                        }
-                                    }
+                                        Display(datumsPtr);
                                 }
                                 else
                                 {
-                                    OpenPose.Log($"Image {imagePath} could not be processed.", Priority.High);
+                                    OpenPose.Log("Image could not be processed.", Priority.High);
                                 }
                             }
                         }
                     }
+
+                    // Info
+                    OpenPose.Log("NOTE: In addition with the user flags, this demo has auto-selected the following flags: `--body_disable --hand --hand_detector 2`", Priority.High);
 
                     // Measuring total time
                     OpenPose.PrintTime(opTimer, "OpenPose demo successfully finished. Total time: ", " seconds.", Priority.High);

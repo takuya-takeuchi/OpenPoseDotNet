@@ -14,6 +14,21 @@ namespace KeyPointsFromImagesMultiGPU
     internal class Program
     {
 
+        #region Constructors
+
+        static Program()
+        {
+            // Producer
+            Flags.ImageDir = "examples/media/";                          // Process a directory of images. Read all standard formats (jpg, png, bmp, etc.)..
+            // Consumer
+            Flags.LatencyIsIrrelevantAndComputerWithLotsOfRam = false;   // If false, it will read and then then process images right away. If true, it will first store all the frames and
+                                                                         // later process them (slightly faster). However: 1) Latency will hugely increase (no frames will be processed
+                                                                         // until they have all been read). And 2) The program might go out of RAM memory with long videos or folders with
+                                                                         // many images (so the computer might freeze).
+        }
+
+        #endregion
+
         #region Methods
 
         private static void Main(string[] args)
@@ -195,7 +210,7 @@ namespace KeyPointsFromImagesMultiGPU
                 {
                     // Display image and sleeps at least 1 ms (it usually sleeps ~5-10 msec to display the image)
                     var temp = data.ToArray()[0].Get();
-                    Cv.ImShow("User worker GUI", temp.CvOutputData);
+                    Cv.ImShow($"{OpenPose.OpenPoseNameAndVersion()} - Tutorial C++ API", temp.CvOutputData);
                     key = Cv.WaitKey(1);
                 }
                 else
@@ -250,6 +265,10 @@ namespace KeyPointsFromImagesMultiGPU
                         OpenPose.Log("Configuring OpenPose...", Priority.High);
                         ConfigureWrapper(opWrapper);
 
+                        // Increase maximum wrapper queue size
+                        if (Flags.LatencyIsIrrelevantAndComputerWithLotsOfRam)
+                            opWrapper.SetDefaultMaxSizeQueues(long.MaxValue);
+
                         // Starting OpenPose
                         OpenPose.Log("Starting thread(s)...", Priority.High);
                         opWrapper.Start();
@@ -266,12 +285,63 @@ namespace KeyPointsFromImagesMultiGPU
                         //     1. One pushing images to OpenPose all the time.
                         //     2. A second one retrieving those frames.
                         // Option b) Much easier and faster to implement but slightly slower runtime performance
-                        for (var imageId = 0; imageId < imagePaths.Length; imageId += numberGPUs)
+                        if (!Flags.LatencyIsIrrelevantAndComputerWithLotsOfRam)
+                        {
+                            for (var imageBaseId = 0; imageBaseId < imagePaths.Length; imageBaseId += numberGPUs)
+                            {
+                                // Read and push images into OpenPose wrapper
+                                for (var gpuId = 0; gpuId < numberGPUs; gpuId++)
+                                {
+                                    var imageId = imageBaseId + gpuId;
+                                    if (imageId < imagePaths.Length)
+                                    {
+                                        var imagePath = imagePaths[imageId];
+                                        // Faster alternative that moves imageToProcess
+                                        using (var imageToProcess = Cv.ImRead(imagePath))
+                                            opWrapper.WaitAndEmplace(imageToProcess);
+                                        // // Slower but safer alternative that copies imageToProcess
+                                        // const auto imageToProcess = cv::imread(imagePath);
+                                        // opWrapper.waitAndPush(imageToProcess);
+                                    }
+                                }
+
+                                // Retrieve processed results from OpenPose wrapper
+                                for (var gpuId = 0; gpuId < numberGPUs; gpuId++)
+                                {
+                                    var imageId = imageBaseId + gpuId;
+                                    if (imageId < imagePaths.Length)
+                                    {
+                                        var status = opWrapper.WaitAndPop(out var datumProcessed);
+                                        if (status && datumProcessed != null)
+                                        {
+                                            PrintKeypoints(datumProcessed);
+                                            if (!Flags.NoDisplay)
+                                            {
+                                                var userWantsToExit = Display(datumProcessed);
+                                                if (userWantsToExit)
+                                                {
+                                                    OpenPose.Log("User pressed Esc to exit demo.", Priority.High);
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        else
+                                            OpenPose.Log("Image could not be processed.", Priority.High);
+                                    }
+                                }
+                            }
+                        }
+                        // Option c) Even easier and faster to implement than option b. In addition, its runtime performance should
+                        // be slightly faster too, but:
+                        //  - Latency will hugely increase (no frames will be processed until they have all been read).
+                        //  - The program might go out of RAM memory with long videos or folders with many images (so the computer
+                        //    might freeze).
+                        else
                         {
                             // Read and push images into OpenPose wrapper
-                            for (var gpuId = 0; gpuId < numberGPUs; gpuId++)
+                            OpenPose.Log("Loading images into OpenPose wrapper...", Priority.High);
+                            foreach (var imagePath in imagePaths)
                             {
-                                var imagePath = imagePaths[imageId + gpuId];
                                 // Faster alternative that moves imageToProcess
                                 using (var imageToProcess = Cv.ImRead(imagePath))
                                     opWrapper.WaitAndEmplace(imageToProcess);
@@ -281,7 +351,8 @@ namespace KeyPointsFromImagesMultiGPU
                             }
 
                             // Retrieve processed results from OpenPose wrapper
-                            for (var gpuId = 0; gpuId < numberGPUs; gpuId++)
+                            OpenPose.Log("Retrieving results from OpenPose wrapper...", Priority.High);
+                            for (var imageId = 0; imageId < imagePaths.Length; imageId += numberGPUs)
                             {
                                 var status = opWrapper.WaitAndPop(out var datumProcessed);
                                 if (status && datumProcessed != null)

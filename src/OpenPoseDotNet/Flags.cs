@@ -787,6 +787,12 @@ namespace OpenPoseDotNet
             set;
         }
 
+        public static bool LatencyIsIrrelevantAndComputerWithLotsOfRam
+        {
+            get;
+            set;
+        }
+
         #endregion
 
         #endregion

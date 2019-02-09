@@ -81,6 +81,11 @@ namespace OpenPoseDotNet
                                                                       int height,
                                                                       int type);
 
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern void op_wrapper_setDefaultMaxSizeQueues(OpenPose.DataType dataType,
+                                                                     IntPtr wrapper,
+                                                                     long defaultMaxSizeQueues);
+
     }
 
 }
