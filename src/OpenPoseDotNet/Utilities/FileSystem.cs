@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.IO;
+using System.Linq;
 
 // ReSharper disable once CheckNamespace
 namespace OpenPoseDotNet
@@ -17,7 +17,7 @@ namespace OpenPoseDotNet
             if (!extensions.Any())
                 return new string[0];
 
-            var exts = extensions.Select(s => $"*.{s}").ToArray();
+            var exts = extensions.Select(s => $".{s}").ToArray();
             var list = Directory.EnumerateFiles(directoryPath).Where(s => exts.Contains(Path.GetExtension(s))).ToList();
             list.Sort();
             return list.ToArray();
@@ -38,12 +38,12 @@ namespace OpenPoseDotNet
                     {
                         var exts = new[]
                         {
-                        // Completely supported by OpenCV
-                        "bmp", "dib", "pbm", "pgm", "ppm", "sr", "ras",
-                        // Most of them supported by OpenCV
-                        "jpg", "jpeg", "png"
-                    };
-                        return GetFilesOnDirectory(directoryPath, extensions);
+                            // Completely supported by OpenCV
+                            "bmp", "dib", "pbm", "pgm", "ppm", "sr", "ras",
+                            // Most of them supported by OpenCV
+                            "jpg", "jpeg", "png"
+                        };
+                        return GetFilesOnDirectory(directoryPath, exts);
                     }
                 default:
                     throw new ArgumentOutOfRangeException($"Unknown kind of extensions (id = {extensions.ToString()}). Notify us of this error.");

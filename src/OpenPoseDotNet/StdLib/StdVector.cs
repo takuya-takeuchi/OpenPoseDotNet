@@ -26,17 +26,20 @@ namespace OpenPoseDotNet
         {
             var types = new[]
             {
-                new { Type = typeof(int),          ElementType = ElementTypes.Int32 },
-                new { Type = typeof(uint),         ElementType = ElementTypes.UInt32 },
-                new { Type = typeof(float),        ElementType = ElementTypes.Float },
-                new { Type = typeof(double),       ElementType = ElementTypes.Double },
-                new { Type = typeof(ErrorMode),    ElementType = ElementTypes.ErrorMode },
-                new { Type = typeof(LogMode),      ElementType = ElementTypes.LogMode },
-                new { Type = typeof(Point<int>),   ElementType = ElementTypes.PointOfInt32 },
-                new { Type = typeof(Array<float>), ElementType = ElementTypes.ArrayFloat },
-                new { Type = typeof(Datum),        ElementType = ElementTypes.Datum },
-                new { Type = typeof(CustomDatum),  ElementType = ElementTypes.CustomDatum },
-                new { Type = typeof(HeatMapType),  ElementType = ElementTypes.HeatMapType }
+                new { Type = typeof(int),                       ElementType = ElementTypes.Int32 },
+                new { Type = typeof(uint),                      ElementType = ElementTypes.UInt32 },
+                new { Type = typeof(float),                     ElementType = ElementTypes.Float },
+                new { Type = typeof(double),                    ElementType = ElementTypes.Double },
+                new { Type = typeof(ErrorMode),                 ElementType = ElementTypes.ErrorMode },
+                new { Type = typeof(LogMode),                   ElementType = ElementTypes.LogMode },
+                new { Type = typeof(Point<int>),                ElementType = ElementTypes.PointOfInt32 },
+                new { Type = typeof(Rectangle<float>),          ElementType = ElementTypes.RectangleOfFloat },
+                new { Type = typeof(Array<float>),              ElementType = ElementTypes.ArrayFloat },
+                new { Type = typeof(Datum),                     ElementType = ElementTypes.Datum },
+                new { Type = typeof(CustomDatum),               ElementType = ElementTypes.CustomDatum },
+                new { Type = typeof(StdSharedPtr<Datum>),       ElementType = ElementTypes.SharedPtrDatum },
+                new { Type = typeof(StdSharedPtr<CustomDatum>), ElementType = ElementTypes.SharedPtrCustomDatum },
+                new { Type = typeof(HeatMapType),               ElementType = ElementTypes.HeatMapType }
             };
 
             foreach (var type in types)
@@ -113,6 +116,12 @@ namespace OpenPoseDotNet
 
         #region Methods
 
+        public TItem At(int index)
+        {
+            this.ThrowIfDisposed();
+            return this._Imp.At(this.NativePtr, index);
+        }
+
         public void EmplaceBack()
         {
             this.ThrowIfDisposed();
@@ -147,12 +156,18 @@ namespace OpenPoseDotNet
                         return new StdVectorLogModeImp(isEnabledDispose) as StdVectorImp<TItem>;
                     case ElementTypes.PointOfInt32:
                         return new StdVectorPointOfInt32Imp(isEnabledDispose) as StdVectorImp<TItem>;
+                    case ElementTypes.RectangleOfFloat:
+                        return new StdVectorRectangleOfFloatImp(isEnabledDispose) as StdVectorImp<TItem>;
                     case ElementTypes.ArrayFloat:
                         return new StdVectorArrayOfFloatImp(isEnabledDispose) as StdVectorImp<TItem>;
                     case ElementTypes.Datum:
                         return new StdVectorDatumImp(isEnabledDispose) as StdVectorImp<TItem>;
                     case ElementTypes.CustomDatum:
                         return new StdVectorCustomDatumImp(isEnabledDispose) as StdVectorImp<TItem>;
+                    case ElementTypes.SharedPtrDatum:
+                        return new StdVectorStdSharedPtrOfDatumImp(isEnabledDispose) as StdVectorImp<TItem>;
+                    case ElementTypes.SharedPtrCustomDatum:
+                        return new StdVectorStdSharedPtrOfCustomDatumImp(isEnabledDispose) as StdVectorImp<TItem>;
                     case ElementTypes.HeatMapType:
                         return new StdVectorHeatMapTypeImp(isEnabledDispose) as StdVectorImp<TItem>;
                 }
@@ -182,11 +197,17 @@ namespace OpenPoseDotNet
 
             PointOfInt32,
 
+            RectangleOfFloat,
+
             ArrayFloat,
 
             Datum,
 
             CustomDatum,
+
+            SharedPtrDatum,
+
+            SharedPtrCustomDatum,
 
             HeatMapType
 
@@ -224,6 +245,8 @@ namespace OpenPoseDotNet
             public abstract IntPtr Create(IEnumerable<T> data);
 
             public abstract void Dispose(IntPtr ptr);
+
+            public abstract T At(IntPtr ptr, int index);
 
             public abstract bool Empty(IntPtr ptr);
 
@@ -278,6 +301,11 @@ namespace OpenPoseDotNet
             public override void Dispose(IntPtr ptr)
             {
                 NativeMethods.std_vector_int32_t_delete(ptr);
+            }
+
+            public override int At(IntPtr ptr, int index)
+            {
+                return NativeMethods.std_vector_int32_t_at(ptr, index);
             }
 
             public override bool Empty(IntPtr ptr)
@@ -357,6 +385,11 @@ namespace OpenPoseDotNet
                 NativeMethods.std_vector_uint32_t_delete(ptr);
             }
 
+            public override uint At(IntPtr ptr, int index)
+            {
+                return NativeMethods.std_vector_uint32_t_at(ptr, index);
+            }
+
             public override bool Empty(IntPtr ptr)
             {
                 return NativeMethods.std_vector_uint32_t_empty(ptr);
@@ -434,6 +467,11 @@ namespace OpenPoseDotNet
                 NativeMethods.std_vector_float_delete(ptr);
             }
 
+            public override float At(IntPtr ptr, int index)
+            {
+                return NativeMethods.std_vector_float_at(ptr, index);
+            }
+
             public override bool Empty(IntPtr ptr)
             {
                 return NativeMethods.std_vector_float_empty(ptr);
@@ -509,6 +547,11 @@ namespace OpenPoseDotNet
             public override void Dispose(IntPtr ptr)
             {
                 NativeMethods.std_vector_double_delete(ptr);
+            }
+
+            public override double At(IntPtr ptr, int index)
+            {
+                return NativeMethods.std_vector_double_at(ptr, index);
             }
 
             public override bool Empty(IntPtr ptr)
@@ -593,6 +636,11 @@ namespace OpenPoseDotNet
                 return NativeMethods.std_vector_ErrorMode_empty(ptr);
             }
 
+            public override ErrorMode At(IntPtr ptr, int index)
+            {
+                return NativeMethods.std_vector_ErrorMode_at(ptr, index);
+            }
+
             public override void EmplaceBack(IntPtr ptr)
             {
                 NativeMethods.std_vector_ErrorMode_emplace_back(ptr);
@@ -663,6 +711,11 @@ namespace OpenPoseDotNet
             public override void Dispose(IntPtr ptr)
             {
                 NativeMethods.std_vector_LogMode_delete(ptr);
+            }
+
+            public override LogMode At(IntPtr ptr, int index)
+            {
+                return NativeMethods.std_vector_LogMode_at(ptr, index);
             }
 
             public override bool Empty(IntPtr ptr)
@@ -742,6 +795,12 @@ namespace OpenPoseDotNet
                 NativeMethods.std_vector_PointOfInt32_t_delete(ptr);
             }
 
+            public override Point<int> At(IntPtr ptr, int index)
+            {
+                var ret = NativeMethods.std_vector_PointOfInt32_t_at(ptr, index);
+                return new Point<int>(ret, false);
+            }
+
             public override bool Empty(IntPtr ptr)
             {
                 return NativeMethods.std_vector_PointOfInt32_t_empty(ptr);
@@ -772,6 +831,89 @@ namespace OpenPoseDotNet
                 var elementPtr = this.GetElementPtr(ptr);
                 InteropHelper.Copy(elementPtr, dst, dst.Length);
                 return dst.Select(p => new Point<int>(p.x, p.y)).ToArray();
+            }
+
+            #endregion
+
+        }
+
+        private sealed class StdVectorRectangleOfFloatImp : StdVectorImp<Rectangle<float>>
+        {
+
+            #region Constructors
+
+            internal StdVectorRectangleOfFloatImp(bool isEnabledDispose) :
+                base(isEnabledDispose)
+            {
+            }
+
+            #endregion
+
+            #region Methods
+
+            public override IntPtr Create()
+            {
+                return NativeMethods.std_vector_RectangleOfFloat_new1();
+            }
+
+            public override IntPtr Create(int size)
+            {
+                if (size < 0)
+                    throw new ArgumentOutOfRangeException(nameof(size));
+
+                return NativeMethods.std_vector_RectangleOfFloat_new2(new IntPtr(size));
+            }
+
+            public override IntPtr Create(IEnumerable<Rectangle<float>> data)
+            {
+                if (data == null)
+                    throw new ArgumentNullException(nameof(data));
+
+                var array = data.Select(p => new NativeMethods.NativeRectangleOfFloat { x = p.X, y = p.Y, width = p.Width, height = p.Height }).ToArray();
+                return NativeMethods.std_vector_RectangleOfFloat_new3(array, new IntPtr(array.Length));
+            }
+
+            public override void Dispose(IntPtr ptr)
+            {
+                NativeMethods.std_vector_RectangleOfFloat_delete(ptr);
+            }
+
+            public override Rectangle<float> At(IntPtr ptr, int index)
+            {
+                var ret = NativeMethods.std_vector_RectangleOfFloat_at(ptr, index);
+                return new Rectangle<float>(ret, false);
+            }
+
+            public override bool Empty(IntPtr ptr)
+            {
+                return NativeMethods.std_vector_RectangleOfFloat_empty(ptr);
+            }
+
+            public override void EmplaceBack(IntPtr ptr)
+            {
+                NativeMethods.std_vector_RectangleOfFloat_emplace_back(ptr);
+            }
+
+            public override IntPtr GetElementPtr(IntPtr ptr)
+            {
+                return NativeMethods.std_vector_RectangleOfFloat_getPointer(ptr);
+            }
+
+            public override int GetSize(IntPtr ptr)
+            {
+                return NativeMethods.std_vector_RectangleOfFloat_getSize(ptr).ToInt32();
+            }
+
+            public override Rectangle<float>[] ToArray(IntPtr ptr)
+            {
+                var size = this.GetSize(ptr);
+                if (size == 0)
+                    return new Rectangle<float>[0];
+
+                var dst = new NativeMethods.NativeRectangleOfFloat[size];
+                var elementPtr = this.GetElementPtr(ptr);
+                InteropHelper.Copy(elementPtr, dst, dst.Length);
+                return dst.Select(r => new Rectangle<float>(r.x, r.y, r.width, r.height)).ToArray();
             }
 
             #endregion
@@ -818,6 +960,12 @@ namespace OpenPoseDotNet
             {
                 if (this.IsEnabledDispose)
                     NativeMethods.std_vector_op_ArrayOfFloat_delete(ptr);
+            }
+
+            public override Array<float> At(IntPtr ptr, int index)
+            {
+                var ret = NativeMethods.std_vector_op_ArrayOfFloat_at(ptr, index);
+                return new Array<float>(ret, false);
             }
 
             public override bool Empty(IntPtr ptr)
@@ -897,6 +1045,12 @@ namespace OpenPoseDotNet
                     NativeMethods.std_vector_Datum_delete(ptr);
             }
 
+            public override Datum At(IntPtr ptr, int index)
+            {
+                var ret = NativeMethods.std_vector_Datum_at(ptr, index);
+                return new Datum(ret, false);
+            }
+
             public override bool Empty(IntPtr ptr)
             {
                 return NativeMethods.std_vector_Datum_empty(ptr);
@@ -974,6 +1128,12 @@ namespace OpenPoseDotNet
                     NativeMethods.std_vector_CustomDatum_delete(ptr);
             }
 
+            public override CustomDatum At(IntPtr ptr, int index)
+            {
+                var ret = NativeMethods.std_vector_CustomDatum_at(ptr, index);
+                return new CustomDatum(ret, false);
+            }
+
             public override bool Empty(IntPtr ptr)
             {
                 return NativeMethods.std_vector_CustomDatum_empty(ptr);
@@ -1003,6 +1163,172 @@ namespace OpenPoseDotNet
                 var dst = new IntPtr[size];
                 NativeMethods.std_vector_CustomDatum_copy(ptr, dst);
                 return dst.Select(p => new CustomDatum(p, this.IsEnabledDispose)).ToArray();
+            }
+
+            #endregion
+
+        }
+        
+        private sealed class StdVectorStdSharedPtrOfDatumImp : StdVectorImp<StdSharedPtr<Datum>>
+        {
+
+            #region Constructors
+
+            internal StdVectorStdSharedPtrOfDatumImp(bool isEnabledDispose) :
+                base(isEnabledDispose)
+            {
+            }
+
+            #endregion
+
+            #region Methods
+
+            public override IntPtr Create()
+            {
+                return NativeMethods.std_vector_StdSharedPtrOfDatum_new1();
+            }
+
+            public override IntPtr Create(int size)
+            {
+                if (size < 0)
+                    throw new ArgumentOutOfRangeException(nameof(size));
+
+                return NativeMethods.std_vector_StdSharedPtrOfDatum_new2(new IntPtr(size));
+            }
+
+            public override IntPtr Create(IEnumerable<StdSharedPtr<Datum>> data)
+            {
+                if (data == null)
+                    throw new ArgumentNullException(nameof(data));
+
+                var array = data.Select(d => d.NativePtr).ToArray();
+                return NativeMethods.std_vector_StdSharedPtrOfDatum_new3(array, new IntPtr(array.Length));
+            }
+
+            public override void Dispose(IntPtr ptr)
+            {
+                if (this.IsEnabledDispose)
+                    NativeMethods.std_vector_StdSharedPtrOfDatum_delete(ptr);
+            }
+
+            public override StdSharedPtr<Datum> At(IntPtr ptr, int index)
+            {
+                var ret = NativeMethods.std_vector_StdSharedPtrOfDatum_at(ptr, index);
+                return new StdSharedPtr<Datum>(ret, false);
+            }
+
+            public override bool Empty(IntPtr ptr)
+            {
+                return NativeMethods.std_vector_StdSharedPtrOfDatum_empty(ptr);
+            }
+
+            public override void EmplaceBack(IntPtr ptr)
+            {
+                NativeMethods.std_vector_StdSharedPtrOfDatum_emplace_back(ptr);
+            }
+
+            public override IntPtr GetElementPtr(IntPtr ptr)
+            {
+                return NativeMethods.std_vector_StdSharedPtrOfDatum_getPointer(ptr);
+            }
+
+            public override int GetSize(IntPtr ptr)
+            {
+                return NativeMethods.std_vector_StdSharedPtrOfDatum_getSize(ptr).ToInt32();
+            }
+
+            public override StdSharedPtr<Datum>[] ToArray(IntPtr ptr)
+            {
+                var size = this.GetSize(ptr);
+                if (size == 0)
+                    return new StdSharedPtr<Datum>[0];
+
+                var dst = new IntPtr[size];
+                NativeMethods.std_vector_StdSharedPtrOfDatum_copy(ptr, dst);
+                return dst.Select(p => new StdSharedPtr<Datum>(p, this.IsEnabledDispose)).ToArray();
+            }
+
+            #endregion
+
+        }
+
+        private sealed class StdVectorStdSharedPtrOfCustomDatumImp : StdVectorImp<StdSharedPtr<CustomDatum>>
+        {
+
+            #region Constructors
+
+            internal StdVectorStdSharedPtrOfCustomDatumImp(bool isEnabledDispose) :
+                base(isEnabledDispose)
+            {
+            }
+
+            #endregion
+
+            #region Methods
+
+            public override IntPtr Create()
+            {
+                return NativeMethods.std_vector_StdSharedPtrOfCustomDatum_new1();
+            }
+
+            public override IntPtr Create(int size)
+            {
+                if (size < 0)
+                    throw new ArgumentOutOfRangeException(nameof(size));
+
+                return NativeMethods.std_vector_StdSharedPtrOfCustomDatum_new2(new IntPtr(size));
+            }
+
+            public override IntPtr Create(IEnumerable<StdSharedPtr<CustomDatum>> data)
+            {
+                if (data == null)
+                    throw new ArgumentNullException(nameof(data));
+
+                var array = data.Select(d => d.NativePtr).ToArray();
+                return NativeMethods.std_vector_StdSharedPtrOfCustomDatum_new3(array, new IntPtr(array.Length));
+            }
+
+            public override void Dispose(IntPtr ptr)
+            {
+                if (this.IsEnabledDispose)
+                    NativeMethods.std_vector_StdSharedPtrOfCustomDatum_delete(ptr);
+            }
+
+            public override StdSharedPtr<CustomDatum> At(IntPtr ptr, int index)
+            {
+                var ret = NativeMethods.std_vector_StdSharedPtrOfCustomDatum_at(ptr, index);
+                return new StdSharedPtr<CustomDatum>(ret, false);
+            }
+
+            public override bool Empty(IntPtr ptr)
+            {
+                return NativeMethods.std_vector_StdSharedPtrOfCustomDatum_empty(ptr);
+            }
+
+            public override void EmplaceBack(IntPtr ptr)
+            {
+                NativeMethods.std_vector_StdSharedPtrOfCustomDatum_emplace_back(ptr);
+            }
+
+            public override IntPtr GetElementPtr(IntPtr ptr)
+            {
+                return NativeMethods.std_vector_StdSharedPtrOfCustomDatum_getPointer(ptr);
+            }
+
+            public override int GetSize(IntPtr ptr)
+            {
+                return NativeMethods.std_vector_StdSharedPtrOfCustomDatum_getSize(ptr).ToInt32();
+            }
+
+            public override StdSharedPtr<CustomDatum>[] ToArray(IntPtr ptr)
+            {
+                var size = this.GetSize(ptr);
+                if (size == 0)
+                    return new StdSharedPtr<CustomDatum>[0];
+
+                var dst = new IntPtr[size];
+                NativeMethods.std_vector_StdSharedPtrOfCustomDatum_copy(ptr, dst);
+                return dst.Select(p => new StdSharedPtr<CustomDatum>(p, this.IsEnabledDispose)).ToArray();
             }
 
             #endregion
@@ -1048,6 +1374,11 @@ namespace OpenPoseDotNet
             public override void Dispose(IntPtr ptr)
             {
                 NativeMethods.std_vector_HeatMapType_delete(ptr);
+            }
+
+            public override HeatMapType At(IntPtr ptr, int index)
+            {
+                return NativeMethods.std_vector_HeatMapType_at(ptr, index);
             }
 
             public override bool Empty(IntPtr ptr)

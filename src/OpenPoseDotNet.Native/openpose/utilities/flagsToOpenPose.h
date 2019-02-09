@@ -44,6 +44,11 @@ DLLEXPORT std::vector<op::HeatMapType>* op_flagsToHeatMaps(const bool heatMapsAd
     return new std::vector<op::HeatMapType>(ret);
 }
 
+DLLEXPORT op::Detector op_flagsToDetector(const int detector)
+{
+    return op::flagsToDetector(detector);
+}
+
 DLLEXPORT op::ScaleMode op_flagsToHeatMapScaleMode(const int heatMapScale)
 {
     return op::flagsToHeatMapScaleMode(heatMapScale);

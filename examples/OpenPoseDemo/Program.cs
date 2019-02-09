@@ -4,7 +4,6 @@
 */
 
 using System;
-using System.Diagnostics;
 using OpenPoseDotNet;
 
 namespace OpenPoseDemo
@@ -34,6 +33,10 @@ namespace OpenPoseDemo
                 Profiler.SetDefaultX((ulong)Flags.ProfileSpeed);
 
                 // Applying user defined configuration - GFlags to program variables
+                // producerType
+                var tie = OpenPose.FlagsToProducer(Flags.ImageDir, Flags.Video, Flags.IpCamera, Flags.Camera, Flags.FlirCamera, Flags.FlirCameraIndex);
+                var producerType = tie.Item1;
+                var producerString = tie.Item2;
                 // cameraSize
                 var cameraSize = OpenPose.FlagsToPoint(Flags.CameraResolution, "-1x-1");
                 // outputSize
@@ -44,10 +47,6 @@ namespace OpenPoseDemo
                 var faceNetInputSize = OpenPose.FlagsToPoint(Flags.FaceNetResolution, "368x368 (multiples of 16)");
                 // handNetInputSize
                 var handNetInputSize = OpenPose.FlagsToPoint(Flags.HandNetResolution, "368x368 (multiples of 16)");
-                // producerType
-                var tie = OpenPose.FlagsToProducer(Flags.ImageDir, Flags.Video, Flags.IpCamera, Flags.Camera, Flags.FlirCamera, Flags.FlirCameraIndex);
-                var producerType = tie.Item1;
-                var producerString = tie.Item2;
                 // poseModel
                 var poseModel = OpenPose.FlagsToPoseModel(Flags.ModelPose);
                 // JSON saving
@@ -60,9 +59,52 @@ namespace OpenPoseDemo
                 var heatMapScale = OpenPose.FlagsToHeatMapScaleMode(Flags.HeatmapsScale);
                 // >1 camera view?
                 var multipleView = (Flags.Enable3D || Flags.Views3D > 1 || Flags.FlirCamera);
+                // Face and hand detectors
+                var faceDetector = OpenPose.FlagsToDetector(Flags.FaceDetector);
+                var handDetector = OpenPose.FlagsToDetector(Flags.HandDetector);
                 // Enabling Google Logging
                 const bool enableGoogleLogging = true;
 
+                // Configuring OpenPose
+                OpenPose.Log("Configuring OpenPose...", Priority.High);
+                using (var opWrapper = new Wrapper<Datum>())
+                {
+                    // Configuring OpenPose
+                    OpenPose.Log("Configuring OpenPose...", Priority.High);
+                    ConfigureWrapper(opWrapper);
+
+                    // Start, run, and stop processing - exec() blocks this thread until OpenPose wrapper has finished
+                    OpenPose.Log("Starting thread(s)...", Priority.High);
+                    opWrapper.Exec();
+
+                        // Start, run, and stop processing - exec() blocks this thread until OpenPose wrapper has finished
+                        OpenPose.Log("Starting thread(s)...", Priority.High);
+                        opWrapper.Exec();
+
+                        // Measuring total time
+                        timer.Stop();
+                        var totalTimeSec = timer.ElapsedMilliseconds * 1000;
+                        var message = $"OpenPose demo successfully finished. Total time: {totalTimeSec} seconds.";
+                        OpenPose.Log(message, Priority.High);
+                    }
+                }
+
+                // Return successful message
+                return 0;
+            }
+            catch (Exception)
+            {
+                return -1;
+            }
+        }
+
+        #endregion
+
+        #endregion
+
+    }
+
+}
                 // Pose configuration (use WrapperStructPose{} for default and recommended configuration)
                 var pose = new WrapperStructPose(!Flags.BodyDisabled,
                                                  netInputSize,
@@ -91,7 +133,8 @@ namespace OpenPoseDemo
                                                  enableGoogleLogging);
 
                 // Face configuration (use op::WrapperStructFace{} to disable it)
-                var face = new WrapperStructFace(Flags.Face,
+                var face = new WrapperStructFace(Flags.Face, 
+                                                 faceDetector,
                                                  faceNetInputSize,
                                                  OpenPose.FlagsToRenderMode(Flags.FaceRender, multipleView, Flags.RenderPose),
                                                  (float)Flags.FaceAlphaPose,
@@ -100,9 +143,10 @@ namespace OpenPoseDemo
 
                 // Hand configuration (use op::WrapperStructHand{} to disable it)
                 var hand = new WrapperStructHand(Flags.Hand,
+                                                 handDetector,
                                                  handNetInputSize,
                                                  Flags.HandScaleNumber,
-                                                 (float)Flags.HandScaleRange, Flags.HandTracking,
+                                                 (float)Flags.HandScaleRange,
                                                  OpenPose.FlagsToRenderMode(Flags.HandRender, multipleView, Flags.RenderPose),
                                                  (float)Flags.HandAlphaPose,
                                                  (float)Flags.HandAlphaHeatmap,
@@ -178,41 +222,6 @@ namespace OpenPoseDemo
             try
             {
                 OpenPose.Log("Starting OpenPose demo...", Priority.High);
-                var timer = new Stopwatch();
-                timer.Start();
-
-                using (var opWrapper = new Wrapper<Datum>())
-                {
-                    // Configuring OpenPose
-                    OpenPose.Log("Configuring OpenPose...", Priority.High);
-                    ConfigureWrapper(opWrapper);
-
-                    // Start, run, and stop processing - exec() blocks this thread until OpenPose wrapper has finished
-                    OpenPose.Log("Starting thread(s)...", Priority.High);
-                    opWrapper.Exec();
-
+                using (var opTimer = OpenPose.GetTimerInit())
                     // Measuring total time
-                    timer.Stop();
-                    var totalTimeSec = timer.ElapsedMilliseconds * 1000;
-                    var message = $"OpenPose demo successfully finished. Total time: {totalTimeSec} seconds.";
-                    OpenPose.Log(message, Priority.High);
-                }
-
-                // Return successful message
-                OpenPose.Log("Stopping OpenPose...", Priority.High);
-
-                return 0;
-            }
-            catch (Exception)
-            {
-                return -1;
-            }
-        }
-
-        #endregion
-
-        #endregion
-
-    }
-
-}
+                    OpenPose.PrintTime(opTimer, "OpenPose demo successfully finished. Total time: ", " seconds.", Priority.High);

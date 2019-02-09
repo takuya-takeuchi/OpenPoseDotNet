@@ -20,6 +20,19 @@ typedef op::WorkerProducer<__TYPENAME__##Datums> __TYPENAME__##WorkerProducer;\
 
 #pragma endregion template
 
+// e.g.
+// DefaultDatumsNoPtr       std::vector<std::shared_ptr<op::Datum>>
+// DefaultDatums            std::shared_ptr<std::vector<std::shared_ptr<op::Datum>>>
+// DefaultWrapper           op::WrapperT<op::Datum>
+// DefaultThreadManager     op::ThreadManager<std::shared_ptr<std::vector<std::shared_ptr<op::Datum>>>>
+// DefaultWorker            std::shared_ptr<op::Worker<std::shared_ptr<std::vector<std::shared_ptr<op::Datum>>>>
+// DefaultWrapper           op::WrapperT<op::Datum>
+// DefaultDatumProducer     op::DatumProducer<op::Datum>
+// DefaultWDatumProduce     op::WDatumProducer<op::Datum>
+// DefaultWGui              op::WGui<op::Datum>
+// DefaultWorkerConsumer    op::WorkerConsumer<std::shared_ptr<std::vector<std::shared_ptr<op::Datum>>>>
+// DefaultWorkerProducer    op::WorkerProducer<std::shared_ptr<std::vector<std::shared_ptr<op::Datum>>>>
+
 MAKE_DEFINE(op::Datum, Default)
 MAKE_DEFINE(CustomDatum, Custom)
 

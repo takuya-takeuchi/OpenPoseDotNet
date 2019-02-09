@@ -83,4 +83,50 @@ DLLEXPORT std::array<op::Array<float>, 2>* op_core_datum_get_handHeatMaps(op::Da
     return &datum->handHeatMaps;
 }
 
+DLLEXPORT std::vector<op::Rectangle<float>>* op_core_datum_get_faceRectangles(op::Datum* datum)
+{
+    const auto ret = &datum->faceRectangles;
+    auto vec = new std::vector<op::Rectangle<float>>();
+    for (auto i = 0; i < ret->size(); i++)
+        vec->push_back(ret->at(i));
+
+    return vec;
+}
+
+DLLEXPORT void op_core_datum_set_faceRectangles(op::Datum* datum, std::vector<op::Rectangle<float>>* rectangles)
+{
+    datum->faceRectangles = *rectangles;
+}
+
+DLLEXPORT std::vector<op::Rectangle<float>>* op_core_datum_get_handRectangles(op::Datum* datum)
+{
+    const auto ret = &datum->handRectangles;
+    auto vec = new std::vector<op::Rectangle<float>>();
+    for (auto i = 0; i < ret->size(); i++)
+    for (auto j = 0; j < 2; j++)
+        vec->push_back(ret->at(i)[j]);
+
+    return vec;
+}
+
+DLLEXPORT void op_core_datum_set_handRectangles(op::Datum* datum, std::vector<op::Rectangle<float>>* rectangles)
+{
+    const auto& r = *static_cast<std::vector<op::Rectangle<float>>*>(rectangles);
+    std::vector<std::array<op::Rectangle<float>, 2>> vector;
+    for (auto i = 0; i < r.size(); i++)
+        if (i % 2 == 0)
+        {
+            std::array<op::Rectangle<float>, 2> a;
+            a.at(0) = r[i];
+            vector.push_back(a);
+        }
+        else
+        {
+            auto& a = vector[i % 2];
+            a.at(1) = r[i];
+        }
+
+    datum->handRectangles = vector;
+}
+
 #endif

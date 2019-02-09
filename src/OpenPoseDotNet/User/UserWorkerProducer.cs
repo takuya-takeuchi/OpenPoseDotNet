@@ -66,8 +66,8 @@ namespace OpenPoseDotNet
             this.ThrowIfDisposed();
             NativeMethods.op_UserWorkerProducer_stop(this._DataType, this.NativePtr);
         }
-
-        protected virtual StdSharedPtr<StdVector<T>> WorkProducer()
+        
+        protected virtual StdSharedPtr<StdVector<StdSharedPtr<T>>> WorkProducer()
         {
             this.ThrowIfDisposed();
             return null;

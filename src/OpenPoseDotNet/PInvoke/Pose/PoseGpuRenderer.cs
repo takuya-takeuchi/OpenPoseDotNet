@@ -8,7 +8,7 @@ namespace OpenPoseDotNet
     internal sealed partial class NativeMethods
     {
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern IntPtr op_PoseGpuRenderer_new(PoseModel poseModel,
                                                            IntPtr poseExtractorNet,
                                                            float renderThreshold,
@@ -17,13 +17,13 @@ namespace OpenPoseDotNet
                                                            float alphaHeatMap,
                                                            uint elementToRender);
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void op_PoseGpuRenderer_delete(IntPtr renderer);
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void op_PoseGpuRenderer_initializationOnThread(IntPtr renderer);
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void op_PoseGpuRenderer_renderPose(IntPtr renderer,
                                                                 IntPtr outputData,
                                                                 IntPtr poseKeypoints,
@@ -32,7 +32,7 @@ namespace OpenPoseDotNet
                                                                 out int item1,
                                                                 out IntPtr item2);
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void op_PoseGpuRenderer_setElementToRender(IntPtr renderer, int elementToRender);
 
     }

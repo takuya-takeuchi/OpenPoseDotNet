@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Runtime.InteropServices;
-using System.Text;
 
 // ReSharper disable once CheckNamespace
 namespace OpenPoseDotNet
@@ -11,7 +8,7 @@ namespace OpenPoseDotNet
     internal sealed partial class NativeMethods
     {
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern IntPtr op_PoseExtractorCaffe_new(PoseModel poseModel,
                                                               byte[] modelFolder,
                                                               int gpuId,
@@ -23,10 +20,10 @@ namespace OpenPoseDotNet
                                                               byte[] caffeModelPath,
                                                               bool enableGoogleLogging);
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void op_PoseExtractorCaffe_delete(IntPtr caffe);
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void op_PoseExtractorCaffe_forwardPass(IntPtr caffe,
                                                                     IntPtr inputNetData,
                                                                     IntPtr inputDataSize,

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using System.Text;
 
 // ReSharper disable once CheckNamespace
 namespace OpenPoseDotNet
@@ -9,7 +8,7 @@ namespace OpenPoseDotNet
     internal sealed partial class NativeMethods
     {
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern IntPtr op_wrapperStructOutput_new(double verbose,
                                                                byte[] writeKeyPoint,
                                                                DataFormat writeKeyPointFormat,
@@ -29,7 +28,7 @@ namespace OpenPoseDotNet
                                                                byte[] udpHost,
                                                                byte[] udpPort);
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void op_wrapperStructOutput_delete(IntPtr face);
 
     }

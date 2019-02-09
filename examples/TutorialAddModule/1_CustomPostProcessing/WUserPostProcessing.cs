@@ -33,7 +33,7 @@ namespace CustomPostProcessing
         {
         }
 
-        protected override void Work(CustomDatum[] datums)
+        protected override void Work(StdSharedPtr<CustomDatum>[] datums)
         {
             try
             {
@@ -48,7 +48,7 @@ namespace CustomPostProcessing
                     {
                         // THIS IS THE ONLY LINE THAT THE USER MUST MODIFY ON THIS HPP FILE, by using the proper function
                         // and datum elements
-                        this._UserPostProcessing.DoSomething(datum.CvOutputData, datum.CvOutputData);
+                        this._UserPostProcessing.DoSomething(datum.Get().CvOutputData, datum.Get().CvOutputData);
                         // Profiling speed
                         Profiler.TimerEnd(profilerKey);
                         Profiler.PrintAveragedTimeMsOnIterationX(profilerKey, -1, nameof(this.Work), "");

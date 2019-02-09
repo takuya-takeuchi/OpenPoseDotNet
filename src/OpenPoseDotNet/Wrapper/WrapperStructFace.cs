@@ -14,15 +14,87 @@ namespace OpenPoseDotNet
 
         #region Constructors
 
-        public WrapperStructFace(bool enable = false,
-                                 Point<int> netInputSize = default(Point<int>),
-                                 RenderMode renderMode = RenderMode.Gpu,
-                                 float alphaKeyPoint = OpenPose.FaceDefaultAlphaKeyPoint,
-                                 float alphaHeatMap = OpenPose.FaceDefaultAlphaHeatMap,
-                                 float renderThreshold = 0.4f)
+        public WrapperStructFace() :
+            this(false)
         {
-            using(var native = netInputSize.ToNative())
+        }
+
+        public WrapperStructFace(bool enable) :
+            this(enable,
+                Detector.Body)
+        {
+        }
+
+        public WrapperStructFace(bool enable,
+                                 Detector detector) :
+            this(enable,
+                detector,
+                new Point<int>(368, 368))
+        {
+        }
+
+        public WrapperStructFace(bool enable,
+                                 Detector detector,
+                                 Point<int> netInputSize) :
+            this(enable,
+                detector,
+                netInputSize,
+                RenderMode.Gpu)
+        {
+        }
+
+        public WrapperStructFace(bool enable,
+                                 Detector detector,
+                                 Point<int> netInputSize,
+                                 RenderMode renderMode) :
+            this(enable,
+                detector,
+                netInputSize,
+                renderMode,
+                OpenPose.FaceDefaultAlphaKeyPoint)
+        {
+        }
+
+        public WrapperStructFace(bool enable,
+                                 Detector detector,
+                                 Point<int> netInputSize,
+                                 RenderMode renderMode,
+                                 float alphaKeyPoint) :
+            this(enable,
+                detector,
+                netInputSize,
+                renderMode,
+                alphaKeyPoint,
+                OpenPose.FaceDefaultAlphaHeatMap)
+        {
+        }
+
+        public WrapperStructFace(bool enable,
+                                 Detector detector,
+                                 Point<int> netInputSize,
+                                 RenderMode renderMode,
+                                 float alphaKeyPoint,
+                                 float alphaHeatMap) :
+            this(enable, 
+                 detector,
+                 netInputSize,
+                 renderMode, 
+                 alphaKeyPoint,
+                 alphaHeatMap, 0.4f)
+        {
+        }
+
+        public WrapperStructFace(bool enable,
+                                 Detector detector,
+                                 Point<int> netInputSize,
+                                 RenderMode renderMode,
+                                 float alphaKeyPoint,
+                                 float alphaHeatMap,
+                                 float renderThreshold)
+        {
+            using (var native = netInputSize.ToNative())
                 this.NativePtr = NativeMethods.op_wrapperStructFace_new(enable,
+                                                                        detector,
                                                                         native.NativePtr,
                                                                         renderMode,
                                                                         alphaKeyPoint,

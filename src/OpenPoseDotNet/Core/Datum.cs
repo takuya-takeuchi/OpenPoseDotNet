@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 // ReSharper disable once CheckNamespace
 namespace OpenPoseDotNet
@@ -8,6 +10,11 @@ namespace OpenPoseDotNet
     {
 
         #region Constructors
+
+        public Datum()
+        {
+            this.NativePtr = NativeMethods.op_core_datum_new();
+        }
 
         internal Datum(IntPtr ptr, bool isEnabledDispose = true) :
             base(isEnabledDispose)
@@ -52,6 +59,68 @@ namespace OpenPoseDotNet
                 this.ThrowIfDisposed();
                 value?.ThrowIfDisposed();
                 NativeMethods.op_core_datum_set_cvOutputData(this.NativePtr, value?.NativePtr ?? IntPtr.Zero);
+            }
+        }
+
+        public Rectangle<float>[] FaceRectangles
+        {
+            get
+            {
+                this.ThrowIfDisposed();
+                var ret = NativeMethods.op_core_datum_get_faceRectangles(this.NativePtr);
+
+                using (var vector = new StdVector<Rectangle<float>>(ret))
+                    return vector.ToArray();
+            }
+            set
+            {
+                this.ThrowIfDisposed();
+                using (var vector = new StdVector<Rectangle<float>>(new List<Rectangle<float>>(value ?? new Rectangle<float>[0])))
+                    NativeMethods.op_core_datum_set_faceRectangles(this.NativePtr, vector.NativePtr);
+            }
+        }
+
+        public Rectangle<float>[][] HandRectangles
+        {
+            get
+            {
+                this.ThrowIfDisposed();
+                var ret = NativeMethods.op_core_datum_get_handRectangles(this.NativePtr);
+                using (var vector = new StdVector<Rectangle<float>>(ret))
+                {
+                    var rectangles = vector.ToArray();
+
+                    var result = new List<Rectangle<float>[]>();
+                    for (var index = 0; index < rectangles.Length; index++)
+                    {
+                        if (index == 0)
+                        {
+                            var r = new Rectangle<float>[2];
+                            r[0] = rectangles[index];
+                            result.Add(r);
+                        }
+                        else
+                        {
+                            var r = result[index % 2];
+                            r[1] = rectangles[index];
+                        }
+                    }
+
+                    return result.ToArray();
+                }
+            }
+            set
+            {
+                this.ThrowIfDisposed();
+
+                // check whether each item has only 2 or not
+                if (value != null)
+                    if (value.Any(r => r.Length != 2))
+                        throw new ArgumentOutOfRangeException();
+
+                var rectangles = value != null ? value.SelectMany(r => r).ToList() : new List<Rectangle<float>>();
+                using (var vector = new StdVector<Rectangle<float>>(rectangles))
+                    NativeMethods.op_core_datum_set_handRectangles(this.NativePtr, vector.NativePtr);
             }
         }
 

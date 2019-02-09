@@ -192,7 +192,7 @@ namespace OpenPoseDotNet
 
         #region Implements
 
-        private abstract class ArrayImp<T>
+        private abstract class ArrayImp<U>
         {
 
             #region Methods
@@ -211,7 +211,7 @@ namespace OpenPoseDotNet
 
             public abstract IntPtr Gets(IntPtr ptr, int index);
 
-            public abstract T Operator(IntPtr ptr, IntPtr indexes);
+            public abstract U Operator(IntPtr ptr, IntPtr indexes);
 
             public abstract IntPtr ToString(IntPtr ptr);
 

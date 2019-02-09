@@ -8,7 +8,7 @@ namespace OpenPoseDotNet
     internal sealed partial class NativeMethods
     {
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern IntPtr op_createProducer(ProducerType type,
                                                       byte[] producerString,
                                                       IntPtr cameraResolution,
@@ -18,7 +18,7 @@ namespace OpenPoseDotNet
 
         #region op::DatumManager
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern IntPtr op_DatumProducer_new(OpenPose.DataType dataType,
                                                          IntPtr producerSharedPtr,
                                                          ulong frameFirst,
@@ -26,18 +26,18 @@ namespace OpenPoseDotNet
                                                          ulong frameLast,
                                                          IntPtr videoSeekSharedPtr);
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void op_DatumProducer_delete(OpenPose.DataType dataType, IntPtr producer);
 
         #endregion
 
         #region op::WDatumManager
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern IntPtr op_WDatumProducer_new(OpenPose.DataType dataType,
                                                           IntPtr datumProducer);
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void op_WDatumProducer_delete(OpenPose.DataType dataType, IntPtr producer);
 
         #endregion
