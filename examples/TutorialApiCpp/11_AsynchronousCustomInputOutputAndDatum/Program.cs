@@ -1,18 +1,29 @@
 ﻿
 /*
- * This sample program is ported by C# from examples/tutorial_api_cpp/04_keypoints_from_images.cpp.
+ * This sample program is ported by C# from examples/tutorial_api_cpp/11_asynchronous_custom_input_output_and_datum.cpp.
 */
 
 using System;
-using System.IO;
 using Microsoft.Extensions.CommandLineUtils;
 using OpenPoseDotNet;
+using UserDatum = OpenPoseDotNet.CustomDatum;
 
-namespace KeyPointsFromImages
+namespace AsynchronousLoopCustomInputAndOutput
 {
 
     internal class Program
     {
+
+        #region Constructor
+
+        static Program()
+        {
+            // Custom OpenPose flags
+            // Producer
+            Flags.ImageDir = "examples/media/";    // Process a directory of images. Read all standard formats (jpg, png, bmp, etc.).
+        }
+
+        #endregion
 
         #region Methods
 
@@ -20,31 +31,16 @@ namespace KeyPointsFromImages
         {
             var app = new CommandLineApplication(false)
             {
-                Name = nameof(KeyPointsFromImages)
+                Name = nameof(AsynchronousLoopCustomInputAndOutput)
             };
 
             app.HelpOption("-h|--help");
 
-            var disableMultiThreadArgument = app.Argument("disableMultiThread", "Disable MultiThread");
-            var imageDirOption = app.Option("-i|--imageDir", "Process a directory of images. Read all standard formats (jpg, png, bmp, etc.).", CommandOptionType.SingleValue);
             var noDisplay = app.Option("--no_display", "Enable to disable the visual display.", CommandOptionType.NoValue);
 
             app.OnExecute(() =>
             {
-                if (disableMultiThreadArgument.Value != null)
-                    Flags.DisableMultiThread = true;
-
-                var path = imageDirOption.Value();
-                if (string.IsNullOrWhiteSpace(path) || !Directory.Exists(path))
-                {
-                    Console.WriteLine("Argument 'imageDir' is invalid or not found.");
-                    app.ShowHelp();
-                    return -1;
-                }
-
-                Flags.ImageDir = path;
                 Flags.NoDisplay = noDisplay.HasValue();
-
                 TutorialApiCpp();
 
                 return 0;
@@ -55,7 +51,7 @@ namespace KeyPointsFromImages
 
         #region Helpers
 
-        private static void ConfigureWrapper(Wrapper<Datum> opWrapper)
+        private static void ConfigureWrapper(Wrapper<UserDatum> opWrapperT)
         {
             try
             {
@@ -101,18 +97,18 @@ namespace KeyPointsFromImages
                                                  Flags.NumGpu,
                                                  Flags.NumGpuStart,
                                                  Flags.ScaleNumber,
-                                                 (float) Flags.ScaleGap,
+                                                 (float)Flags.ScaleGap,
                                                  OpenPose.FlagsToRenderMode(Flags.RenderPose, multipleView),
                                                  poseModel,
                                                  !Flags.DisableBlending,
-                                                 (float) Flags.AlphaPose,
-                                                 (float) Flags.AlphaHeatmap,
+                                                 (float)Flags.AlphaPose,
+                                                 (float)Flags.AlphaHeatmap,
                                                  Flags.PartToShow,
                                                  Flags.ModelFolder,
                                                  heatMapTypes,
                                                  heatMapScale,
                                                  Flags.PartCandidates,
-                                                 (float) Flags.RenderThreshold,
+                                                 (float)Flags.RenderThreshold,
                                                  Flags.NumberPeopleMax,
                                                  Flags.MaximizePositives,
                                                  Flags.FpsMax,
@@ -124,19 +120,19 @@ namespace KeyPointsFromImages
                                                  faceDetector,
                                                  faceNetInputSize,
                                                  OpenPose.FlagsToRenderMode(Flags.FaceRender, multipleView, Flags.RenderPose),
-                                                 (float) Flags.FaceAlphaPose,
-                                                 (float) Flags.FaceAlphaHeatmap,
-                                                 (float) Flags.FaceRenderThreshold);
+                                                 (float)Flags.FaceAlphaPose,
+                                                 (float)Flags.FaceAlphaHeatmap,
+                                                 (float)Flags.FaceRenderThreshold);
                 // Hand configuration (use op::WrapperStructHand{} to disable it)
                 var hand = new WrapperStructHand(Flags.Hand,
                                                  handDetector,
                                                  handNetInputSize,
                                                  Flags.HandScaleNumber,
-                                                 (float) Flags.HandScaleRange,
+                                                 (float)Flags.HandScaleRange,
                                                  OpenPose.FlagsToRenderMode(Flags.HandRender, multipleView, Flags.RenderPose),
-                                                 (float) Flags.HandAlphaPose,
-                                                 (float) Flags.HandAlphaHeatmap,
-                                                 (float) Flags.HandRenderThreshold);
+                                                 (float)Flags.HandAlphaPose,
+                                                 (float)Flags.HandAlphaHeatmap,
+                                                 (float)Flags.HandRenderThreshold);
                 // Extra functionality configuration (use op::WrapperStructExtra{} to disable it)
                 var extra = new WrapperStructExtra(Flags.Enable3D,
                                                    Flags.MinViews3D,
@@ -162,78 +158,20 @@ namespace KeyPointsFromImages
                                                      Flags.WriteBvh,
                                                      Flags.UdpHost,
                                                      Flags.UdpPort);
-
-                opWrapper.Configure(pose);
-                opWrapper.Configure(face);
-                opWrapper.Configure(hand);
-                opWrapper.Configure(extra);
-                opWrapper.Configure(output);
+                opWrapperT.Configure(pose);
+                opWrapperT.Configure(face);
+                opWrapperT.Configure(hand);
+                opWrapperT.Configure(extra);
+                opWrapperT.Configure(output);
 
                 // No GUI. Equivalent to: opWrapper.configure(op::WrapperStructGui{});
                 // Set to single-thread (for sequential processing and/or debugging and/or reducing latency)
                 if (Flags.DisableMultiThread)
-                    opWrapper.DisableMultiThreading();
-
-                // Return successful message
-                OpenPose.Log("Stopping OpenPose...", Priority.High);
+                    opWrapperT.DisableMultiThreading();
             }
             catch (Exception e)
             {
                 OpenPose.Error(e.Message, -1, nameof(ConfigureWrapper));
-            }
-        }
-
-        private static bool Display(StdSharedPtr<StdVector<StdSharedPtr<Datum>>> datumsPtr)
-        {
-            try
-            {
-                // User's displaying/saving/other processing here
-                // datum.cvOutputData: rendered frame with pose or heatmaps
-                // datum.poseKeypoints: Array<float> with the estimated pose
-                var key = 32;
-                if (datumsPtr != null && datumsPtr.TryGet(out var data) && !data.Empty)
-                {
-                    // Display image and sleeps at least 1 ms (it usually sleeps ~5-10 msec to display the image)
-                    var temp = data.ToArray();
-                    Cv.ImShow($"{OpenPose.OpenPoseNameAndVersion()} - Tutorial C++ API", temp[0].Get().CvOutputData);
-                    key = Cv.WaitKey(1);
-                }
-                else
-                {
-                    OpenPose.Log("Nullptr or empty datumsPtr found.", Priority.High);
-                }
-
-                return (key == 27);
-            }
-            catch (Exception e)
-            {
-                OpenPose.Error(e.Message, -1, nameof(Display));
-                return true;
-            }
-        }
-
-        private static void PrintKeypoints(StdSharedPtr<StdVector<StdSharedPtr<Datum>>> datumsPtr)
-        {
-            try
-            {
-                // Example: How to use the pose keypoints
-                if (datumsPtr != null && datumsPtr.TryGet(out var data) && !data.Empty)
-                {
-                    // Alternative 1
-                    var temp = data.ToArray();
-                    OpenPose.Log($"Body keypoints: {temp[0].Get().PoseKeyPoints}");
-                    OpenPose.Log($"Face keypoints: {temp[0].Get().FaceKeyPoints}");
-                    OpenPose.Log($"Left hand keypoints: {temp[0].Get().HandKeyPoints[0]}");
-                    OpenPose.Log($"Right hand keypoints: {temp[0].Get().HandKeyPoints[1]}");
-                }
-                else
-                {
-                    OpenPose.Log("Nullptr or empty datumsPtr found.", Priority.High);
-                }
-            }
-            catch (Exception e)
-            {
-                OpenPose.Error(e.Message, -1, nameof(PrintKeypoints));
             }
         }
 
@@ -244,44 +182,45 @@ namespace KeyPointsFromImages
                 OpenPose.Log("Starting OpenPose demo...", Priority.High);
                 using (var opTimer = OpenPose.GetTimerInit())
                 {
-                    using (var opWrapper = new Wrapper<Datum>(ThreadManagerMode.Asynchronous))
+                    // Configuring OpenPose
+                    OpenPose.Log("Configuring OpenPose...", Priority.High);
+                    using (var opWrapperT = new Wrapper<UserDatum>(ThreadManagerMode.Asynchronous))
                     {
-                        // Configuring OpenPose
-                        OpenPose.Log("Configuring OpenPose...", Priority.High);
-                        ConfigureWrapper(opWrapper);
+                        ConfigureWrapper(opWrapperT);
 
-                        // Starting OpenPose
+                        // Start, run, and stop processing - exec() blocks this thread until OpenPose wrapper has finished
                         OpenPose.Log("Starting thread(s)...", Priority.High);
-                        opWrapper.Start();
+                        opWrapperT.Start();
 
-                        // Read frames on directory
-                        var imagePaths = OpenPose.GetFilesOnDirectory(Flags.ImageDir, Extensions.Images);
-                        // Process and display images
-                        foreach (var imagePath in imagePaths)
+                        // User processing
+                        var userInputClass = new UserInputClass(Flags.ImageDir);
+                        var userOutputClass = new UserOutputClass();
+                        var userWantsToExit = false;
+                        while (!userWantsToExit && !userInputClass.IsFinished())
                         {
-                            // Process and display image
-                            using (var imageToProcess = Cv.ImRead(imagePath))
-                            using (var datumProcessed = opWrapper.EmplaceAndPop(imageToProcess))
+                            // Push frame
+                            using (var datumToProcess = userInputClass.CreateDatum())
                             {
-                                if (datumProcessed != null)
+                                if (datumToProcess != null)
                                 {
-                                    PrintKeypoints(datumProcessed);
-                                    if (!Flags.NoDisplay)
+                                    var successfullyEmplaced = opWrapperT.WaitAndEmplace(datumToProcess);
+
+                                    // Pop frame
+                                    if (successfullyEmplaced && opWrapperT.WaitAndPop(out var datumProcessed))
                                     {
-                                        var userWantsToExit = Display(datumProcessed);
-                                        if (userWantsToExit)
-                                        {
-                                            OpenPose.Log("User pressed Esc to exit demo.", Priority.High);
-                                            break;
-                                        }
+                                        if (!Flags.NoDisplay)
+                                            userWantsToExit = userOutputClass.Display(datumProcessed);
+                                        userOutputClass.PrintKeyPoints(datumProcessed);
+                                        datumProcessed.Dispose();
                                     }
-                                }
-                                else
-                                {
-                                    OpenPose.Log($"Image {imagePath} could not be processed.", Priority.High);
+                                    else
+                                        OpenPose.Log("Processed datum could not be emplaced.", Priority.High);
                                 }
                             }
                         }
+
+                        OpenPose.Log("Stopping thread(s)", Priority.High);
+                        opWrapperT.Stop();
                     }
 
                     // Measuring total time

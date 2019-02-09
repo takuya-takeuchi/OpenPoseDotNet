@@ -1,12 +1,12 @@
-﻿
-/*
- * This sample program is ported by C# from examples/openpose/openpose.cpp.
+﻿/*
+ * This sample program is ported by C# from examples/tutorial_api_cpp/15_synchronous_custom_output.cpp.
 */
 
 using System;
+using Microsoft.Extensions.CommandLineUtils;
 using OpenPoseDotNet;
 
-namespace OpenPoseDemo
+namespace SynchronousCustomOutput
 {
 
     internal class Program
@@ -14,9 +14,26 @@ namespace OpenPoseDemo
 
         #region Methods
 
-        private static void Main()
+        private static void Main(string[] args)
         {
-            OpenPoseDemo();
+            var app = new CommandLineApplication(false)
+            {
+                Name = nameof(SynchronousCustomOutput)
+            };
+
+            app.HelpOption("-h|--help");
+
+            var noDisplay = app.Option("--no_display", "Enable to disable the visual display.", CommandOptionType.NoValue);
+
+            app.OnExecute(() =>
+            {
+                Flags.NoDisplay = noDisplay.HasValue();
+                TutorialApiCpp();
+
+                return 0;
+            });
+
+            app.Execute(args);
         }
 
         #region Helpers
@@ -31,6 +48,11 @@ namespace OpenPoseDemo
                 OpenPose.Check(0 <= Flags.LoggingLevel && Flags.LoggingLevel <= 255, "Wrong logging_level value.");
                 ConfigureLog.PriorityThreshold = (Priority)Flags.LoggingLevel;
                 Profiler.SetDefaultX((ulong)Flags.ProfileSpeed);
+                // // For debugging
+                // // Print all logging messages
+                // ConfigureLog.PriorityThreshold = Priority.None;
+                // // Print out speed values faster
+                // Profiler.setDefaultX(100);
 
                 // Applying user defined configuration - GFlags to program variables
                 // producerType
@@ -52,8 +74,8 @@ namespace OpenPoseDemo
                 // JSON saving
                 if (!string.IsNullOrEmpty(Flags.WriteKeyPoint))
                     OpenPose.Log("Flag `write_keypoint` is deprecated and will eventually be removed. Please, use `write_json` instead.", Priority.Max);
-                // keyPointScale
-                var keyPointScale = OpenPose.FlagsToScaleMode(Flags.KeyPointScale);
+                // keypointScale
+                var keypointScale = OpenPose.FlagsToScaleMode(Flags.KeyPointScale);
                 // heatmaps to add
                 var heatMapTypes = OpenPose.FlagsToHeatMaps(Flags.HeatmapsAddParts, Flags.HeatmapsAddBackground, Flags.HeatmapsAddPAFs);
                 var heatMapScale = OpenPose.FlagsToHeatMapScaleMode(Flags.HeatmapsScale);
@@ -65,11 +87,19 @@ namespace OpenPoseDemo
                 // Enabling Google Logging
                 const bool enableGoogleLogging = true;
 
+                // Initializing the user custom classes
+                // GUI (Display)
+                var wUserOutput = new StdSharedPtr<UserWorkerConsumer<Datum>>(new WUserOutput());
+
+                // Add custom processing
+                const bool workerOutputOnNewThread = true;
+                opWrapper.SetWorker(WorkerType.Output, wUserOutput, workerOutputOnNewThread);
+
                 // Pose configuration (use WrapperStructPose{} for default and recommended configuration)
                 var pose = new WrapperStructPose(!Flags.BodyDisabled,
                                                  netInputSize,
                                                  outputSize,
-                                                 keyPointScale,
+                                                 keypointScale,
                                                  Flags.NumGpu,
                                                  Flags.NumGpuStart,
                                                  Flags.ScaleNumber,
@@ -93,7 +123,7 @@ namespace OpenPoseDemo
                                                  enableGoogleLogging);
 
                 // Face configuration (use op::WrapperStructFace{} to disable it)
-                var face = new WrapperStructFace(Flags.Face, 
+                var face = new WrapperStructFace(Flags.Face,
                                                  faceDetector,
                                                  faceNetInputSize,
                                                  OpenPose.FlagsToRenderMode(Flags.FaceRender, multipleView, Flags.RenderPose),
@@ -106,11 +136,11 @@ namespace OpenPoseDemo
                                                  handDetector,
                                                  handNetInputSize,
                                                  Flags.HandScaleNumber,
-                                                 (float)Flags.HandScaleRange,
+                                                 (float) Flags.HandScaleRange,
                                                  OpenPose.FlagsToRenderMode(Flags.HandRender, multipleView, Flags.RenderPose),
-                                                 (float)Flags.HandAlphaPose,
-                                                 (float)Flags.HandAlphaHeatmap,
-                                                 (float)Flags.HandRenderThreshold);
+                                                 (float) Flags.HandAlphaPose,
+                                                 (float) Flags.HandAlphaHeatmap,
+                                                 (float) Flags.HandRenderThreshold);
 
                 // Extra functionality configuration (use op::WrapperStructExtra{} to disable it)
                 var extra = new WrapperStructExtra(Flags.Enable3D,
@@ -154,19 +184,15 @@ namespace OpenPoseDemo
                                                      Flags.UdpHost,
                                                      Flags.UdpPort);
 
-                // GUI (comment or use default argument to disable any visual output)
-                var gui = new WrapperStructGui(OpenPose.FlagsToDisplayMode(Flags.Display, Flags.Enable3D),
-                                               !Flags.NoGuiVerbose,
-                                               Flags.FullScreen);
-
+                // No GUI. Equivalent to: opWrapper.configure(op::WrapperStructGui{});
                 opWrapper.Configure(pose);
                 opWrapper.Configure(face);
                 opWrapper.Configure(hand);
                 opWrapper.Configure(extra);
                 opWrapper.Configure(input);
                 opWrapper.Configure(output);
-                opWrapper.Configure(gui);
 
+                // No GUI. Equivalent to: opWrapper.configure(op::WrapperStructGui{});
                 // Set to single-thread (for sequential processing and/or debugging and/or reducing latency)
                 if (Flags.DisableMultiThread)
                     opWrapper.DisableMultiThreading();
@@ -177,26 +203,29 @@ namespace OpenPoseDemo
             }
         }
 
-        private static int OpenPoseDemo()
+        private static int TutorialApiCpp()
         {
             try
             {
                 OpenPose.Log("Starting OpenPose demo...", Priority.High);
                 using (var opTimer = OpenPose.GetTimerInit())
-                using (var opWrapper = new Wrapper<Datum>())
                 {
-                    // Configuring OpenPose
+                    // OpenPose wrapper
                     OpenPose.Log("Configuring OpenPose...", Priority.High);
-                    ConfigureWrapper(opWrapper);
+                    using (var opWrapper = new Wrapper<Datum>())
+                    {
+                        ConfigureWrapper(opWrapper);
 
-                    // Start, run, and stop processing - exec() blocks this thread until OpenPose wrapper has finished
-                    OpenPose.Log("Starting thread(s)...", Priority.High);
-                    opWrapper.Exec();
+                        // Start, run, and stop processing - exec() blocks this thread until OpenPose wrapper has finished
+                        OpenPose.Log("Starting thread(s)...", Priority.High);
+                        opWrapper.Exec();
+                    }
 
                     // Measuring total time
-                    OpenPose.PrintTime(opTimer, "OpenPose demo successfully finished. Total time: ", " seconds.", Priority.High);                }
+                    OpenPose.PrintTime(opTimer, "OpenPose demo successfully finished. Total time: ", " seconds.", Priority.High);
+                }
 
-                // Return successful message
+                // Return
                 return 0;
             }
             catch (Exception)

@@ -1,12 +1,11 @@
-﻿
-/*
- * This sample program is ported by C# from examples/openpose/openpose.cpp.
+﻿/*
+ * This sample program is ported by C# from examples/tutorial_api_cpp/14_synchronous_custom_postprocessing.cpp.
 */
 
 using System;
 using OpenPoseDotNet;
 
-namespace OpenPoseDemo
+namespace SynchronousCustomPostProcessing
 {
 
     internal class Program
@@ -16,7 +15,7 @@ namespace OpenPoseDemo
 
         private static void Main()
         {
-            OpenPoseDemo();
+            TutorialApiCpp();
         }
 
         #region Helpers
@@ -51,8 +50,8 @@ namespace OpenPoseDemo
                 var poseModel = OpenPose.FlagsToPoseModel(Flags.ModelPose);
                 // JSON saving
                 if (!string.IsNullOrEmpty(Flags.WriteKeyPoint))
-                    OpenPose.Log("Flag `write_keypoint` is deprecated and will eventually be removed. Please, use `write_json` instead.", Priority.Max);
-                // keyPointScale
+                    OpenPose.Log("Flag `write_keypoint` is deprecated and will eventually be removed. Please, use `write_json` instead.");
+                // keypointScale
                 var keyPointScale = OpenPose.FlagsToScaleMode(Flags.KeyPointScale);
                 // heatmaps to add
                 var heatMapTypes = OpenPose.FlagsToHeatMaps(Flags.HeatmapsAddParts, Flags.HeatmapsAddBackground, Flags.HeatmapsAddPAFs);
@@ -64,6 +63,14 @@ namespace OpenPoseDemo
                 var handDetector = OpenPose.FlagsToDetector(Flags.HandDetector);
                 // Enabling Google Logging
                 const bool enableGoogleLogging = true;
+
+                // Initializing the user custom classes
+                // Processing
+                var wUserPostProcessing = new StdSharedPtr<UserWorker<Datum>>(new WUserPostProcessing());
+
+                // Add custom processing
+                const bool workerProcessingOnNewThread = true;
+                opWrapper.SetWorker(WorkerType.PostProcessing, wUserPostProcessing, workerProcessingOnNewThread);
 
                 // Pose configuration (use WrapperStructPose{} for default and recommended configuration)
                 var pose = new WrapperStructPose(!Flags.BodyDisabled,
@@ -93,7 +100,7 @@ namespace OpenPoseDemo
                                                  enableGoogleLogging);
 
                 // Face configuration (use op::WrapperStructFace{} to disable it)
-                var face = new WrapperStructFace(Flags.Face, 
+                var face = new WrapperStructFace(Flags.Face,
                                                  faceDetector,
                                                  faceNetInputSize,
                                                  OpenPose.FlagsToRenderMode(Flags.FaceRender, multipleView, Flags.RenderPose),
@@ -177,26 +184,29 @@ namespace OpenPoseDemo
             }
         }
 
-        private static int OpenPoseDemo()
+        private static int TutorialApiCpp()
         {
             try
             {
                 OpenPose.Log("Starting OpenPose demo...", Priority.High);
                 using (var opTimer = OpenPose.GetTimerInit())
-                using (var opWrapper = new Wrapper<Datum>())
                 {
-                    // Configuring OpenPose
+                    // OpenPose wrapper
                     OpenPose.Log("Configuring OpenPose...", Priority.High);
-                    ConfigureWrapper(opWrapper);
+                    using (var opWrapper = new Wrapper<Datum>())
+                    {
+                        ConfigureWrapper(opWrapper);
 
-                    // Start, run, and stop processing - exec() blocks this thread until OpenPose wrapper has finished
-                    OpenPose.Log("Starting thread(s)...", Priority.High);
-                    opWrapper.Exec();
+                        // Start, run, and stop processing - exec() blocks this thread until OpenPose wrapper has finished
+                        OpenPose.Log("Starting thread(s)...", Priority.High);
+                        opWrapper.Exec();
+                    }
 
                     // Measuring total time
-                    OpenPose.PrintTime(opTimer, "OpenPose demo successfully finished. Total time: ", " seconds.", Priority.High);                }
+                    OpenPose.PrintTime(opTimer, "OpenPose demo successfully finished. Total time: ", " seconds.", Priority.High);
+                }
 
-                // Return successful message
+                // Return
                 return 0;
             }
             catch (Exception)
