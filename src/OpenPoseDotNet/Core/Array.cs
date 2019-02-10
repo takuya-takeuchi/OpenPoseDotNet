@@ -154,20 +154,20 @@ namespace OpenPoseDotNet
             var stdstr = IntPtr.Zero;
             var str = "";
 
-            //try
-            //{
-            //    stdstr = this._Imp.ToString(this.NativePtr);
-            //    str = StringHelper.FromStdString(stdstr) ?? "";
-            //}
-            //catch (Exception e)
-            //{
-            //    Console.WriteLine(e.StackTrace);
-            //}
-            //finally
-            //{
-            //    if (stdstr != IntPtr.Zero)
-            //        NativeMethods.std_string_delete(stdstr);
-            //}
+            try
+            {
+                stdstr = this._Imp.ToString(this.NativePtr);
+                str = StringHelper.FromStdString(stdstr) ?? "";
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+            }
+            finally
+            {
+                if (stdstr != IntPtr.Zero)
+                    NativeMethods.std_string_delete(stdstr);
+            }
 
             return str;
         }
