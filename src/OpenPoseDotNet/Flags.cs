@@ -8,10 +8,10 @@ namespace OpenPoseDotNet
 
         #region Properties
 
-        public static bool BodyDisabled
+        public static int Body
         {
-            get => NativeMethods.op_flags_get_body_disable();
-            set => NativeMethods.op_flags_set_body_disable(value);
+            get => NativeMethods.op_flags_get_body();
+            set => NativeMethods.op_flags_set_body(value);
         }
 
         public static string CaffeModelPath
@@ -315,6 +315,12 @@ namespace OpenPoseDotNet
         {
             get => NativeMethods.op_flags_get_tracking();
             set => NativeMethods.op_flags_set_tracking(value);
+        }
+        
+        public static double UpsamplingRatio
+        {
+            get => NativeMethods.op_flags_get_upsampling_ratio();
+            set => NativeMethods.op_flags_set_upsampling_ratio(value);
         }
 
         public static int WriteCocoJsonVariant

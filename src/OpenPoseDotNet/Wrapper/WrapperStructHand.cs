@@ -22,15 +22,15 @@ namespace OpenPoseDotNet
 
         public WrapperStructHand(bool enable) :
             this(enable,
-                Detector.Body)
+                 Detector.Body)
         {
         }
 
         public WrapperStructHand(bool enable,
                                  Detector detector) :
             this(enable,
-                detector,
-                new Point<int>(368, 368))
+                 detector,
+                 new Point<int>(368, 368))
         {
         }
 
@@ -38,9 +38,9 @@ namespace OpenPoseDotNet
                                  Detector detector,
                                  Point<int> netInputSize) :
             this(enable,
-                detector,
-                netInputSize,
-                1)
+                 detector,
+                 netInputSize,
+                 1)
         {
         }
 
@@ -49,10 +49,10 @@ namespace OpenPoseDotNet
                                  Point<int> netInputSize,
                                  int scalesNumber) :
             this(enable,
-                detector,
-                netInputSize,
-                scalesNumber,
-                0.4f)
+                 detector,
+                 netInputSize,
+                 scalesNumber,
+                 0.4f)
         {
         }
 
@@ -62,11 +62,11 @@ namespace OpenPoseDotNet
                                  int scalesNumber,
                                  float scaleRange) :
             this(enable,
-                detector,
-                netInputSize,
-                scalesNumber,
-                scaleRange,
-                RenderMode.Gpu)
+                 detector,
+                 netInputSize,
+                 scalesNumber,
+                 scaleRange,
+                 RenderMode.Gpu)
         {
         }
 
@@ -77,12 +77,12 @@ namespace OpenPoseDotNet
                                  float scaleRange,
                                  RenderMode renderMode) :
             this(enable,
-                detector,
-                netInputSize,
-                scalesNumber,
-                scaleRange,
-                renderMode,
-                OpenPose.HandDefaultAlphaKeyPoint)
+                 detector,
+                 netInputSize,
+                 scalesNumber,
+                 scaleRange,
+                 renderMode,
+                 OpenPose.HandDefaultAlphaKeyPoint)
         {
         }
 
@@ -94,13 +94,13 @@ namespace OpenPoseDotNet
                                  RenderMode renderMode,
                                  float alphaKeyPoint) :
             this(enable,
-                detector,
-                netInputSize,
-                scalesNumber,
-                scaleRange,
-                renderMode,
-                alphaKeyPoint,
-                OpenPose.HandDefaultAlphaHeatMap)
+                 detector,
+                 netInputSize,
+                 scalesNumber,
+                 scaleRange,
+                 renderMode,
+                 alphaKeyPoint,
+                 OpenPose.HandDefaultAlphaHeatMap)
         {
         }
 
@@ -113,14 +113,14 @@ namespace OpenPoseDotNet
                                  float alphaKeyPoint,
                                  float alphaHeatMap) :
             this(enable,
-                detector,
-                netInputSize,
-                scalesNumber,
-                scaleRange,
-                renderMode,
-                alphaKeyPoint,
-                alphaHeatMap,
-                0.2f)
+                 detector,
+                 netInputSize,
+                 scalesNumber,
+                 scaleRange,
+                 renderMode,
+                 alphaKeyPoint,
+                 alphaHeatMap,
+                 0.2f)
         {
         }
 

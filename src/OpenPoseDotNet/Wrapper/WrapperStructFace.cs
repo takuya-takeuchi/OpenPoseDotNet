@@ -21,15 +21,15 @@ namespace OpenPoseDotNet
 
         public WrapperStructFace(bool enable) :
             this(enable,
-                Detector.Body)
+                 Detector.Body)
         {
         }
 
         public WrapperStructFace(bool enable,
                                  Detector detector) :
             this(enable,
-                detector,
-                new Point<int>(368, 368))
+                 detector,
+                 new Point<int>(368, 368))
         {
         }
 
@@ -37,9 +37,9 @@ namespace OpenPoseDotNet
                                  Detector detector,
                                  Point<int> netInputSize) :
             this(enable,
-                detector,
-                netInputSize,
-                RenderMode.Gpu)
+                 detector,
+                 netInputSize,
+                 RenderMode.Gpu)
         {
         }
 
@@ -48,10 +48,10 @@ namespace OpenPoseDotNet
                                  Point<int> netInputSize,
                                  RenderMode renderMode) :
             this(enable,
-                detector,
-                netInputSize,
-                renderMode,
-                OpenPose.FaceDefaultAlphaKeyPoint)
+                 detector,
+                 netInputSize,
+                 renderMode,
+                 OpenPose.FaceDefaultAlphaKeyPoint)
         {
         }
 
@@ -61,11 +61,11 @@ namespace OpenPoseDotNet
                                  RenderMode renderMode,
                                  float alphaKeyPoint) :
             this(enable,
-                detector,
-                netInputSize,
-                renderMode,
-                alphaKeyPoint,
-                OpenPose.FaceDefaultAlphaHeatMap)
+                 detector,
+                 netInputSize,
+                 renderMode,
+                 alphaKeyPoint,
+                 OpenPose.FaceDefaultAlphaHeatMap)
         {
         }
 

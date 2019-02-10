@@ -25,6 +25,11 @@ DLLEXPORT op::RenderMode op_flagsToRenderMode(const int renderFlag, const bool g
     return op::flagsToRenderMode(renderFlag, gpuBuggy, renderPoseFlag);
 }
 
+DLLEXPORT op::PoseMode op_flagsToPoseMode(const int poseModeInt)
+{
+    return op::flagsToPoseMode(poseModeInt);
+}
+
 DLLEXPORT op::PoseModel op_flagsToPoseModel(const char* poseModeString)
 {
     const std::string str(poseModeString);

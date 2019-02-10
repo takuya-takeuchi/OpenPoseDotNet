@@ -97,6 +97,9 @@ namespace OpenPoseDotNet
         public static extern RenderMode op_flagsToRenderMode(int renderFlag, bool gpuBuggy, int renderPoseFlag);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern PoseMode op_flagsToPoseMode(int poseMode);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern PoseModel op_flagsToPoseModel(byte[] poseModeString);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]

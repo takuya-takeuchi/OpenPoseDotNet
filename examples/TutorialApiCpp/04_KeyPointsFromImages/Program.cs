@@ -1,5 +1,4 @@
-﻿
-/*
+﻿/*
  * This sample program is ported by C# from examples/tutorial_api_cpp/04_keypoints_from_images.cpp.
 */
 
@@ -75,6 +74,8 @@ namespace KeyPointsFromImages
                 var faceNetInputSize = OpenPose.FlagsToPoint(Flags.FaceNetResolution, "368x368 (multiples of 16)");
                 // handNetInputSize
                 var handNetInputSize = OpenPose.FlagsToPoint(Flags.HandNetResolution, "368x368 (multiples of 16)");
+                // poseMode
+                var poseMode = OpenPose.FlagsToPoseMode(Flags.Body);
                 // poseModel
                 var poseModel = OpenPose.FlagsToPoseModel(Flags.ModelPose);
                 // JSON saving
@@ -94,7 +95,7 @@ namespace KeyPointsFromImages
                 const bool enableGoogleLogging = true;
 
                 // Pose configuration (use WrapperStructPose{} for default and recommended configuration)
-                var pose = new WrapperStructPose(!Flags.BodyDisabled,
+                var pose = new WrapperStructPose(poseMode,
                                                  netInputSize,
                                                  outputSize,
                                                  keypointScale,
@@ -118,6 +119,7 @@ namespace KeyPointsFromImages
                                                  Flags.FpsMax,
                                                  Flags.PrototxtPath,
                                                  Flags.CaffeModelPath,
+                                                 (float)Flags.UpsamplingRatio,
                                                  enableGoogleLogging);
                 // Face configuration (use op::WrapperStructFace{} to disable it)
                 var face = new WrapperStructFace(Flags.Face,
