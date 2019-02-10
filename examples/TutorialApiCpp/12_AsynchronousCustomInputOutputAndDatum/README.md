@@ -19,7 +19,7 @@
 #### 3. Try Tutorial
 
 ````dos
-> cd <OpenPoseDotNet_dir>\examples\TutorialApiCpp\11_AsynchronousCustomInputOutputAndDatum
+> cd <OpenPoseDotNet_dir>\examples\TutorialApiCpp\12_AsynchronousCustomInputOutputAndDatum
 > CopyOpenPose.bat <Debug/Release>
 > dotnet run -c Release -i "<OpenPoseDotNet_dir>\openpose\examples\media"
 ````

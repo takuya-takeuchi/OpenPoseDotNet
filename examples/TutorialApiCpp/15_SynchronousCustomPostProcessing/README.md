@@ -19,7 +19,7 @@
 #### 3. Try Tutorial
 
 ````dos
-> cd <OpenPoseDotNet_dir>\examples\TutorialApiCpp\14_SynchronousCustomPostProcessing
+> cd <OpenPoseDotNet_dir>\examples\TutorialApiCpp\15_SynchronousCustomPostProcessing
 > CopyOpenPose.bat <Debug/Release>
 > dotnet run -c Release
 ````

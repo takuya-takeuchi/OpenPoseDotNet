@@ -19,7 +19,7 @@
 #### 3. Try Tutorial
 
 ````dos
-> cd <OpenPoseDotNet_dir>\examples\TutorialApiCpp\09_AsynchronousCustomInput
+> cd <OpenPoseDotNet_dir>\examples\TutorialApiCpp\10_AsynchronousCustomInput
 > CopyOpenPose.bat <Debug/Release>
 > dotnet run -c Release
 ````

@@ -19,7 +19,7 @@
 #### 3. Try Tutorial
 
 ````dos
-> cd <OpenPoseDotNet_dir>\examples\TutorialApiCpp\12_SynchronousCustomInput
+> cd <OpenPoseDotNet_dir>\examples\TutorialApiCpp\13_SynchronousCustomInput
 > CopyOpenPose.bat <Debug/Release>
 > dotnet run -c Release -i "<OpenPoseDotNet_dir>\openpose\examples\media"
 ````
