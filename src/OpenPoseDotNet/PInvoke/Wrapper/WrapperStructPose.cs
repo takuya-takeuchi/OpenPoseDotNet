@@ -9,7 +9,7 @@ namespace OpenPoseDotNet
     {
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern IntPtr op_wrapperStructPose_new(bool enable,
+        public static extern IntPtr op_wrapperStructPose_new(PoseMode poseMode,
                                                              IntPtr netInputSize,
                                                              IntPtr outputSize,
                                                              ScaleMode keypointScale,
@@ -39,11 +39,10 @@ namespace OpenPoseDotNet
         public static extern void op_wrapperStructPose_delete(IntPtr face);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        [return: MarshalAs(UnmanagedType.U1)]
-        public static extern bool op_wrapperStructPose_get_enable(IntPtr face);
+        public static extern PoseMode op_wrapperStructPose_get_poseMode(IntPtr face);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern void op_wrapperStructPose_set_enable(IntPtr face, bool enable);
+        public static extern void op_wrapperStructPose_set_poseMode(IntPtr face, PoseMode poseMode);
 
     }
 
