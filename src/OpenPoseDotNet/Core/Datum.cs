@@ -178,6 +178,27 @@ namespace OpenPoseDotNet
                 return new Array<float>(ret, false);
             }
         }
+        
+        public Array<float> PoseNetOutput
+        {
+            get
+            {
+                this.ThrowIfDisposed();
+                var ret = NativeMethods.op_core_datum_get_poseNetOutput(this.NativePtr);
+
+                // Datum.poseNetOutput is not pointer. Therefore, this object must not be disposed.
+                return new Array<float>(ret, false);
+            }
+            set
+            {
+                this.ThrowIfDisposed();
+                if(value == null)
+                    throw new ArgumentNullException();
+
+                value.ThrowIfDisposed();
+                NativeMethods.op_core_datum_set_poseNetOutput(this.NativePtr, value.NativePtr);
+            }
+        }
 
         public Array<float> FaceKeyPoints
         {
@@ -210,7 +231,7 @@ namespace OpenPoseDotNet
                 this.ThrowIfDisposed();
                 var ret = NativeMethods.op_core_datum_get_handKeypoints(this.NativePtr);
 
-                // Datum.poseKeypoints is not pointer. Therefore, this object must not be disposed.
+                // Datum.handKeypoints is not pointer. Therefore, this object must not be disposed.
                 using (var array = new StdArray<Array<float>>(ret, 2, false))
                     return array.ToArray();
             }

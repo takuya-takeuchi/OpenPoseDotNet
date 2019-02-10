@@ -8,27 +8,27 @@ DLLEXPORT op::Datum* op_core_datum_new()
     return new op::Datum();
 }
 
-DLLEXPORT void op_core_datum_delete(op::Datum* datum)
+DLLEXPORT void op_core_datum_delete(const op::Datum* datum)
 {
     delete datum;
 }
 
-DLLEXPORT unsigned long long op_core_datum_get_id(op::Datum* datum)
+DLLEXPORT unsigned long long op_core_datum_get_id(const op::Datum* datum)
 {
     return datum->id;
 }
 
-DLLEXPORT unsigned long long op_core_datum_get_subId(op::Datum* datum)
+DLLEXPORT unsigned long long op_core_datum_get_subId(const op::Datum* datum)
 {
     return datum->subId;
 }
 
-DLLEXPORT unsigned long long op_core_datum_get_subIdMax(op::Datum* datum)
+DLLEXPORT unsigned long long op_core_datum_get_subIdMax(const op::Datum* datum)
 {
     return datum->subIdMax;
 }
 
-DLLEXPORT unsigned long long op_core_datum_get_frameNumber(op::Datum* datum)
+DLLEXPORT unsigned long long op_core_datum_get_frameNumber(const op::Datum* datum)
 {
     return datum->frameNumber;
 }
@@ -78,6 +78,16 @@ DLLEXPORT op::Array<float>* op_core_datum_get_poseHeatMaps(op::Datum* datum)
     return &datum->poseHeatMaps;
 }
 
+DLLEXPORT op::Array<float>* op_core_datum_get_poseNetOutput(op::Datum* datum)
+{
+    return &datum->poseNetOutput;
+}
+
+DLLEXPORT void op_core_datum_set_poseNetOutput(op::Datum* datum, op::Array<float>* output)
+{
+    datum->poseNetOutput = *output;
+}
+
 DLLEXPORT op::Array<float>* op_core_datum_get_faceHeatMaps(op::Datum* datum)
 {
     return &datum->faceHeatMaps;
@@ -88,7 +98,7 @@ DLLEXPORT std::array<op::Array<float>, 2>* op_core_datum_get_handHeatMaps(op::Da
     return &datum->handHeatMaps;
 }
 
-DLLEXPORT std::vector<op::Rectangle<float>>* op_core_datum_get_faceRectangles(op::Datum* datum)
+DLLEXPORT std::vector<op::Rectangle<float>>* op_core_datum_get_faceRectangles(const op::Datum* datum)
 {
     const auto ret = &datum->faceRectangles;
     auto vec = new std::vector<op::Rectangle<float>>();
@@ -103,7 +113,7 @@ DLLEXPORT void op_core_datum_set_faceRectangles(op::Datum* datum, std::vector<op
     datum->faceRectangles = *rectangles;
 }
 
-DLLEXPORT std::vector<op::Rectangle<float>>* op_core_datum_get_handRectangles(op::Datum* datum)
+DLLEXPORT std::vector<op::Rectangle<float>>* op_core_datum_get_handRectangles(const op::Datum* datum)
 {
     const auto ret = &datum->handRectangles;
     auto vec = new std::vector<op::Rectangle<float>>();
