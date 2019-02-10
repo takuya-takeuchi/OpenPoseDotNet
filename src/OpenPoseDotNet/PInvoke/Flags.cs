@@ -40,11 +40,10 @@ namespace OpenPoseDotNet
         public static extern void op_flags_set_alpha_pose(double value);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        [return: MarshalAs(UnmanagedType.U1)]
-        public static extern bool op_flags_get_body_disable();
+        public static extern int op_flags_get_body();
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern void op_flags_set_body_disable(bool value);
+        public static extern void op_flags_set_body(int value);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern IntPtr op_flags_get_caffemodel_path();
@@ -379,6 +378,12 @@ namespace OpenPoseDotNet
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void op_flags_set_tracking(int value);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern double op_flags_get_upsampling_ratio();
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern void op_flags_set_upsampling_ratio(double value);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern int op_flags_get_write_coco_json_variant();

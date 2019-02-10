@@ -33,6 +33,7 @@ namespace OpenPoseDotNet
                                                              double fpsMax,
                                                              byte[] protoTxtPath,
                                                              byte[] caffeModelPath,
+                                                             float upsamplingRatio,
                                                              bool enableGoogleLogging);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]

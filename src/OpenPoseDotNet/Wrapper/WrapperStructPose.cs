@@ -640,7 +640,7 @@ namespace OpenPoseDotNet
                                  int numberPeopleMax,
                                  bool maximizePositives,
                                  double fpsMax,
-                                 string prototxtPath):
+                                 string prototxtPath) :
             this(poseMode,
                  netInputSize,
                  outputSize,
@@ -691,7 +691,7 @@ namespace OpenPoseDotNet
                                  bool maximizePositives,
                                  double fpsMax,
                                  string prototxtPath,
-                                 string caffeModelPath):
+                                 string caffeModelPath) :
             this(poseMode,
                  netInputSize,
                  outputSize,
@@ -716,6 +716,60 @@ namespace OpenPoseDotNet
                  fpsMax,
                  prototxtPath,
                  caffeModelPath,
+                 0f)
+        {
+        }
+
+        public WrapperStructPose(PoseMode poseMode,
+                                 Point<int> netInputSize,
+                                 Point<int> outputSize,
+                                 ScaleMode keyPointScale,
+                                 int gpuNumber,
+                                 int gpuNumberStart,
+                                 int scalesNumber,
+                                 float scaleGap,
+                                 RenderMode renderMode,
+                                 PoseModel poseModel,
+                                 bool blendOriginalFrame,
+                                 float alphaKeyPoint,
+                                 float alphaHeatMap,
+                                 int defaultPartToRender,
+                                 string modelFolder,
+                                 IEnumerable<HeatMapType> heatMapTypes,
+                                 ScaleMode heatMapScale,
+                                 bool addPartCandidates,
+                                 float renderThreshold,
+                                 int numberPeopleMax,
+                                 bool maximizePositives,
+                                 double fpsMax,
+                                 string prototxtPath,
+                                 string caffeModelPath,
+                                 float upsamplingRatio) :
+            this(poseMode,
+                 netInputSize,
+                 outputSize,
+                 keyPointScale,
+                 gpuNumber,
+                 gpuNumberStart,
+                 scalesNumber,
+                 scaleGap,
+                 renderMode,
+                 poseModel,
+                 blendOriginalFrame,
+                 alphaKeyPoint,
+                 alphaHeatMap,
+                 defaultPartToRender,
+                 modelFolder,
+                 heatMapTypes,
+                 heatMapScale,
+                 addPartCandidates,
+                 renderThreshold,
+                 numberPeopleMax,
+                 maximizePositives,
+                 fpsMax,
+                 prototxtPath,
+                 caffeModelPath,
+                 upsamplingRatio,
                  true)
         {
         }
@@ -744,6 +798,7 @@ namespace OpenPoseDotNet
                                  double fpsMax,
                                  string prototxtPath,
                                  string caffeModelPath,
+                                 float upsamplingRatio,
                                  bool enableGoogleLogging)
         {
             var modelFolderBytes = Encoding.UTF8.GetBytes(modelFolder ?? "");
@@ -777,6 +832,7 @@ namespace OpenPoseDotNet
                                                                         fpsMax,
                                                                         prototxtPathBytes,
                                                                         caffeModelPathBytes,
+                                                                        upsamplingRatio,
                                                                         enableGoogleLogging);
         }
 
