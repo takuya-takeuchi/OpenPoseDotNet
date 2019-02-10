@@ -787,6 +787,12 @@ namespace OpenPoseDotNet
 
         #region ExampleOnly
 
+        public static string ImagePath
+        {
+            get;
+            set;
+        }
+
         public static bool NoDisplay
         {
             get;

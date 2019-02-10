@@ -1,4 +1,4 @@
-# Asynchronous Custom Output
+# KeyPoints From Heatmaps
 
 ## Quick Start
 
@@ -19,9 +19,9 @@
 #### 3. Try Tutorial
 
 ````dos
-> cd <OpenPoseDotNet_dir>\examples\TutorialApiCpp\11_AsynchronousCustomOutput
+> cd <OpenPoseDotNet_dir>\examples\TutorialApiCpp\09_KeyPointsFromHeatmaps
 > CopyOpenPose.bat <Debug/Release>
-> dotnet run -c Release -i "<OpenPoseDotNet_dir>\openpose\examples\media"
+> dotnet run -c Release  -i "<OpenPoseDotNet_dir>\openpose\examples\media\COCO_val2014_000000000294.jpg"
 ````
 
-<img src="images/example_turorial_7.gif"/>
+<img src="images/example_turorial_9.png"/>

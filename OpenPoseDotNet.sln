@@ -63,6 +63,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "11_AsynchronousCustomOutput
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "10_AsynchronousCustomInput", "examples\TutorialApiCpp\10_AsynchronousCustomInput\10_AsynchronousCustomInput.csproj", "{EA0EF1F8-17B5-498E-BEF3-4D0833ABA21C}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "09_KeyPointsFromHeatmaps", "examples\TutorialApiCpp\09_KeyPointsFromHeatmaps\09_KeyPointsFromHeatmaps.csproj", "{D3D47C51-26C9-4A1C-9D97-AC57E803D085}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -165,6 +167,10 @@ Global
 		{EA0EF1F8-17B5-498E-BEF3-4D0833ABA21C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA0EF1F8-17B5-498E-BEF3-4D0833ABA21C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA0EF1F8-17B5-498E-BEF3-4D0833ABA21C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3D47C51-26C9-4A1C-9D97-AC57E803D085}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3D47C51-26C9-4A1C-9D97-AC57E803D085}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3D47C51-26C9-4A1C-9D97-AC57E803D085}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3D47C51-26C9-4A1C-9D97-AC57E803D085}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -197,6 +203,7 @@ Global
 		{98B0E747-419A-4905-A82B-E830B81670C7} = {9636645D-A6CD-44A2-B8B0-C3EA476F047F}
 		{DB8F1D3E-3625-4809-B7BA-11C7007149F4} = {9636645D-A6CD-44A2-B8B0-C3EA476F047F}
 		{EA0EF1F8-17B5-498E-BEF3-4D0833ABA21C} = {9636645D-A6CD-44A2-B8B0-C3EA476F047F}
+		{D3D47C51-26C9-4A1C-9D97-AC57E803D085} = {9636645D-A6CD-44A2-B8B0-C3EA476F047F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9D8118C7-92BF-487E-83ED-EFB9BF807E08}

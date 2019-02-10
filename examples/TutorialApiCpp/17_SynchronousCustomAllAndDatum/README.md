@@ -19,7 +19,7 @@
 #### 3. Try Tutorial
 
 ````dos
-> cd <OpenPoseDotNet_dir>\examples\TutorialApiCpp\16_SynchronousCustomAllAndDatum
+> cd <OpenPoseDotNet_dir>\examples\TutorialApiCpp\17_SynchronousCustomAllAndDatum
 > CopyOpenPose.bat <Debug/Release>
 > dotnet run -c Release  -i "<OpenPoseDotNet_dir>\openpose\examples\media"
 ````

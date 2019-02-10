@@ -1,24 +1,17 @@
 ﻿/*
- * This sample program is ported by C# from examples/tutorial_api_cpp/08_heatmaps_from_image.cpp.
+ * This sample program is ported by C# from examples/tutorial_api_cpp/09_keypoints_from_heatmaps.cpp.
 */
 
 using System;
-using System.Collections.Generic;
 using System.IO;
 using Microsoft.Extensions.CommandLineUtils;
 using OpenPoseDotNet;
 
-namespace HeatmapsFromImage
+namespace KeyPointsFromHeatmaps
 {
 
     internal class Program
     {
-
-        #region Fields
-
-        private static string ImagePath;
-
-        #endregion
 
         #region Methods
 
@@ -26,7 +19,7 @@ namespace HeatmapsFromImage
         {
             var app = new CommandLineApplication(false)
             {
-                Name = nameof(HeatmapsFromImage)
+                Name = nameof(KeyPointsFromHeatmaps)
             };
 
             app.HelpOption("-h|--help");
@@ -48,8 +41,7 @@ namespace HeatmapsFromImage
                     return -1;
                 }
 
-                ImagePath = path;
-
+                Flags.ImagePath = path;
                 Flags.NoDisplay = noDisplay.HasValue();
                 TutorialApiCpp();
 
@@ -192,71 +184,25 @@ namespace HeatmapsFromImage
             }
         }
 
-        private static bool Display(StdSharedPtr<StdVector<StdSharedPtr<Datum>>> datumsPtr, int desiredChannel = 0)
+        private static void Display(StdSharedPtr<StdVector<StdSharedPtr<Datum>>> datumsPtr)
         {
             try
             {
+                // User's displaying/saving/other processing here
+                // datum.cvOutputData: rendered frame with pose or heatmaps
+                // datum.poseKeypoints: Array<float> with the estimated pose
                 if (datumsPtr != null && datumsPtr.TryGet(out var data) && !data.Empty)
                 {
                     var datum = datumsPtr.Get().At(0).Get();
 
-                    // Note: Heatmaps are in net_resolution size, which does not necessarily match the final image size
-                    // Read heatmaps
-                    var poseHeatMaps = datum.PoseHeatMaps;
-                    // Read desired channel
-                    var numberChannels = poseHeatMaps.GetSize(0);
-                    var height = poseHeatMaps.GetSize(1);
-                    var width = poseHeatMaps.GetSize(2);
-                    var eleSize = sizeof(float);
-                    using (var desiredChannelHeatMap = new Mat(height, width, MatType.CV_32F, IntPtr.Add(poseHeatMaps.GetPtr(), (desiredChannel % numberChannels) * height * width * eleSize)))
-                    {
-                        // Read image used from OpenPose body network (same resolution than heatmaps)
-                        var inputNetData = datum.InputNetData[0];
-                        using (var inputNetDataB = new Mat(height, width, MatType.CV_32F, IntPtr.Add(inputNetData.GetPtr(), 0 * height * width * eleSize)))
-                        using (var inputNetDataG = new Mat(height, width, MatType.CV_32F, IntPtr.Add(inputNetData.GetPtr(), 1 * height * width * eleSize)))
-                        using (var inputNetDataR = new Mat(height, width, MatType.CV_32F, IntPtr.Add(inputNetData.GetPtr(), 2 * height * width * eleSize)))
-                        using (var vector = new StdVector<Mat>(new List<Mat>(new[] { inputNetDataB, inputNetDataG, inputNetDataR })))
-                        using (var tmp = new Mat())
-                        {
-                            Cv.Merge(vector, tmp);
-
-                            using (var add = tmp + 0.5)
-                            using (var mul = add * 255)
-                            using (var netInputImage = (Mat)mul)
-                            {
-                                // Turn into uint8 Cv.Mat
-                                using (var netInputImageUint8 = new Mat())
-                                {
-                                    netInputImage.ConvertTo(netInputImageUint8, MatType.CV_8UC1);
-                                    using (var desiredChannelHeatMapUint8 = new Mat())
-                                    {
-                                        desiredChannelHeatMap.ConvertTo(desiredChannelHeatMapUint8, MatType.CV_8UC1);
-
-                                        // Combining both images
-                                        using (var imageToRender = new Mat())
-                                        {
-                                            Cv.ApplyColorMap(desiredChannelHeatMapUint8, desiredChannelHeatMapUint8, ColormapType.COLORMAP_JET);
-                                            Cv.AddWeighted(netInputImageUint8, 0.5, desiredChannelHeatMapUint8, 0.5, 0d, imageToRender);
-
-                                            // Display image
-                                            Cv.ImShow($"{OpenPose.OpenPoseNameAndVersion()} - Tutorial C++ API", imageToRender);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    // Display image
+                    Cv.ImShow($"{OpenPose.OpenPoseNameAndVersion()} - Tutorial C++ API", datum.CvOutputData);
+                    Cv.WaitKey(0);
                 }
-                else
-                    OpenPose.Log("Nullptr or empty datumsPtr found.", Priority.High);
-
-                var key = (char)Cv.WaitKey(1);
-                return (key == 27);
             }
             catch (Exception e)
             {
                 OpenPose.Error(e.Message, -1, nameof(Display));
-                return true;
             }
         }
 
@@ -267,11 +213,11 @@ namespace HeatmapsFromImage
                 // Example: How to use the pose keypoints
                 if (datumsPtr != null && datumsPtr.TryGet(out var data) && !data.Empty)
                 {
-                    var poseHeatMaps = data.ToArray()[0].Get().PoseHeatMaps;
-                    var numberChannels = poseHeatMaps.GetSize(0);
-                    var height = poseHeatMaps.GetSize(1);
-                    var width = poseHeatMaps.GetSize(2);
-                    OpenPose.Log($"Body heatmaps has {numberChannels} channels, and each channel has a dimension of {width} x {height} pixels.", Priority.High);
+                    var temp = data.ToArray()[0].Get();
+                    OpenPose.Log($"Body keypoints: {temp.PoseKeyPoints}", Priority.High);
+                    OpenPose.Log($"Face keypoints: {temp.FaceKeyPoints}", Priority.High);
+                    OpenPose.Log($"Left hand keypoints: {temp.HandKeyPoints[0]}", Priority.High);
+                    OpenPose.Log($"Right hand keypoints: {temp.HandKeyPoints[1]}", Priority.High);
                 }
                 else
                 {
@@ -291,49 +237,100 @@ namespace HeatmapsFromImage
                 OpenPose.Log("Starting OpenPose demo...", Priority.High);
                 using (var opTimer = OpenPose.GetTimerInit())
                 {
-                    // Required flags to enable heatmaps
-                    Flags.HeatmapsAddParts = true;
-                    Flags.HeatmapsAddBackground = true;
-                    Flags.HeatmapsAddPAFs = true;
-                    Flags.HeatmapsScale = 2;
-
-                    using (var opWrapper = new Wrapper<Datum>(ThreadManagerMode.Asynchronous))
+                    // Image to process
+                    using (var imageToProcess = Cv.ImRead(Flags.ImagePath))
                     {
-                        // Configuring OpenPose
-                        OpenPose.Log("Configuring OpenPose...", Priority.High);
-                        ConfigureWrapper(opWrapper);
+                        // Required flags to disable the OpenPose network
+                        Flags.Body = 2;
 
-                        // Starting OpenPose
-                        OpenPose.Log("Starting thread(s)...", Priority.High);
-                        opWrapper.Start();
-
-                        // Process and display image
-                        using (var imageToProcess = Cv.ImRead(ImagePath))
-                        using (var datumProcessed = opWrapper.EmplaceAndPop(imageToProcess))
+                        using (var opWrapper = new Wrapper<Datum>(ThreadManagerMode.Asynchronous))
                         {
-                            if (datumProcessed != null)
+                            // Configuring OpenPose
+                            OpenPose.Log("Configuring OpenPose...", Priority.High);
+                            ConfigureWrapper(opWrapper);
+
+                            // Starting OpenPose
+                            OpenPose.Log("Starting thread(s)...", Priority.High);
+                            opWrapper.Start();
+
+                            // Heatmap set selection
+                            StdSharedPtr<StdVector<StdSharedPtr<Datum>>> datumHeatmaps = null;
+
+                            // Using a random set of heatmaps
+                            // Replace the following lines inside the try-catch block with your custom heatmap generator
+                            try
                             {
-                                PrintKeypoints(datumProcessed);
-                                if (!Flags.NoDisplay)
+                                // Required flags to enable heatmaps
+                                Flags.HeatmapsAddParts = true;
+                                Flags.HeatmapsAddBackground = true;
+                                Flags.HeatmapsAddPAFs = true;
+                                Flags.HeatmapsScale = 3;
+                                Flags.UpsamplingRatio = 1;
+                                Flags.Body = 1;
+
+                                // Configuring OpenPose
+                                using (var opWrapperGetHeatMaps = new Wrapper<Datum>(ThreadManagerMode.Asynchronous))
                                 {
-                                    var numberChannels = datumProcessed.Get().ToArray()[0].Get().PoseHeatMaps.GetSize(0);
-                                    for (var desiredChannel = 0; desiredChannel < numberChannels; desiredChannel++)
-                                        if (Display(datumProcessed, desiredChannel))
-                                            break;
+                                    OpenPose.Log("Configuring OpenPose...", Priority.High);
+                                    ConfigureWrapper(opWrapperGetHeatMaps);
+
+                                    // Starting OpenPose
+                                    opWrapperGetHeatMaps.Start();
+
+                                    // Get heatmaps
+                                    datumHeatmaps = opWrapperGetHeatMaps.EmplaceAndPop(imageToProcess);
+                                    if (datumHeatmaps?.Get() == null)
+                                        OpenPose.Log("Image could not be processed.");
                                 }
                             }
+                            catch (Exception e)
+                            {
+                                OpenPose.Log(e.Message);
+                            }
+
+                            // Starting OpenPose
+                            OpenPose.Log("Starting thread(s)...", Priority.High);
+                            opWrapper.Start();
+
+                            // Create new datum
+                            using (var vector = new StdVector<StdSharedPtr<Datum>>())
+                            using (var datumProcessed = new StdSharedPtr<StdVector<StdSharedPtr<Datum>>>(vector))
+                            using (var datumPtr = new Datum())
+                            {
+                                datumProcessed.Get().EmplaceBack();
+                                var datum = datumProcessed.Get().At(0);
+
+                                // C# cannot set pointer object by using assignment operator
+                                datum.Reset(datumPtr);
+
+                                // Fill datum with image and faceRectangles
+                                datumPtr.CvInputData = imageToProcess;
+                                datumPtr.PoseNetOutput = datumHeatmaps.Get().At(0).Get().PoseHeatMaps;
+
+                                // Display image
+                                if (opWrapper.EmplaceAndPop(datumProcessed))
+                                {
+                                    PrintKeypoints(datumProcessed);
+                                    if (!Flags.NoDisplay)
+                                        Display(datumProcessed);
+                                }
+                                else
+                                {
+                                    OpenPose.Log("Image could not be processed.", Priority.High);
+                                }
+                            }
+
+                            // Info
+                            OpenPose.Log("NOTE: In addition with the user flags, this demo has auto-selected the following flags:\n\t`--body 2`", Priority.High);
+
+                            // Measuring total time
+                            OpenPose.PrintTime(opTimer, "OpenPose demo successfully finished. Total time: ", " seconds.", Priority.High);
                         }
                     }
 
-                    // Info
-                    OpenPose.Log("NOTE: In addition with the user flags, this demo has auto-selected the following flags:\n\t`--heatmaps_add_parts --heatmaps_add_bkg --heatmaps_add_PAFs`", Priority.High);
-
-                    // Measuring total time
-                    OpenPose.PrintTime(opTimer, "OpenPose demo successfully finished. Total time: ", " seconds.", Priority.High);
+                    // Return
+                    return 0;
                 }
-
-                // Return
-                return 0;
             }
             catch (Exception)
             {
