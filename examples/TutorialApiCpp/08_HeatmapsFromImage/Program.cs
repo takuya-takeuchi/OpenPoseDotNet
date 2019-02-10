@@ -8,7 +8,7 @@ using System.IO;
 using Microsoft.Extensions.CommandLineUtils;
 using OpenPoseDotNet;
 
-namespace KeyPointsFromImages
+namespace HeatmapsFromImage
 {
 
     internal class Program
@@ -26,7 +26,7 @@ namespace KeyPointsFromImages
         {
             var app = new CommandLineApplication(false)
             {
-                Name = nameof(KeyPointsFromImages)
+                Name = nameof(HeatmapsFromImage)
             };
 
             app.HelpOption("-h|--help");
