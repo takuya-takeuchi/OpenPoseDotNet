@@ -1,11 +1,12 @@
 ﻿/*
- * This sample program is ported by C# from examples/tutorial_api_cpp/13_synchronous_custom_preprocessing.cpp.
+ * This sample program is ported by C# from examples/tutorial_api_cpp/16_synchronous_custom_output.cpp.
 */
 
 using System;
+using Microsoft.Extensions.CommandLineUtils;
 using OpenPoseDotNet;
 
-namespace SynchronousCustomPreProcessing
+namespace SynchronousCustomOutput
 {
 
     internal class Program
@@ -13,9 +14,26 @@ namespace SynchronousCustomPreProcessing
 
         #region Methods
 
-        private static void Main()
+        private static void Main(string[] args)
         {
-            TutorialApiCpp();
+            var app = new CommandLineApplication(false)
+            {
+                Name = nameof(SynchronousCustomOutput)
+            };
+
+            app.HelpOption("-h|--help");
+
+            var noDisplay = app.Option("--no_display", "Enable to disable the visual display.", CommandOptionType.NoValue);
+
+            app.OnExecute(() =>
+            {
+                Flags.NoDisplay = noDisplay.HasValue();
+                TutorialApiCpp();
+
+                return 0;
+            });
+
+            app.Execute(args);
         }
 
         #region Helpers
@@ -30,6 +48,11 @@ namespace SynchronousCustomPreProcessing
                 OpenPose.Check(0 <= Flags.LoggingLevel && Flags.LoggingLevel <= 255, "Wrong logging_level value.");
                 ConfigureLog.PriorityThreshold = (Priority)Flags.LoggingLevel;
                 Profiler.SetDefaultX((ulong)Flags.ProfileSpeed);
+                // // For debugging
+                // // Print all logging messages
+                // ConfigureLog.PriorityThreshold = Priority.None;
+                // // Print out speed values faster
+                // Profiler.setDefaultX(100);
 
                 // Applying user defined configuration - GFlags to program variables
                 // producerType
@@ -50,9 +73,9 @@ namespace SynchronousCustomPreProcessing
                 var poseModel = OpenPose.FlagsToPoseModel(Flags.ModelPose);
                 // JSON saving
                 if (!string.IsNullOrEmpty(Flags.WriteKeyPoint))
-                    OpenPose.Log("Flag `write_keypoint` is deprecated and will eventually be removed. Please, use `write_json` instead.");
+                    OpenPose.Log("Flag `write_keypoint` is deprecated and will eventually be removed. Please, use `write_json` instead.", Priority.Max);
                 // keypointScale
-                var keyPointScale = OpenPose.FlagsToScaleMode(Flags.KeyPointScale);
+                var keypointScale = OpenPose.FlagsToScaleMode(Flags.KeyPointScale);
                 // heatmaps to add
                 var heatMapTypes = OpenPose.FlagsToHeatMaps(Flags.HeatmapsAddParts, Flags.HeatmapsAddBackground, Flags.HeatmapsAddPAFs);
                 var heatMapScale = OpenPose.FlagsToHeatMapScaleMode(Flags.HeatmapsScale);
@@ -65,18 +88,18 @@ namespace SynchronousCustomPreProcessing
                 const bool enableGoogleLogging = true;
 
                 // Initializing the user custom classes
-                // Processing
-                var wUserPreProcessing = new StdSharedPtr<UserWorker<Datum>>(new WUserPreProcessing());
+                // GUI (Display)
+                var wUserOutput = new StdSharedPtr<UserWorkerConsumer<Datum>>(new WUserOutput());
 
                 // Add custom processing
-                const bool workerProcessingOnNewThread = true;
-                opWrapper.SetWorker(WorkerType.PreProcessing, wUserPreProcessing, workerProcessingOnNewThread);
+                const bool workerOutputOnNewThread = true;
+                opWrapper.SetWorker(WorkerType.Output, wUserOutput, workerOutputOnNewThread);
 
                 // Pose configuration (use WrapperStructPose{} for default and recommended configuration)
                 var pose = new WrapperStructPose(!Flags.BodyDisabled,
                                                  netInputSize,
                                                  outputSize,
-                                                 keyPointScale,
+                                                 keypointScale,
                                                  Flags.NumGpu,
                                                  Flags.NumGpuStart,
                                                  Flags.ScaleNumber,
@@ -113,11 +136,11 @@ namespace SynchronousCustomPreProcessing
                                                  handDetector,
                                                  handNetInputSize,
                                                  Flags.HandScaleNumber,
-                                                 (float)Flags.HandScaleRange,
+                                                 (float) Flags.HandScaleRange,
                                                  OpenPose.FlagsToRenderMode(Flags.HandRender, multipleView, Flags.RenderPose),
-                                                 (float)Flags.HandAlphaPose,
-                                                 (float)Flags.HandAlphaHeatmap,
-                                                 (float)Flags.HandRenderThreshold);
+                                                 (float) Flags.HandAlphaPose,
+                                                 (float) Flags.HandAlphaHeatmap,
+                                                 (float) Flags.HandRenderThreshold);
 
                 // Extra functionality configuration (use op::WrapperStructExtra{} to disable it)
                 var extra = new WrapperStructExtra(Flags.Enable3D,
@@ -161,19 +184,15 @@ namespace SynchronousCustomPreProcessing
                                                      Flags.UdpHost,
                                                      Flags.UdpPort);
 
-                // GUI (comment or use default argument to disable any visual output)
-                var gui = new WrapperStructGui(OpenPose.FlagsToDisplayMode(Flags.Display, Flags.Enable3D),
-                                               !Flags.NoGuiVerbose,
-                                               Flags.FullScreen);
-
+                // No GUI. Equivalent to: opWrapper.configure(op::WrapperStructGui{});
                 opWrapper.Configure(pose);
                 opWrapper.Configure(face);
                 opWrapper.Configure(hand);
                 opWrapper.Configure(extra);
                 opWrapper.Configure(input);
                 opWrapper.Configure(output);
-                opWrapper.Configure(gui);
 
+                // No GUI. Equivalent to: opWrapper.configure(op::WrapperStructGui{});
                 // Set to single-thread (for sequential processing and/or debugging and/or reducing latency)
                 if (Flags.DisableMultiThread)
                     opWrapper.DisableMultiThreading();

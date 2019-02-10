@@ -1,15 +1,13 @@
 ﻿/*
- * This sample program is ported by C# from examples/tutorial_api_cpp/16_synchronous_custom_all_and_datum.cpp.
+ * This sample program is ported by C# from examples/tutorial_api_cpp/13_synchronous_custom_input.cpp.
 */
 
 using System;
-using System.Diagnostics;
 using System.IO;
 using Microsoft.Extensions.CommandLineUtils;
 using OpenPoseDotNet;
-using UserDatum = OpenPoseDotNet.CustomDatum;
 
-namespace SynchronousCustomAll
+namespace SynchronousCustomInput
 {
 
     internal class Program
@@ -28,19 +26,25 @@ namespace SynchronousCustomAll
 
         #region Methods
 
+
         private static void Main(string[] args)
         {
             var app = new CommandLineApplication(false)
             {
-                Name = nameof(SynchronousCustomAll)
+                Name = nameof(SynchronousCustomInput)
             };
 
             app.HelpOption("-h|--help");
+
+            var disableMultiThreadArgument = app.Argument("disableMultiThread", "Disable MultiThread");
             var imageDirOption = app.Option("-i|--imageDir", "Process a directory of images. Read all standard formats (jpg, png, bmp, etc.).", CommandOptionType.SingleValue);
             var noDisplay = app.Option("--no_display", "Enable to disable the visual display.", CommandOptionType.NoValue);
 
             app.OnExecute(() =>
             {
+                if (disableMultiThreadArgument.Value != null)
+                    Flags.DisableMultiThread = true;
+
                 var path = imageDirOption.Value();
                 if (string.IsNullOrWhiteSpace(path) || !Directory.Exists(path))
                 {
@@ -51,6 +55,7 @@ namespace SynchronousCustomAll
 
                 Flags.ImageDir = path;
                 Flags.NoDisplay = noDisplay.HasValue();
+
                 TutorialApiCpp();
 
                 return 0;
@@ -61,7 +66,7 @@ namespace SynchronousCustomAll
 
         #region Helpers
 
-        private static void ConfigureWrapper(Wrapper<UserDatum> opWrapperT)
+        private static void ConfigureWrapper(Wrapper<Datum> opWrapper)
         {
             try
             {
@@ -71,6 +76,11 @@ namespace SynchronousCustomAll
                 OpenPose.Check(0 <= Flags.LoggingLevel && Flags.LoggingLevel <= 255, "Wrong logging_level value.");
                 ConfigureLog.PriorityThreshold = (Priority)Flags.LoggingLevel;
                 Profiler.SetDefaultX((ulong)Flags.ProfileSpeed);
+                // // For debugging
+                // // Print all logging messages
+                // ConfigureLog.PriorityThreshold = Priority.None;
+                // // Print out speed values faster
+                // Profiler.setDefaultX(100);
 
                 // Applying user defined configuration - GFlags to program variables
                 // outputSize
@@ -92,7 +102,8 @@ namespace SynchronousCustomAll
                 var heatMapTypes = OpenPose.FlagsToHeatMaps(Flags.HeatmapsAddParts, Flags.HeatmapsAddBackground, Flags.HeatmapsAddPAFs);
                 var heatMapScale = OpenPose.FlagsToHeatMapScaleMode(Flags.HeatmapsScale);
                 // >1 camera view?
-                var multipleView = (Flags.Enable3D || Flags.Views3D > 1);
+                // var multipleView = (Flags.Enable3D || Flags.Views3D > 1 || Flags.FlirCamera);
+                const bool multipleView = false;
                 // Face and hand detectors
                 var faceDetector = OpenPose.FlagsToDetector(Flags.FaceDetector);
                 var handDetector = OpenPose.FlagsToDetector(Flags.HandDetector);
@@ -101,23 +112,11 @@ namespace SynchronousCustomAll
 
                 // Initializing the user custom classes
                 // Frames producer (e.g., video, webcam, ...)
-                var wUserInput = new StdSharedPtr<UserWorkerProducer<UserDatum>>(new WUserInput(Flags.ImageDir));
-                // Processing
-                var wUserPostProcessing = new StdSharedPtr<UserWorker<UserDatum>>(new WUserPostProcessing());
-                // GUI (Display)
-                var wUserOutput = new StdSharedPtr<UserWorkerConsumer<UserDatum>>(new WUserOutput());
-
-                // Add custom input
-                const bool workerInputOnNewThread = false;
-                opWrapperT.SetWorker(WorkerType.Input, wUserInput, workerInputOnNewThread);
+                var wUserInput = new StdSharedPtr<UserWorkerProducer<Datum>>(new WUserInput(Flags.ImageDir));
 
                 // Add custom processing
-                const bool workerProcessingOnNewThread = false;
-                opWrapperT.SetWorker(WorkerType.PostProcessing, wUserPostProcessing, workerProcessingOnNewThread);
-
-                // Add custom output
-                const bool workerOutputOnNewThread = true;
-                opWrapperT.SetWorker(WorkerType.Output, wUserOutput, workerOutputOnNewThread);
+                const bool workerInputOnNewThread = true;
+                opWrapper.SetWorker(WorkerType.Input, wUserInput, workerInputOnNewThread);
 
                 // Pose configuration (use WrapperStructPose{} for default and recommended configuration)
                 var pose = new WrapperStructPose(!Flags.BodyDisabled,
@@ -127,18 +126,18 @@ namespace SynchronousCustomAll
                                                  Flags.NumGpu,
                                                  Flags.NumGpuStart,
                                                  Flags.ScaleNumber,
-                                                 (float) Flags.ScaleGap,
+                                                 (float)Flags.ScaleGap,
                                                  OpenPose.FlagsToRenderMode(Flags.RenderPose, multipleView),
                                                  poseModel,
                                                  !Flags.DisableBlending,
-                                                 (float) Flags.AlphaPose,
-                                                 (float) Flags.AlphaHeatmap,
+                                                 (float)Flags.AlphaPose,
+                                                 (float)Flags.AlphaHeatmap,
                                                  Flags.PartToShow,
                                                  Flags.ModelFolder,
                                                  heatMapTypes,
                                                  heatMapScale,
                                                  Flags.PartCandidates,
-                                                 (float) Flags.RenderThreshold,
+                                                 (float)Flags.RenderThreshold,
                                                  Flags.NumberPeopleMax,
                                                  Flags.MaximizePositives,
                                                  Flags.FpsMax,
@@ -151,20 +150,20 @@ namespace SynchronousCustomAll
                                                  faceDetector,
                                                  faceNetInputSize,
                                                  OpenPose.FlagsToRenderMode(Flags.FaceRender, multipleView, Flags.RenderPose),
-                                                 (float) Flags.FaceAlphaPose,
-                                                 (float) Flags.FaceAlphaHeatmap,
-                                                 (float) Flags.FaceRenderThreshold);
+                                                 (float)Flags.FaceAlphaPose,
+                                                 (float)Flags.FaceAlphaHeatmap,
+                                                 (float)Flags.FaceRenderThreshold);
 
                 // Hand configuration (use op::WrapperStructHand{} to disable it)
                 var hand = new WrapperStructHand(Flags.Hand,
                                                  handDetector,
                                                  handNetInputSize,
                                                  Flags.HandScaleNumber,
-                                                 (float) Flags.HandScaleRange,
+                                                 (float)Flags.HandScaleRange,
                                                  OpenPose.FlagsToRenderMode(Flags.HandRender, multipleView, Flags.RenderPose),
-                                                 (float) Flags.HandAlphaPose,
-                                                 (float) Flags.HandAlphaHeatmap,
-                                                 (float) Flags.HandRenderThreshold);
+                                                 (float)Flags.HandAlphaPose,
+                                                 (float)Flags.HandAlphaHeatmap,
+                                                 (float)Flags.HandRenderThreshold);
 
                 // Extra functionality configuration (use op::WrapperStructExtra{} to disable it)
                 var extra = new WrapperStructExtra(Flags.Enable3D,
@@ -193,23 +192,29 @@ namespace SynchronousCustomAll
                                                      Flags.UdpHost,
                                                      Flags.UdpPort);
 
-                opWrapperT.Configure(pose);
-                opWrapperT.Configure(face);
-                opWrapperT.Configure(hand);
-                opWrapperT.Configure(extra);
-                opWrapperT.Configure(output);
+                // GUI (comment or use default argument to disable any visual output)
+                var gui = new WrapperStructGui(OpenPose.FlagsToDisplayMode(Flags.Display, Flags.Enable3D),
+                                               !Flags.NoGuiVerbose,
+                                               Flags.FullScreen);
+
+                opWrapper.Configure(pose);
+                opWrapper.Configure(face);
+                opWrapper.Configure(hand);
+                opWrapper.Configure(extra);
+                opWrapper.Configure(output);
+                opWrapper.Configure(gui);
 
                 // No GUI. Equivalent to: opWrapper.configure(op::WrapperStructGui{});
                 // Set to single-thread (for sequential processing and/or debugging and/or reducing latency)
                 if (Flags.DisableMultiThread)
-                    opWrapperT.DisableMultiThreading();
+                    opWrapper.DisableMultiThreading();
             }
             catch (Exception e)
             {
                 OpenPose.Error(e.Message, -1, nameof(ConfigureWrapper));
             }
         }
-        
+
         private static int TutorialApiCpp()
         {
             try
@@ -219,13 +224,13 @@ namespace SynchronousCustomAll
                 {
                     // OpenPose wrapper
                     OpenPose.Log("Configuring OpenPose...", Priority.High);
-                    using (var opWrapperT = new Wrapper<UserDatum>())
+                    using (var opWrapper = new Wrapper<Datum>())
                     {
-                        ConfigureWrapper(opWrapperT);
+                        ConfigureWrapper(opWrapper);
 
                         // Start, run, and stop processing - exec() blocks this thread until OpenPose wrapper has finished
                         OpenPose.Log("Starting thread(s)...", Priority.High);
-                        opWrapperT.Exec();
+                        opWrapper.Exec();
                     }
 
                     // Measuring total time

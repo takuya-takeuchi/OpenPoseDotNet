@@ -1,5 +1,4 @@
-﻿
-/*
+﻿/*
  * This sample program is ported by C# from examples/tutorial_api_cpp/05_keypoints_from_images_multi_gpu.cpp.
 */
 

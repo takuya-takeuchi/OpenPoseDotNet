@@ -1,5 +1,4 @@
-﻿
-/*
+﻿/*
  * This sample program is ported by C# from examples/tutorial_api_cpp/03_keypoints_from_image.cpp.
 */
 
