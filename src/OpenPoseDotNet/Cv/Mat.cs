@@ -15,12 +15,12 @@ namespace OpenPoseDotNet
 
         public Mat()
         {
-            this.NativePtr = NativeMethods.op_3rdparty_cv_mat_new();
+            this.NativePtr = NativeMethods.op_3rdparty_cv_Mat_new();
         }
 
         public Mat(int rows, int cols, int type, IntPtr data)
         {
-            this.NativePtr = NativeMethods.op_3rdparty_cv_mat_new2(rows, cols, type, data);
+            this.NativePtr = NativeMethods.op_3rdparty_cv_Mat_new2(rows, cols, type, data);
         }
 
         internal Mat(IntPtr ptr, bool isEnabledDispose = true) :
@@ -38,7 +38,7 @@ namespace OpenPoseDotNet
             get
             {
                 this.ThrowIfDisposed();
-                return NativeMethods.op_3rdparty_cv_mat_channels(this.NativePtr);
+                return NativeMethods.op_3rdparty_cv_Mat_channels(this.NativePtr);
             }
         }
 
@@ -47,7 +47,7 @@ namespace OpenPoseDotNet
             get
             {
                 this.ThrowIfDisposed();
-                return NativeMethods.op_3rdparty_cv_mat_cols(this.NativePtr);
+                return NativeMethods.op_3rdparty_cv_Mat_cols(this.NativePtr);
             }
         }
 
@@ -56,7 +56,7 @@ namespace OpenPoseDotNet
             get
             {
                 this.ThrowIfDisposed();
-                return NativeMethods.op_3rdparty_cv_mat_empty(this.NativePtr);
+                return NativeMethods.op_3rdparty_cv_Mat_empty(this.NativePtr);
             }
         }
 
@@ -65,7 +65,7 @@ namespace OpenPoseDotNet
             get
             {
                 this.ThrowIfDisposed();
-                return NativeMethods.op_3rdparty_cv_mat_rows(this.NativePtr);
+                return NativeMethods.op_3rdparty_cv_Mat_rows(this.NativePtr);
             }
         }
 
@@ -74,7 +74,7 @@ namespace OpenPoseDotNet
             get
             {
                 this.ThrowIfDisposed();
-                var value = NativeMethods.op_3rdparty_cv_mat_type(this.NativePtr);
+                var value = NativeMethods.op_3rdparty_cv_Mat_type(this.NativePtr);
                 return new MatType(value);
             }
         }
@@ -92,7 +92,7 @@ namespace OpenPoseDotNet
 
             m.ThrowIfDisposed();
 
-            NativeMethods.op_3rdparty_cv_mat_convertTo(this.NativePtr, m.NativePtr, rtype, alpha, beta);
+            NativeMethods.op_3rdparty_cv_Mat_convertTo(this.NativePtr, m.NativePtr, rtype, alpha, beta);
         }
 
         public Bitmap ToBitmap()
@@ -127,7 +127,7 @@ namespace OpenPoseDotNet
                 var scan0 = data.Scan0;
 
                 var line = channels * width;
-                var src = NativeMethods.op_3rdparty_cv_mat_data(this.NativePtr);
+                var src = NativeMethods.op_3rdparty_cv_Mat_data(this.NativePtr);
 
                 unsafe
                 {
@@ -161,7 +161,7 @@ namespace OpenPoseDotNet
 
             lhs.ThrowIfDisposed();
 
-            var ret = NativeMethods.op_3rdparty_cv_mat_operator_add(lhs.NativePtr, rhs);
+            var ret = NativeMethods.op_3rdparty_cv_Mat_operator_add(lhs.NativePtr, rhs);
             return new MatExpr(ret);
         }
 
@@ -172,7 +172,7 @@ namespace OpenPoseDotNet
 
             lhs.ThrowIfDisposed();
 
-            var ret = NativeMethods.op_3rdparty_cv_mat_operator_multiply_int32_t(lhs.NativePtr, rhs);
+            var ret = NativeMethods.op_3rdparty_cv_Mat_operator_multiply_int32_t(lhs.NativePtr, rhs);
             return new MatExpr(ret);
         }
 
@@ -183,7 +183,7 @@ namespace OpenPoseDotNet
 
             lhs.ThrowIfDisposed();
 
-            var ret = NativeMethods.op_3rdparty_cv_mat_operator_multiply_double(lhs.NativePtr, rhs);
+            var ret = NativeMethods.op_3rdparty_cv_Mat_operator_multiply_double(lhs.NativePtr, rhs);
             return new MatExpr(ret);
         }
 
@@ -199,7 +199,7 @@ namespace OpenPoseDotNet
             if (this.NativePtr == IntPtr.Zero)
                 return;
 
-            NativeMethods.op_3rdparty_cv_mat_delete(this.NativePtr);
+            NativeMethods.op_3rdparty_cv_Mat_delete(this.NativePtr);
         }
 
         #endregion
