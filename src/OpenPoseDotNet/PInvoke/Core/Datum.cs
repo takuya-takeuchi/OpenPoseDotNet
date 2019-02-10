@@ -42,6 +42,9 @@ namespace OpenPoseDotNet
         public static extern IntPtr op_core_datum_get_poseKeypoints(IntPtr datum);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern IntPtr op_core_datum_get_inputNetData(IntPtr datum);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern IntPtr op_core_datum_get_poseHeatMaps(IntPtr datum);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]

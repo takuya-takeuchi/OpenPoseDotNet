@@ -142,6 +142,19 @@ namespace OpenPoseDotNet
             }
         }
 
+        public Array<float>[] InputNetData
+        {
+            get
+            {
+                this.ThrowIfDisposed();
+                var ret = NativeMethods.op_core_datum_get_inputNetData(this.NativePtr);
+
+                // Datum.poseKeypoints is not pointer. Therefore, this object must not be disposed.
+                using (var array = new StdVector<Array<float>>(ret, false))
+                    return array.ToArray();
+            }
+        }
+
         public Array<float> PoseHeatMaps
         {
             get

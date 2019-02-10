@@ -94,14 +94,13 @@ namespace FaceFromImage
                 // >1 camera view?
                 var multipleView = (Flags.Enable3D || Flags.Views3D > 1);
                 // Face and hand detectors
-                var faceDetector = Detector.Provided;
+                var faceDetector = OpenPose.FlagsToDetector(Flags.FaceDetector);
                 var handDetector = OpenPose.FlagsToDetector(Flags.HandDetector);
                 // Enabling Google Logging
                 const bool enableGoogleLogging = true;
 
                 // Pose configuration (use WrapperStructPose{} for default and recommended configuration)
-                const bool bodyEnable = false;
-                var pose = new WrapperStructPose(bodyEnable,
+                var pose = new WrapperStructPose(!Flags.BodyDisabled,
                                                  netInputSize,
                                                  outputSize,
                                                  keypointScale,
@@ -127,7 +126,7 @@ namespace FaceFromImage
                                                  Flags.CaffeModelPath,
                                                  enableGoogleLogging);
                 // Face configuration (use op::WrapperStructFace{} to disable it)
-                var face = new WrapperStructFace(true,
+                var face = new WrapperStructFace(Flags.Face,
                                                  faceDetector,
                                                  faceNetInputSize,
                                                  OpenPose.FlagsToRenderMode(Flags.FaceRender, multipleView, Flags.RenderPose),
@@ -222,12 +221,11 @@ namespace FaceFromImage
                 // Example: How to use the pose keypoints
                 if (datumsPtr != null && datumsPtr.TryGet(out var data) && !data.Empty)
                 {
-                    // Alternative 1
                     var temp = data.ToArray()[0].Get();
-                    OpenPose.Log($"Body keypoints: {temp.PoseKeyPoints}");
-                    OpenPose.Log($"Face keypoints: {temp.FaceKeyPoints}");
-                    OpenPose.Log($"Left hand keypoints: {temp.HandKeyPoints[0]}");
-                    OpenPose.Log($"Right hand keypoints: {temp.HandKeyPoints[1]}");
+                    OpenPose.Log($"Body keypoints: {temp.PoseKeyPoints}", Priority.High);
+                    OpenPose.Log($"Face keypoints: {temp.FaceKeyPoints}", Priority.High);
+                    OpenPose.Log($"Left hand keypoints: {temp.HandKeyPoints[0]}", Priority.High);
+                    OpenPose.Log($"Right hand keypoints: {temp.HandKeyPoints[1]}", Priority.High);
                 }
                 else
                 {
@@ -247,6 +245,11 @@ namespace FaceFromImage
                 OpenPose.Log("Starting OpenPose demo...", Priority.High);
                 using (var opTimer = OpenPose.GetTimerInit())
                 {
+                    // Required flags to enable heatmaps
+                    Flags.BodyDisabled = true;
+                    Flags.Face = true;
+                    Flags.FaceDetector = 2;
+
                     using (var opWrapper = new Wrapper<Datum>(ThreadManagerMode.Asynchronous))
                     {
                         // Configuring OpenPose
@@ -300,7 +303,7 @@ namespace FaceFromImage
                     }
 
                     // Info
-                    OpenPose.Log("NOTE: In addition with the user flags, this demo has auto-selected the following flags: `--body_disable --face --face_detector 2`", Priority.High);
+                    OpenPose.Log("NOTE: In addition with the user flags, this demo has auto-selected the following flags:\n `--body_disable --face --face_detector 2`", Priority.High);
 
                     // Measuring total time
                     OpenPose.PrintTime(opTimer, "OpenPose demo successfully finished. Total time: ", " seconds.", Priority.High);

@@ -7,6 +7,8 @@ namespace OpenPoseDotNet
 
         Input = 0,
 
+        PreProcessing,
+
         PostProcessing,
 
         Output

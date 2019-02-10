@@ -43,6 +43,11 @@ DLLEXPORT void op_core_datum_set_cvInputData(op::Datum* datum, cv::Mat* mat)
     datum->cvInputData = *mat;
 }
 
+DLLEXPORT std::vector<op::Array<float>>* op_core_datum_get_inputNetData(op::Datum* datum)
+{
+    return &datum->inputNetData;
+}
+
 DLLEXPORT cv::Mat* op_core_datum_get_cvOutputData(op::Datum* datum)
 {
     return &datum->cvOutputData;

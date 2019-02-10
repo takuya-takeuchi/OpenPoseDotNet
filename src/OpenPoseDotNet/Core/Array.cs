@@ -102,6 +102,12 @@ namespace OpenPoseDotNet
 
         #region Methods
 
+        public IntPtr GetPtr()
+        {
+            this.ThrowIfDisposed();
+            return this._Imp.GetPtr(this.NativePtr);
+        }
+
         public int[] GetSize()
         {
             this.ThrowIfDisposed();
@@ -148,20 +154,20 @@ namespace OpenPoseDotNet
             var stdstr = IntPtr.Zero;
             var str = "";
 
-            try
-            {
-                stdstr = this._Imp.ToString(this.NativePtr);
-                str = StringHelper.FromStdString(stdstr) ?? "";
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.StackTrace);
-            }
-            finally
-            {
-                if (stdstr != IntPtr.Zero)
-                    NativeMethods.std_string_delete(stdstr);
-            }
+            //try
+            //{
+            //    stdstr = this._Imp.ToString(this.NativePtr);
+            //    str = StringHelper.FromStdString(stdstr) ?? "";
+            //}
+            //catch (Exception e)
+            //{
+            //    Console.WriteLine(e.StackTrace);
+            //}
+            //finally
+            //{
+            //    if (stdstr != IntPtr.Zero)
+            //        NativeMethods.std_string_delete(stdstr);
+            //}
 
             return str;
         }
@@ -201,6 +207,8 @@ namespace OpenPoseDotNet
 
             public abstract bool Empty(IntPtr ptr);
 
+            public abstract IntPtr GetPtr(IntPtr ptr);
+
             public abstract int GetSize(IntPtr ptr, int index);
 
             public abstract IntPtr GetSize(IntPtr ptr);
@@ -232,6 +240,11 @@ namespace OpenPoseDotNet
             public override bool Empty(IntPtr ptr)
             {
                 return NativeMethods.op_core_Array_float_empty(ptr);
+            }
+
+            public override IntPtr GetPtr(IntPtr ptr)
+            {
+                return NativeMethods.op_core_Array_float_getPtr(ptr);
             }
 
             public override int GetSize(IntPtr ptr, int index)
@@ -288,6 +301,11 @@ namespace OpenPoseDotNet
             public override bool Empty(IntPtr ptr)
             {
                 return NativeMethods.op_core_Array_double_empty(ptr);
+            }
+
+            public override IntPtr GetPtr(IntPtr ptr)
+            {
+                return NativeMethods.op_core_Array_double_getPtr(ptr);
             }
 
             public override int GetSize(IntPtr ptr, int index)

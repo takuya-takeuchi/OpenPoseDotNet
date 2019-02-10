@@ -97,30 +97,30 @@ namespace BodyFromImageDefault
                 {
                     // Alternative 1
                     var temp = data.ToArray();
-                    OpenPose.Log($"Body keypoints: {temp[0].Get().PoseKeyPoints}");
+                    OpenPose.Log($"Body keypoints: {temp[0].Get().PoseKeyPoints}", Priority.High);
 
                     // // Alternative 2
-                    // op::log(datumsPtr->at(0).poseKeypoints);
+                    // op::log(datumsPtr->at(0).poseKeypoints, op::Priority::High);
 
                     // // Alternative 3
                     // std::cout << datumsPtr->at(0).poseKeypoints << std::endl;
 
                     // // Alternative 4 - Accesing each element of the keypoints
-                    // op::log("\nKeypoints:");
+                    // op::log("\nKeypoints:", op::Priority::High);
                     // const auto& poseKeypoints = datumsPtr->at(0).poseKeypoints;
-                    // op::log("Person pose keypoints:");
+                    // op::log("Person pose keypoints:", op::Priority::High);
                     // for (auto person = 0 ; person < poseKeypoints.getSize(0) ; person++)
                     // {
-                    //     op::log("Person " + std::to_string(person) + " (x, y, score):");
+                    //     op::log("Person " + std::to_string(person) + " (x, y, score):", op::Priority::High);
                     //     for (auto bodyPart = 0 ; bodyPart < poseKeypoints.getSize(1) ; bodyPart++)
                     //     {
                     //         std::string valueToPrint;
                     //         for (auto xyscore = 0 ; xyscore < poseKeypoints.getSize(2) ; xyscore++)
                     //             valueToPrint += std::to_string(   poseKeypoints[{person, bodyPart, xyscore}]   ) + " ";
-                    //         op::log(valueToPrint);
+                    //         op::log(valueToPrint, op::Priority::High);
                     //     }
                     // }
-                    // op::log(" ");
+                    // op::log(" ", op::Priority::High);
                 }
                 else
                 {

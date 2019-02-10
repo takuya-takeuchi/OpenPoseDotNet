@@ -53,6 +53,11 @@ DLLEXPORT bool op_core_Array_##__TYPENAME__##_empty(op::Array<__TYPE__>* array)\
     return array->empty();\
 }\
 \
+DLLEXPORT __TYPE__* op_core_Array_##__TYPENAME__##_getPtr(op::Array<__TYPE__>* array)\
+{\
+    return array->getPtr();\
+}\
+\
 DLLEXPORT __TYPE__ op_core_Array_##__TYPENAME__##_operator_indexes(op::Array<__TYPE__>* array, std::vector<int>* indexes)\
 {\
     auto& tmp = *array;\

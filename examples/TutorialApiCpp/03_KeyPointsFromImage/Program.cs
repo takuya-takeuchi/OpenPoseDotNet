@@ -221,12 +221,11 @@ namespace KeyPointsFromImages
                 // Example: How to use the pose keypoints
                 if (datumsPtr != null && datumsPtr.TryGet(out var data) && !data.Empty)
                 {
-                    // Alternative 1
-                    var temp = data.ToArray();
-                    OpenPose.Log($"Body keypoints: {temp[0].Get().PoseKeyPoints}");
-                    OpenPose.Log($"Face keypoints: {temp[0].Get().FaceKeyPoints}");
-                    OpenPose.Log($"Left hand keypoints: {temp[0].Get().HandKeyPoints[0]}");
-                    OpenPose.Log($"Right hand keypoints: {temp[0].Get().HandKeyPoints[1]}");
+                    var temp = data.ToArray()[0].Get();
+                    OpenPose.Log($"Body keypoints: {temp.PoseKeyPoints}", Priority.High);
+                    OpenPose.Log($"Face keypoints: {temp.FaceKeyPoints}", Priority.High);
+                    OpenPose.Log($"Left hand keypoints: {temp.HandKeyPoints[0]}", Priority.High);
+                    OpenPose.Log($"Right hand keypoints: {temp.HandKeyPoints[1]}", Priority.High);
                 }
                 else
                 {

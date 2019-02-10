@@ -543,6 +543,41 @@ namespace OpenPoseDotNet
 
         #endregion
 
+        #region OpneCV::Mat
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern IntPtr std_vector_3rdparty_opencv_Mat_new1();
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern IntPtr std_vector_3rdparty_opencv_Mat_new2(IntPtr size);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern IntPtr std_vector_3rdparty_opencv_Mat_new3([In] IntPtr[] data, IntPtr dataLength);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern IntPtr std_vector_3rdparty_opencv_Mat_getSize(IntPtr vector);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern IntPtr std_vector_3rdparty_opencv_Mat_getPointer(IntPtr vector);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern IntPtr std_vector_3rdparty_opencv_Mat_at(IntPtr vector, int index);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool std_vector_3rdparty_opencv_Mat_empty(IntPtr vector);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern void std_vector_3rdparty_opencv_Mat_delete(IntPtr vector);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern void std_vector_3rdparty_opencv_Mat_copy(IntPtr vector, IntPtr[] dst);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern void std_vector_3rdparty_opencv_Mat_emplace_back(IntPtr vector);
+
+        #endregion
+
         #endregion
 
         #region share_ptr

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
+using System.Threading;
 
 // ReSharper disable once CheckNamespace
 namespace OpenPoseDotNet
@@ -10,6 +12,16 @@ namespace OpenPoseDotNet
     {
 
         #region Constructors
+
+        public Mat()
+        {
+            this.NativePtr = NativeMethods.op_3rdparty_cv_mat_new();
+        }
+
+        public Mat(int rows, int cols, int type, IntPtr data)
+        {
+            this.NativePtr = NativeMethods.op_3rdparty_cv_mat_new2(rows, cols, type, data);
+        }
 
         internal Mat(IntPtr ptr, bool isEnabledDispose = true) :
             base(isEnabledDispose)
@@ -71,6 +83,18 @@ namespace OpenPoseDotNet
 
         #region Methods
 
+        public void ConvertTo(Mat m, int rtype, double alpha = 1, double beta = 0)
+        {
+            this.ThrowIfDisposed();
+
+            if (m == null)
+                throw new ArgumentNullException(nameof(m));
+
+            m.ThrowIfDisposed();
+
+            NativeMethods.op_3rdparty_cv_mat_convertTo(this.NativePtr, m.NativePtr, rtype, alpha, beta);
+        }
+
         public Bitmap ToBitmap()
         {
             this.ThrowIfDisposed();
@@ -107,7 +131,7 @@ namespace OpenPoseDotNet
 
                 unsafe
                 {
-                    var ps = (byte*) scan0;
+                    var ps = (byte*)scan0;
                     for (var h = 0; h < height; h++)
                         NativeMethods.cstd_memcpy(ps + stride * h, src + h * line, line);
                 }
@@ -127,6 +151,43 @@ namespace OpenPoseDotNet
         }
 
         #region Overrides
+
+        #region Operators
+
+        public static MatExpr operator +(Mat lhs, double rhs)
+        {
+            if (lhs == null)
+                throw new ArgumentNullException(nameof(lhs));
+
+            lhs.ThrowIfDisposed();
+
+            var ret = NativeMethods.op_3rdparty_cv_mat_operator_add(lhs.NativePtr, rhs);
+            return new MatExpr(ret);
+        }
+
+        public static MatExpr operator *(Mat lhs, int rhs)
+        {
+            if (lhs == null)
+                throw new ArgumentNullException(nameof(lhs));
+
+            lhs.ThrowIfDisposed();
+
+            var ret = NativeMethods.op_3rdparty_cv_mat_operator_multiply_int32_t(lhs.NativePtr, rhs);
+            return new MatExpr(ret);
+        }
+
+        public static MatExpr operator *(Mat lhs, double rhs)
+        {
+            if (lhs == null)
+                throw new ArgumentNullException(nameof(lhs));
+
+            lhs.ThrowIfDisposed();
+
+            var ret = NativeMethods.op_3rdparty_cv_mat_operator_multiply_double(lhs.NativePtr, rhs);
+            return new MatExpr(ret);
+        }
+
+        #endregion
 
         /// <summary>
         /// Releases all unmanaged resources.

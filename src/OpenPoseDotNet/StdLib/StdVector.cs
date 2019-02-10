@@ -39,7 +39,8 @@ namespace OpenPoseDotNet
                 new { Type = typeof(CustomDatum),               ElementType = ElementTypes.CustomDatum },
                 new { Type = typeof(StdSharedPtr<Datum>),       ElementType = ElementTypes.SharedPtrDatum },
                 new { Type = typeof(StdSharedPtr<CustomDatum>), ElementType = ElementTypes.SharedPtrCustomDatum },
-                new { Type = typeof(HeatMapType),               ElementType = ElementTypes.HeatMapType }
+                new { Type = typeof(HeatMapType),               ElementType = ElementTypes.HeatMapType },
+                new { Type = typeof(Mat),                       ElementType = ElementTypes.OpenCVMat }
             };
 
             foreach (var type in types)
@@ -170,6 +171,8 @@ namespace OpenPoseDotNet
                         return new StdVectorStdSharedPtrOfCustomDatumImp(isEnabledDispose) as StdVectorImp<TItem>;
                     case ElementTypes.HeatMapType:
                         return new StdVectorHeatMapTypeImp(isEnabledDispose) as StdVectorImp<TItem>;
+                    case ElementTypes.OpenCVMat:
+                        return new StdVectorOpenCVMatImp(isEnabledDispose) as StdVectorImp<TItem>;
                 }
             }
 
@@ -209,7 +212,9 @@ namespace OpenPoseDotNet
 
             SharedPtrCustomDatum,
 
-            HeatMapType
+            HeatMapType,
+
+            OpenCVMat
 
         }
 
@@ -1411,6 +1416,89 @@ namespace OpenPoseDotNet
                 var elementPtr = this.GetElementPtr(ptr);
                 InteropHelper.Copy(elementPtr, dst, dst.Length);
                 return dst;
+            }
+
+            #endregion
+
+        }
+
+        private sealed class StdVectorOpenCVMatImp : StdVectorImp<Mat>
+        {
+
+            #region Constructors
+
+            internal StdVectorOpenCVMatImp(bool isEnabledDispose) :
+                base(isEnabledDispose)
+            {
+            }
+
+            #endregion
+
+            #region Methods
+
+            public override IntPtr Create()
+            {
+                return NativeMethods.std_vector_3rdparty_opencv_Mat_new1();
+            }
+
+            public override IntPtr Create(int size)
+            {
+                if (size < 0)
+                    throw new ArgumentOutOfRangeException(nameof(size));
+
+                return NativeMethods.std_vector_3rdparty_opencv_Mat_new2(new IntPtr(size));
+            }
+
+            public override IntPtr Create(IEnumerable<Mat> data)
+            {
+                if (data == null)
+                    throw new ArgumentNullException(nameof(data));
+
+                var array = data.Select(d => d.NativePtr).ToArray();
+                return NativeMethods.std_vector_3rdparty_opencv_Mat_new3(array, new IntPtr(array.Length));
+            }
+
+            public override void Dispose(IntPtr ptr)
+            {
+                if (this.IsEnabledDispose)
+                    NativeMethods.std_vector_3rdparty_opencv_Mat_delete(ptr);
+            }
+
+            public override Mat At(IntPtr ptr, int index)
+            {
+                var ret = NativeMethods.std_vector_3rdparty_opencv_Mat_at(ptr, index);
+                return new Mat(ret, false);
+            }
+
+            public override bool Empty(IntPtr ptr)
+            {
+                return NativeMethods.std_vector_3rdparty_opencv_Mat_empty(ptr);
+            }
+
+            public override void EmplaceBack(IntPtr ptr)
+            {
+                NativeMethods.std_vector_3rdparty_opencv_Mat_emplace_back(ptr);
+            }
+
+            public override IntPtr GetElementPtr(IntPtr ptr)
+            {
+                return NativeMethods.std_vector_3rdparty_opencv_Mat_getPointer(ptr);
+            }
+
+            public override int GetSize(IntPtr ptr)
+            {
+                return NativeMethods.std_vector_3rdparty_opencv_Mat_getSize(ptr).ToInt32();
+            }
+
+            public override Mat[] ToArray(IntPtr ptr)
+            {
+                var size = this.GetSize(ptr);
+                if (size == 0)
+                    return new Mat[0];
+
+                var dst = new IntPtr[size];
+                NativeMethods.std_vector_3rdparty_opencv_Mat_copy(ptr, dst);
+                return dst.Select(p => new Mat(p, this.IsEnabledDispose)).ToArray();
             }
 
             #endregion

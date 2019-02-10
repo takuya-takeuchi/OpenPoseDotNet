@@ -18,17 +18,16 @@ namespace AsynchronousLoopCustomInputAndOutput
                 // User's displaying/saving/other processing here
                 // datum.cvOutputData: rendered frame with pose or heatmaps
                 // datum.poseKeypoints: Array<float> with the estimated pose
-                var key = ' ';
                 if (datumsPtr != null && datumsPtr.TryGet(out var data) && !data.Empty)
                 {
                     // Display image and sleeps at least 1 ms (it usually sleeps ~5-10 msec to display the image)
                     var temp = data.ToArray()[0].Get();
                     Cv.ImShow($"{OpenPose.OpenPoseNameAndVersion()} - Tutorial C++ API", temp.CvOutputData);
-                    key = (char)Cv.WaitKey(1);
                 }
                 else
                     OpenPose.Log("Nullptr or empty datumsPtr found.", Priority.High);
 
+                var key = (char)Cv.WaitKey(1);
                 return (key == 27);
             }
             catch (Exception e)
@@ -63,9 +62,9 @@ namespace AsynchronousLoopCustomInputAndOutput
 
                 OpenPose.Log(" ");
                 // Alternative: just getting std::string equivalent
-                OpenPose.Log($"Face keypoints: {datum.FaceKeyPoints}");
-                OpenPose.Log($"Left hand keypoints: {datum.HandKeyPoints[0]}");
-                OpenPose.Log($"Right hand keypoints: {datum.HandKeyPoints[1]}");
+                OpenPose.Log($"Face keypoints: {datum.FaceKeyPoints}", Priority.High);
+                OpenPose.Log($"Left hand keypoints: {datum.HandKeyPoints[0]}", Priority.High);
+                OpenPose.Log($"Right hand keypoints: {datum.HandKeyPoints[1]}", Priority.High);
                 // Heatmaps
                 var poseHeatMaps = datum.PoseHeatMaps;
                 if (!poseHeatMaps.Empty)
