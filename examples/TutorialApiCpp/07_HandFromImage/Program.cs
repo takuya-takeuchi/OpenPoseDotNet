@@ -80,6 +80,8 @@ namespace HandFromImage
                 var faceNetInputSize = OpenPose.FlagsToPoint(Flags.FaceNetResolution, "368x368 (multiples of 16)");
                 // handNetInputSize
                 var handNetInputSize = OpenPose.FlagsToPoint(Flags.HandNetResolution, "368x368 (multiples of 16)");
+                // poseMode
+                var poseMode = OpenPose.FlagsToPoseMode(Flags.Body);
                 // poseModel
                 var poseModel = OpenPose.FlagsToPoseModel(Flags.ModelPose);
                 // JSON saving
@@ -99,7 +101,7 @@ namespace HandFromImage
                 const bool enableGoogleLogging = true;
 
                 // Pose configuration (use WrapperStructPose{} for default and recommended configuration)
-                var pose = new WrapperStructPose(!Flags.BodyDisabled,
+                var pose = new WrapperStructPose(poseMode,
                                                  netInputSize,
                                                  outputSize,
                                                  keypointScale,
@@ -123,6 +125,7 @@ namespace HandFromImage
                                                  Flags.FpsMax,
                                                  Flags.PrototxtPath,
                                                  Flags.CaffeModelPath,
+                                                 (float)Flags.UpsamplingRatio,
                                                  enableGoogleLogging);
                 // Face configuration (use op::WrapperStructFace{} to disable it)
                 var face = new WrapperStructFace(Flags.Face,
@@ -245,7 +248,7 @@ namespace HandFromImage
                 using (var opTimer = OpenPose.GetTimerInit())
                 {
                     // Required flags to enable heatmaps
-                    Flags.BodyDisabled = true;
+                    Flags.Body = 0;
                     Flags.Hand = true;
                     Flags.HandDetector = 2;
 
@@ -317,7 +320,7 @@ namespace HandFromImage
                     }
 
                     // Info
-                    OpenPose.Log("NOTE: In addition with the user flags, this demo has auto-selected the following flags:\n `--body_disable --hand --hand_detector 2`", Priority.High);
+                    OpenPose.Log("NOTE: In addition with the user flags, this demo has auto-selected the following flags:\n\t`--body_disable --hand --hand_detector 2`", Priority.High);
 
                     // Measuring total time
                     OpenPose.PrintTime(opTimer, "OpenPose demo successfully finished. Total time: ", " seconds.", Priority.High);

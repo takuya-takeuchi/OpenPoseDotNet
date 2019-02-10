@@ -46,6 +46,8 @@ namespace SynchronousCustomPostProcessing
                 var faceNetInputSize = OpenPose.FlagsToPoint(Flags.FaceNetResolution, "368x368 (multiples of 16)");
                 // handNetInputSize
                 var handNetInputSize = OpenPose.FlagsToPoint(Flags.HandNetResolution, "368x368 (multiples of 16)");
+                // poseMode
+                var poseMode = OpenPose.FlagsToPoseMode(Flags.Body);
                 // poseModel
                 var poseModel = OpenPose.FlagsToPoseModel(Flags.ModelPose);
                 // JSON saving
@@ -73,7 +75,7 @@ namespace SynchronousCustomPostProcessing
                 opWrapper.SetWorker(WorkerType.PostProcessing, wUserPostProcessing, workerProcessingOnNewThread);
 
                 // Pose configuration (use WrapperStructPose{} for default and recommended configuration)
-                var pose = new WrapperStructPose(!Flags.BodyDisabled,
+                var pose = new WrapperStructPose(poseMode,
                                                  netInputSize,
                                                  outputSize,
                                                  keyPointScale,
@@ -97,6 +99,7 @@ namespace SynchronousCustomPostProcessing
                                                  Flags.FpsMax,
                                                  Flags.PrototxtPath,
                                                  Flags.CaffeModelPath,
+                                                 (float)Flags.UpsamplingRatio,
                                                  enableGoogleLogging);
 
                 // Face configuration (use op::WrapperStructFace{} to disable it)

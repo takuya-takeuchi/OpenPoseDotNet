@@ -48,49 +48,38 @@ namespace AsynchronousCustomOutput
                 OpenPose.Check(0 <= Flags.LoggingLevel && Flags.LoggingLevel <= 255, "Wrong logging_level value.");
                 ConfigureLog.PriorityThreshold = (Priority)Flags.LoggingLevel;
                 Profiler.SetDefaultX((ulong)Flags.ProfileSpeed);
-
                 // Applying user defined configuration - GFlags to program variables
                 // producerType
                 var tie = OpenPose.FlagsToProducer(Flags.ImageDir, Flags.Video, Flags.IpCamera, Flags.Camera, Flags.FlirCamera, Flags.FlirCameraIndex);
                 var producerType = tie.Item1;
                 var producerString = tie.Item2;
-
                 // cameraSize
                 var cameraSize = OpenPose.FlagsToPoint(Flags.CameraResolution, "-1x-1");
-
                 // outputSize
                 var outputSize = OpenPose.FlagsToPoint(Flags.OutputResolution, "-1x-1");
-
                 // netInputSize
                 var netInputSize = OpenPose.FlagsToPoint(Flags.NetResolution, "-1x368");
-
                 // faceNetInputSize
                 var faceNetInputSize = OpenPose.FlagsToPoint(Flags.FaceNetResolution, "368x368 (multiples of 16)");
-
                 // handNetInputSize
                 var handNetInputSize = OpenPose.FlagsToPoint(Flags.HandNetResolution, "368x368 (multiples of 16)");
-
+                // poseMode
+                var poseMode = OpenPose.FlagsToPoseMode(Flags.Body);
                 // poseModel
                 var poseModel = OpenPose.FlagsToPoseModel(Flags.ModelPose);
-
                 // JSON saving
                 if (!string.IsNullOrEmpty(Flags.WriteKeyPoint))
                     OpenPose.Log("Flag `write_keypoint` is deprecated and will eventually be removed. Please, use `write_json` instead.", Priority.Max);
-
                 // keypointScale
                 var keypointScale = OpenPose.FlagsToScaleMode(Flags.KeyPointScale);
-
                 // heatmaps to add
                 var heatMapTypes = OpenPose.FlagsToHeatMaps(Flags.HeatmapsAddParts, Flags.HeatmapsAddBackground, Flags.HeatmapsAddPAFs);
                 var heatMapScale = OpenPose.FlagsToHeatMapScaleMode(Flags.HeatmapsScale);
-
                 // >1 camera view?
                 var multipleView = (Flags.Enable3D || Flags.Views3D > 1 || Flags.FlirCamera);
-
                 // Face and hand detectors
                 var faceDetector = OpenPose.FlagsToDetector(Flags.FaceDetector);
                 var handDetector = OpenPose.FlagsToDetector(Flags.HandDetector);
-
                 // Enabling Google Logging
                 const bool enableGoogleLogging = true;
 
@@ -98,7 +87,7 @@ namespace AsynchronousCustomOutput
                 OpenPose.Log("Configuring OpenPose...", Priority.High);
 
                 // Pose configuration (use WrapperStructPose{} for default and recommended configuration)
-                var pose = new WrapperStructPose(!Flags.BodyDisabled,
+                var pose = new WrapperStructPose(poseMode,
                                                  netInputSize,
                                                  outputSize,
                                                  keypointScale,
@@ -122,6 +111,7 @@ namespace AsynchronousCustomOutput
                                                  Flags.FpsMax,
                                                  Flags.PrototxtPath,
                                                  Flags.CaffeModelPath,
+                                                 (float)Flags.UpsamplingRatio,
                                                  enableGoogleLogging);
 
                 // Face configuration (use op::WrapperStructFace{} to disable it)
@@ -234,11 +224,9 @@ namespace AsynchronousCustomOutput
                                 userOutputClass.PrintKeyPoints(datumProcessed);
                                 datumProcessed.Dispose();
                             }
-
                             // If OpenPose finished reading images
                             else if (!opWrapper.IsRunning)
                                 break;
-
                             // Something else happened
                             else
                                 OpenPose.Log("Processed datum could not be emplaced.", Priority.High);
