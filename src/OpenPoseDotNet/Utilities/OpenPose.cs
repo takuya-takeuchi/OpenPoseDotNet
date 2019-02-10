@@ -132,6 +132,11 @@ namespace OpenPoseDotNet
             return NativeMethods.op_flagsToRenderMode(renderFlag, gpuBuggy, renderPoseFlag);
         }
 
+        public static PoseMode FlagsToPoseMode(int poseMode)
+        {
+            return NativeMethods.op_flagsToPoseMode(poseMode);
+        }
+
         public static PoseModel FlagsToPoseModel(string poseModeString)
         {
             if (poseModeString == null)
