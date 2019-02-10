@@ -9,21 +9,21 @@ namespace OpenPoseDotNet
 
         #region Fields
 
-        private const int CV_8U = 0;
+        public const int CV_8U = 0;
 
-        private const int CV_8S = 1;
+        public const int CV_8S = 1;
 
-        private const int CV_16U = 2;
+        public const int CV_16U = 2;
 
-        private const int CV_16S = 3;
+        public const int CV_16S = 3;
 
-        private const int CV_32S = 4;
+        public const int CV_32S = 4;
 
-        private const int CV_32F = 5;
+        public const int CV_32F = 5;
 
-        private const int CV_64F = 6;
+        public const int CV_64F = 6;
 
-        private const int CV_USRTYPE1 = 7;
+        public const int CV_USRTYPE1 = 7;
 
         private static readonly int CV_CN_MAX = 512;
 

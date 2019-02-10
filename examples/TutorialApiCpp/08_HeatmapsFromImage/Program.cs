@@ -1,31 +1,23 @@
 ﻿
 /*
- * This sample program is ported by C# from examples/tutorial_api_cpp/05_keypoints_from_images_multi_gpu.cpp.
+ * This sample program is ported by C# from examples/tutorial_api_cpp/08_heatmaps_from_image.cpp.
 */
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using Microsoft.Extensions.CommandLineUtils;
 using OpenPoseDotNet;
 
-namespace KeyPointsFromImagesMultiGPU
+namespace KeyPointsFromImages
 {
 
     internal class Program
     {
 
-        #region Constructors
+        #region Fields
 
-        static Program()
-        {
-            // Producer
-            Flags.ImageDir = "examples/media/";                          // Process a directory of images. Read all standard formats (jpg, png, bmp, etc.)..
-            // Consumer
-            Flags.LatencyIsIrrelevantAndComputerWithLotsOfRam = false;   // If false, it will read and then then process images right away. If true, it will first store all the frames and
-                                                                         // later process them (slightly faster). However: 1) Latency will hugely increase (no frames will be processed
-                                                                         // until they have all been read). And 2) The program might go out of RAM memory with long videos or folders with
-                                                                         // many images (so the computer might freeze).
-        }
+        private static string ImagePath;
 
         #endregion
 
@@ -35,13 +27,13 @@ namespace KeyPointsFromImagesMultiGPU
         {
             var app = new CommandLineApplication(false)
             {
-                Name = nameof(KeyPointsFromImagesMultiGPU)
+                Name = nameof(KeyPointsFromImages)
             };
 
             app.HelpOption("-h|--help");
 
             var disableMultiThreadArgument = app.Argument("disableMultiThread", "Disable MultiThread");
-            var imageDirOption = app.Option("-i|--imageDir", "Process a directory of images. Read all standard formats (jpg, png, bmp, etc.).", CommandOptionType.SingleValue);
+            var inputImageOption = app.Option("-i|--image", "Input image", CommandOptionType.SingleValue);
             var noDisplay = app.Option("--no_display", "Enable to disable the visual display.", CommandOptionType.NoValue);
 
             app.OnExecute(() =>
@@ -49,17 +41,17 @@ namespace KeyPointsFromImagesMultiGPU
                 if (disableMultiThreadArgument.Value != null)
                     Flags.DisableMultiThread = true;
 
-                var path = imageDirOption.Value();
-                if (string.IsNullOrWhiteSpace(path) || !Directory.Exists(path))
+                var path = inputImageOption.Value();
+                if (string.IsNullOrWhiteSpace(path) || !File.Exists(path))
                 {
-                    Console.WriteLine("Argument 'imageDir' is invalid or not found.");
+                    Console.WriteLine($"Argument 'image' is invalid or not found.");
                     app.ShowHelp();
                     return -1;
                 }
 
-                Flags.ImageDir = path;
-                Flags.NoDisplay = noDisplay.HasValue();
+                ImagePath = path;
 
+                Flags.NoDisplay = noDisplay.HasValue();
                 TutorialApiCpp();
 
                 return 0;
@@ -198,25 +190,65 @@ namespace KeyPointsFromImagesMultiGPU
             }
         }
 
-        private static bool Display(StdSharedPtr<StdVector<StdSharedPtr<Datum>>> datumsPtr)
+        private static bool Display(StdSharedPtr<StdVector<StdSharedPtr<Datum>>> datumsPtr, int desiredChannel = 0)
         {
             try
             {
-                // User's displaying/saving/other processing here
-                // datum.cvOutputData: rendered frame with pose or heatmaps
-                // datum.poseKeypoints: Array<float> with the estimated pose
                 if (datumsPtr != null && datumsPtr.TryGet(out var data) && !data.Empty)
                 {
-                    // Display image and sleeps at least 1 ms (it usually sleeps ~5-10 msec to display the image)
-                    var temp = data.ToArray()[0].Get();
-                    Cv.ImShow($"{OpenPose.OpenPoseNameAndVersion()} - Tutorial C++ API", temp.CvOutputData);
+                    var datum = datumsPtr.Get().At(0).Get();
+
+                    // Note: Heatmaps are in net_resolution size, which does not necessarily match the final image size
+                    // Read heatmaps
+                    var poseHeatMaps = datum.PoseHeatMaps;
+                    // Read desired channel
+                    var numberChannels = poseHeatMaps.GetSize(0);
+                    var height = poseHeatMaps.GetSize(1);
+                    var width = poseHeatMaps.GetSize(2);
+                    var eleSize = sizeof(float);
+                    using (var desiredChannelHeatMap = new Mat(height, width, MatType.CV_32F, IntPtr.Add(poseHeatMaps.GetPtr(), (desiredChannel % numberChannels) * height * width * eleSize)))
+                    {
+                        // Read image used from OpenPose body network (same resolution than heatmaps)
+                        var inputNetData = datum.InputNetData[0];
+                        using (var inputNetDataB = new Mat(height, width, MatType.CV_32F, IntPtr.Add(inputNetData.GetPtr(), 0 * height * width * eleSize)))
+                        using (var inputNetDataG = new Mat(height, width, MatType.CV_32F, IntPtr.Add(inputNetData.GetPtr(), 1 * height * width * eleSize)))
+                        using (var inputNetDataR = new Mat(height, width, MatType.CV_32F, IntPtr.Add(inputNetData.GetPtr(), 2 * height * width * eleSize)))
+                        using (var vector = new StdVector<Mat>(new List<Mat>(new[] { inputNetDataB, inputNetDataG, inputNetDataR })))
+                        using (var tmp = new Mat())
+                        {
+                            Cv.Merge(vector, tmp);
+
+                            using (var add = tmp + 0.5)
+                            using (var mul = add * 255)
+                            using (var netInputImage = (Mat)mul)
+                            {
+                                // Turn into uint8 Cv.Mat
+                                using (var netInputImageUint8 = new Mat())
+                                {
+                                    netInputImage.ConvertTo(netInputImageUint8, MatType.CV_8UC1);
+                                    using (var desiredChannelHeatMapUint8 = new Mat())
+                                    {
+                                        desiredChannelHeatMap.ConvertTo(desiredChannelHeatMapUint8, MatType.CV_8UC1);
+
+                                        // Combining both images
+                                        using (var imageToRender = new Mat())
+                                        {
+                                            Cv.ApplyColorMap(desiredChannelHeatMapUint8, desiredChannelHeatMapUint8, ColormapType.COLORMAP_JET);
+                                            Cv.AddWeighted(netInputImageUint8, 0.5, desiredChannelHeatMapUint8, 0.5, 0d, imageToRender);
+
+                                            // Display image
+                                            Cv.ImShow($"{OpenPose.OpenPoseNameAndVersion()} - Tutorial C++ API", imageToRender);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
                 else
-                {
                     OpenPose.Log("Nullptr or empty datumsPtr found.", Priority.High);
-                }
 
-                var key = Cv.WaitKey(1);
+                var key = (char)Cv.WaitKey(1);
                 return (key == 27);
             }
             catch (Exception e)
@@ -233,11 +265,11 @@ namespace KeyPointsFromImagesMultiGPU
                 // Example: How to use the pose keypoints
                 if (datumsPtr != null && datumsPtr.TryGet(out var data) && !data.Empty)
                 {
-                    var temp = data.ToArray()[0].Get();
-                    OpenPose.Log($"Body keypoints: {temp.PoseKeyPoints}", Priority.High);
-                    OpenPose.Log($"Face keypoints: {temp.FaceKeyPoints}", Priority.High);
-                    OpenPose.Log($"Left hand keypoints: {temp.HandKeyPoints[0]}", Priority.High);
-                    OpenPose.Log($"Right hand keypoints: {temp.HandKeyPoints[1]}", Priority.High);
+                    var poseHeatMaps = data.ToArray()[0].Get().PoseHeatMaps;
+                    var numberChannels = poseHeatMaps.GetSize(0);
+                    var height = poseHeatMaps.GetSize(1);
+                    var width = poseHeatMaps.GetSize(2);
+                    OpenPose.Log($"Body heatmaps has {numberChannels} channels, and each channel has a dimension of {width} x {height} pixels.", Priority.High);
                 }
                 else
                 {
@@ -257,120 +289,42 @@ namespace KeyPointsFromImagesMultiGPU
                 OpenPose.Log("Starting OpenPose demo...", Priority.High);
                 using (var opTimer = OpenPose.GetTimerInit())
                 {
+                    // Required flags to enable heatmaps
+                    Flags.HeatmapsAddParts = true;
+                    Flags.HeatmapsAddBackground = true;
+                    Flags.HeatmapsAddPAFs = true;
+                    Flags.HeatmapsScale = 2;
+
                     using (var opWrapper = new Wrapper<Datum>(ThreadManagerMode.Asynchronous))
                     {
                         // Configuring OpenPose
                         OpenPose.Log("Configuring OpenPose...", Priority.High);
                         ConfigureWrapper(opWrapper);
 
-                        // Increase maximum wrapper queue size
-                        if (Flags.LatencyIsIrrelevantAndComputerWithLotsOfRam)
-                            opWrapper.SetDefaultMaxSizeQueues(long.MaxValue);
-
                         // Starting OpenPose
                         OpenPose.Log("Starting thread(s)...", Priority.High);
                         opWrapper.Start();
 
-                        // Read frames on directory
-                        var imagePaths = OpenPose.GetFilesOnDirectory(Flags.ImageDir, Extensions.Images);
-
-                        // Process and display images
-                        // Option a) Harder to implement but the fastest method
-                        // Create 2 different threads:
-                        //     1. One pushing images to OpenPose all the time.
-                        //     2. A second one retrieving those frames.
-                        // Option b) Much easier and faster to implement but slightly slower runtime performance
-                        if (!Flags.LatencyIsIrrelevantAndComputerWithLotsOfRam)
+                        // Process and display image
+                        using (var imageToProcess = Cv.ImRead(ImagePath))
+                        using (var datumProcessed = opWrapper.EmplaceAndPop(imageToProcess))
                         {
-                            // Read number of GPUs in your system
-                            var numberGPUs = OpenPose.GetGpuNumber();
-
-                            for (var imageBaseId = 0; imageBaseId < imagePaths.Length; imageBaseId += numberGPUs)
+                            if (datumProcessed != null)
                             {
-                                // Read and push images into OpenPose wrapper
-                                for (var gpuId = 0; gpuId < numberGPUs; gpuId++)
+                                PrintKeypoints(datumProcessed);
+                                if (!Flags.NoDisplay)
                                 {
-                                    var imageId = imageBaseId + gpuId;
-                                    if (imageId < imagePaths.Length)
-                                    {
-                                        var imagePath = imagePaths[imageId];
-                                        // Faster alternative that moves imageToProcess
-                                        using (var imageToProcess = Cv.ImRead(imagePath))
-                                            opWrapper.WaitAndEmplace(imageToProcess);
-                                        // // Slower but safer alternative that copies imageToProcess
-                                        // const auto imageToProcess = cv::imread(imagePath);
-                                        // opWrapper.waitAndPush(imageToProcess);
-                                    }
-                                }
-
-                                // Retrieve processed results from OpenPose wrapper
-                                for (var gpuId = 0; gpuId < numberGPUs; gpuId++)
-                                {
-                                    var imageId = imageBaseId + gpuId;
-                                    if (imageId < imagePaths.Length)
-                                    {
-                                        var status = opWrapper.WaitAndPop(out var datumProcessed);
-                                        if (status && datumProcessed != null)
-                                        {
-                                            PrintKeypoints(datumProcessed);
-                                            if (!Flags.NoDisplay)
-                                            {
-                                                var userWantsToExit = Display(datumProcessed);
-                                                if (userWantsToExit)
-                                                {
-                                                    OpenPose.Log("User pressed Esc to exit demo.", Priority.High);
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                        else
-                                            OpenPose.Log("Image could not be processed.", Priority.High);
-                                    }
-                                }
-                            }
-                        }
-                        // Option c) Even easier and faster to implement than option b. In addition, its runtime performance should
-                        // be slightly faster too, but:
-                        //  - Latency will hugely increase (no frames will be processed until they have all been read).
-                        //  - The program might go out of RAM memory with long videos or folders with many images (so the computer
-                        //    might freeze).
-                        else
-                        {
-                            // Read and push images into OpenPose wrapper
-                            OpenPose.Log("Loading images into OpenPose wrapper...", Priority.High);
-                            foreach (var imagePath in imagePaths)
-                            {
-                                // Faster alternative that moves imageToProcess
-                                using (var imageToProcess = Cv.ImRead(imagePath))
-                                    opWrapper.WaitAndEmplace(imageToProcess);
-                                // // Slower but safer alternative that copies imageToProcess
-                                // const auto imageToProcess = cv::imread(imagePath);
-                                // opWrapper.waitAndPush(imageToProcess);
-                            }
-
-                            // Retrieve processed results from OpenPose wrapper
-                            OpenPose.Log("Retrieving results from OpenPose wrapper...", Priority.High);
-                            for (var imageId = 0; imageId < imagePaths.Length; imageId++)
-                            {
-                                var status = opWrapper.WaitAndPop(out var datumProcessed);
-                                if (status && datumProcessed != null)
-                                {
-                                    PrintKeypoints(datumProcessed);
-                                    if (!Flags.NoDisplay)
-                                    {
-                                        var userWantsToExit = Display(datumProcessed);
-                                        if (userWantsToExit)
-                                        {
-                                            OpenPose.Log("User pressed Esc to exit demo.", Priority.High);
+                                    var numberChannels = datumProcessed.Get().ToArray()[0].Get().PoseHeatMaps.GetSize(0);
+                                    for (var desiredChannel = 0; desiredChannel < numberChannels; desiredChannel++)
+                                        if (Display(datumProcessed, desiredChannel))
                                             break;
-                                        }
-                                    }
                                 }
-                                else
-                                    OpenPose.Log("Image could not be processed.", Priority.High);
                             }
                         }
                     }
+
+                    // Info
+                    OpenPose.Log("NOTE: In addition with the user flags, this demo has auto-selected the following flags:\n `--heatmaps_add_parts --heatmaps_add_bkg --heatmaps_add_PAFs`", Priority.High);
 
                     // Measuring total time
                     OpenPose.PrintTime(opTimer, "OpenPose demo successfully finished. Total time: ", " seconds.", Priority.High);

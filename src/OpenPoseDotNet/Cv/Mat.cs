@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
+using System.Threading;
 
 // ReSharper disable once CheckNamespace
 namespace OpenPoseDotNet
@@ -10,6 +12,16 @@ namespace OpenPoseDotNet
     {
 
         #region Constructors
+
+        public Mat()
+        {
+            this.NativePtr = NativeMethods.op_3rdparty_cv_Mat_new();
+        }
+
+        public Mat(int rows, int cols, int type, IntPtr data)
+        {
+            this.NativePtr = NativeMethods.op_3rdparty_cv_Mat_new2(rows, cols, type, data);
+        }
 
         internal Mat(IntPtr ptr, bool isEnabledDispose = true) :
             base(isEnabledDispose)
@@ -26,7 +38,7 @@ namespace OpenPoseDotNet
             get
             {
                 this.ThrowIfDisposed();
-                return NativeMethods.op_3rdparty_cv_mat_channels(this.NativePtr);
+                return NativeMethods.op_3rdparty_cv_Mat_channels(this.NativePtr);
             }
         }
 
@@ -35,7 +47,7 @@ namespace OpenPoseDotNet
             get
             {
                 this.ThrowIfDisposed();
-                return NativeMethods.op_3rdparty_cv_mat_cols(this.NativePtr);
+                return NativeMethods.op_3rdparty_cv_Mat_cols(this.NativePtr);
             }
         }
 
@@ -44,7 +56,7 @@ namespace OpenPoseDotNet
             get
             {
                 this.ThrowIfDisposed();
-                return NativeMethods.op_3rdparty_cv_mat_empty(this.NativePtr);
+                return NativeMethods.op_3rdparty_cv_Mat_empty(this.NativePtr);
             }
         }
 
@@ -53,7 +65,7 @@ namespace OpenPoseDotNet
             get
             {
                 this.ThrowIfDisposed();
-                return NativeMethods.op_3rdparty_cv_mat_rows(this.NativePtr);
+                return NativeMethods.op_3rdparty_cv_Mat_rows(this.NativePtr);
             }
         }
 
@@ -62,7 +74,7 @@ namespace OpenPoseDotNet
             get
             {
                 this.ThrowIfDisposed();
-                var value = NativeMethods.op_3rdparty_cv_mat_type(this.NativePtr);
+                var value = NativeMethods.op_3rdparty_cv_Mat_type(this.NativePtr);
                 return new MatType(value);
             }
         }
@@ -70,6 +82,18 @@ namespace OpenPoseDotNet
         #endregion
 
         #region Methods
+
+        public void ConvertTo(Mat m, int rtype, double alpha = 1, double beta = 0)
+        {
+            this.ThrowIfDisposed();
+
+            if (m == null)
+                throw new ArgumentNullException(nameof(m));
+
+            m.ThrowIfDisposed();
+
+            NativeMethods.op_3rdparty_cv_Mat_convertTo(this.NativePtr, m.NativePtr, rtype, alpha, beta);
+        }
 
         public Bitmap ToBitmap()
         {
@@ -103,11 +127,11 @@ namespace OpenPoseDotNet
                 var scan0 = data.Scan0;
 
                 var line = channels * width;
-                var src = NativeMethods.op_3rdparty_cv_mat_data(this.NativePtr);
+                var src = NativeMethods.op_3rdparty_cv_Mat_data(this.NativePtr);
 
                 unsafe
                 {
-                    var ps = (byte*) scan0;
+                    var ps = (byte*)scan0;
                     for (var h = 0; h < height; h++)
                         NativeMethods.cstd_memcpy(ps + stride * h, src + h * line, line);
                 }
@@ -128,6 +152,43 @@ namespace OpenPoseDotNet
 
         #region Overrides
 
+        #region Operators
+
+        public static MatExpr operator +(Mat lhs, double rhs)
+        {
+            if (lhs == null)
+                throw new ArgumentNullException(nameof(lhs));
+
+            lhs.ThrowIfDisposed();
+
+            var ret = NativeMethods.op_3rdparty_cv_Mat_operator_add(lhs.NativePtr, rhs);
+            return new MatExpr(ret);
+        }
+
+        public static MatExpr operator *(Mat lhs, int rhs)
+        {
+            if (lhs == null)
+                throw new ArgumentNullException(nameof(lhs));
+
+            lhs.ThrowIfDisposed();
+
+            var ret = NativeMethods.op_3rdparty_cv_Mat_operator_multiply_int32_t(lhs.NativePtr, rhs);
+            return new MatExpr(ret);
+        }
+
+        public static MatExpr operator *(Mat lhs, double rhs)
+        {
+            if (lhs == null)
+                throw new ArgumentNullException(nameof(lhs));
+
+            lhs.ThrowIfDisposed();
+
+            var ret = NativeMethods.op_3rdparty_cv_Mat_operator_multiply_double(lhs.NativePtr, rhs);
+            return new MatExpr(ret);
+        }
+
+        #endregion
+
         /// <summary>
         /// Releases all unmanaged resources.
         /// </summary>
@@ -138,7 +199,7 @@ namespace OpenPoseDotNet
             if (this.NativePtr == IntPtr.Zero)
                 return;
 
-            NativeMethods.op_3rdparty_cv_mat_delete(this.NativePtr);
+            NativeMethods.op_3rdparty_cv_Mat_delete(this.NativePtr);
         }
 
         #endregion

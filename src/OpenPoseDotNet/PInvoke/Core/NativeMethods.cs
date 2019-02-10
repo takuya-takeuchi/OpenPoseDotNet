@@ -43,6 +43,9 @@ namespace OpenPoseDotNet
         public static extern uint op_core_Array_float_getVolume(IntPtr array);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern IntPtr op_core_Array_float_getPtr(IntPtr array);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool op_core_Array_float_empty(IntPtr array);
 
@@ -77,6 +80,9 @@ namespace OpenPoseDotNet
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool op_core_Array_double_empty(IntPtr array);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern IntPtr op_core_Array_double_getPtr(IntPtr array);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern double op_core_Array_double_operator_indexes(IntPtr array, IntPtr indexes);
