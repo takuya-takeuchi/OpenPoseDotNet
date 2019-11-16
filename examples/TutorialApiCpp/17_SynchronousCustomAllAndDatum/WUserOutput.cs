@@ -70,7 +70,7 @@ namespace SynchronousCustomAll
                             // Display rendered output image
                             Cv.ImShow($"{OpenPose.OpenPoseNameAndVersion()} - Tutorial C++ API", cvMat);
                             // Display image and sleeps at least 1 ms (it usually sleeps ~5-10 msec to display the image)
-                            var key = (char)Cv.WaitKey(500);
+                            var key = (char)Cv.WaitKey(1);
                             if (key == 27)
                                 this.Stop();
                         }
