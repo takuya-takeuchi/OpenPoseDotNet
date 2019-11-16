@@ -7,7 +7,7 @@ project(${PROJ_NAME} VERSION 0.0.0)
 set(VERSION_MAJOR 1)
 set(VERSION_MINOR 4)
 set(VERSION_PATCH 0)
-set(VERSION_DATE 20190115)
+set(VERSION_DATE 20190210)
 
 # Only GCC requires -fPIC
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
@@ -51,11 +51,11 @@ configure_file(
 # include 3rdparty libraries
 if (MSVC OR MSYS OR MINGW)
     set(STATIC_LIBRARIES
-        ${OPENPOSEDOTNET_ROOT_DIR}/openpose/3rdparty/windows/opencv/x64/vc14/lib/opencv_world310.lib
+        ${OPENPOSEDOTNET_ROOT_DIR}/openpose/3rdparty/windows/opencv/x64/vc14/lib/opencv_world401.lib
         optimized ${OPENPOSEDOTNET_ROOT_DIR}/openpose/3rdparty/windows/caffe3rdparty/lib/gflags.lib
-        optimized ${OPENPOSEDOTNET_ROOT_DIR}/openpose/build/src/openpose/Release/openpose.lib
+        optimized ${OPENPOSEDOTNET_ROOT_DIR}/openpose/build_win/src/openpose/Release/openpose.lib
         debug ${OPENPOSEDOTNET_ROOT_DIR}/openpose/3rdparty/windows/caffe3rdparty/lib/gflagsd.lib
-        debug ${OPENPOSEDOTNET_ROOT_DIR}/openpose/build/src/openpose/Debug/openposed.lib
+        debug ${OPENPOSEDOTNET_ROOT_DIR}/openpose/build_win/src/openpose/Debug/openposed.lib
     )
 elseif(APPLE)
     set(STATIC_LIBRARIES
@@ -63,17 +63,17 @@ elseif(APPLE)
         opencv_imgcodecs
         opencv_highgui
         optimized gflags
-        optimized ${OPENPOSEDOTNET_ROOT_DIR}/openpose/build/src/openpose/libopenpose.dylib
+        optimized ${OPENPOSEDOTNET_ROOT_DIR}/openpose/build_osx/src/openpose/libopenpose.dylib
         debug gflagsd
-        debug ${OPENPOSEDOTNET_ROOT_DIR}/openpose/build/src/openpose/libopenposed.dylib
+        debug ${OPENPOSEDOTNET_ROOT_DIR}/openpose/build_osx/src/openpose/libopenposed.dylib
     )
 elseif(UNIX AND NOT APPLE)
     set(STATIC_LIBRARIES
         opencv_imgproc
         optimized gflags
-        optimized ${OPENPOSEDOTNET_ROOT_DIR}/openpose/build/src/openpose/libopenpose.so
+        optimized ${OPENPOSEDOTNET_ROOT_DIR}/openpose_linux/build/src/openpose/libopenpose.so
         debug gflagsd
-        debug ${OPENPOSEDOTNET_ROOT_DIR}/openpose/build/src/openpose/libopenposed.so
+        debug ${OPENPOSEDOTNET_ROOT_DIR}/openpose_linux/build/src/openpose/libopenposed.so
     )
 else()
     message(FATAL_ERROR "Failed to link library")

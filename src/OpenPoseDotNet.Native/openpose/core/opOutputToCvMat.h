@@ -13,10 +13,10 @@ DLLEXPORT void op_core_OpOutputToCvMat_delete(op::OpOutputToCvMat* mat)
     delete mat;
 }
 
-DLLEXPORT cv::Mat* op_core_OpOutputToCvMat_formatToCvMat(const op::OpOutputToCvMat* mat, const op::Array<float>* outputData)
+DLLEXPORT cv::Mat* op_core_OpOutputToCvMat_formatToCvMat(op::OpOutputToCvMat* mat, const op::Array<float>* outputData)
 {
-    auto& tmp = *outputData;
-    auto ret = mat->formatToCvMat(tmp);
+    const auto& tmp = *outputData;
+    const auto ret = mat->formatToCvMat(tmp);
     return new cv::Mat(ret);
 }
 

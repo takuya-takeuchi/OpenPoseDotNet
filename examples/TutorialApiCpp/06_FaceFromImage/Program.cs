@@ -305,7 +305,7 @@ namespace FaceFromImage
                     }
 
                     // Info
-                    OpenPose.Log("NOTE: In addition with the user flags, this demo has auto-selected the following flags:\n\t`--body_disable --face --face_detector 2`", Priority.High);
+                    OpenPose.Log("NOTE: In addition with the user flags, this demo has auto-selected the following flags:\n\t`--body 0 --face --face_detector 2`", Priority.High);
 
                     // Measuring total time
                     OpenPose.PrintTime(opTimer, "OpenPose demo successfully finished. Total time: ", " seconds.", Priority.High);

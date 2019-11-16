@@ -13,7 +13,7 @@ DLLEXPORT void op_core_CvMatToOpInput_delete(op::CvMatToOpInput* input)
     delete input;
 }
 
-DLLEXPORT std::vector<op::Array<float>>* op_core_CvMatToOpInput_createArray(const op::CvMatToOpInput* input,
+DLLEXPORT std::vector<op::Array<float>>* op_core_CvMatToOpInput_createArray(op::CvMatToOpInput* input,
                                                                             const cv::Mat* cvInputData,
                                                                             const std::vector<double>* scaleInputToNetInputs,
                                                                             const std::vector<op::Point<int>>* netInputSizes)
