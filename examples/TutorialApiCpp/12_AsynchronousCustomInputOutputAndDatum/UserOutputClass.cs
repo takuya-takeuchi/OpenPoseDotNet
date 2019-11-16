@@ -22,7 +22,8 @@ namespace AsynchronousLoopCustomInputAndOutput
                 {
                     // Display image and sleeps at least 1 ms (it usually sleeps ~5-10 msec to display the image)
                     var temp = data.ToArray()[0].Get();
-                    Cv.ImShow($"{OpenPose.OpenPoseNameAndVersion()} - Tutorial C++ API", temp.CvOutputData);
+                    using (var cvMat = OpenPose.OP_OP2CVCONSTMAT(temp.CvOutputData))
+                        Cv.ImShow($"{OpenPose.OpenPoseNameAndVersion()} - Tutorial C++ API", cvMat);
                 }
                 else
                     OpenPose.Log("Nullptr or empty datumsPtr found.", Priority.High);

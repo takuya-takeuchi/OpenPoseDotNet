@@ -61,7 +61,7 @@ namespace KeyPointsFromImages
                 // Configuring OpenPose
 
                 // logging_level
-                OpenPose.Check(0 <= Flags.LoggingLevel && Flags.LoggingLevel <= 255, "Wrong logging_level value.");
+                OpenPose.CheckBool(0 <= Flags.LoggingLevel && Flags.LoggingLevel <= 255, "Wrong logging_level value.");
                 ConfigureLog.PriorityThreshold = (Priority)Flags.LoggingLevel;
                 Profiler.SetDefaultX((ulong)Flags.ProfileSpeed);
 
@@ -196,7 +196,8 @@ namespace KeyPointsFromImages
                 {
                     // Display image and sleeps at least 1 ms (it usually sleeps ~5-10 msec to display the image)
                     var temp = data.ToArray();
-                    Cv.ImShow($"{OpenPose.OpenPoseNameAndVersion()} - Tutorial C++ API", temp[0].Get().CvOutputData);
+                    using (var cvMat = OpenPose.OP_OP2CVCONSTMAT(temp[0].Get().CvOutputData)) 
+                        Cv.ImShow($"{OpenPose.OpenPoseNameAndVersion()} - Tutorial C++ API", cvMat);
                 }
                 else
                 {
@@ -260,7 +261,8 @@ namespace KeyPointsFromImages
                         foreach (var imagePath in imagePaths)
                         {
                             // Process and display image
-                            using (var imageToProcess = Cv.ImRead(imagePath))
+                            using (var cvImageToProcess = Cv.ImRead(imagePath))
+                            using (var imageToProcess = OpenPose.OP_CV2OPCONSTMAT(cvImageToProcess))
                             using (var datumProcessed = opWrapper.EmplaceAndPop(imageToProcess))
                             {
                                 if (datumProcessed != null)

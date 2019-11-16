@@ -60,7 +60,7 @@ namespace KeyPointsFromHeatmaps
                 // Configuring OpenPose
 
                 // logging_level
-                OpenPose.Check(0 <= Flags.LoggingLevel && Flags.LoggingLevel <= 255, "Wrong logging_level value.");
+                OpenPose.CheckBool(0 <= Flags.LoggingLevel && Flags.LoggingLevel <= 255, "Wrong logging_level value.");
                 ConfigureLog.PriorityThreshold = (Priority)Flags.LoggingLevel;
                 Profiler.SetDefaultX((ulong)Flags.ProfileSpeed);
 
@@ -196,8 +196,11 @@ namespace KeyPointsFromHeatmaps
                     var datum = datumsPtr.Get().At(0).Get();
 
                     // Display image
-                    Cv.ImShow($"{OpenPose.OpenPoseNameAndVersion()} - Tutorial C++ API", datum.CvOutputData);
-                    Cv.WaitKey(0);
+                    using (var cvMat = OpenPose.OP_OP2CVCONSTMAT(datum.CvOutputData))
+                    {
+                        Cv.ImShow($"{OpenPose.OpenPoseNameAndVersion()} - Tutorial C++ API", cvMat);
+                        Cv.WaitKey(0);
+                    }
                 }
             }
             catch (Exception e)
@@ -238,7 +241,8 @@ namespace KeyPointsFromHeatmaps
                 using (var opTimer = OpenPose.GetTimerInit())
                 {
                     // Image to process
-                    using (var imageToProcess = Cv.ImRead(Flags.ImagePath))
+                    using (var cvImageToProcess = Cv.ImRead(Flags.ImagePath))
+                    using (var imageToProcess = OpenPose.OP_CV2OPCONSTMAT(cvImageToProcess))
                     {
                         // Required flags to disable the OpenPose network
                         Flags.Body = 2;

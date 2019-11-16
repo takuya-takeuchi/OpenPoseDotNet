@@ -18,7 +18,7 @@ namespace OpenPoseDotNet.Tests
             const string file = "OpenPoseTest.cs";
 
             foreach (var priority in Enum.GetValues(typeof(Priority)).Cast<Priority>())
-                OpenPose.DebugLog($"{message}", priority, -1, function, file);
+                OpenPose.LogIfDebug($"{message}", priority, -1, function, file);
         }
 
         [TestMethod]

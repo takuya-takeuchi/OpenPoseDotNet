@@ -17,7 +17,8 @@ namespace AsynchronousCustomOutput
             if (datumsPtr != null && datumsPtr.TryGet(out var data) && !data.Empty)
             {
                 var temp = data.ToArray()[0].Get();
-                Cv.ImShow($"{OpenPose.OpenPoseNameAndVersion()} - Tutorial C++ API", temp.CvOutputData);
+                using (var cvMat = OpenPose.OP_OP2CVCONSTMAT(temp.CvOutputData))
+                    Cv.ImShow($"{OpenPose.OpenPoseNameAndVersion()} - Tutorial C++ API", cvMat);
                 // Display image and sleeps at least 1 ms (it usually sleeps ~5-10 msec to display the image)
             }
             else

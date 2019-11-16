@@ -53,18 +53,18 @@ namespace OpenPoseDotNet
         #region utilities/check
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern void op_check(bool condition,
-                                           byte[] message,
-                                           int line,
-                                           byte[] function,
-                                           byte[] file);
+        public static extern void op_checkBool(bool condition,
+                                               byte[] message,
+                                               int line,
+                                               byte[] function,
+                                               byte[] file);
 
         #endregion
 
         #region utilities/errorAndLog
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern void op_dLog(byte[] message,
+        public static extern void op_opLogIfDebug(byte[] message,
                                                   Priority priority,
                                                   int line,
                                                   byte[] function,
@@ -77,11 +77,11 @@ namespace OpenPoseDotNet
                                            byte[] file);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern void op_log(byte[] message,
-                                         Priority priority,
-                                         int line,
-                                         byte[] function,
-                                         byte[] file);
+        public static extern void op_opLog(byte[] message,
+                                           Priority priority,
+                                           int line,
+                                           byte[] function,
+                                           byte[] file);
 
         #endregion
 

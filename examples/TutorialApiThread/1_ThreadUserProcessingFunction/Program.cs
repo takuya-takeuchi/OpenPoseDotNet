@@ -77,7 +77,7 @@ namespace ThreadUserProcessingFunction
                     // Step 1 - Set logging level
                     // - 0 will output all the logging messages
                     // - 255 will output nothing
-                    OpenPose.Check(0 <= Flags.LoggingLevel && Flags.LoggingLevel <= 255, "Wrong logging_level value.");
+                    OpenPose.CheckBool(0 <= Flags.LoggingLevel && Flags.LoggingLevel <= 255, "Wrong logging_level value.");
                     ConfigureLog.PriorityThreshold = (Priority)Flags.LoggingLevel;
                     // Step 2 - Read GFlags (user defined configuration)
                     // cameraSize

@@ -18,7 +18,7 @@ namespace OpenPoseDotNet
 
         #region Methods
 
-        public Mat FormatToCvMat(Array<float> outputData)
+        public Matrix FormatToCvMat(Array<float> outputData)
         {
             if (outputData == null)
                 throw new ArgumentNullException(nameof(outputData));
@@ -26,7 +26,7 @@ namespace OpenPoseDotNet
             outputData.ThrowIfDisposed();
 
             var ret = NativeMethods.op_core_OpOutputToCvMat_formatToCvMat(this.NativePtr, outputData.NativePtr);
-            return new Mat(ret);
+            return new Matrix(ret);
         }
 
         #region Overrides

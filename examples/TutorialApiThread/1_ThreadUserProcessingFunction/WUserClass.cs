@@ -35,7 +35,8 @@ namespace ThreadUserProcessingFunction
                 // datum.cvOutputData: final cv::Mat to be displayed
                 if (datumsPtr != null)
                     foreach (var datum in datumsPtr)
-                        Cv.BitwiseNot(datum.Get().CvInputData, datum.Get().CvOutputData);
+                        using (var cvOutputData = OpenPose.OP_OP2CVMAT(datum.Get().CvOutputData))
+                            Cv.BitwiseNot(cvOutputData, cvOutputData);
             }
             catch (Exception e)
             {

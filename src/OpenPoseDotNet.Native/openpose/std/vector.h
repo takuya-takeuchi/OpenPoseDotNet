@@ -240,7 +240,7 @@ MAKE_FUNC_CLASS(op::Datum, Datum)
 MAKE_FUNC_CLASS(CustomDatum, CustomDatum)
 MAKE_FUNC_CLASS(std::shared_ptr<op::Datum>, StdSharedPtrOfDatum)
 MAKE_FUNC_CLASS(std::shared_ptr<CustomDatum>, StdSharedPtrOfCustomDatum)
-
 MAKE_FUNC_POINTER(cv::Mat, 3rdparty_opencv_Mat)
+MAKE_FUNC_POINTER(op::Matrix, op_Matrix)
 
 #endif

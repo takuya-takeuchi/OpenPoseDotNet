@@ -74,8 +74,11 @@ namespace BodyFromImageDefault
                 {
                     // Display image
                     var temp = data.ToArray();
-                    Cv.ImShow($"{OpenPose.OpenPoseNameAndVersion()} - Tutorial C++ API", temp[0].Get().CvOutputData);
-                    Cv.WaitKey();
+                    using (var cvMat = OpenPose.OP_OP2CVCONSTMAT(temp[0].Get().CvOutputData))
+                    {
+                        Cv.ImShow($"{OpenPose.OpenPoseNameAndVersion()} - Tutorial C++ API", cvMat);
+                        Cv.WaitKey();
+                    }
                 }
                 else
                 {

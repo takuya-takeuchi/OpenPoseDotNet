@@ -13,7 +13,7 @@ namespace OpenPoseDotNet
 
         #region filestream/filestream
 
-        public static Mat LoadImage(string path, LoadImageFlag flag)
+        public static Matrix LoadImage(string path, LoadImageFlag flag)
         {
             if (path == null)
                 throw new ArgumentNullException(nameof(path));
@@ -22,7 +22,7 @@ namespace OpenPoseDotNet
 
             var pathBytes = Encoding.UTF8.GetBytes(path);
             var ret = NativeMethods.op_loadImage(pathBytes, flag);
-            return new Mat(ret);
+            return new Matrix(ret);
         }
 
         public static DataFormat StringToDataFormat(string dataFormat)

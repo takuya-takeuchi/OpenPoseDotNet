@@ -21,7 +21,7 @@ namespace OpenPoseDotNet
 
         #region Methods
 
-        public void DisplayFrame(Mat frame, int waitKeyValue = -1)
+        public void DisplayFrame(Matrix frame, int waitKeyValue = -1)
         {
             if (frame == null)
                 throw new ArgumentNullException(nameof(frame));

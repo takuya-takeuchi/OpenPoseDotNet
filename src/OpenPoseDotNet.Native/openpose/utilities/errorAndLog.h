@@ -5,16 +5,16 @@
 
 using namespace std;
 
-DLLEXPORT void op_dLog(const char* message,
-                      const op::Priority priority,
-                      const int line,
-                      const char* function,
-                      const char* file)
+DLLEXPORT void op_opLogIfDebug(const char* message,
+                               const op::Priority priority,
+                               const int line,
+                               const char* function,
+                               const char* file)
 {
     const std::string str_message(message);
     const std::string str_function(function == nullptr ? "" : function);
     const std::string str_file(file == nullptr ? "" : file);
-    op::dLog(str_message, priority, line, str_function, str_file);
+    op::opLogIfDebug(str_message, priority, line, str_function, str_file);
 }
 
 DLLEXPORT void op_error(const char* message,
@@ -28,16 +28,16 @@ DLLEXPORT void op_error(const char* message,
     op::error(str_message, line, str_function, str_file);
 }
 
-DLLEXPORT void op_log(const char* message,
-                      const op::Priority priority,
-                      const int line,
-                      const char* function,
-                      const char* file)
+DLLEXPORT void op_opLog(const char* message,
+                        const op::Priority priority,
+                        const int line,
+                        const char* function,
+                        const char* file)
 {
     const std::string str_message(message);
     const std::string str_function(function == nullptr ? "" : function);
     const std::string str_file(file == nullptr ? "" : file);
-    op::log(str_message, priority, line, str_function, str_file);
+    op::opLog(str_message, priority, line, str_function, str_file);
 }
 
 DLLEXPORT std::vector<op::ErrorMode>* op_ConfigureError_getErrorModes()

@@ -47,7 +47,6 @@ configure_file(
     ${CMAKE_CURRENT_BINARY_DIR}/version.rc
     @ONLY)
 
-
 # include 3rdparty libraries
 if (MSVC OR MSYS OR MINGW)
     set(STATIC_LIBRARIES

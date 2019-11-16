@@ -42,11 +42,11 @@ namespace OpenPoseDotNet
 
         #region utilities/check
 
-        public static void Check(bool condition,
-                                 string message,
-                                 int line = -1,
-                                 string function = "",
-                                 string file = "")
+        public static void CheckBool(bool condition,
+                                     string message,
+                                     int line = -1,
+                                     string function = "",
+                                     string file = "")
         {
             if (message == null)
                 throw new ArgumentNullException(nameof(message));
@@ -55,18 +55,18 @@ namespace OpenPoseDotNet
             var functionBytes = Encoding.UTF8.GetBytes(function ?? "");
             var fileBytes = Encoding.UTF8.GetBytes(file ?? "");
 
-            NativeMethods.op_check(condition, messageBytes, line, functionBytes, fileBytes);
+            NativeMethods.op_checkBool(condition, messageBytes, line, functionBytes, fileBytes);
         }
 
         #endregion
 
         #region utilities/errorAndLog
 
-        public static void DebugLog(string message,
-                                    Priority priority = Priority.Max,
-                                    int line = -1,
-                                    string function = "",
-                                    string file = "")
+        public static void LogIfDebug(string message,
+                                      Priority priority = Priority.Max,
+                                      int line = -1,
+                                      string function = "",
+                                      string file = "")
         {
             if (message == null)
                 throw new ArgumentNullException(nameof(message));
@@ -75,7 +75,7 @@ namespace OpenPoseDotNet
             var functionBytes = Encoding.UTF8.GetBytes(function ?? "");
             var fileBytes = Encoding.UTF8.GetBytes(file ?? "");
 
-            NativeMethods.op_dLog(messageBytes, priority, line, functionBytes, fileBytes);
+            NativeMethods.op_opLogIfDebug(messageBytes, priority, line, functionBytes, fileBytes);
         }
 
         public static void Error(string message,
@@ -106,7 +106,7 @@ namespace OpenPoseDotNet
             var functionBytes = Encoding.UTF8.GetBytes(function ?? "");
             var fileBytes = Encoding.UTF8.GetBytes(file ?? "");
 
-            NativeMethods.op_log(messageBytes, priority, line, functionBytes, fileBytes);
+            NativeMethods.op_opLog(messageBytes, priority, line, functionBytes, fileBytes);
         }
 
         #endregion

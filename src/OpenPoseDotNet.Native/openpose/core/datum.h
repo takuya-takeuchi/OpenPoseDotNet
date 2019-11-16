@@ -33,12 +33,12 @@ DLLEXPORT unsigned long long op_core_datum_get_frameNumber(const op::Datum* datu
     return datum->frameNumber;
 }
 
-DLLEXPORT cv::Mat* op_core_datum_get_cvInputData(op::Datum* datum)
+DLLEXPORT op::Matrix* op_core_datum_get_cvInputData(op::Datum* datum)
 {
     return &datum->cvInputData;
 }
 
-DLLEXPORT void op_core_datum_set_cvInputData(op::Datum* datum, cv::Mat* mat)
+DLLEXPORT void op_core_datum_set_cvInputData(op::Datum* datum, op::Matrix* mat)
 {
     datum->cvInputData = *mat;
 }
@@ -48,12 +48,12 @@ DLLEXPORT std::vector<op::Array<float>>* op_core_datum_get_inputNetData(op::Datu
     return &datum->inputNetData;
 }
 
-DLLEXPORT cv::Mat* op_core_datum_get_cvOutputData(op::Datum* datum)
+DLLEXPORT op::Matrix* op_core_datum_get_cvOutputData(op::Datum* datum)
 {
     return &datum->cvOutputData;
 }
 
-DLLEXPORT void op_core_datum_set_cvOutputData(op::Datum* datum, cv::Mat* mat)
+DLLEXPORT void op_core_datum_set_cvOutputData(op::Datum* datum, op::Matrix* mat)
 {
     datum->cvOutputData = *mat;
 }

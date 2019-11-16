@@ -26,7 +26,7 @@ namespace OpenPoseDotNet
 
         #region Properties
 
-        public Mat CvInputData
+        public Matrix CvInputData
         {
             get
             {
@@ -34,7 +34,7 @@ namespace OpenPoseDotNet
                 var ret = NativeMethods.op_core_datum_get_cvInputData(this.NativePtr);
 
                 // Datum.cvInputData is not pointer. Therefore, this object must not be disposed.
-                return new Mat(ret, false);
+                return new Matrix(ret, false);
             }
             set
             {
@@ -44,7 +44,7 @@ namespace OpenPoseDotNet
             }
         }
 
-        public Mat CvOutputData
+        public Matrix CvOutputData
         {
             get
             {
@@ -52,7 +52,7 @@ namespace OpenPoseDotNet
                 var ret = NativeMethods.op_core_datum_get_cvOutputData(this.NativePtr);
 
                 // Datum.cvOutputData is not pointer. Therefore, this object must not be disposed.
-                return new Mat(ret, false);
+                return new Matrix(ret, false);
             }
             set
             {

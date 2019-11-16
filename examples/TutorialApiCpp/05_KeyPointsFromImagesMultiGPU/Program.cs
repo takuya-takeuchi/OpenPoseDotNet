@@ -76,7 +76,7 @@ namespace KeyPointsFromImagesMultiGPU
                 // Configuring OpenPose
 
                 // logging_level
-                OpenPose.Check(0 <= Flags.LoggingLevel && Flags.LoggingLevel <= 255, "Wrong logging_level value.");
+                OpenPose.CheckBool(0 <= Flags.LoggingLevel && Flags.LoggingLevel <= 255, "Wrong logging_level value.");
                 ConfigureLog.PriorityThreshold = (Priority)Flags.LoggingLevel;
                 Profiler.SetDefaultX((ulong)Flags.ProfileSpeed);
 
@@ -211,7 +211,8 @@ namespace KeyPointsFromImagesMultiGPU
                 {
                     // Display image and sleeps at least 1 ms (it usually sleeps ~5-10 msec to display the image)
                     var temp = data.ToArray()[0].Get();
-                    Cv.ImShow($"{OpenPose.OpenPoseNameAndVersion()} - Tutorial C++ API", temp.CvOutputData);
+                    using (var cvMat = OpenPose.OP_OP2CVCONSTMAT(temp.CvOutputData))
+                        Cv.ImShow($"{OpenPose.OpenPoseNameAndVersion()} - Tutorial C++ API", cvMat);
                 }
                 else
                 {
@@ -297,7 +298,8 @@ namespace KeyPointsFromImagesMultiGPU
                                     {
                                         var imagePath = imagePaths[imageId];
                                         // Faster alternative that moves imageToProcess
-                                        using (var imageToProcess = Cv.ImRead(imagePath))
+                                        using (var cvImageToProcess = Cv.ImRead(imagePath))
+                                        using (var imageToProcess = OpenPose.OP_CV2OPCONSTMAT(cvImageToProcess))
                                             opWrapper.WaitAndEmplace(imageToProcess);
                                         // // Slower but safer alternative that copies imageToProcess
                                         // const auto imageToProcess = cv::imread(imagePath);
@@ -343,7 +345,8 @@ namespace KeyPointsFromImagesMultiGPU
                             foreach (var imagePath in imagePaths)
                             {
                                 // Faster alternative that moves imageToProcess
-                                using (var imageToProcess = Cv.ImRead(imagePath))
+                                using (var cvImageToProcess = Cv.ImRead(imagePath))
+                                using (var imageToProcess = OpenPose.OP_CV2OPCONSTMAT(cvImageToProcess))
                                     opWrapper.WaitAndEmplace(imageToProcess);
                                 // // Slower but safer alternative that copies imageToProcess
                                 // const auto imageToProcess = cv::imread(imagePath);

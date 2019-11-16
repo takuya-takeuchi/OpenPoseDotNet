@@ -34,7 +34,8 @@ namespace SynchronousCustomAll
                 // datum.poseKeypoints: Array<float> with the estimated pose
                 if (datums != null && datums.Length != 0)
                     foreach (var datum in datums)
-                        Cv.BitwiseNot(datum.Get().CvOutputData, datum.Get().CvOutputData);
+                        using (var cvOutputData = OpenPose.OP_OP2CVMAT(datum.Get().CvOutputData))
+                            Cv.BitwiseNot(cvOutputData, cvOutputData);
             }
             catch (Exception e)
             {

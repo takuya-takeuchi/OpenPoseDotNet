@@ -66,12 +66,15 @@ namespace SynchronousCustomOutput
                     if (!Flags.NoDisplay)
                     {
                         // Display rendered output image
-                        Cv.ImShow($"{OpenPose.OpenPoseNameAndVersion()} - Tutorial C++ API", datum.CvOutputData);
+                        using (var cvMat = OpenPose.OP_OP2CVCONSTMAT(datum.CvOutputData))
+                        {
+                            Cv.ImShow($"{OpenPose.OpenPoseNameAndVersion()} - Tutorial C++ API", cvMat);
 
-                        // Display image and sleeps at least 1 ms (it usually sleeps ~5-10 msec to display the image)
-                        var key = (char)Cv.WaitKey(1);
-                        if (key == 27)
-                            this.Stop();
+                            // Display image and sleeps at least 1 ms (it usually sleeps ~5-10 msec to display the image)
+                            var key = (char)Cv.WaitKey(1);
+                            if (key == 27)
+                                this.Stop();
+                        }
                     }
                 }
             }

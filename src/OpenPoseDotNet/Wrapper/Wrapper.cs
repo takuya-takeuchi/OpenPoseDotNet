@@ -123,7 +123,7 @@ namespace OpenPoseDotNet
             NativeMethods.op_wrapper_disableMultiThreading(this._DataType, this.NativePtr);
         }
 
-        public StdSharedPtr<StdVector<StdSharedPtr<T>>> EmplaceAndPop(Mat mat)
+        public StdSharedPtr<StdVector<StdSharedPtr<T>>> EmplaceAndPop(Matrix mat)
         {
             if (mat == null)
                 throw new ArgumentNullException(nameof(mat));
@@ -280,7 +280,7 @@ namespace OpenPoseDotNet
             return NativeMethods.op_wrapper_waitAndEmplace(this._DataType, this.NativePtr, datums.NativePtr);
         }
 
-        public bool WaitAndEmplace(Mat mat)
+        public bool WaitAndEmplace(Matrix mat)
         {
             if (mat == null)
                 throw new ArgumentNullException(nameof(mat));

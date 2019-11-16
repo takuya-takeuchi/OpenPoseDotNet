@@ -14,7 +14,7 @@ DLLEXPORT void op_core_CvMatToOpOutput_delete(op::CvMatToOpOutput* output)
 }
 
 DLLEXPORT op::Array<float>* op_core_CvMatToOpOutput_createArray(op::CvMatToOpOutput* output,
-                                                                const cv::Mat* cvInputData,
+                                                                const op::Matrix* cvInputData,
                                                                 const double scaleInputToOutput,
                                                                 const op::Point<int>* outputResolution)
 {

@@ -68,7 +68,7 @@ namespace HeatmapsFromImage
                 // Configuring OpenPose
 
                 // logging_level
-                OpenPose.Check(0 <= Flags.LoggingLevel && Flags.LoggingLevel <= 255, "Wrong logging_level value.");
+                OpenPose.CheckBool(0 <= Flags.LoggingLevel && Flags.LoggingLevel <= 255, "Wrong logging_level value.");
                 ConfigureLog.PriorityThreshold = (Priority)Flags.LoggingLevel;
                 Profiler.SetDefaultX((ulong)Flags.ProfileSpeed);
 
@@ -308,7 +308,8 @@ namespace HeatmapsFromImage
                         opWrapper.Start();
 
                         // Process and display image
-                        using (var imageToProcess = Cv.ImRead(ImagePath))
+                        using (var cvImageToProcess = Cv.ImRead(ImagePath))
+                        using (var imageToProcess = OpenPose.OP_CV2OPCONSTMAT(cvImageToProcess))
                         using (var datumProcessed = opWrapper.EmplaceAndPop(imageToProcess))
                         {
                             if (datumProcessed != null)

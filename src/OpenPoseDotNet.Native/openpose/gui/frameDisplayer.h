@@ -15,7 +15,7 @@ DLLEXPORT void op_FrameDisplayer_delete(op::FrameDisplayer* displayer)
     delete displayer;
 }
 
-DLLEXPORT void op_FrameDisplayer_displayFrame(op::FrameDisplayer* displayer, cv::Mat* frame, const int waitKeyValue)
+DLLEXPORT void op_FrameDisplayer_displayFrame(op::FrameDisplayer* displayer, op::Matrix* frame, const int waitKeyValue)
 {
     const auto& f = *frame;
     displayer->displayFrame(f, waitKeyValue);

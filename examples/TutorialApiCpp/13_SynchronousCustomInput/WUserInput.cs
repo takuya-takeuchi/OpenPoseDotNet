@@ -60,8 +60,9 @@ namespace SynchronousCustomInput
                     datum.Reset(new Datum());
 
                     // Fill datum
-                    using (var mat = Cv.ImRead(this._ImageFiles[this._Counter++]))
-                        datum.Get().CvInputData = mat;
+                    using (var cvInputData = Cv.ImRead(this._ImageFiles[this._Counter++]))
+                    using (var inputData = OpenPose.OP_CV2OPCONSTMAT(cvInputData))
+                        datum.Get().CvInputData = inputData;
 
                     // If empty frame -> return nullptr
                     if (datum.Get().CvInputData.Empty)
