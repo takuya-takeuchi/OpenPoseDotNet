@@ -10,7 +10,7 @@ if [ $# -ne 1 ]; then
 fi
 
 CUDDIR=`pwd`
-OUTPUT=build
+OUTPUT=build_linux
 cd openpose
 
 # *******************************************************************

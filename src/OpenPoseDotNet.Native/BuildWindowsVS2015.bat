@@ -10,7 +10,7 @@ if "%1"=="" (
 )
 
 set CURDIR=%cd%
-set DIR=build
+set DIR=build_win
 mkdir %DIR%
 cd %DIR%
 cmake -G "Visual Studio 14 2015 Win64" ^

@@ -10,7 +10,7 @@ if "%1"=="" (
 )
 
 set CURDIR=%cd%
-set OUTPUT=build
+set OUTPUT=build_win
 cd openpose
 if not exist %OUTPUT% (
    mkdir %OUTPUT%
