@@ -147,7 +147,7 @@ namespace AsynchronousLoopCustomInputAndOutput
                                                      OpenPose.StringToDataFormat(Flags.WriteKeyPointFormat),
                                                      Flags.WriteJson,
                                                      Flags.WriteCocoJson,
-                                                     Flags.WriteCocoFootJson,
+                                                     Flags.WriteCocoJsonVariants,
                                                      Flags.WriteCocoJsonVariant,
                                                      Flags.WriteImages,
                                                      Flags.WriteImagesFormat,

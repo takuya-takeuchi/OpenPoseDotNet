@@ -14,7 +14,7 @@ namespace OpenPoseDotNet
                                                                DataFormat writeKeyPointFormat,
                                                                byte[] writeJson,
                                                                byte[] writeCocoJson,
-                                                               byte[] writeCocoFootJson,
+                                                               int writeCocoJsonVariants,
                                                                int writeCocoJsonVariant,
                                                                byte[] writeImages,
                                                                byte[] writeImagesFormat,

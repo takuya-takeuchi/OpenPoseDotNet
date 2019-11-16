@@ -15,7 +15,7 @@ namespace OpenPoseDotNet
                                    DataFormat writeKeyPointFormat = DataFormat.Xml,
                                    string writeJson = "",
                                    string writeCocoJson = "",
-                                   string writeCocoFootJson = "",
+                                   int writeCocoJsonVariants = 1,
                                    int writeCocoJsonVariant = 1,
                                    string writeImages = "",
                                    string writeImagesFormat = "",
@@ -32,7 +32,6 @@ namespace OpenPoseDotNet
             var writeKeyPointBytes = Encoding.UTF8.GetBytes(writeKeyPoint ?? "");
             var writeJsonBytes = Encoding.UTF8.GetBytes(writeJson ?? "");
             var writeCocoJsonBytes = Encoding.UTF8.GetBytes(writeCocoJson ?? "");
-            var writeCocoFootJsonBytes = Encoding.UTF8.GetBytes(writeCocoFootJson ?? "");
             var writeImagesBytes = Encoding.UTF8.GetBytes(writeImages ?? "");
             var writeImagesFormatBytes = Encoding.UTF8.GetBytes(writeImagesFormat ?? "");
             var writeVideoBytes = Encoding.UTF8.GetBytes(writeVideo ?? "");
@@ -48,7 +47,7 @@ namespace OpenPoseDotNet
                                                                       writeKeyPointFormat,
                                                                       writeJsonBytes,
                                                                       writeCocoJsonBytes,
-                                                                      writeCocoFootJsonBytes,
+                                                                      writeCocoJsonVariants,
                                                                       writeCocoJsonVariant,
                                                                       writeImagesBytes,
                                                                       writeImagesFormatBytes,

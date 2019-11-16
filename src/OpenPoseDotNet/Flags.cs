@@ -329,6 +329,12 @@ namespace OpenPoseDotNet
             set => NativeMethods.op_flags_set_write_coco_json_variant(value);
         }
 
+        public static int WriteCocoJsonVariants
+        {
+            get => NativeMethods.op_flags_get_write_coco_json_variants();
+            set => NativeMethods.op_flags_set_write_coco_json_variants(value);
+        }
+
         public static int FaceDetector
         {
             get => NativeMethods.op_flags_get_face_detector();
@@ -626,21 +632,6 @@ namespace OpenPoseDotNet
             {
                 var str = Encoding.UTF8.GetBytes(value ?? "");
                 NativeMethods.op_flags_set_write_bvh(str);
-            }
-        }
-
-        public static string WriteCocoFootJson
-        {
-            get
-            {
-                var stdstr = NativeMethods.op_flags_get_write_coco_foot_json();
-                var ret = StringHelper.FromStdString(stdstr, true);
-                return ret;
-            }
-            set
-            {
-                var str = Encoding.UTF8.GetBytes(value ?? "");
-                NativeMethods.op_flags_set_write_coco_foot_json(str);
             }
         }
 

@@ -392,6 +392,12 @@ namespace OpenPoseDotNet
         public static extern void op_flags_set_write_coco_json_variant(int value);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern int op_flags_get_write_coco_json_variants();
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern void op_flags_set_write_coco_json_variants(int value);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern double op_flags_get_write_video_fps();
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
@@ -480,12 +486,6 @@ namespace OpenPoseDotNet
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void op_flags_set_write_bvh(byte[] value);
-
-        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern IntPtr op_flags_get_write_coco_foot_json();
-
-        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern void op_flags_set_write_coco_foot_json(byte[] value);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern IntPtr op_flags_get_write_coco_json();
