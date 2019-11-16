@@ -20,9 +20,9 @@ namespace ThreadUserInputProcessingOutputAndDatum
             // Note: This command will show you flags for other unnecessary 3rdparty files. Check only the flags for the OpenPose
             // executable. E.g., for `openpose.bin`, look for `Flags from examples/openpose/openpose.cpp:`.
             // Debugging/Other
-            Flags.LoggingLevel = 3;                                      // The logging level. Integer in the range [0, 255]. 0 will output any log() message, while
-                                                                         // 255 will not output any. Current OpenPose library messages are in the range 0-4: 1 for
-                                                                         // low priority messages and 4 for important ones.
+            Flags.LoggingLevel = 3;                                      // The logging level. Integer in the range [0, 255]. 0 will output any opLog() message,
+                                                                         // while 255 will not output any. Current OpenPose library messages are in the range 0-4:"
+                                                                         // 1 for low priority messages and 4 for important ones.
             // Producer
             Flags.ImageDir = "examples/media/";                          // Process a directory of images. Read all standard formats (jpg, png, bmp, etc.)..
             // Consumer

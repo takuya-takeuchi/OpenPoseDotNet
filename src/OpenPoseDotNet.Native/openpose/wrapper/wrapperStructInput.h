@@ -18,7 +18,7 @@ DLLEXPORT op::WrapperStructInput* op_wrapperStructInput_new(const op::ProducerTy
                                                             const int numberViews)
 {
     return new op::WrapperStructInput(producerType,
-                                      std::string(producerString),
+                                      op::String(producerString),
                                       frameFirst,
                                       frameStep,
                                       frameLast,
@@ -27,7 +27,7 @@ DLLEXPORT op::WrapperStructInput* op_wrapperStructInput_new(const op::ProducerTy
                                       frameRotate,
                                       framesRepeat,
                                       *cameraResolution,
-                                      std::string(cameraParameterPath),
+                                      op::String(cameraParameterPath),
                                       undistortImage,
                                       numberViews);
 }

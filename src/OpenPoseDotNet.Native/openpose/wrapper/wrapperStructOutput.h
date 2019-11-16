@@ -23,23 +23,23 @@ DLLEXPORT op::WrapperStructOutput* op_wrapperStructOutput_new(const double verbo
                                                               const char* udpPort)
 {
     return new op::WrapperStructOutput(verbose,
-                                       std::string(writeKeypoint),
+                                       op::String(writeKeypoint),
                                        writeKeypointFormat,
-                                       std::string(writeJson),
-                                       std::string(writeCocoJson),
+                                       op::String(writeJson),
+                                       op::String(writeCocoJson),
                                        writeCocoJsonVariants,
                                        writeCocoJsonVariant,
-                                       std::string(writeImages),
-                                       std::string(writeImagesFormat),
-                                       std::string(writeVideo),
+                                       op::String(writeImages),
+                                       op::String(writeImagesFormat),
+                                       op::String(writeVideo),
                                        writeVideoFps,
                                        writeVideoWithAudio,
-                                       std::string(writeHeatMaps),
-                                       std::string(writeHeatMapsFormat),
-                                       std::string(writeVideoAdam),
-                                       std::string(writeBvh),
-                                       std::string(udpHost),
-                                       std::string(udpPort));
+                                       op::String(writeHeatMaps),
+                                       op::String(writeHeatMapsFormat),
+                                       op::String(writeVideoAdam),
+                                       op::String(writeBvh),
+                                       op::String(udpHost),
+                                       op::String(udpPort));
 }
 
 DLLEXPORT void op_wrapperStructOutput_delete(op::WrapperStructOutput* output)

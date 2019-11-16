@@ -45,7 +45,7 @@ DLLEXPORT op::WrapperStructPose* op_wrapperStructPose_new(const op::PoseMode pos
                                      alphaKeypoint,
                                      alphaHeatMap,
                                      defaultPartToRender,
-                                     std::string(modelFolder),
+                                     op::String(modelFolder),
                                      tmp_heatMapTypes,
                                      heatMapScale,
                                      addPartCandidates,
@@ -53,8 +53,8 @@ DLLEXPORT op::WrapperStructPose* op_wrapperStructPose_new(const op::PoseMode pos
                                      numberPeopleMax,
                                      maximizePositives,
                                      fpsMax,
-                                     std::string(protoTxtPath),
-                                     std::string(caffeModelPath),
+                                     op::String(protoTxtPath),
+                                     op::String(caffeModelPath),
                                      upsamplingRatio,
                                      enableGoogleLogging);
 }

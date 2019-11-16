@@ -7,7 +7,7 @@ DLLEXPORT op::Point<int>* op_flagsToPoint(const char* pointString, const char* p
 {
     const std::string str_pointString(pointString);
     const std::string str_pointExample(pointExample);
-    const auto ret = op::flagsToPoint(str_pointString, str_pointExample);
+    const auto ret = op::flagsToPoint(op::String(str_pointString), op::String(str_pointExample));
     return new op::Point<int>(ret);
 }
 
@@ -15,7 +15,7 @@ DLLEXPORT void op_flagsToPoint_xy(const char* pointString, const char* pointExam
 {
     const std::string str_pointString(pointString);
     const std::string str_pointExample(pointExample);
-    const auto ret = op::flagsToPoint(str_pointString, str_pointExample);
+    const auto ret = op::flagsToPoint(op::String(str_pointString), op::String(str_pointExample));
     *x = ret.x;
     *y = ret.y;
 }
@@ -32,7 +32,7 @@ DLLEXPORT op::PoseMode op_flagsToPoseMode(const int poseModeInt)
 
 DLLEXPORT op::PoseModel op_flagsToPoseModel(const char* poseModeString)
 {
-    const std::string str(poseModeString);
+    const op::String str(poseModeString);
     return op::flagsToPoseModel(str);
 }
 
@@ -68,9 +68,9 @@ DLLEXPORT void op_flagsToProducer(const char* imageDirectory,
                                   op::ProducerType* item1,
                                   std::string** item2)
 {
-    const std::string str_imageDirectory(imageDirectory);
-    const std::string str_videoPath(videoPath);
-    const std::string str_ipCameraPath(ipCameraPath);
+    const op::String str_imageDirectory(imageDirectory);
+    const op::String str_videoPath(videoPath);
+    const op::String str_ipCameraPath(ipCameraPath);
 
     const auto ret = op::flagsToProducer(str_imageDirectory,
                                          str_videoPath,
@@ -79,7 +79,7 @@ DLLEXPORT void op_flagsToProducer(const char* imageDirectory,
                                          flirCamera,
                                          flirCameraIndex);
     *item1 = ret.first;
-    *item2 = new std::string(ret.second);
+    *item2 = new std::string(ret.second.getStdString());
 }
 
 DLLEXPORT op::DisplayMode op_flagsToDisplayMode(const int display, const bool enabled3d)
