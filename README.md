@@ -33,10 +33,9 @@ I never guarantee that the license issue will not occur by using OpenPoseDotNet.
 #### 3. Try Tutorial
 
 ````dos
-> cd examples\Tutorial\1_BodyFromImage
-> CopyOpenPose.bat <Debug/Release>
-> dotnet run -c Release  -i "<OpenPoseDotNet>\openpose\examples\med
-ia\COCO_val2014_000000000192.jpg"
+> cd examples\TutorialApiCpp\01_BodyFromImageDefault
+> SymlinkBinary.bat <Debug/Release>
+> dotnet run -c Release  -i "examples\media\COCO_val2014_000000000192.jpg"
 ````
 
 <img src="images/example_turorial_1.png"/>
