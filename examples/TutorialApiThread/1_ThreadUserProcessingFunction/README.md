@@ -20,6 +20,6 @@
 
 ````dos
 > cd <OpenPoseDotNet_dir>\examples\TutorialDeveloper\1_ThreadUserProcessingFunction
-> CopyOpenPose.bat <Debug/Release>
+> SymlinkBinary.bat <Debug/Release>
 > dotnet run -c Release
 ````

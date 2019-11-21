@@ -20,6 +20,6 @@
 
 ````dos
 > cd <OpenPoseDotNet_dir>\examples\TutorialApiCpp\16_SynchronousCustomOutput
-> CopyOpenPose.bat <Debug/Release>
+> SymlinkBinary.bat <Debug/Release>
 > dotnet run -c Release
 ````

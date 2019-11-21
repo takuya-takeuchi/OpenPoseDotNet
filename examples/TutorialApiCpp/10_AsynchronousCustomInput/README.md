@@ -20,7 +20,7 @@
 
 ````dos
 > cd <OpenPoseDotNet_dir>\examples\TutorialApiCpp\10_AsynchronousCustomInput
-> CopyOpenPose.bat <Debug/Release>
+> SymlinkBinary.bat <Debug/Release>
 > dotnet run -c Release
 ````
 

@@ -20,8 +20,8 @@
 
 ````dos
 > cd <OpenPoseDotNet_dir>\examples\TutorialApiCpp\06_FaceFromImage
-> CopyOpenPose.bat <Debug/Release>
-> dotnet run -c Release  -i "<OpenPoseDotNet_dir>\openpose\examples\media\COCO_val2014_000000000241.jpg"
+> SymlinkBinary.bat <Debug/Release>
+> dotnet run -c Release  -i "examples\media\COCO_val2014_000000000241.jpg"
 ````
 
 <img src="images/example_turorial_9.png"/>

@@ -20,8 +20,8 @@
 
 ````dos
 > cd <OpenPoseDotNet_dir>\examples\TutorialApiCpp\17_SynchronousCustomAllAndDatum
-> CopyOpenPose.bat <Debug/Release>
-> dotnet run -c Release  -i "<OpenPoseDotNet_dir>\openpose\examples\media"
+> SymlinkBinary.bat <Debug/Release>
+> dotnet run -c Release  -i "examples\media"
 ````
 
 <img src="images/example_turorial_15.gif"/>
