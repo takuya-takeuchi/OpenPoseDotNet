@@ -52,9 +52,9 @@ if (MSVC OR MSYS OR MINGW)
     set(STATIC_LIBRARIES
         ${OPENPOSEDOTNET_ROOT_DIR}/openpose/3rdparty/windows/opencv/x64/vc14/lib/opencv_world411.lib
         optimized ${OPENPOSEDOTNET_ROOT_DIR}/openpose/3rdparty/windows/caffe3rdparty/lib/gflags.lib
-        optimized ${OPENPOSEDOTNET_ROOT_DIR}/openpose/build_win/src/openpose/Release/openpose.lib
+        optimized ${OPENPOSEDOTNET_ROOT_DIR}/openpose/build/src/openpose/Release/openpose.lib
         debug ${OPENPOSEDOTNET_ROOT_DIR}/openpose/3rdparty/windows/caffe3rdparty/lib/gflagsd.lib
-        debug ${OPENPOSEDOTNET_ROOT_DIR}/openpose/build_win/src/openpose/Debug/openposed.lib
+        debug ${OPENPOSEDOTNET_ROOT_DIR}/openpose/build/src/openpose/Debug/openposed.lib
     )
 elseif(APPLE)
     set(STATIC_LIBRARIES

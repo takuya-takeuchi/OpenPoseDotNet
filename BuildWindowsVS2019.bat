@@ -12,13 +12,11 @@ if "%1"=="" (
 git submodule update --init --recursive
 
 set CURDIR=%cd%
-set OUTPUT=build_win
+set OUTPUT=build
 cd openpose
-if not exist %OUTPUT% (
-   mkdir %OUTPUT%
-)
+mkdir %OUTPUT%
 cd %OUTPUT%
-cmake -G "Visual Studio 14 2015 Win64" ^
+cmake -G "Visual Studio 16 2019" -A x64 ^
       ..
 cmake --build . --config %1
 cd %CURDIR%
