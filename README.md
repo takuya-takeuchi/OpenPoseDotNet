@@ -23,7 +23,7 @@ You can sepcify Visual Studio vesion and CUDA version.
 
 ````dos
 > cd <OpenPoseDotNet_dir>
-> git submodule update --inti --recursive
+> git submodule update --init --recursive
 > cd src\OpenPoseDotNet.Native
 > pwsh Build.ps1 <Debug/Release> <cpu/cuda> 64 desktop <2015/2017/2019> <92/100/101>
 ````
