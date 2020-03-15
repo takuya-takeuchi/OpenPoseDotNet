@@ -39,7 +39,7 @@ DLLEXPORT int op_3rdparty_cv_waitKey(const int delay)
 DLLEXPORT void op_3rdparty_cv_merge(std::vector<cv::Mat*>* mv, cv::Mat* dst)
 {
     auto& d = *static_cast<cv::Mat*>(dst);
-    auto& input = std::vector<cv::Mat>();
+    auto input = std::vector<cv::Mat>();
     auto& src = *static_cast<std::vector<cv::Mat*>*>(mv);
     for (auto index = 0; index < src.size(); index++)
     {

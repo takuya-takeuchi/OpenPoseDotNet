@@ -9,16 +9,21 @@ if "%1"=="" (
 @exit /B
 )
 
+if "%2"=="" ( 
+@echo Error: Specify build directory of OpenPoseDotNet.Native [build_win_desktop_<cpu/cuda>_x64]
+@exit /B
+)
+
 @set ROOT=%~dp0
 @for %%a in ("%ROOT%") do set "p_dir=%%~dpa"
 @for %%a in (%p_dir:~0,-1%) do set "p_dir=%%~dpa"
 @for %%a in (%p_dir:~0,-1%) do set "p_dir=%%~dpa"
 @for %%a in (%p_dir:~0,-1%) do set "p_dir=%%~dpa"
 @set ROOT=%p_dir%
-@set BIN_DIR=%ROOT%openpose\build_win\bin
-@set NATIVE_DIR=%ROOT%src\OpenPoseDotNet.Native\build_win\%1
-@set OP_ROOT=%ROOT%openpose
-@set OP_DIR=%OP_ROOT%\build_win\x64\%1
+@set BIN_DIR=%ROOT%\src\OpenPoseDotNet.Native\%2\%1
+@set NATIVE_DIR=%BIN_DIR%
+@set OP_ROOT=%ROOT%src\openpose
+@set OP_DIR=%ROOT%src\OpenPoseDotNet.Native\%2\%1
 @set DIR=bin\%1\netcoreapp2.0
 
 @mkdir %DIR%

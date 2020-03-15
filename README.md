@@ -17,24 +17,24 @@ I never guarantee that the license issue will not occur by using OpenPoseDotNet.
 
 ## Quick Start
 
-#### 1. Build OpenPose
+#### 1. Build
+
+You can sepcify Visual Studio vesion and CUDA version. 
 
 ````dos
-> BuildWindowsVS2015.bat <Debug/Release>
-````
-
-#### 2. Build OpenPoseDotNet
-
-````dos
+> cd <OpenPoseDotNet_dir>
+> git submodule update --inti --recursive
 > cd src\OpenPoseDotNet.Native
-> BuildWindowsVS2015.bat <Debug/Release>
+> pwsh Build.ps1 <Debug/Release> <cpu/cuda> 64 desktop <2015/2017/2019> <92/100/101>
 ````
 
-#### 3. Try Tutorial
+After build, you should see artifacts in src\OpenPoseDotNet.Native\build_win_desktop_<cpu/cuda>_x64\<Debug/Release>.
+
+#### 2. Try Tutorial
 
 ````dos
 > cd examples\TutorialApiCpp\01_BodyFromImageDefault
-> SymlinkBinary.bat <Debug/Release>
+> SymlinkBinary.bat <Debug/Release> build_win_desktop_<cpu/cuda>_x64
 > dotnet run -c Release  -i "examples\media\COCO_val2014_000000000192.jpg"
 ````
 
