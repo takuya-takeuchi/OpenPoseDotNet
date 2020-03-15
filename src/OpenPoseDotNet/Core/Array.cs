@@ -102,6 +102,12 @@ namespace OpenPoseDotNet
 
         #region Methods
 
+        public IntPtr GetPtr()
+        {
+            this.ThrowIfDisposed();
+            return this._Imp.GetPtr(this.NativePtr);
+        }
+
         public int[] GetSize()
         {
             this.ThrowIfDisposed();
@@ -192,7 +198,7 @@ namespace OpenPoseDotNet
 
         #region Implements
 
-        private abstract class ArrayImp<T>
+        private abstract class ArrayImp<U>
         {
 
             #region Methods
@@ -200,6 +206,8 @@ namespace OpenPoseDotNet
             public abstract void Delete(IntPtr ptr);
 
             public abstract bool Empty(IntPtr ptr);
+
+            public abstract IntPtr GetPtr(IntPtr ptr);
 
             public abstract int GetSize(IntPtr ptr, int index);
 
@@ -211,7 +219,7 @@ namespace OpenPoseDotNet
 
             public abstract IntPtr Gets(IntPtr ptr, int index);
 
-            public abstract T Operator(IntPtr ptr, IntPtr indexes);
+            public abstract U Operator(IntPtr ptr, IntPtr indexes);
 
             public abstract IntPtr ToString(IntPtr ptr);
 
@@ -232,6 +240,11 @@ namespace OpenPoseDotNet
             public override bool Empty(IntPtr ptr)
             {
                 return NativeMethods.op_core_Array_float_empty(ptr);
+            }
+
+            public override IntPtr GetPtr(IntPtr ptr)
+            {
+                return NativeMethods.op_core_Array_float_getPtr(ptr);
             }
 
             public override int GetSize(IntPtr ptr, int index)
@@ -288,6 +301,11 @@ namespace OpenPoseDotNet
             public override bool Empty(IntPtr ptr)
             {
                 return NativeMethods.op_core_Array_double_empty(ptr);
+            }
+
+            public override IntPtr GetPtr(IntPtr ptr)
+            {
+                return NativeMethods.op_core_Array_double_getPtr(ptr);
             }
 
             public override int GetSize(IntPtr ptr, int index)

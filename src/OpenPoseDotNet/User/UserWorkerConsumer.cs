@@ -67,7 +67,7 @@ namespace OpenPoseDotNet
             NativeMethods.op_UserWorkerConsumer_stop(this._DataType, this.NativePtr);
         }
 
-        protected virtual void WorkConsumer(T[] datums)
+        protected virtual void WorkConsumer(StdSharedPtr<T>[] datums)
         {
             this.ThrowIfDisposed();
         }
@@ -106,7 +106,7 @@ namespace OpenPoseDotNet
                 return;
             }
 
-            // ptr is shared_ptr<std::vector<DATUM>>
+            // ptr is std::shared_ptr<std::vector<std::shared_ptr<TDatum>>>
             var content = NativeMethods.std_shared_ptr_TDatum_get(this._DataType, ptr);
             if (content == IntPtr.Zero)
             {
@@ -114,7 +114,7 @@ namespace OpenPoseDotNet
                 return;
             }
 
-            using (var vector = new StdVector<T>(content, false))
+            using (var vector = new StdVector<StdSharedPtr<T>>(content, false))
                 this.WorkConsumer(vector.ToArray());
         }
 

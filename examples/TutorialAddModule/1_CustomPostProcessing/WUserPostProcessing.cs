@@ -33,27 +33,28 @@ namespace CustomPostProcessing
         {
         }
 
-        protected override void Work(CustomDatum[] datums)
+        protected override void Work(StdSharedPtr<CustomDatum>[] datums)
         {
             try
             {
                 if (datums != null)
                 {
                     // Debugging log
-                    OpenPose.DebugLog("", Priority.Low, -1, nameof(this.Work), "");
+                    OpenPose.LogIfDebug("", Priority.Low, -1, nameof(this.Work), "");
                     // Profiling speed
                     var profilerKey = Profiler.TimerInit(-1,nameof(this.Work),"");
 
                     foreach (var datum in datums)
                     {
-                        // THIS IS THE ONLY LINE THAT THE USER MUST MODIFY ON THIS HPP FILE, by using the proper function
-                        // and datum elements
-                        this._UserPostProcessing.DoSomething(datum.CvOutputData, datum.CvOutputData);
+                        // THESE 2 ARE THE ONLY LINES THAT THE USER MUST MODIFY ON THIS HPP FILE, by using the proper
+                        // function and datum elements
+                        using (var cvOutputData = OpenPose.OP_OP2CVMAT(datum.Get().CvOutputData))
+                            this._UserPostProcessing.DoSomething(cvOutputData, cvOutputData);
                         // Profiling speed
                         Profiler.TimerEnd(profilerKey);
                         Profiler.PrintAveragedTimeMsOnIterationX(profilerKey, -1, nameof(this.Work), "");
                         // Debugging log
-                        OpenPose.DebugLog("", Priority.Low, -1, nameof(this.Work), "");
+                        OpenPose.LogIfDebug("", Priority.Low, -1, nameof(this.Work), "");
                     }
                 }
             }

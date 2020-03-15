@@ -8,7 +8,7 @@ namespace OpenPoseDotNet
     internal sealed partial class NativeMethods
     {
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern IntPtr op_Gui_new(IntPtr outputSize,
                                                bool fullScreen,
                                                IntPtr isRunningSharedPtr,
@@ -19,7 +19,7 @@ namespace OpenPoseDotNet
                                                IntPtr renderers,
                                                DisplayMode displayMode);
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void op_Gui_delete(IntPtr gui);
 
     }

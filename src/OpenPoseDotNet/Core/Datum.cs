@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 // ReSharper disable once CheckNamespace
 namespace OpenPoseDotNet
@@ -8,6 +10,11 @@ namespace OpenPoseDotNet
     {
 
         #region Constructors
+
+        public Datum()
+        {
+            this.NativePtr = NativeMethods.op_core_datum_new();
+        }
 
         internal Datum(IntPtr ptr, bool isEnabledDispose = true) :
             base(isEnabledDispose)
@@ -19,7 +26,7 @@ namespace OpenPoseDotNet
 
         #region Properties
 
-        public Mat CvInputData
+        public Matrix CvInputData
         {
             get
             {
@@ -27,7 +34,7 @@ namespace OpenPoseDotNet
                 var ret = NativeMethods.op_core_datum_get_cvInputData(this.NativePtr);
 
                 // Datum.cvInputData is not pointer. Therefore, this object must not be disposed.
-                return new Mat(ret, false);
+                return new Matrix(ret, false);
             }
             set
             {
@@ -37,7 +44,7 @@ namespace OpenPoseDotNet
             }
         }
 
-        public Mat CvOutputData
+        public Matrix CvOutputData
         {
             get
             {
@@ -45,13 +52,75 @@ namespace OpenPoseDotNet
                 var ret = NativeMethods.op_core_datum_get_cvOutputData(this.NativePtr);
 
                 // Datum.cvOutputData is not pointer. Therefore, this object must not be disposed.
-                return new Mat(ret, false);
+                return new Matrix(ret, false);
             }
             set
             {
                 this.ThrowIfDisposed();
                 value?.ThrowIfDisposed();
                 NativeMethods.op_core_datum_set_cvOutputData(this.NativePtr, value?.NativePtr ?? IntPtr.Zero);
+            }
+        }
+
+        public Rectangle<float>[] FaceRectangles
+        {
+            get
+            {
+                this.ThrowIfDisposed();
+                var ret = NativeMethods.op_core_datum_get_faceRectangles(this.NativePtr);
+
+                using (var vector = new StdVector<Rectangle<float>>(ret))
+                    return vector.ToArray();
+            }
+            set
+            {
+                this.ThrowIfDisposed();
+                using (var vector = new StdVector<Rectangle<float>>(new List<Rectangle<float>>(value ?? new Rectangle<float>[0])))
+                    NativeMethods.op_core_datum_set_faceRectangles(this.NativePtr, vector.NativePtr);
+            }
+        }
+
+        public Rectangle<float>[][] HandRectangles
+        {
+            get
+            {
+                this.ThrowIfDisposed();
+                var ret = NativeMethods.op_core_datum_get_handRectangles(this.NativePtr);
+                using (var vector = new StdVector<Rectangle<float>>(ret))
+                {
+                    var rectangles = vector.ToArray();
+
+                    var result = new List<Rectangle<float>[]>();
+                    for (var index = 0; index < rectangles.Length; index++)
+                    {
+                        if (index == 0)
+                        {
+                            var r = new Rectangle<float>[2];
+                            r[0] = rectangles[index];
+                            result.Add(r);
+                        }
+                        else
+                        {
+                            var r = result[index % 2];
+                            r[1] = rectangles[index];
+                        }
+                    }
+
+                    return result.ToArray();
+                }
+            }
+            set
+            {
+                this.ThrowIfDisposed();
+
+                // check whether each item has only 2 or not
+                if (value != null)
+                    if (value.Any(r => r.Length != 2))
+                        throw new ArgumentOutOfRangeException();
+
+                var rectangles = value != null ? value.SelectMany(r => r).ToList() : new List<Rectangle<float>>();
+                using (var vector = new StdVector<Rectangle<float>>(rectangles))
+                    NativeMethods.op_core_datum_set_handRectangles(this.NativePtr, vector.NativePtr);
             }
         }
 
@@ -70,6 +139,19 @@ namespace OpenPoseDotNet
             {
                 this.ThrowIfDisposed();
                 return NativeMethods.op_core_datum_get_id(this.NativePtr);
+            }
+        }
+
+        public Array<float>[] InputNetData
+        {
+            get
+            {
+                this.ThrowIfDisposed();
+                var ret = NativeMethods.op_core_datum_get_inputNetData(this.NativePtr);
+
+                // Datum.poseKeypoints is not pointer. Therefore, this object must not be disposed.
+                using (var array = new StdVector<Array<float>>(ret, false))
+                    return array.ToArray();
             }
         }
 
@@ -94,6 +176,27 @@ namespace OpenPoseDotNet
 
                 // Datum.poseKeypoints is not pointer. Therefore, this object must not be disposed.
                 return new Array<float>(ret, false);
+            }
+        }
+        
+        public Array<float> PoseNetOutput
+        {
+            get
+            {
+                this.ThrowIfDisposed();
+                var ret = NativeMethods.op_core_datum_get_poseNetOutput(this.NativePtr);
+
+                // Datum.poseNetOutput is not pointer. Therefore, this object must not be disposed.
+                return new Array<float>(ret, false);
+            }
+            set
+            {
+                this.ThrowIfDisposed();
+                if(value == null)
+                    throw new ArgumentNullException();
+
+                value.ThrowIfDisposed();
+                NativeMethods.op_core_datum_set_poseNetOutput(this.NativePtr, value.NativePtr);
             }
         }
 
@@ -128,7 +231,7 @@ namespace OpenPoseDotNet
                 this.ThrowIfDisposed();
                 var ret = NativeMethods.op_core_datum_get_handKeypoints(this.NativePtr);
 
-                // Datum.poseKeypoints is not pointer. Therefore, this object must not be disposed.
+                // Datum.handKeypoints is not pointer. Therefore, this object must not be disposed.
                 using (var array = new StdArray<Array<float>>(ret, 2, false))
                     return array.ToArray();
             }

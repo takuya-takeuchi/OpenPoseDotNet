@@ -1,6 +1,7 @@
 #ifndef _CPP_SHARED_H_
 #define _CPP_SHARED_H_
 
+#include <opencv2/opencv.hpp>
 #include <openpose/headers.hpp>
 
 #include "export.h"

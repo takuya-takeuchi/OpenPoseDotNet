@@ -18,7 +18,7 @@ namespace OpenPoseDotNet
 
         #region Methods
 
-        public Array<float>[] CreateArray(Mat cvInputData, double[] scaleInputToNetInputs, Point<int>[] netInputSizes)
+        public Array<float>[] CreateArray(Matrix cvInputData, double[] scaleInputToNetInputs, Point<int>[] netInputSizes)
         {
             if (cvInputData == null)
                 throw new ArgumentNullException(nameof(cvInputData));

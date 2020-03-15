@@ -13,13 +13,13 @@ DLLEXPORT void op_core_CvMatToOpOutput_delete(op::CvMatToOpOutput* output)
     delete output;
 }
 
-DLLEXPORT op::Array<float>* op_core_CvMatToOpOutput_createArray(const op::CvMatToOpOutput* output,
-                                                                const cv::Mat* cvInputData,
+DLLEXPORT op::Array<float>* op_core_CvMatToOpOutput_createArray(op::CvMatToOpOutput* output,
+                                                                const op::Matrix* cvInputData,
                                                                 const double scaleInputToOutput,
                                                                 const op::Point<int>* outputResolution)
 {
-    auto& inputData = *cvInputData;
-    auto& resolution = *outputResolution;
+    const auto& inputData = *cvInputData;
+    const auto& resolution = *outputResolution;
     const auto ret = output->createArray(inputData, scaleInputToOutput, resolution);
     return new op::Array<float>(ret);
 }

@@ -8,19 +8,36 @@ namespace OpenPoseDotNet
     public static class Cv
     {
 
-        #region Events
-        #endregion
-
-        #region Fields
-        #endregion
-
-        #region Constructors
-        #endregion
-
-        #region Properties
-        #endregion
-
         #region Methods
+
+        public static void AddWeighted(Mat src1, double alpha, Mat src2, double beta, double gamma, Mat dst)
+        {
+            if (src1 == null)
+                throw new ArgumentNullException(nameof(src1));
+            if (src2 == null)
+                throw new ArgumentNullException(nameof(src2));
+            if (dst == null)
+                throw new ArgumentNullException(nameof(dst));
+
+            src1.ThrowIfDisposed();
+            src2.ThrowIfDisposed();
+            dst.ThrowIfDisposed();
+
+            NativeMethods.op_3rdparty_addWeighted(src1.NativePtr, alpha, src2.NativePtr, beta, gamma, dst.NativePtr);
+        }
+
+        public static void ApplyColorMap(Mat src, Mat dst, ColormapType colormap)
+        {
+            if (src == null)
+                throw new ArgumentNullException(nameof(src));
+            if (dst == null)
+                throw new ArgumentNullException(nameof(dst));
+
+            src.ThrowIfDisposed();
+            dst.ThrowIfDisposed();
+
+            NativeMethods.op_3rdparty_applyColorMap(src.NativePtr, dst.NativePtr, colormap);
+        }
 
         public static void BitwiseNot(Mat src, Mat dst)
         {
@@ -47,6 +64,19 @@ namespace OpenPoseDotNet
             return new Mat(ret);
         }
 
+        public static void ImWrite(string path, Mat mat)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+                throw new ArgumentException();
+            if (mat == null)
+                throw new ArgumentNullException(nameof(mat));
+
+            mat.ThrowIfDisposed();
+
+            var passBytes = Encoding.UTF8.GetBytes(path);
+            NativeMethods.op_3rdparty_cv_imwrite(passBytes, mat.NativePtr);
+        }
+
         public static void ImShow(string winName, Mat mat)
         {
             if (mat == null)
@@ -56,6 +86,19 @@ namespace OpenPoseDotNet
 
             var winnameBytes = Encoding.UTF8.GetBytes(winName ?? "");
             NativeMethods.op_3rdparty_cv_imshow(winnameBytes, mat.NativePtr);
+        }
+
+        public static void Merge(StdVector<Mat> mv, Mat dst)
+        {
+            if (mv == null)
+                throw new ArgumentNullException(nameof(mv));
+            if (dst == null)
+                throw new ArgumentNullException(nameof(dst));
+
+            mv.ThrowIfDisposed();
+            dst.ThrowIfDisposed();
+
+            NativeMethods.op_3rdparty_cv_merge(mv.NativePtr, dst.NativePtr);
         }
 
         public static int WaitKey(int delay = 0)

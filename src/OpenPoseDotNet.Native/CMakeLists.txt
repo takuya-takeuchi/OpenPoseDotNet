@@ -1,13 +1,30 @@
 cmake_minimum_required(VERSION 3.0.0)
+
 set(PROJ_NAME OpenPoseDotNetNative)
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 project(${PROJ_NAME} VERSION 0.0.0)
 
+# OS info
+message("-------------------------------------------------------")
+message("-- CMAKE_SYSTEM_INFO_FILE: ${CMAKE_SYSTEM_INFO_FILE}")
+message("-- CMAKE_SYSTEM_NAME:      ${CMAKE_SYSTEM_NAME}")
+message("-- CMAKE_SYSTEM_PROCESSOR: ${CMAKE_SYSTEM_PROCESSOR}")
+message("-- CMAKE_SYSTEM:           ${CMAKE_SYSTEM}")
+message("-- CMAKE_C_COMPILER:       ${CMAKE_C_COMPILER}")
+message("-- CMAKE_CXX_COMPILER:     ${CMAKE_CXX_COMPILER}")
+string (REGEX MATCH "\\.el[1-9]" os_version_suffix ${CMAKE_SYSTEM})
+message("-- os_version_suffix:      ${os_version_suffix}")
+message("-- Project: ${CMAKE_CURRENT_SOURCE_DIR}")
+message("-- Binaries: ${CMAKE_CURRENT_BINARY_DIR}")
+message("-------------------------------------------------------")
+
 # Version info
 set(VERSION_MAJOR 1)
-set(VERSION_MINOR 4)
-set(VERSION_PATCH 0)
-set(VERSION_DATE 20190115)
+set(VERSION_MINOR 5)
+set(VERSION_PATCH 1)
+set(VERSION_DATE 20191116)
 
 # Only GCC requires -fPIC
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
@@ -30,13 +47,13 @@ get_filename_component(OPENPOSEDOTNET_ROOT_DIR "../.." ABSOLUTE)
 
 # include 3rdparty libraries
 if (MSVC OR MSYS OR MINGW)
-    include_directories("${OPENPOSEDOTNET_ROOT_DIR}/openpose/include"
-                        "${OPENPOSEDOTNET_ROOT_DIR}/openpose/3rdparty/windows/opencv/include"
-                        "${OPENPOSEDOTNET_ROOT_DIR}/openpose/3rdparty/windows/caffe3rdparty/include")
+    include_directories("${OPENPOSEDOTNET_ROOT_DIR}/src/openpose/include"
+                        "${OPENPOSEDOTNET_ROOT_DIR}/src/openpose/3rdparty/windows/opencv/include"
+                        "${OPENPOSEDOTNET_ROOT_DIR}/src/openpose/3rdparty/windows/caffe3rdparty/include")
 else()
     find_package( GFlags REQUIRED )
     find_package( OpenCV REQUIRED )
-    include_directories("${OPENPOSEDOTNET_ROOT_DIR}/openpose/include")
+    include_directories("${OPENPOSEDOTNET_ROOT_DIR}/src/openpose/include")
 endif()
 
 FILE(GLOB_RECURSE HEADERS ${PROJECT_SOURCE_DIR}/openpose/*.h)
@@ -47,15 +64,14 @@ configure_file(
     ${CMAKE_CURRENT_BINARY_DIR}/version.rc
     @ONLY)
 
-
 # include 3rdparty libraries
 if (MSVC OR MSYS OR MINGW)
     set(STATIC_LIBRARIES
-        ${OPENPOSEDOTNET_ROOT_DIR}/openpose/3rdparty/windows/opencv/x64/vc14/lib/opencv_world310.lib
-        optimized ${OPENPOSEDOTNET_ROOT_DIR}/openpose/3rdparty/windows/caffe3rdparty/lib/gflags.lib
-        optimized ${OPENPOSEDOTNET_ROOT_DIR}/openpose/build/src/openpose/Release/openpose.lib
-        debug ${OPENPOSEDOTNET_ROOT_DIR}/openpose/3rdparty/windows/caffe3rdparty/lib/gflagsd.lib
-        debug ${OPENPOSEDOTNET_ROOT_DIR}/openpose/build/src/openpose/Debug/openposed.lib
+        ${OPENPOSEDOTNET_ROOT_DIR}/src/openpose/3rdparty/windows/opencv/x64/vc14/lib/opencv_world411.lib
+        optimized ${OPENPOSEDOTNET_ROOT_DIR}/src/openpose/3rdparty/windows/caffe3rdparty/lib/gflags.lib
+        optimized ${CMAKE_CURRENT_BINARY_DIR}/openpose/src/openpose/Release/openpose.lib
+        debug ${OPENPOSEDOTNET_ROOT_DIR}/src/openpose/3rdparty/windows/caffe3rdparty/lib/gflagsd.lib
+        debug ${CMAKE_CURRENT_BINARY_DIR}/openpose/src/openpose/Debug/openposed.lib
     )
 elseif(APPLE)
     set(STATIC_LIBRARIES
@@ -63,17 +79,17 @@ elseif(APPLE)
         opencv_imgcodecs
         opencv_highgui
         optimized gflags
-        optimized ${OPENPOSEDOTNET_ROOT_DIR}/openpose/build/src/openpose/libopenpose.dylib
+        optimized ${CMAKE_CURRENT_BINARY_DIR}/openpose/build_osx/src/openpose/libopenpose.dylib
         debug gflagsd
-        debug ${OPENPOSEDOTNET_ROOT_DIR}/openpose/build/src/openpose/libopenposed.dylib
+        debug ${CMAKE_CURRENT_BINARY_DIR}/openpose/build_osx/src/openpose/libopenposed.dylib
     )
 elseif(UNIX AND NOT APPLE)
     set(STATIC_LIBRARIES
         opencv_imgproc
         optimized gflags
-        optimized ${OPENPOSEDOTNET_ROOT_DIR}/openpose/build/src/openpose/libopenpose.so
+        optimized ${CMAKE_CURRENT_BINARY_DIR}/openpose_linux/build/src/openpose/libopenpose.so
         debug gflagsd
-        debug ${OPENPOSEDOTNET_ROOT_DIR}/openpose/build/src/openpose/libopenposed.so
+        debug ${CMAKE_CURRENT_BINARY_DIR}/openpose_linux/build/src/openpose/libopenposed.so
     )
 else()
     message(FATAL_ERROR "Failed to link library")

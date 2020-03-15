@@ -10,7 +10,7 @@ namespace OpenPoseDotNet
 
         #region std::shared_ptr
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern IntPtr std_shared_ptr_TDatum_get(OpenPose.DataType dataType, IntPtr p);
 
         #endregion

@@ -3,7 +3,6 @@
 */
 
 using System;
-using System.Diagnostics;
 using OpenPoseDotNet;
 
 namespace CustomPostProcessing
@@ -21,20 +20,22 @@ namespace CustomPostProcessing
 
         #region Helpers
 
-        private static int TutorialAddModule1()
+        private static void ConfigureWrapper(Wrapper<CustomDatum> opWrapper)
         {
             try
             {
-                OpenPose.Log("Starting OpenPose demo...", Priority.High);
-                var timeBegin = new Stopwatch();
-                timeBegin.Start();
+                // Configuring OpenPose
 
                 // logging_level
-                OpenPose.Check(0 <= Flags.LoggingLevel && Flags.LoggingLevel <= 255, "Wrong logging_level value.");
+                OpenPose.CheckBool(0 <= Flags.LoggingLevel && Flags.LoggingLevel <= 255, "Wrong logging_level value.");
                 ConfigureLog.PriorityThreshold = (Priority)Flags.LoggingLevel;
                 Profiler.SetDefaultX((ulong)Flags.ProfileSpeed);
 
                 // Applying user defined configuration - GFlags to program variables
+                // producerType
+                var tie = OpenPose.FlagsToProducer(Flags.ImageDir, Flags.Video, Flags.IpCamera, Flags.Camera, Flags.FlirCamera, Flags.FlirCameraIndex);
+                var producerType = tie.Item1;
+                var producerString = tie.Item2;
                 // cameraSize
                 var cameraSize = OpenPose.FlagsToPoint(Flags.CameraResolution, "-1x-1");
                 // outputSize
@@ -45,10 +46,8 @@ namespace CustomPostProcessing
                 var faceNetInputSize = OpenPose.FlagsToPoint(Flags.FaceNetResolution, "368x368 (multiples of 16)");
                 // handNetInputSize
                 var handNetInputSize = OpenPose.FlagsToPoint(Flags.HandNetResolution, "368x368 (multiples of 16)");
-                // producerType
-                var tie = OpenPose.FlagsToProducer(Flags.ImageDir, Flags.Video, Flags.IpCamera, Flags.Camera, Flags.FlirCamera, Flags.FlirCameraIndex);
-                var producerType = tie.Item1;
-                var producerString = tie.Item2;
+                // poseMode
+                var poseMode = OpenPose.FlagsToPoseMode(Flags.Body);
                 // poseModel
                 var poseModel = OpenPose.FlagsToPoseModel(Flags.ModelPose);
                 // JSON saving
@@ -61,126 +60,149 @@ namespace CustomPostProcessing
                 var heatMapScale = OpenPose.FlagsToHeatMapScaleMode(Flags.HeatmapsScale);
                 // >1 camera view?
                 var multipleView = (Flags.Enable3D || Flags.Views3D > 1 || Flags.FlirCamera);
+                // Face and hand detectors
+                var faceDetector = OpenPose.FlagsToDetector(Flags.FaceDetector);
+                var handDetector = OpenPose.FlagsToDetector(Flags.HandDetector);
                 // Enabling Google Logging
                 const bool enableGoogleLogging = true;
 
                 // Configuring OpenPose
                 OpenPose.Log("Configuring OpenPose...", Priority.High);
-                using (var opWrapper = new Wrapper<CustomDatum>())
                 {
                     // Pose configuration (use WrapperStructPose{} for default and recommended configuration)
-                    using (var pose = new WrapperStructPose(!Flags.BodyDisabled,
-                                                            netInputSize,
-                                                            outputSize,
-                                                            keyPointScale,
-                                                            Flags.NumGpu,
-                                                            Flags.NumGpuStart,
-                                                            Flags.ScaleNumber,
-                                                            (float)Flags.ScaleGap,
-                                                            OpenPose.FlagsToRenderMode(Flags.RenderPose, multipleView),
-                                                            poseModel,
-                                                            !Flags.DisableBlending,
-                                                            (float)Flags.AlphaPose,
-                                                            (float)Flags.AlphaHeatmap,
-                                                            Flags.PartToShow,
-                                                            Flags.ModelFolder,
-                                                            heatMapTypes,
-                                                            heatMapScale,
-                                                            Flags.PartCandidates,
-                                                            (float)Flags.RenderThreshold,
-                                                            Flags.NumberPeopleMax,
-                                                            Flags.MaximizePositives,
-                                                            Flags.FpsMax,
-                                                            enableGoogleLogging))
+                    var pose = new WrapperStructPose(poseMode,
+                                                     netInputSize,
+                                                     outputSize,
+                                                     keyPointScale,
+                                                     Flags.NumGpu,
+                                                     Flags.NumGpuStart,
+                                                     Flags.ScaleNumber,
+                                                     (float)Flags.ScaleGap,
+                                                     OpenPose.FlagsToRenderMode(Flags.RenderPose, multipleView),
+                                                     poseModel,
+                                                     !Flags.DisableBlending,
+                                                     (float)Flags.AlphaPose,
+                                                     (float)Flags.AlphaHeatmap,
+                                                     Flags.PartToShow,
+                                                     Flags.ModelFolder,
+                                                     heatMapTypes,
+                                                     heatMapScale,
+                                                     Flags.PartCandidates,
+                                                     (float)Flags.RenderThreshold,
+                                                     Flags.NumberPeopleMax,
+                                                     Flags.MaximizePositives,
+                                                     Flags.FpsMax,
+                                                     Flags.PrototxtPath,
+                                                     Flags.CaffeModelPath,
+                                                     (float)Flags.UpsamplingRatio,
+                                                     enableGoogleLogging);
                     // Face configuration (use op::WrapperStructFace{} to disable it)
-                    using (var face = new WrapperStructFace(Flags.Face,
-                                                            faceNetInputSize,
-                                                            OpenPose.FlagsToRenderMode(Flags.FaceRender, multipleView, Flags.RenderPose),
-                                                            (float)Flags.FaceAlphaPose,
-                                                            (float)Flags.FaceAlphaHeatmap,
-                                                            (float)Flags.FaceRenderThreshold))
+                    var face = new WrapperStructFace(Flags.Face,
+                                                     faceDetector,
+                                                     faceNetInputSize,
+                                                     OpenPose.FlagsToRenderMode(Flags.FaceRender, multipleView, Flags.RenderPose),
+                                                     (float) Flags.FaceAlphaPose,
+                                                     (float) Flags.FaceAlphaHeatmap,
+                                                     (float) Flags.FaceRenderThreshold);
                     // Hand configuration (use op::WrapperStructHand{} to disable it)
-                    using (var hand = new WrapperStructHand(Flags.Hand,
-                                                            handNetInputSize,
-                                                            Flags.HandScaleNumber,
-                                                            (float)Flags.HandScaleRange, Flags.HandTracking,
-                                                            OpenPose.FlagsToRenderMode(Flags.HandRender, multipleView, Flags.RenderPose),
-                                                            (float)Flags.HandAlphaPose,
-                                                            (float)Flags.HandAlphaHeatmap,
-                                                            (float)Flags.HandRenderThreshold))
+                    var hand = new WrapperStructHand(Flags.Hand,
+                                                     handDetector,
+                                                     handNetInputSize,
+                                                     Flags.HandScaleNumber,
+                                                     (float) Flags.HandScaleRange,
+                                                     OpenPose.FlagsToRenderMode(Flags.HandRender, multipleView, Flags.RenderPose),
+                                                     (float) Flags.HandAlphaPose,
+                                                     (float) Flags.HandAlphaHeatmap,
+                                                     (float) Flags.HandRenderThreshold);
                     // Extra functionality configuration (use op::WrapperStructExtra{} to disable it)
-                    using (var extra = new WrapperStructExtra(Flags.Enable3D,
-                                                              Flags.MinViews3D,
-                                                              Flags.Identification,
-                                                              Flags.Tracking,
-                                                              Flags.IkThreads))
+                    var extra = new WrapperStructExtra(Flags.Enable3D,
+                                                       Flags.MinViews3D,
+                                                       Flags.Identification,
+                                                       Flags.Tracking,
+                                                       Flags.IkThreads);
                     // Producer (use default to disable any input)
-                    using (var input = new WrapperStructInput(producerType,
-                                                              producerString,
-                                                              Flags.FrameFirst,
-                                                              Flags.FrameStep,
-                                                              Flags.FrameLast,
-                                                              Flags.ProcessRealTime,
-                                                              Flags.FrameFlip,
-                                                              Flags.FrameRotate,
-                                                              Flags.FramesRepeat,
-                                                              cameraSize,
-                                                              Flags.CameraParameterPath,
-                                                              Flags.FrameUndistort,
-                                                              Flags.Views3D))
+                    var input = new WrapperStructInput(producerType,
+                                                       producerString,
+                                                       Flags.FrameFirst,
+                                                       Flags.FrameStep,
+                                                       Flags.FrameLast,
+                                                       Flags.ProcessRealTime,
+                                                       Flags.FrameFlip,
+                                                       Flags.FrameRotate,
+                                                       Flags.FramesRepeat,
+                                                       cameraSize,
+                                                       Flags.CameraParameterPath,
+                                                       Flags.FrameUndistort,
+                                                       Flags.Views3D);
                     // Output (comment or use default argument to disable any output)
-                    using (var output = new WrapperStructOutput(Flags.CliVerbose,
-                                                                Flags.WriteKeyPoint,
-                                                                OpenPose.StringToDataFormat(Flags.WriteKeyPointFormat),
-                                                                Flags.WriteJson,
-                                                                Flags.WriteCocoJson,
-                                                                Flags.WriteCocoFootJson,
-                                                                Flags.WriteCocoJsonVariant,
-                                                                Flags.WriteImages,
-                                                                Flags.WriteImagesFormat,
-                                                                Flags.WriteVideo,
-                                                                Flags.WriteVideoFps,
-                                                                Flags.WriteHeatmaps,
-                                                                Flags.WriteHeatmapsFormat,
-                                                                Flags.WriteVideoAdam,
-                                                                Flags.WriteBvh,
-                                                                Flags.UdpHost,
-                                                                Flags.UdpPort))
+                    var output = new WrapperStructOutput(Flags.CliVerbose,
+                                                         Flags.WriteKeyPoint,
+                                                         OpenPose.StringToDataFormat(Flags.WriteKeyPointFormat),
+                                                         Flags.WriteJson,
+                                                         Flags.WriteCocoJson,
+                                                         Flags.WriteCocoJsonVariants,
+                                                         Flags.WriteCocoJsonVariant,
+                                                         Flags.WriteImages,
+                                                         Flags.WriteImagesFormat,
+                                                         Flags.WriteVideo,
+                                                         Flags.WriteVideoFps,
+                                                         Flags.WriteVideoWithAudio,
+                                                         Flags.WriteHeatmaps,
+                                                         Flags.WriteHeatmapsFormat,
+                                                         Flags.WriteVideoAdam,
+                                                         Flags.WriteBvh,
+                                                         Flags.UdpHost,
+                                                         Flags.UdpPort);
                     // GUI (comment or use default argument to disable any visual output)
-                    using (var gui = new WrapperStructGui(OpenPose.FlagsToDisplayMode(Flags.Display, Flags.Enable3D),
-                                                          !Flags.NoGuiVerbose,
-                                                          Flags.FullScreen))
+                    var gui = new WrapperStructGui(OpenPose.FlagsToDisplayMode(Flags.Display, Flags.Enable3D),
+                                                   !Flags.NoGuiVerbose,
+                                                   Flags.FullScreen);
+                    opWrapper.Configure(pose);
+                    opWrapper.Configure(face);
+                    opWrapper.Configure(hand);
+                    opWrapper.Configure(extra);
+                    opWrapper.Configure(input);
+                    opWrapper.Configure(output);
+                    opWrapper.Configure(gui);
+
+                    // Custom post-processing
+                    var userPostProcessing = new UserPostProcessing(/* Your class arguments here */);
+                    var wUserPostProcessing = new StdSharedPtr<UserWorker<CustomDatum>>(new WUserPostProcessing(userPostProcessing));
+
+                    // Add custom processing
+                    const bool workerProcessingOnNewThread = false;
+                    opWrapper.SetWorker(WorkerType.PostProcessing, wUserPostProcessing, workerProcessingOnNewThread);
+
+                    // Set to single-thread (for sequential processing and/or debugging and/or reducing latency)
+                    if (Flags.DisableMultiThread)
+                        opWrapper.DisableMultiThreading();
+                }
+            }
+            catch (Exception e)
+            {
+                OpenPose.Error(e.Message, -1, nameof(ConfigureWrapper));
+            }
+        }
+
+        private static int TutorialAddModule1()
+        {
+            try
+            {
+                OpenPose.Log("Starting OpenPose demo...", Priority.High);
+                using (var opTimer = OpenPose.GetTimerInit())
+                {
+                    // Configuring OpenPose
+                    OpenPose.Log("Configuring OpenPose...", Priority.High);
+                    using (var opWrapperT = new Wrapper<CustomDatum>())
                     {
-                        opWrapper.Configure(pose);
-                        opWrapper.Configure(face);
-                        opWrapper.Configure(hand);
-                        opWrapper.Configure(extra);
-                        opWrapper.Configure(input);
-                        opWrapper.Configure(output);
-                        opWrapper.Configure(gui);
+                        ConfigureWrapper(opWrapperT);
 
-                        // Custom post-processing
-                        var userPostProcessing = new UserPostProcessing(/* Your class arguments here */);
-                        using (var wUserPostProcessing = new StdSharedPtr<UserWorker<CustomDatum>>(new WUserPostProcessing(userPostProcessing)))
-                        {
-                            // Add custom processing
-                            const bool workerProcessingOnNewThread = false;
-                            opWrapper.SetWorker(WorkerType.PostProcessing, wUserPostProcessing, workerProcessingOnNewThread);
+                        OpenPose.Log("Starting thread(s)...", Priority.High);
+                        // Start, run & stop threads - it blocks this thread until all others have finished 
+                        opWrapperT.Exec();
 
-                            // Set to single-thread (for sequential processing and/or debugging and/or reducing latency)
-                            if (Flags.DisableMultiThread)
-                                opWrapper.DisableMultiThreading();
-
-                            OpenPose.Log("Starting thread(s)...", Priority.High);
-                            // Start, run & stop threads - it blocks this thread until all others have finished
-                            opWrapper.Exec();
-
-                            // Measuring total time
-                            timeBegin.Stop();
-                            var totalTimeSec = timeBegin.ElapsedMilliseconds * 1000;
-                            var message = $"OpenPose demo successfully finished. Total time: {totalTimeSec} seconds.";
-                            OpenPose.Log(message, Priority.High);
-                        }
+                        // Measuring total time
+                        OpenPose.PrintTime(opTimer, "OpenPose demo successfully finished. Total time: ", " seconds.", Priority.High);
                     }
                 }
 

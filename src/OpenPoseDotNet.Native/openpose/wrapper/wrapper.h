@@ -270,6 +270,29 @@ DLLEXPORT bool op_wrapper_waitAndEmplace(const data_type dataType, void* wrapper
     return ret;
 }
 
+DLLEXPORT bool op_wrapper_waitAndEmplace_cvMat(const data_type dataType, void* wrapper, op::Matrix* mat)
+{
+    bool ret = false;
+
+    switch(dataType)
+    {
+        case data_type::Default:
+            {
+                auto& tmp = *mat;
+                ret = ((DefaultWrapper*)wrapper)->waitAndEmplace(tmp);
+            }
+            break;
+        case data_type::Custom:
+            {
+                auto& tmp = *mat;
+                ret = ((CustomWrapper*)wrapper)->waitAndEmplace(tmp);
+            }
+            break;
+    }
+
+    return ret;
+}
+
 DLLEXPORT bool op_wrapper_tryPush(const data_type dataType, void* wrapper, void* tDatums)
 {
     bool ret = false;
@@ -389,20 +412,20 @@ DLLEXPORT bool op_wrapper_emplaceAndPop(const data_type dataType, void* wrapper,
     return ret;
 }
 
-DLLEXPORT void* op_wrapper_emplaceAndPop_cvMat(const data_type dataType, void* wrapper, cv::Mat* cvMat)
+DLLEXPORT void* op_wrapper_emplaceAndPop_cvMat(const data_type dataType, void* wrapper, op::Matrix* mat)
 {
     switch(dataType)
     {
         case data_type::Default:
             {
-                const auto& tmp = *cvMat;
+                const auto& tmp = *mat;
                 const auto ret = ((DefaultWrapper*)wrapper)->emplaceAndPop(tmp);
                 return new DefaultDatums(ret);
             }
             break;
         case data_type::Custom:
             {
-                const auto& tmp = *cvMat;
+                const auto& tmp = *mat;
                 const auto ret = ((CustomWrapper*)wrapper)->emplaceAndPop(tmp);
                 return new CustomDatums(ret);
             }
@@ -423,14 +446,14 @@ DLLEXPORT void* op_wrapper_emplaceAndPop_rawImage(const data_type dataType,
     {
         case data_type::Default:
             {
-                cv::Mat mat(height, width, type, data);
+                op::Matrix mat(height, width, type, data);
                 const auto ret = ((DefaultWrapper*)wrapper)->emplaceAndPop(mat);
                 return new DefaultDatums(ret);
             }
             break;
         case data_type::Custom:
             {
-                cv::Mat mat(height, width, type, data);
+                op::Matrix mat(height, width, type, data);
                 const auto ret = ((CustomWrapper*)wrapper)->emplaceAndPop(mat);
                 return new CustomDatums(ret);
             }
@@ -438,6 +461,21 @@ DLLEXPORT void* op_wrapper_emplaceAndPop_rawImage(const data_type dataType,
     }
 
     return nullptr;
+}
+
+DLLEXPORT void op_wrapper_setDefaultMaxSizeQueues(const data_type dataType,
+                                                  void* wrapper,
+                                                  const long long defaultMaxSizeQueues)
+{
+    switch(dataType)
+    {
+        case data_type::Default:
+            ((DefaultWrapper*)wrapper)->setDefaultMaxSizeQueues(defaultMaxSizeQueues);
+            break;
+        case data_type::Custom:
+            ((CustomWrapper*)wrapper)->setDefaultMaxSizeQueues(defaultMaxSizeQueues);
+            break;
+    }
 }
 
 #endif

@@ -4,7 +4,7 @@
     public static partial class OpenPose
     {
 
-        internal sealed partial class Native
+        internal sealed class Native
         {
 
             internal enum ErrorType

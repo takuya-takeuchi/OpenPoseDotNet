@@ -70,6 +70,12 @@ namespace OpenPoseDotNet.Interop
                 NativeMethods.cstd_memcpy((IntPtr)ptrDest, ptrSource, (elements * sizeof(NativeMethods.NativePointOfInt32)));
         }
 
+        public static unsafe void Copy(IntPtr ptrSource, NativeMethods.NativeRectangleOfFloat[] dest, int elements)
+        {
+            fixed (NativeMethods.NativeRectangleOfFloat* ptrDest = &dest[0])
+                NativeMethods.cstd_memcpy((IntPtr)ptrDest, ptrSource, (elements * sizeof(NativeMethods.NativeRectangleOfFloat)));
+        }
+
         public static unsafe void Copy(uint[] source, IntPtr ptrDest, int elements)
         {
             fixed (uint* ptrSource = &source[0])

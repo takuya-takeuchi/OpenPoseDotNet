@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Text;
 
 // ReSharper disable once CheckNamespace
 namespace OpenPoseDotNet
@@ -10,8 +8,8 @@ namespace OpenPoseDotNet
     internal sealed partial class NativeMethods
     {
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-        public static extern IntPtr op_wrapperStructPose_new(bool enable,
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern IntPtr op_wrapperStructPose_new(PoseMode poseMode,
                                                              IntPtr netInputSize,
                                                              IntPtr outputSize,
                                                              ScaleMode keypointScale,
@@ -33,17 +31,19 @@ namespace OpenPoseDotNet
                                                              int numberPeopleMax,
                                                              bool maximizePositives,
                                                              double fpsMax,
+                                                             byte[] protoTxtPath,
+                                                             byte[] caffeModelPath,
+                                                             float upsamplingRatio,
                                                              bool enableGoogleLogging);
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void op_wrapperStructPose_delete(IntPtr face);
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-        [return: MarshalAs(UnmanagedType.U1)]
-        public static extern bool op_wrapperStructPose_get_enable(IntPtr face);
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern PoseMode op_wrapperStructPose_get_poseMode(IntPtr face);
 
-        [DllImport(NativeMethods.NativeLibrary, CallingConvention = NativeMethods.CallingConvention)]
-        public static extern void op_wrapperStructPose_set_enable(IntPtr face, bool enable);
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern void op_wrapperStructPose_set_poseMode(IntPtr face, PoseMode poseMode);
 
     }
 

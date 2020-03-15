@@ -11,13 +11,42 @@ namespace OpenPoseDotNet
 
         #region Methods
 
+        public static StdTimePoint GetTimerInit()
+        {
+            var ret = NativeMethods.op_getTimerInit();
+            return new StdTimePoint(ret);
+        }
+
+        public static double GetTimerSeconds(StdTimePoint timePoint)
+        {
+            if (timePoint == null)
+                throw new ArgumentNullException(nameof(timePoint));
+
+            timePoint.ThrowIfDisposed();
+
+            return NativeMethods.op_getTimeSeconds(timePoint.NativePtr);
+        }
+
+        public static void PrintTime(StdTimePoint timePoint, string firstMessage, string secondMessage, Priority priority)
+        {
+            if (timePoint == null)
+                throw new ArgumentNullException(nameof(timePoint));
+
+            timePoint.ThrowIfDisposed();
+
+            var firstMessageBytes = Encoding.UTF8.GetBytes(firstMessage ?? "");
+            var secondMessageBytes = Encoding.UTF8.GetBytes(secondMessage ?? "");
+
+            NativeMethods.op_printTime(timePoint.NativePtr, firstMessageBytes, secondMessageBytes, priority);
+        }
+
         #region utilities/check
 
-        public static void Check(bool condition,
-                                 string message,
-                                 int line = -1,
-                                 string function = "",
-                                 string file = "")
+        public static void CheckBool(bool condition,
+                                     string message,
+                                     int line = -1,
+                                     string function = "",
+                                     string file = "")
         {
             if (message == null)
                 throw new ArgumentNullException(nameof(message));
@@ -26,18 +55,18 @@ namespace OpenPoseDotNet
             var functionBytes = Encoding.UTF8.GetBytes(function ?? "");
             var fileBytes = Encoding.UTF8.GetBytes(file ?? "");
 
-            NativeMethods.op_check(condition, messageBytes, line, functionBytes, fileBytes);
+            NativeMethods.op_checkBool(condition, messageBytes, line, functionBytes, fileBytes);
         }
 
         #endregion
 
         #region utilities/errorAndLog
 
-        public static void DebugLog(string message,
-                                    Priority priority = Priority.Max,
-                                    int line = -1,
-                                    string function = "",
-                                    string file = "")
+        public static void LogIfDebug(string message,
+                                      Priority priority = Priority.Max,
+                                      int line = -1,
+                                      string function = "",
+                                      string file = "")
         {
             if (message == null)
                 throw new ArgumentNullException(nameof(message));
@@ -46,7 +75,7 @@ namespace OpenPoseDotNet
             var functionBytes = Encoding.UTF8.GetBytes(function ?? "");
             var fileBytes = Encoding.UTF8.GetBytes(file ?? "");
 
-            NativeMethods.op_dLog(messageBytes, priority, line, functionBytes, fileBytes);
+            NativeMethods.op_opLogIfDebug(messageBytes, priority, line, functionBytes, fileBytes);
         }
 
         public static void Error(string message,
@@ -77,7 +106,7 @@ namespace OpenPoseDotNet
             var functionBytes = Encoding.UTF8.GetBytes(function ?? "");
             var fileBytes = Encoding.UTF8.GetBytes(file ?? "");
 
-            NativeMethods.op_log(messageBytes, priority, line, functionBytes, fileBytes);
+            NativeMethods.op_opLog(messageBytes, priority, line, functionBytes, fileBytes);
         }
 
         #endregion
@@ -101,6 +130,11 @@ namespace OpenPoseDotNet
         public static RenderMode FlagsToRenderMode(int renderFlag, bool gpuBuggy, int renderPoseFlag = -2)
         {
             return NativeMethods.op_flagsToRenderMode(renderFlag, gpuBuggy, renderPoseFlag);
+        }
+
+        public static PoseMode FlagsToPoseMode(int poseMode)
+        {
+            return NativeMethods.op_flagsToPoseMode(poseMode);
         }
 
         public static PoseModel FlagsToPoseModel(string poseModeString)
@@ -132,6 +166,10 @@ namespace OpenPoseDotNet
             return NativeMethods.op_flagsToHeatMapScaleMode(heatMapScale);
         }
 
+        public static Detector FlagsToDetector(int detector)
+        {
+            return NativeMethods.op_flagsToDetector(detector);
+        }
 
         public static Tuple<ProducerType, string> FlagsToProducer(string imageDirectory,
                                                                   string videoPath,

@@ -53,6 +53,11 @@ DLLEXPORT void std_vector_##__TYPENAME__##_emplace_back(std::vector<__TYPE__> *v
 {\
     return vector->emplace_back();\
 }\
+\
+DLLEXPORT __TYPE__* std_vector_##__TYPENAME__##_at(std::vector<__TYPE__> *vector, int index)\
+{\
+    return &(vector->at(index));\
+}\
 
 #define MAKE_FUNC_CLASS(__TYPE__, __TYPENAME__)\
 DLLEXPORT std::vector<__TYPE__>* std_vector_##__TYPENAME__##_new1()\
@@ -100,6 +105,11 @@ DLLEXPORT void std_vector_##__TYPENAME__##_emplace_back(std::vector<__TYPE__> *v
 {\
     return vector->emplace_back();\
 }\
+\
+DLLEXPORT __TYPE__* std_vector_##__TYPENAME__##_at(std::vector<__TYPE__> *vector, int index)\
+{\
+    return &(vector->at(index));\
+}\
 
 #define MAKE_FUNC_REF(__TYPE__, __TYPENAME__)\
 DLLEXPORT std::vector<__TYPE__>* std_vector_##__TYPENAME__##_new1()\
@@ -145,6 +155,16 @@ DLLEXPORT bool std_vector_##__TYPENAME__##_empty(std::vector<__TYPE__> *vector)\
 {\
     return vector->empty();\
 }\
+\
+DLLEXPORT void std_vector_##__TYPENAME__##_emplace_back(std::vector<__TYPE__> *vector)\
+{\
+    return vector->emplace_back();\
+}\
+\
+DLLEXPORT __TYPE__* std_vector_##__TYPENAME__##_at(std::vector<__TYPE__> *vector, int index)\
+{\
+    return &(vector->at(index));\
+}\
 
 #define MAKE_FUNC_POINTER(__TYPE__, __TYPENAME__)\
 DLLEXPORT std::vector<__TYPE__*>* std_vector_##__TYPENAME__##_new1()\
@@ -183,7 +203,7 @@ DLLEXPORT void std_vector_##__TYPENAME__##_copy(std::vector<__TYPE__*> *vector, 
     memcpy(dst, &(vector->at(0)), length);\
 }\
 \
-DLLEXPORT bool std_vector_##__TYPENAME__##_delete(std::vector<__TYPE__*> *vector)\
+DLLEXPORT bool std_vector_##__TYPENAME__##_empty(std::vector<__TYPE__*> *vector)\
 {\
     return vector->empty();\
 }\
@@ -191,6 +211,11 @@ DLLEXPORT bool std_vector_##__TYPENAME__##_delete(std::vector<__TYPE__*> *vector
 DLLEXPORT void std_vector_##__TYPENAME__##_emplace_back(std::vector<__TYPE__*> *vector)\
 {\
     return vector->emplace_back();\
+}\
+\
+DLLEXPORT __TYPE__* std_vector_##__TYPENAME__##_at(std::vector<__TYPE__*> *vector, int index)\
+{\
+    return vector->at(index);\
 }\
 
 #pragma endregion template
@@ -210,7 +235,12 @@ MAKE_FUNC(op::HeatMapType, HeatMapType)
 MAKE_FUNC_REF(op::Array<float>, op_ArrayOfFloat)
 
 MAKE_FUNC_CLASS(op::Point<int>, PointOfInt32_t)
+MAKE_FUNC_CLASS(op::Rectangle<float>, RectangleOfFloat)
 MAKE_FUNC_CLASS(op::Datum, Datum)
 MAKE_FUNC_CLASS(CustomDatum, CustomDatum)
+MAKE_FUNC_CLASS(std::shared_ptr<op::Datum>, StdSharedPtrOfDatum)
+MAKE_FUNC_CLASS(std::shared_ptr<CustomDatum>, StdSharedPtrOfCustomDatum)
+MAKE_FUNC_POINTER(cv::Mat, 3rdparty_opencv_Mat)
+MAKE_FUNC_POINTER(op::Matrix, op_Matrix)
 
 #endif

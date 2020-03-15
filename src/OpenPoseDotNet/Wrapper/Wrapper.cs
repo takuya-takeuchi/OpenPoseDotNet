@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 // ReSharper disable once CheckNamespace
 namespace OpenPoseDotNet
@@ -121,15 +123,115 @@ namespace OpenPoseDotNet
             NativeMethods.op_wrapper_disableMultiThreading(this._DataType, this.NativePtr);
         }
 
-        public StdSharedPtr<StdVector<T>> EmplaceAndPop(Mat mat)
+        public StdSharedPtr<StdVector<StdSharedPtr<T>>> EmplaceAndPop(Matrix mat)
         {
             if (mat == null)
                 throw new ArgumentNullException(nameof(mat));
 
             mat.ThrowIfDisposed();
+            this.ThrowIfDisposed();
 
             var ret = NativeMethods.op_wrapper_emplaceAndPop_cvMat(this._DataType, this.NativePtr, mat.NativePtr);
-            return new StdSharedPtr<StdVector<T>>(ret);
+            return new StdSharedPtr<StdVector<StdSharedPtr<T>>>(ret);
+        }
+
+        public bool EmplaceAndPop(StdSharedPtr<StdVector<StdSharedPtr<T>>> datums)
+        {
+            if (datums == null)
+                throw new ArgumentNullException(nameof(datums));
+
+            datums.ThrowIfDisposed();
+            this.ThrowIfDisposed();
+
+            return NativeMethods.op_wrapper_emplaceAndPop(this._DataType, this.NativePtr, datums.NativePtr);
+        }
+
+        public StdSharedPtr<StdVector<StdSharedPtr<T>>> EmplaceAndPop(Bitmap bitmap)
+        {
+            if (bitmap == null)
+                throw new ArgumentNullException(nameof(bitmap));
+
+            this.ThrowIfDisposed();
+
+            byte[] image = null;
+            var format = bitmap.PixelFormat;
+            var width = bitmap.Width;
+            var height = bitmap.Height;
+            var size = new Size(width, height);
+
+            int type;
+            switch (format)
+            {
+                case PixelFormat.Format24bppRgb:
+                    type = MatType.CV_8UC3;
+                    break;
+                case PixelFormat.Format32bppArgb:
+                    type = MatType.CV_8UC4;
+                    break;
+                case PixelFormat.Format8bppIndexed:
+                    type = MatType.CV_8UC1;
+                    break;
+                default:
+                    throw new ArgumentException($"{bitmap.PixelFormat} is not supported.");
+            }
+
+            BitmapData data = null;
+
+            try
+            {
+                var channels = MatType.Channels(type);
+
+                data = bitmap.LockBits(new Rectangle(Point.Empty, size), ImageLockMode.ReadOnly, format);
+
+                var stride = data.Stride;
+                var scan0 = data.Scan0;
+                var line = width * channels;
+                image = new byte[line * height];
+
+                unsafe
+                {
+                    fixed (byte* pi = &image[0])
+                    {
+                        var ppi = pi;
+                        var ps = (byte*)scan0;
+                        for (var h = 0; h < height; h++)
+                        {
+                            NativeMethods.cstd_memcpy(ppi, ps, line);
+                            ps += stride;
+                            ppi += line;
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                if (data != null)
+                    bitmap.UnlockBits(data);
+            }
+
+            var ret = NativeMethods.op_wrapper_emplaceAndPop_rawImage(this._DataType,
+                                                                      this.NativePtr,
+                                                                      image,
+                                                                      width,
+                                                                      height,
+                                                                      type);
+            return new StdSharedPtr<StdVector<StdSharedPtr<T>>>(ret);
+        }
+
+        public StdSharedPtr<StdVector<StdSharedPtr<T>>> EmplaceAndPop(byte[] image, int width, int height, int type)
+        {
+            if (image == null)
+                throw new ArgumentNullException(nameof(image));
+
+            this.ThrowIfDisposed();
+
+            var ret = NativeMethods.op_wrapper_emplaceAndPop_rawImage(this._DataType,
+                                                                      this.NativePtr,
+                                                                      image,
+                                                                      width,
+                                                                      height,
+                                                                      type);
+            return new StdSharedPtr<StdVector<StdSharedPtr<T>>>(ret);
         }
 
         public void Exec()
@@ -147,6 +249,12 @@ namespace OpenPoseDotNet
             NativeMethods.op_wrapper_setWorker(this._DataType, this.NativePtr, workerType, worker.NativePtr, workerOnNewThread);
         }
 
+        public void SetDefaultMaxSizeQueues(long defaultMaxSizeQueues = -1)
+        {
+            this.ThrowIfDisposed();
+            NativeMethods.op_wrapper_setDefaultMaxSizeQueues(this._DataType, this.NativePtr, defaultMaxSizeQueues);
+        }
+
         public void Start()
         {
             this.ThrowIfDisposed();
@@ -161,7 +269,7 @@ namespace OpenPoseDotNet
             NativeMethods.op_wrapper_stop(this._DataType, this.NativePtr);
         }
 
-        public bool WaitAndEmplace(StdSharedPtr<StdVector<T>> datums)
+        public bool WaitAndEmplace(StdSharedPtr<StdVector<StdSharedPtr<T>>> datums)
         {
             if (datums == null)
                 throw new ArgumentNullException(nameof(datums));
@@ -172,12 +280,23 @@ namespace OpenPoseDotNet
             return NativeMethods.op_wrapper_waitAndEmplace(this._DataType, this.NativePtr, datums.NativePtr);
         }
 
-        public bool WaitAndPop(out StdSharedPtr<StdVector<T>> datums)
+        public bool WaitAndEmplace(Matrix mat)
+        {
+            if (mat == null)
+                throw new ArgumentNullException(nameof(mat));
+
+            mat.ThrowIfDisposed();
+            this.ThrowIfDisposed();
+
+            return NativeMethods.op_wrapper_waitAndEmplace_cvMat(this._DataType, this.NativePtr, mat.NativePtr);
+        }
+
+        public bool WaitAndPop(out StdSharedPtr<StdVector<StdSharedPtr<T>>> datums)
         {
             this.ThrowIfDisposed();
 
             var ret = NativeMethods.op_wrapper_waitAndPop(this._DataType, this.NativePtr, out var tDatums);
-            datums = ret ? new StdSharedPtr<StdVector<T>>(tDatums) : null;
+            datums = ret ? new StdSharedPtr<StdVector<StdSharedPtr<T>>>(tDatums) : null;
             return ret;
         }
 

@@ -8,10 +8,25 @@ namespace OpenPoseDotNet
 
         #region Properties
 
-        public static bool BodyDisabled
+        public static int Body
         {
-            get => NativeMethods.op_flags_get_body_disable();
-            set => NativeMethods.op_flags_set_body_disable(value);
+            get => NativeMethods.op_flags_get_body();
+            set => NativeMethods.op_flags_set_body(value);
+        }
+
+        public static string CaffeModelPath
+        {
+            get
+            {
+                var stdstr = NativeMethods.op_flags_get_caffemodel_path();
+                var ret = StringHelper.FromStdString(stdstr, true);
+                return ret;
+            }
+            set
+            {
+                var str = Encoding.UTF8.GetBytes(value ?? "");
+                NativeMethods.op_flags_set_caffemodel_path(str);
+            }
         }
 
         public static bool Face
@@ -205,12 +220,6 @@ namespace OpenPoseDotNet
             get => NativeMethods.op_flags_get_hand_scale_range();
             set => NativeMethods.op_flags_set_hand_scale_range(value);
         }
-        
-        public static bool HandTracking
-        {
-            get => NativeMethods.op_flags_get_hand_tracking();
-            set => NativeMethods.op_flags_set_hand_tracking(value);
-        }
 
         public static bool Identification
         {
@@ -307,11 +316,35 @@ namespace OpenPoseDotNet
             get => NativeMethods.op_flags_get_tracking();
             set => NativeMethods.op_flags_set_tracking(value);
         }
+        
+        public static double UpsamplingRatio
+        {
+            get => NativeMethods.op_flags_get_upsampling_ratio();
+            set => NativeMethods.op_flags_set_upsampling_ratio(value);
+        }
 
         public static int WriteCocoJsonVariant
         {
             get => NativeMethods.op_flags_get_write_coco_json_variant();
             set => NativeMethods.op_flags_set_write_coco_json_variant(value);
+        }
+
+        public static int WriteCocoJsonVariants
+        {
+            get => NativeMethods.op_flags_get_write_coco_json_variants();
+            set => NativeMethods.op_flags_set_write_coco_json_variants(value);
+        }
+
+        public static int FaceDetector
+        {
+            get => NativeMethods.op_flags_get_face_detector();
+            set => NativeMethods.op_flags_set_face_detector(value);
+        }
+
+        public static int HandDetector
+        {
+            get => NativeMethods.op_flags_get_hand_detector();
+            set => NativeMethods.op_flags_set_hand_detector(value);
         }
 
         public static int HeatmapsScale
@@ -511,7 +544,22 @@ namespace OpenPoseDotNet
             get => NativeMethods.op_flags_get_profile_speed();
             set => NativeMethods.op_flags_set_profile_speed(value);
         }
-        
+
+        public static string PrototxtPath
+        {
+            get
+            {
+                var stdstr = NativeMethods.op_flags_get_prototxt_path();
+                var ret = StringHelper.FromStdString(stdstr, true);
+                return ret;
+            }
+            set
+            {
+                var str = Encoding.UTF8.GetBytes(value ?? "");
+                NativeMethods.op_flags_set_prototxt_path(str);
+            }
+        }
+
         public static string ModelFolder
         {
             get
@@ -584,21 +632,6 @@ namespace OpenPoseDotNet
             {
                 var str = Encoding.UTF8.GetBytes(value ?? "");
                 NativeMethods.op_flags_set_write_bvh(str);
-            }
-        }
-
-        public static string WriteCocoFootJson
-        {
-            get
-            {
-                var stdstr = NativeMethods.op_flags_get_write_coco_foot_json();
-                var ret = StringHelper.FromStdString(stdstr, true);
-                return ret;
-            }
-            set
-            {
-                var str = Encoding.UTF8.GetBytes(value ?? "");
-                NativeMethods.op_flags_set_write_coco_foot_json(str);
             }
         }
 
@@ -721,6 +754,12 @@ namespace OpenPoseDotNet
                 NativeMethods.op_flags_set_write_video(str);
             }
         }
+        
+        public static bool WriteVideoWithAudio
+        {
+            get => NativeMethods.op_flags_get_write_video_with_audio();
+            set => NativeMethods.op_flags_set_write_video_with_audio(value);
+        }
 
         public static string WriteVideoAdam
         {
@@ -737,8 +776,30 @@ namespace OpenPoseDotNet
             }
         }
 
+        #region ExampleOnly
+
+        public static string ImagePath
+        {
+            get;
+            set;
+        }
+
+        public static bool NoDisplay
+        {
+            get;
+            set;
+        }
+
+        public static bool LatencyIsIrrelevantAndComputerWithLotsOfRam
+        {
+            get;
+            set;
+        }
+
+        #endregion
+
         #endregion
 
     }
-    
+
 }
