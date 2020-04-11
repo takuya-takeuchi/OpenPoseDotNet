@@ -15,7 +15,7 @@
 
 ````dos
 > cd <OpenPoseDotNet_dir>\examples\TutorialApiCpp\01_BodyFromImageDefault
-> SymlinkBinary.bat <Debug/Release> build_win_desktop_<cpu/cuda>_x64
+> pwsh SymlinkBinary.ps1 <Debug/Release> build_win_desktop_<cpu/cuda>_x64
 > dotnet run -c Release  -i "examples\media\COCO_val2014_000000000192.jpg"
 ````
 

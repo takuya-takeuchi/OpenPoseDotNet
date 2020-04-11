@@ -6,21 +6,16 @@
 
 ````dos
 > cd <OpenPoseDotNet_dir>
-> BuildWindowsVS2015.bat <Debug/Release>
+> git submodule update --inti --recursive
+> cd src\OpenPoseDotNet.Native
+> pwsh Build.ps1 <Debug/Release> <cpu/cuda> 64 desktop <2015/2017/2019> <92/100/101>
 ````
 
-#### 2. Build OpenPoseDotNet.Native
-
-````dos
-> cd <OpenPoseDotNet_dir>\src\OpenPoseDotNet.Native
-> BuildWindowsVS2015.bat <Debug/Release>
-````
-
-#### 3. Try Tutorial
+#### 2. Try Tutorial
 
 ````dos
 > cd <OpenPoseDotNet_dir>\examples\TutorialApiCpp\02_WholeBodyFromImageDefault
-> SymlinkBinary.bat <Debug/Release>
+> pwsh SymlinkBinary.ps1 <Debug/Release> build_win_desktop_<cpu/cuda>_x64
 > dotnet run -c Release  -i "examples\media\COCO_val2014_000000000241.jpg"
 ````
 
