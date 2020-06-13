@@ -1,4 +1,4 @@
-# Synchronous Custom Output
+# Synchronous Custom Pre Processing
 
 ## Quick Start
 
@@ -14,7 +14,7 @@
 #### 2. Try Tutorial
 
 ````dos
-> cd <OpenPoseDotNet_dir>\examples\TutorialApiCpp\16_SynchronousCustomOutput
+> cd <OpenPoseDotNet_dir>\examples\TutorialApiCpp\15_SynchronousCustomPreProcessing
 > pwsh SymlinkBinary.ps1 <Debug/Release> build_win_desktop_<cpu/cuda>_x64
 > dotnet run -c Release
 ````

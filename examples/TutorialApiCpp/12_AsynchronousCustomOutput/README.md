@@ -1,4 +1,4 @@
-# Synchronous Custom Input
+# Asynchronous Custom Output
 
 ## Quick Start
 
@@ -14,9 +14,9 @@
 #### 2. Try Tutorial
 
 ````dos
-> cd <OpenPoseDotNet_dir>\examples\TutorialApiCpp\13_SynchronousCustomInput
+> cd <OpenPoseDotNet_dir>\examples\TutorialApiCpp\12_AsynchronousCustomOutput
 > pwsh SymlinkBinary.ps1 <Debug/Release> build_win_desktop_<cpu/cuda>_x64
-> dotnet run -c Release -i "examples\media"
+> dotnet run -c Release
 ````
 
-<img src="images/example_turorial_11.gif"/>
+<img src="images/example_turorial_7.gif"/>

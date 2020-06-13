@@ -28,4 +28,24 @@ DLLEXPORT void op_CameraParameterReader_setUndistortImage(op::CameraParameterRea
     parameter->setUndistortImage(undistortImage);
 }
 
+DLLEXPORT void op_CameraParameterReader_readParameters(op::CameraParameterReader* parameter,
+                                                       const char* cameraParameterPath,
+                                                       const int32_t cameraParameterPath_len,
+                                                       std::vector<std::string*>* serialNumbers)
+{
+    std::string str(cameraParameterPath, cameraParameterPath_len);
+
+    std::vector<std::string> vec;
+    if (serialNumbers != nullptr)
+    {
+        auto& tmp = *serialNumbers;
+        const size_t size = serialNumbers->size();
+        vec.resize(size);
+        for (size_t i = 0; i < size; i++)
+            vec[i] = *tmp[i];
+    }
+
+    parameter->readParameters(str, vec);
+}
+
 #endif

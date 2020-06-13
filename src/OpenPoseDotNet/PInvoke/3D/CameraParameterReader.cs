@@ -24,6 +24,12 @@ namespace OpenPoseDotNet
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void op_CameraParameterReader_setUndistortImage(IntPtr parameter, bool undistortImage);
 
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern void op_CameraParameterReader_readParameters(IntPtr parameter,
+                                                                          byte[] path,
+                                                                          int path_len,
+                                                                          IntPtr serialNumbers);
+
     }
 
 }

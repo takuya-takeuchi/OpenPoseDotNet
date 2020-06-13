@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
 
 // ReSharper disable once CheckNamespace
 namespace OpenPoseDotNet
@@ -44,6 +47,20 @@ namespace OpenPoseDotNet
         #endregion
 
         #region Methods
+
+        public void ReadParameters(string cameraParameterPath, IEnumerable<string> serialNumbers = null)
+        {
+            if (cameraParameterPath == null)
+                throw new ArgumentNullException(nameof(cameraParameterPath));
+            if (!Directory.Exists(cameraParameterPath))
+                throw new FileNotFoundException($"'{cameraParameterPath}' is not found.");
+
+            this.ThrowIfDisposed();
+
+            var pathBytes = Encoding.UTF8.GetBytes(cameraParameterPath);
+            // ToDo: support serialNumbers parameter
+            NativeMethods.op_CameraParameterReader_readParameters(this.NativePtr, pathBytes, pathBytes.Length, IntPtr.Zero);
+        }
 
         #region Overrides
 

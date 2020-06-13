@@ -452,9 +452,9 @@ class ThirdPartyBuilder
                }
 
                $openposeDir = $this._Config.GetOpenPoseRootDir()
-               $ncnnTarget = Join-Path $current openpose
-               New-Item $ncnnTarget -Force -ItemType Directory
-               Set-Location $ncnnTarget
+               $openposeTarget = Join-Path $current openpose
+               New-Item $openposeTarget -Force -ItemType Directory
+               Set-Location $openposeTarget
                $current2 = Get-Location
                $installDir = Join-Path $current2 install
                $ret = $installDir
@@ -534,8 +534,6 @@ function ConfigCPU([Config]$Config)
    else
    {
       $env:OpenCV_DIR = $installOpenCVDir
-      $env:ncnn_DIR = $installOpenPoseDir
-      $env:ncnn_SRC_DIR = $openposeDir
       Write-Host "   cmake -D BUILD_SHARED_LIBS=ON `
          .." -ForegroundColor Yellow
       cmake -D BUILD_SHARED_LIBS=ON `
@@ -573,8 +571,6 @@ function ConfigCUDA([Config]$Config)
    else
    {
       $env:OpenCV_DIR = $installOpenCVDir
-      $env:ncnn_DIR = $installOpenPoseDir
-      $env:ncnn_SRC_DIR = $openposeDir
       Write-Host "   cmake -D BUILD_SHARED_LIBS=ON `
          .." -ForegroundColor Yellow
       cmake -D BUILD_SHARED_LIBS=ON `

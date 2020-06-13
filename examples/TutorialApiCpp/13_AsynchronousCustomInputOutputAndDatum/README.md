@@ -14,7 +14,7 @@
 #### 2. Try Tutorial
 
 ````dos
-> cd <OpenPoseDotNet_dir>\examples\TutorialApiCpp\12_AsynchronousCustomInputOutputAndDatum
+> cd <OpenPoseDotNet_dir>\examples\TutorialApiCpp\13_AsynchronousCustomInputOutputAndDatum
 > pwsh SymlinkBinary.ps1 <Debug/Release> build_win_desktop_<cpu/cuda>_x64
 > dotnet run -c Release -i "examples\media"
 ````

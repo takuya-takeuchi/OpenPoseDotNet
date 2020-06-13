@@ -67,7 +67,7 @@ configure_file(
 # include 3rdparty libraries
 if (MSVC OR MSYS OR MINGW)
     set(STATIC_LIBRARIES
-        ${OPENPOSEDOTNET_ROOT_DIR}/src/openpose/3rdparty/windows/opencv/x64/vc14/lib/opencv_world411.lib
+        ${OPENPOSEDOTNET_ROOT_DIR}/src/openpose/3rdparty/windows/opencv/x64/vc14/lib/opencv_world420.lib
         optimized ${OPENPOSEDOTNET_ROOT_DIR}/src/openpose/3rdparty/windows/caffe3rdparty/lib/gflags.lib
         optimized ${CMAKE_CURRENT_BINARY_DIR}/openpose/src/openpose/Release/openpose.lib
         debug ${OPENPOSEDOTNET_ROOT_DIR}/src/openpose/3rdparty/windows/caffe3rdparty/lib/gflagsd.lib

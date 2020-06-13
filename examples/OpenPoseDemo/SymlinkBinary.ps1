@@ -64,24 +64,17 @@ $OpenPoseDotNetNativeLibraries =
 )
 $OpenPoseDependenciesLibraries =
 @(
-   "boost_chrono-vc140-mt-1_61.dll",
-   "boost_filesystem-vc140-mt-1_61.dll",
    "boost_filesystem-vc141-mt-x64-1_69.dll",
-   "boost_python-vc140-mt-1_61.dll",
-   "boost_system-vc140-mt-1_61.dll",
-   "boost_thread-vc140-mt-1_61.dll",
+   "boost_filesystem-vc141-mt-gd-x64-1_69.dll",
+   "boost_thread-vc141-mt-gd-x64-1_69.dll",
    "boost_thread-vc141-mt-x64-1_69.dll",
    "caffe.dll",
    "caffehdf5.dll",
    "caffehdf5_hl.dll",
    "caffezlib1.dll",
-   "cublas64_80.dll",
    "cublas64_100.dll",
-   "cudart64_80.dll",
    "cudart64_100.dll",
-   "cudnn64_5.dll",
    "cudnn64_7.dll",
-   "curand64_80.dll",
    "curand64_100.dll",
    "gflags.dll",
    "gflagsd.dll",
@@ -91,11 +84,9 @@ $OpenPoseDependenciesLibraries =
    "libgfortran-3.dll",
    "libopenblas.dll",
    "libquadmath-0.dll",
-   "opencv_ffmpeg401_64.dll",
-   "opencv_videoio_ffmpeg411_64.dll",
-   "opencv_world411.dll",
-   "opencv_world411d.dll",
-   "python27.dll",
+   "opencv_videoio_ffmpeg420_64.dll",
+   "opencv_world420.dll",
+   "opencv_world420d.dll",
    "VCRUNTIME140.dll"
 )
 
