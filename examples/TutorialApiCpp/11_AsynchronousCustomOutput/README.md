@@ -16,7 +16,7 @@
 ````dos
 > cd <OpenPoseDotNet_dir>\examples\TutorialApiCpp\11_AsynchronousCustomOutput
 > pwsh SymlinkBinary.ps1 <Debug/Release> build_win_desktop_<cpu/cuda>_x64
-> dotnet run -c Release -i "examples\media"
+> dotnet run -c Release
 ````
 
 <img src="images/example_turorial_7.gif"/>
