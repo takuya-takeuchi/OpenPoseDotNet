@@ -449,6 +449,12 @@ class ThirdPartyBuilder
                   $env:CUDA_PATH="${cudaPath}"
                   $env:PATH="$env:CUDA_PATH\bin;$env:CUDA_PATH\libnvvp;$ENV:PATH"
                   Write-Host "Info: CUDA_PATH: ${env:CUDA_PATH}" -ForegroundColor Green
+
+                  $GPU_MODE = "CUDA"
+               }
+               else
+               {
+                  $GPU_MODE = "CPU_ONLY"
                }
 
                $openposeDir = $this._Config.GetOpenPoseRootDir()
@@ -466,9 +472,11 @@ class ThirdPartyBuilder
 
                   Write-Host "   cmake -G $vs -A $vsarc -D CMAKE_BUILD_TYPE=$Configuration `
          -D USE_CUDA:BOOL=$useCuda `
+         -D GPU_MODE=$GPU_MODE `
          $openposeDir" -ForegroundColor Yellow
                   cmake -G $vs -A $vsarc -T host=x64 `
                         -D USE_CUDA:BOOL=$useCuda `
+                        -D GPU_MODE=$GPU_MODE `
                         $openposeDir
                   Write-Host "   cmake --build . --config $Configuration" -ForegroundColor Yellow
                   cmake --build . --config $Configuration
@@ -478,9 +486,11 @@ class ThirdPartyBuilder
                   # $env:vecLib_INCLUDE_DIR="/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/Accelerate.framework/Versions/Current/Frameworks/vecLib.framework/Headers/"
                   Write-Host "   cmake -D CMAKE_BUILD_TYPE=$Configuration `
          -D USE_CUDA:BOOL=$useCuda `
+         -D GPU_MODE=$GPU_MODE `
          $openposeDir" -ForegroundColor Yellow
                   cmake -D CMAKE_BUILD_TYPE=$Configuration `
                         -D USE_CUDA:BOOL=$useCuda `
+                        -D GPU_MODE=$GPU_MODE `
                         $openposeDir
                   Write-Host "   cmake --build . --config $Configuration" -ForegroundColor Yellow
                   cmake --build . --config $Configuration
@@ -489,9 +499,11 @@ class ThirdPartyBuilder
                {
                   Write-Host "   cmake -D CMAKE_BUILD_TYPE=$Configuration `
          -D USE_CUDA:BOOL=$useCuda `
+         -D GPU_MODE=$GPU_MODE `
          $openposeDir" -ForegroundColor Yellow
                   cmake -D CMAKE_BUILD_TYPE=$Configuration `
                         -D USE_CUDA:BOOL=$useCuda `
+                        -D GPU_MODE=$GPU_MODE `
                         $openposeDir
                   Write-Host "   cmake --build . --config $Configuration" -ForegroundColor Yellow
                   cmake --build . --config $Configuration
