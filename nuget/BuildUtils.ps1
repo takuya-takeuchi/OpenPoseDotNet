@@ -475,7 +475,7 @@ class ThirdPartyBuilder
                }
                elseif ($global:IsMacOS)
                {
-                  $env:vecLib_INCLUDE_DIR="/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/Accelerate.framework/Versions/Current/Frameworks/vecLib.framework/Headers/"
+                  # $env:vecLib_INCLUDE_DIR="/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/Accelerate.framework/Versions/Current/Frameworks/vecLib.framework/Headers/"
                   Write-Host "   cmake -D CMAKE_BUILD_TYPE=$Configuration `
          -D USE_CUDA:BOOL=$useCuda `
          $openposeDir" -ForegroundColor Yellow
@@ -670,4 +670,54 @@ function CopyToArtifact()
 
    Write-Host "Copy ${libraryName} to ${output}" -ForegroundColor Green
    Copy-Item ${binary} ${output}
+}
+
+function CopyDependenciesToArtifact()
+{
+   Param([string]$srcDir, [string]$build, [string]$libraryName, [string]$dstDir, [string]$rid, [string]$configuration="")
+
+   if ($configuration)
+   {
+      $baseDir = Join-Path ${srcDir} ${build} | `
+                 Join-Path -ChildPath ${configuration}
+   }
+   else
+   {
+      $baseDir = Join-Path ${srcDir} ${build}
+   }
+
+   $output = Join-Path $dstDir runtimes | `
+             Join-Path -ChildPath ${rid} | `
+             Join-Path -ChildPath native
+
+   if (!(Test-Path $output))
+   {
+      Write-Host "Destination: ${output} is not found" -ForegroundColor Red
+      exit -1
+   }
+
+   if ($global:IsWindows)
+   {
+      $os = "win"
+   }
+   elseif ($global:IsMacOS)
+   {
+      $targetDirectories =
+      @(
+         "openpose/caffe/lib",
+         "openpose/src/openpose"
+      )
+
+      foreach ($target in $targetDirectories)
+      {
+         $libs = Join-Path $baseDir $target | `
+                 Join-Path -ChildPath "*.dylib"
+
+         Write-Host "Copy ${libs} to ${output}" -ForegroundColor Green
+         Copy-Item ${libs} ${output}
+      }
+   }
+   elseif ($global:IsLinux)
+   {
+   }
 }
