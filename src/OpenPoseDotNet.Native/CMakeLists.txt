@@ -79,9 +79,9 @@ elseif(APPLE)
         opencv_imgcodecs
         opencv_highgui
         optimized gflags
-        optimized ${CMAKE_CURRENT_BINARY_DIR}/openpose/build_osx/src/openpose/libopenpose.dylib
+        optimized ${CMAKE_CURRENT_BINARY_DIR}/openpose/src/openpose/libopenpose.dylib
         debug gflagsd
-        debug ${CMAKE_CURRENT_BINARY_DIR}/openpose/build_osx/src/openpose/libopenposed.dylib
+        debug ${CMAKE_CURRENT_BINARY_DIR}/openpose/src/openpose/libopenposed.dylib
     )
 elseif(UNIX AND NOT APPLE)
     set(STATIC_LIBRARIES
