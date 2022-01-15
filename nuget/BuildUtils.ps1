@@ -30,7 +30,11 @@ class Config
       91,
       92,
       100,
-      101
+      101,
+      110,
+      111,
+      112,
+      113
    )
 
    $CudaVersionHash =
@@ -39,7 +43,11 @@ class Config
       91 = "CUDA_PATH_V9_1";
       92 = "CUDA_PATH_V9_2";
       100 = "CUDA_PATH_V10_0";
-      101 = "CUDA_PATH_V10_1"
+      101 = "CUDA_PATH_V10_1";
+      110 = "CUDA_PATH_V11_0";
+      111 = "CUDA_PATH_V11_1";
+      112 = "CUDA_PATH_V11_2";
+      113 = "CUDA_PATH_V11_3";
    }
 
    $VisualStudioHash =
@@ -336,13 +344,30 @@ class Config
          }
       }
 
-      if ($this._Configuration -eq "Debug")
+      $target = $this.GetTarget()
+      if ($target -eq "cpu")
       {
-         return "build_${osname}_${platform}_${target}_${architecture}_d"
+      
+         if ($this._Configuration -eq "Debug")
+         {
+            return "build_${osname}_${platform}_${target}_${architecture}_d"
+         }
+         else
+         {
+            return "build_${osname}_${platform}_${target}_${architecture}"
+         }
       }
       else
       {
-         return "build_${osname}_${platform}_${target}_${architecture}"
+         $cudaVersion = $this._CudaVersion
+         if ($this._Configuration -eq "Debug")
+         {
+            return "build_${osname}_${platform}_${target}${cudaVersion}_${architecture}_d"
+         }
+         else
+         {
+            return "build_${osname}_${platform}_${target}${cudaVersion}_${architecture}"
+         }
       }
    }
 
@@ -566,6 +591,7 @@ function ConfigCUDA([Config]$Config)
    Write-Host "Start Build OpenPoseDotNet.Native" -ForegroundColor Green
    if ($IsWindows)
    {
+      $cudaPath = $Config.GetCUDAPath()
       $vs = $Config.GetVisualStudio()
       $vsarc = $Config.GetVisualStudioArchitecture()
 
