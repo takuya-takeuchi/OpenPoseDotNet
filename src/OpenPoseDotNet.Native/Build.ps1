@@ -6,7 +6,7 @@
 #%4: Platform (desktop)
 #%5: Optional Argument
 #   if build on Windows, Visual Studio Version [2015/2017/2019]
-#   if Target is cuda, CUDA version if Target is cuda [90/91/92/100/101/110/111/112/113/114]
+#   if Target is cuda, CUDA version if Target is cuda [90/91/92/100/101/102/110/111/112/113/114/115/116]
 #***************************************
 Param
 (
