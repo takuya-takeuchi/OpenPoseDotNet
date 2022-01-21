@@ -72,10 +72,6 @@ $OpenPoseDependenciesLibraries =
    "caffehdf5.dll",
    "caffehdf5_hl.dll",
    "caffezlib1.dll",
-   "cublas64_100.dll",
-   "cudart64_100.dll",
-   "cudnn64_7.dll",
-   "curand64_100.dll",
    "gflags.dll",
    "gflagsd.dll",
    "glog.dll",
@@ -89,6 +85,12 @@ $OpenPoseDependenciesLibraries =
    "opencv_world420d.dll",
    "VCRUNTIME140.dll"
 )
+
+$cudaBinaries = Get-ChildItem ${OpenPoseDotNetNativeBuildDir} -Filter cu*.dll
+foreach ($binary in $cudaBinaries)
+{
+   $OpenPoseDependenciesLibraries += (Split-Path -Leaf $binary)
+}
 
 # create symlink
 function create-symlink($Targets, $SrcDir, $DstDir)
