@@ -31,10 +31,14 @@ class Config
       92,
       100,
       101,
+      102,
       110,
       111,
       112,
-      113
+      113,
+      114,
+      115,
+      116
    )
 
    $CudaVersionHash =
@@ -44,10 +48,14 @@ class Config
       92 = "CUDA_PATH_V9_2";
       100 = "CUDA_PATH_V10_0";
       101 = "CUDA_PATH_V10_1";
+      102 = "CUDA_PATH_V10_2";
       110 = "CUDA_PATH_V11_0";
       111 = "CUDA_PATH_V11_1";
       112 = "CUDA_PATH_V11_2";
       113 = "CUDA_PATH_V11_3";
+      114 = "CUDA_PATH_V11_4";
+      115 = "CUDA_PATH_V11_5";
+      116 = "CUDA_PATH_V11_6";
    }
 
    $VisualStudioHash =
