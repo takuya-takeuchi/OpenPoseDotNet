@@ -68,30 +68,10 @@ foreach ($SrcPath in $projects)
    )
    $OpenPoseDependenciesLibraries =
    @(
-      "boost_filesystem-vc141-mt-x64-1_69.dll",
-      "boost_filesystem-vc141-mt-gd-x64-1_69.dll",
-      "boost_thread-vc141-mt-gd-x64-1_69.dll",
-      "boost_thread-vc141-mt-x64-1_69.dll",
-      "caffe.dll",
-      "caffehdf5.dll",
-      "caffehdf5_hl.dll",
-      "caffezlib1.dll",
-      "gflags.dll",
-      "gflagsd.dll",
-      "glog.dll",
-      "glogd.dll",
-      "libgcc_s_seh-1.dll",
-      "libgfortran-3.dll",
-      "libopenblas.dll",
-      "libquadmath-0.dll",
-      "opencv_videoio_ffmpeg420_64.dll",
-      "opencv_world420.dll",
-      "opencv_world420d.dll",
-      "VCRUNTIME140.dll"
    )
 
-   $cudaBinaries = Get-ChildItem ${OpenPoseDotNetNativeBuildDir} -Filter cu*.dll
-   foreach ($binary in $cudaBinaries)
+   $binaries = Get-ChildItem ${OpenPoseDotNetNativeBuildDir} -Filter *.dll
+   foreach ($binary in $binaries)
    {
       $OpenPoseDependenciesLibraries += (Split-Path -Leaf $binary)
    }
