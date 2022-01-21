@@ -25,7 +25,7 @@ You can sepcify Visual Studio vesion and CUDA version.
 > cd <OpenPoseDotNet_dir>
 > git submodule update --init --recursive
 > cd src\OpenPoseDotNet.Native
-> pwsh Build.ps1 <Debug/Release> <cpu/cuda> 64 desktop <2015/2017/2019> <92/100/101>
+> pwsh Build.ps1 <Debug/Release> <cpu/cuda> 64 desktop <2015/2017/2019> <92/100/101/102/110/111/112/113/114/115/116>
 ````
 
 After build, you should see artifacts in src\OpenPoseDotNet.Native\build_win_desktop_<cpu/cuda>_x64\<Debug/Release>.
@@ -33,8 +33,9 @@ After build, you should see artifacts in src\OpenPoseDotNet.Native\build_win_des
 #### 2. Try Tutorial
 
 ````dos
-> cd examples\TutorialApiCpp\01_BodyFromImageDefault
-> SymlinkBinary.bat <Debug/Release> build_win_desktop_<cpu/cuda>_x64
+> cd examples
+> pwsh SymlinkBinary.ps1 <Debug/Release> build_win_desktop_<cpu/cudaxxx>_x64
+> cd TutorialApiCpp\01_BodyFromImageDefault
 > dotnet run -c Release  -i "examples\media\COCO_val2014_000000000192.jpg"
 ````
 
