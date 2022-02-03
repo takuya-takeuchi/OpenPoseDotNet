@@ -19,7 +19,7 @@ I never guarantee that the license issue will not occur by using OpenPoseDotNet.
 
 #### 1. Build
 
-You can sepcify Visual Studio vesion and CUDA version. 
+You can sepcify Visual Studio version and CUDA version. 
 
 ````dos
 > cd <OpenPoseDotNet_dir>
